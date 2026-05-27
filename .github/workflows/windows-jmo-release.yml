@@ -45,13 +45,30 @@ jobs:
         run: |
           $extract = Join-Path $env:RUNNER_TEMP "jamovi-windows"
           New-Item -ItemType Directory -Force -Path $extract | Out-Null
-          tar.exe -xf "$env:JAMOVI_ZIP" -C "$extract" `
-            "jamovi/bin/jamovi.exe" `
-            "jamovi/Frameworks/R" `
-            "jamovi/Resources/modules/base/R" `
-            "jamovi/Resources/modules/jmv/R"
-          if ($LASTEXITCODE -ne 0) {
-            throw "Unable to extract the required jamovi Windows build runtime."
+          Add-Type -AssemblyName System.IO.Compression.FileSystem
+          $prefixes = @(
+            "jamovi/Frameworks/R/",
+            "jamovi/Resources/modules/base/R/",
+            "jamovi/Resources/modules/jmv/R/"
+          )
+          $archive = [System.IO.Compression.ZipFile]::OpenRead("$env:JAMOVI_ZIP")
+          try {
+            foreach ($entry in $archive.Entries) {
+              $required = $entry.FullName -eq "jamovi/bin/jamovi.exe"
+              foreach ($prefix in $prefixes) {
+                $required = $required -or $entry.FullName.StartsWith($prefix)
+              }
+              if (-not $required -or $entry.FullName.EndsWith("/")) {
+                continue
+              }
+              $relative = $entry.FullName.Replace("/", [System.IO.Path]::DirectorySeparatorChar)
+              $destination = Join-Path $extract $relative
+              New-Item -ItemType Directory -Force -Path (Split-Path $destination -Parent) | Out-Null
+              [System.IO.Compression.ZipFileExtensions]::ExtractToFile($entry, $destination, $true)
+            }
+          }
+          finally {
+            $archive.Dispose()
           }
           $home = Join-Path $extract "jamovi"
           if (-not (Test-Path (Join-Path $home "bin\jamovi.exe"))) {

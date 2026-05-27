@@ -49,22 +49,31 @@ jobs:
             if ($null -eq $archive.GetEntry("jamovi/bin/jamovi.exe")) {
               throw "The official Windows archive does not contain jamovi/bin/jamovi.exe."
             }
+            if ($null -eq $archive.GetEntry("jamovi/Frameworks/R/bin/x64/R.exe")) {
+              throw "The official Windows archive does not contain its R executable."
+            }
           }
           finally {
             $archive.Dispose()
           }
 
-      - name: Extract jamovi executable marker
+      - name: Extract jamovi runtime markers
         shell: pwsh
         run: |
           $extract = Join-Path $env:RUNNER_TEMP "jamovi-windows"
-          $destination = Join-Path $extract "jamovi\bin\jamovi.exe"
-          New-Item -ItemType Directory -Force -Path (Split-Path $destination -Parent) | Out-Null
+          $requiredEntries = @(
+            "jamovi/bin/jamovi.exe",
+            "jamovi/Frameworks/R/bin/x64/R.exe"
+          )
           Add-Type -AssemblyName System.IO.Compression.FileSystem
           $archive = [System.IO.Compression.ZipFile]::OpenRead("$env:JAMOVI_ZIP")
           try {
-            $entry = $archive.GetEntry("jamovi/bin/jamovi.exe")
-            [System.IO.Compression.ZipFileExtensions]::ExtractToFile($entry, $destination, $true)
+            foreach ($requiredEntry in $requiredEntries) {
+              $entry = $archive.GetEntry($requiredEntry)
+              $destination = Join-Path $extract $requiredEntry
+              New-Item -ItemType Directory -Force -Path (Split-Path $destination -Parent) | Out-Null
+              [System.IO.Compression.ZipFileExtensions]::ExtractToFile($entry, $destination, $true)
+            }
           }
           finally {
             $archive.Dispose()

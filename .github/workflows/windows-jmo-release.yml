@@ -30,17 +30,22 @@ jobs:
         with:
           node-version: 18
 
-      - name: Download jamovi for Windows
+      - name: Download jamovi Windows archive
         shell: pwsh
         run: |
           $zip = Join-Path $env:RUNNER_TEMP "jamovi-windows.zip"
-          $extract = Join-Path $env:RUNNER_TEMP "jamovi-windows"
           curl.exe --location --fail --retry 3 --output $zip "https://archives.jamovi.org/jamovi-$env:JAMOVI_VERSION-win-x64.zip"
-          if ($LASTEXITCODE -ne 0) {
+          if ($LASTEXITCODE -ne 0 -or -not (Test-Path $zip)) {
             throw "Unable to download the official jamovi Windows archive."
           }
+          "JAMOVI_ZIP=$zip" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+      - name: Extract jamovi build dependencies
+        shell: pwsh
+        run: |
+          $extract = Join-Path $env:RUNNER_TEMP "jamovi-windows"
           New-Item -ItemType Directory -Force -Path $extract | Out-Null
-          tar -xf $zip -C $extract `
+          tar -xf "$env:JAMOVI_ZIP" -C $extract `
             "jamovi/bin/jamovi.exe" `
             "jamovi/Frameworks/R" `
             "jamovi/Resources/modules/base/R" `

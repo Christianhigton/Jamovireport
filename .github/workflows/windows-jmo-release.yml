@@ -35,9 +35,16 @@ jobs:
         run: |
           $zip = Join-Path $env:RUNNER_TEMP "jamovi-windows.zip"
           $extract = Join-Path $env:RUNNER_TEMP "jamovi-windows"
-          Invoke-WebRequest "https://dl.jamovi.org/jamovi-$env:JAMOVI_VERSION-win-x64.zip" -OutFile $zip
+          curl.exe --location --fail --retry 3 --output $zip "https://archives.jamovi.org/jamovi-$env:JAMOVI_VERSION-win-x64.zip"
+          if ($LASTEXITCODE -ne 0) {
+            throw "Unable to download the official jamovi Windows archive."
+          }
           New-Item -ItemType Directory -Force -Path $extract | Out-Null
-          tar -xf $zip -C $extract
+          tar -xf $zip -C $extract `
+            "jamovi/bin/jamovi.exe" `
+            "jamovi/Frameworks/R" `
+            "jamovi/Resources/modules/base/R" `
+            "jamovi/Resources/modules/jmv/R"
           $exe = Get-ChildItem -Path $extract -Recurse -Filter "jamovi.exe" |
             Where-Object { $_.FullName -match '\\bin\\jamovi\.exe$' } |
             Select-Object -First 1

@@ -1,0 +1,8 @@
+---
+name: jrReportPropTestN
+title: Automatic Report for Chi-Square Goodness-of-Fit
+jus: '2.0'
+stage: 0
+compilerMode: tame
+children: []
+...

@@ -1,0 +1,36 @@
+Package: JamoviReport
+Type: Package
+Title: Educational Statistical Reporting for R and jamovi
+Version: 0.1.0.9009
+Authors@R: person("Christian", "Higton", role = c("aut", "cre"),
+    email = "christianhigton@gmail.com")
+Description: Provides guided statistical analyses with assumption diagnostics,
+    modern effect sizes, confidence intervals, educational interpretation, and
+    selectable APA-style reporting. The package is designed for use directly
+    from R and through a companion jamovi module interface.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Depends:
+    R (>= 4.1.0)
+Imports:
+    afex,
+    car,
+    effectsize,
+    ggplot2,
+    jmvcore (>= 0.8.5),
+    parameters,
+    performance,
+    psych,
+    R6,
+    stats,
+    tools
+Suggests:
+    BayesFactor,
+    emmeans,
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2

@@ -1,0 +1,46 @@
+---
+name: eduAnova
+title: Guided One-Way ANOVA
+jrs: '1.1'
+items:
+    - { name: overview, title: Overview and Why This Test?, type: Html }
+    - name: main
+      title: Main Results and Effect Size
+      type: Table
+      columns:
+        - { name: test, title: Test, type: text }
+        - { name: statistic, title: F, type: number }
+        - { name: df1, title: df1, type: number }
+        - { name: df2, title: df2, type: number }
+        - { name: p, title: p, type: number, format: "zto,pvalue" }
+        - { name: effect, title: Eta-squared, type: number }
+        - { name: ci_low, title: CI Lower, type: number }
+        - { name: ci_high, title: CI Upper, type: number }
+    - name: descriptives
+      title: Descriptive Statistics
+      type: Table
+      columns:
+        - { name: label, title: Group, type: text }
+        - { name: n, title: N, type: integer }
+        - { name: mean, title: Mean, type: number }
+        - { name: sd, title: SD, type: number }
+    - name: diagnostics
+      title: Assumption Checks and Guidance
+      type: Table
+      columns:
+        - { name: check, title: Check, type: text }
+        - { name: statistic, title: Statistic, type: number }
+        - { name: p, title: p, type: number, format: "zto,pvalue" }
+        - { name: status, title: Status, type: text }
+        - { name: interpretation, title: Interpretation, type: text }
+        - { name: action, title: Recommended Action, type: text }
+    - { name: report, title: Reporting, type: Html }
+    - { name: interpretation, title: Plain-Language Interpretation, type: Html }
+    - name: plot
+      title: Visualisation
+      type: Image
+      visible: (showPlot)
+      width: 520
+      height: 360
+      renderFun: .plot
+...

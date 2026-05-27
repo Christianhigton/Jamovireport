@@ -1,0 +1,8 @@
+---
+name: jrReportAnovaOneW
+title: Automatic Report for One-Way ANOVA
+jus: '2.0'
+stage: 0
+compilerMode: tame
+children: []
+...

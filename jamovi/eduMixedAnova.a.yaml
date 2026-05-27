@@ -1,0 +1,66 @@
+---
+name: eduMixedAnova
+title: Guided Mixed ANOVA
+menuGroup: Educational Analyses
+version: '0.1.0'
+jas: '1.2'
+description:
+    main: >
+        Examine repeated change, between-group differences, and their
+        interaction with sphericity-aware reporting.
+options:
+    - { name: data, type: Data }
+    - name: measures
+      title: Repeated measurements (in order)
+      type: Variables
+      suggested: [continuous]
+      permitted: [numeric]
+    - name: group
+      title: Between-subjects group
+      type: Variable
+      suggested: [nominal, ordinal]
+      permitted: [factor]
+    - name: occasionLabels
+      title: Occasion labels (comma separated)
+      type: String
+      default: ""
+    - { name: ciWidth, title: Confidence level, type: Number, min: 50, max: 99.9, default: 95 }
+    - { name: showPlot, title: Display visualisation, type: Bool, default: true }
+    - name: reportStyle
+      title: Report style
+      type: List
+      options:
+        - { name: apa7, title: APA 7th edition }
+        - { name: plain, title: Plain English / teaching explanation }
+        - { name: journal, title: Journal style }
+        - { name: dissertation, title: Dissertation style }
+      default: apa7
+    - name: reportFormat
+      title: Report format
+      type: List
+      options:
+        - { name: short, title: Short APA sentence }
+        - { name: paragraph, title: Full results paragraph }
+        - { name: bullets, title: Bullet-point interpretation }
+        - { name: table_paragraph, title: Table plus paragraph }
+        - { name: copy_ready, title: Copy-ready report block }
+      default: paragraph
+    - name: reportTone
+      title: Tone of explanation
+      type: List
+      options:
+        - { name: concise, title: Concise }
+        - { name: student_friendly, title: Student-friendly }
+        - { name: detailed, title: Detailed }
+        - { name: critical, title: Critical / publication-focused }
+      default: student_friendly
+    - { name: reportDescriptives, title: Include descriptive statistics, type: Bool, default: true }
+    - { name: reportAssumptions, title: Include assumption checks, type: Bool, default: true }
+    - { name: reportStatistic, title: Include test statistic, type: Bool, default: true }
+    - { name: reportDf, title: Include degrees of freedom, type: Bool, default: true }
+    - { name: reportP, title: Include exact p value, type: Bool, default: true }
+    - { name: reportEffect, title: Include effect size, type: Bool, default: true }
+    - { name: reportCI, title: Include confidence intervals, type: Bool, default: true }
+    - { name: reportInterpretation, title: Include interpretation of findings, type: Bool, default: true }
+    - { name: reportCautions, title: Include cautions or assumption warnings, type: Bool, default: true }
+...

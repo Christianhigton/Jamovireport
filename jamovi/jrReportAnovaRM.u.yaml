@@ -1,0 +1,8 @@
+---
+name: jrReportAnovaRM
+title: Automatic Report for Repeated Measures ANOVA
+jus: '2.0'
+stage: 0
+compilerMode: tame
+children: []
+...

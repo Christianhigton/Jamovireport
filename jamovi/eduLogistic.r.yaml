@@ -1,0 +1,40 @@
+---
+name: eduLogistic
+title: Guided Binomial Logistic Regression
+jrs: '1.1'
+items:
+    - { name: overview, title: Overview and Why This Test?, type: Html }
+    - name: fit
+      title: Main Results and Model Fit
+      type: Table
+      columns:
+        - { name: test, title: Test, type: text }
+        - { name: statistic, title: Chi-square, type: number }
+        - { name: df, title: df, type: number }
+        - { name: p, title: p, type: number, format: "zto,pvalue" }
+        - { name: r2, title: McFadden R-squared, type: number }
+    - name: coefficients
+      title: Coefficients and Odds Ratios
+      type: Table
+      columns:
+        - { name: term, title: Predictor, type: text }
+        - { name: estimate, title: B, type: number }
+        - { name: se, title: SE, type: number }
+        - { name: statistic, title: z, type: number }
+        - { name: p, title: p, type: number, format: "zto,pvalue" }
+        - { name: odds_ratio, title: Odds Ratio, type: number }
+        - { name: lower, title: OR CI Lower, type: number }
+        - { name: upper, title: OR CI Upper, type: number }
+    - name: diagnostics
+      title: Diagnostic Checks and Guidance
+      type: Table
+      columns:
+        - { name: check, title: Check, type: text }
+        - { name: statistic, title: Statistic, type: number }
+        - { name: p, title: p, type: number, format: "zto,pvalue" }
+        - { name: status, title: Status, type: text }
+        - { name: interpretation, title: Interpretation, type: text }
+        - { name: action, title: Recommended Action, type: text }
+    - { name: report, title: Reporting, type: Html }
+    - { name: interpretation, title: Plain-Language Interpretation, type: Html }
+...

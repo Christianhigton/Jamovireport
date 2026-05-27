@@ -1,0 +1,38 @@
+---
+name: eduChiSquareGoodness
+title: Guided Chi-Square Goodness-of-Fit
+jus: '2.0'
+stage: 0
+compilerMode: tame
+children:
+  - type: VariableSupplier
+    persistentItems: false
+    children:
+      - type: TargetLayoutBox
+        label: Categorical variable
+        children: [{ type: VariablesListBox, name: variable, maxItemCount: 1, isTarget: true }]
+      - type: TargetLayoutBox
+        label: Counts (optional)
+        children: [{ type: VariablesListBox, name: counts, maxItemCount: 1, isTarget: true }]
+  - type: CollapseBox
+    label: Expected Distribution
+    collapsed: false
+    children:
+      - { type: TextBox, name: expectedRatios, format: string }
+  - type: CollapseBox
+    label: Reporting
+    collapsed: false
+    children:
+      - { type: ComboBox, name: reportStyle }
+      - { type: ComboBox, name: reportFormat }
+      - { type: ComboBox, name: reportTone }
+      - { type: CheckBox, name: reportDescriptives }
+      - { type: CheckBox, name: reportAssumptions }
+      - { type: CheckBox, name: reportStatistic }
+      - { type: CheckBox, name: reportDf }
+      - { type: CheckBox, name: reportP }
+      - { type: CheckBox, name: reportEffect }
+      - { type: CheckBox, name: reportCI }
+      - { type: CheckBox, name: reportInterpretation }
+      - { type: CheckBox, name: reportCautions }
+...

@@ -1,0 +1,47 @@
+---
+name: eduReliabilityOmega
+title: "Guided Reliability: McDonald's Omega"
+jrs: '1.1'
+items:
+    - { name: overview, title: Overview and Why Omega?, type: Html }
+    - name: main
+      title: Reliability Estimate
+      type: Table
+      columns:
+        - { name: coefficient, title: Coefficient, type: text }
+        - { name: estimate, title: Estimate, type: number }
+        - { name: ci_low, title: CI Lower, type: number }
+        - { name: ci_high, title: CI Upper, type: number }
+        - { name: n, title: Complete N, type: integer }
+        - { name: items, title: Items, type: integer }
+    - name: items
+      title: Item Quality Guidance
+      type: Table
+      columns:
+        - { name: item, title: Item, type: text }
+        - { name: scoring, title: Scoring Direction, type: text }
+        - { name: n, title: N, type: integer }
+        - { name: mean, title: Mean, type: number }
+        - { name: sd, title: SD, type: number }
+        - { name: item_total_r, title: Corrected Item-Total r, type: number }
+        - { name: loading, title: Factor Loading, type: number }
+    - name: diagnostics
+      title: Data and Interpretation Guidance
+      type: Table
+      columns:
+        - { name: check, title: Check, type: text }
+        - { name: statistic, title: Statistic, type: number }
+        - { name: p, title: p, type: number, format: "zto,pvalue" }
+        - { name: status, title: Status, type: text }
+        - { name: interpretation, title: Interpretation, type: text }
+        - { name: action, title: Recommended Action, type: text }
+    - { name: report, title: Reporting, type: Html }
+    - { name: interpretation, title: Plain-Language Interpretation, type: Html }
+    - name: plot
+      title: Item Contribution Plot
+      type: Image
+      visible: (showPlot)
+      width: 520
+      height: 360
+      renderFun: .plot
+...

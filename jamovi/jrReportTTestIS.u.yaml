@@ -1,0 +1,8 @@
+---
+name: jrReportTTestIS
+title: Automatic Report for Independent Samples T-Test
+jus: '2.0'
+stage: 0
+compilerMode: tame
+children: []
+...

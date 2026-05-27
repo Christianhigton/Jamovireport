@@ -1,0 +1,8 @@
+---
+name: jrReportAncova
+title: Automatic Report for ANCOVA
+jus: '2.0'
+stage: 0
+compilerMode: tame
+children: []
+...

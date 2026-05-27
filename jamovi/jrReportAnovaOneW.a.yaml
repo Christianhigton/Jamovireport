@@ -1,0 +1,9 @@
+---
+name: jrReportAnovaOneW
+title: Automatic Report for One-Way ANOVA
+menuGroup: Report Add-ons
+version: '0.1.0'
+jas: '1.2'
+options:
+    - { name: data, type: Data }
+...

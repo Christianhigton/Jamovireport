@@ -1,0 +1,8 @@
+---
+name: jrReportContTables
+title: Automatic Report for Chi-Square Independence
+jus: '2.0'
+stage: 0
+compilerMode: tame
+children: []
+...

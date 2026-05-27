@@ -1,0 +1,84 @@
+name: Build Windows jamovi module
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - codex/manova-report-followups
+    paths:
+      - '.github/workflows/windows-jmo-release.yml'
+
+permissions:
+  contents: write
+
+env:
+  JAMOVI_VERSION: 2.7.24.0
+  RELEASE_TAG: v0.1.0.9010
+  JMO_NAME: JamoviReport_0.1.0.9010_windows_x64_jamovi-2.7.jmo
+
+jobs:
+  build-windows:
+    name: Windows x64 / jamovi 2.7
+    runs-on: windows-2022
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Download jamovi for Windows
+        shell: pwsh
+        run: |
+          $zip = Join-Path $env:RUNNER_TEMP "jamovi-windows.zip"
+          $extract = Join-Path $env:RUNNER_TEMP "jamovi-windows"
+          Invoke-WebRequest "https://dl.jamovi.org/jamovi-$env:JAMOVI_VERSION-win-x64.zip" -OutFile $zip
+          Expand-Archive -Path $zip -DestinationPath $extract
+          $exe = Get-ChildItem -Path $extract -Recurse -Filter "jamovi.exe" |
+            Where-Object { $_.FullName -match '\\bin\\jamovi\.exe$' } |
+            Select-Object -First 1
+          if ($null -eq $exe) {
+            throw "The downloaded jamovi archive did not contain bin\jamovi.exe."
+          }
+          $home = Split-Path (Split-Path $exe.FullName -Parent) -Parent
+          "JAMOVI_HOME=$home" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          Write-Output "Using jamovi at $home"
+
+      - name: Install jamovi compiler
+        run: npm install --global git+https://github.com/jamovi/jamovi-compiler.git
+
+      - name: Build Windows .jmo
+        shell: pwsh
+        run: |
+          jmc --build "." --home "$env:JAMOVI_HOME" --assume-app-version "2.7.24" --jmo "$env:JMO_NAME"
+          if (-not (Test-Path "$env:JMO_NAME")) {
+            throw "The Windows .jmo build was not created."
+          }
+
+      - name: Upload workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: JamoviReport-windows-x64-jamovi-2.7
+          path: ${{ env.JMO_NAME }}
+
+      - name: Publish Windows prerelease asset
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $asset = "$env:JMO_NAME#Windows x64 (jamovi 2.7)"
+          gh release view "$env:RELEASE_TAG" --repo "$env:GITHUB_REPOSITORY" 2>$null
+          if ($LASTEXITCODE -eq 0) {
+            gh release upload "$env:RELEASE_TAG" "$asset" --clobber --repo "$env:GITHUB_REPOSITORY"
+          }
+          else {
+            gh release create "$env:RELEASE_TAG" "$asset" `
+              --target "$env:GITHUB_SHA" `
+              --title "JamoviReport 0.1.0.9010 (development build)" `
+              --notes "Development build for sideloading in jamovi. This Windows x64 asset is built for the jamovi 2.7 series. Download the .jmo file and install it using jamovi's sideload module option." `
+              --prerelease `
+              --repo "$env:GITHUB_REPOSITORY"
+          }

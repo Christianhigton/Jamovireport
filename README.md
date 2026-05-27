@@ -104,6 +104,10 @@ it should not be assumed to work on Windows, Linux, Intel Mac, or the jamovi
 solid series. Separate compatible builds or a jamovi Library release are
 required for those environments.
 
+Windows x64 development builds are published with the filename
+`JamoviReport_0.1.0.9010_windows_x64_jamovi-2.7.jmo`, generated on a Windows
+runner for the jamovi 2.7 series.
+
 ## Report Add-ons
 
 The module follows the `moretests` pattern by registering **Report Add-ons**

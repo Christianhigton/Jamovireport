@@ -84,6 +84,26 @@ Each includes a consistent **Reporting** section with style, format, tone, and
 included-content controls. Reports update when options change because they are
 rendered from the same structured result object used by the R API.
 
+## Installing in jamovi
+
+A compiled `.jmo` installer can be provided for direct download as an asset on
+the [GitHub Releases page](https://github.com/Christianhigton/Jamovireport/releases).
+Compiled installers are not kept in the source-code branch because they are
+build artifacts. If no `.jmo` asset is shown on the Releases page, a
+downloadable build has not yet been published.
+
+To install a released build:
+
+1. Open the [Releases page](https://github.com/Christianhigton/Jamovireport/releases).
+2. Download the `JamoviReport_*.jmo` file that matches your system and jamovi version.
+3. In jamovi, open the module manager, choose to sideload/install a module, and select the downloaded `.jmo` file.
+
+A `.jmo` build is platform-specific. For example, the current development
+build was produced on macOS Apple Silicon for the current jamovi 2.7 series;
+it should not be assumed to work on Windows, Linux, Intel Mac, or the jamovi
+solid series. Separate compatible builds or a jamovi Library release are
+required for those environments.
+
 ## Report Add-ons
 
 The module follows the `moretests` pattern by registering **Report Add-ons**

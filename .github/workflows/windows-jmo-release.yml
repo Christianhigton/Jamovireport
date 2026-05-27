@@ -45,11 +45,14 @@ jobs:
         run: |
           $extract = Join-Path $env:RUNNER_TEMP "jamovi-windows"
           New-Item -ItemType Directory -Force -Path $extract | Out-Null
-          tar -xf "$env:JAMOVI_ZIP" -C $extract `
+          7z x "$env:JAMOVI_ZIP" "-o$extract" -y `
             "jamovi/bin/jamovi.exe" `
-            "jamovi/Frameworks/R" `
-            "jamovi/Resources/modules/base/R" `
-            "jamovi/Resources/modules/jmv/R"
+            "jamovi/Frameworks/R/*" `
+            "jamovi/Resources/modules/base/R/*" `
+            "jamovi/Resources/modules/jmv/R/*"
+          if ($LASTEXITCODE -ne 0) {
+            throw "Unable to extract the jamovi runtime required for module compilation."
+          }
           $exe = Get-ChildItem -Path $extract -Recurse -Filter "jamovi.exe" |
             Where-Object { $_.FullName -match '\\bin\\jamovi\.exe$' } |
             Select-Object -First 1

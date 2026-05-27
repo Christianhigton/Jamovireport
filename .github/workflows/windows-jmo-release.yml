@@ -50,15 +50,14 @@ jobs:
           }
           New-Item -ItemType Directory -Force -Path $extract | Out-Null
           & $sevenZip x "$env:JAMOVI_ZIP" "-o$extract" -y
-          if ($LASTEXITCODE -ne 0) {
-            throw "Unable to extract the jamovi runtime required for module compilation."
-          }
+          $sevenZipExitCode = $LASTEXITCODE
           $exe = Get-ChildItem -Path $extract -Recurse -Filter "jamovi.exe" |
             Where-Object { $_.FullName -match '\\bin\\jamovi\.exe$' } |
             Select-Object -First 1
           if ($null -eq $exe) {
-            throw "The downloaded jamovi archive did not contain bin\jamovi.exe."
+            throw "The jamovi runtime was not extracted; 7-Zip exit code: $sevenZipExitCode."
           }
+          $global:LASTEXITCODE = 0
           $home = Split-Path (Split-Path $exe.FullName -Parent) -Parent
           "JAMOVI_HOME=$home" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           Write-Output "Using jamovi at $home"

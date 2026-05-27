@@ -3,7 +3,7 @@ name: eduRMAnova
 title: Guided Repeated-Measures ANOVA
 jrs: '1.1'
 items:
-    - { name: overview, title: Overview and Why This Test?, type: Html }
+    - { name: overview, title: 'JamoviReport: Overview and Why This Test?', type: Html }
     - name: main
       title: Within-Subjects Result and Effect Size
       type: Table

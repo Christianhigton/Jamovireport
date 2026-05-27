@@ -76,7 +76,8 @@ test_that("jamovi report content is rendered as structured HTML cards", {
     interpretation <- .jr_jamovi_interpretation_html(result)
 
     expect_match(overview, "<div")
-    expect_match(overview, "Why this analysis")
+    expect_match(overview, "JamoviReport")
+    expect_match(overview, "Reporting controls")
     expect_match(report, "Copy-ready reporting")
     expect_match(report, "Welch independent-samples t-test")
     expect_match(interpretation, "What does this mean")
@@ -106,6 +107,7 @@ test_that("native add-ons use a fixed automatic APA reporting profile", {
     expect_match(report, "Student's independent-samples t-test")
     expect_match(report, "Cohen")
     expect_match(report, "95% CI")
+    expect_match(.jr_addon_heading_html(), "Educational Analyses")
 })
 
 test_that("automatic native reports render for supported group comparison designs", {
@@ -133,6 +135,7 @@ test_that("automatic native reports render for supported group comparison design
         edu_anova_oneway(d, "len", "dose", method = "welch", posthoc = FALSE),
         edu_anova_between(d, "len", c("dose", "supp")),
         edu_ancova(d, "len", "supp", "dose_num"),
+        edu_manova(iris, c("Sepal.Length", "Sepal.Width"), "Species"),
         edu_anova_rm(repeated, c("pre", "mid", "post"), c("Pre", "Mid", "Post")),
         edu_anova_mixed(repeated, c("pre", "mid", "post"), "group", c("Pre", "Mid", "Post"))
     )
@@ -330,6 +333,30 @@ test_that("automatic report explains selected ANOVA post hoc comparisons", {
     expect_match(report, "Post hoc interpretation")
     expect_match(report, "Tukey-adjusted")
     expect_match(report, "mean difference")
+})
+
+test_that("post hoc reporting requires a significant omnibus effect", {
+    d <- data.frame(
+        score = rep(c(1, 2, 3, 4), 3),
+        group = factor(rep(c("a", "b", "c"), each = 4))
+    )
+    result <- edu_anova_oneway(d, "score", "group", posthoc = TRUE)
+
+    expect_false(.jr_has_significant_omnibus(result))
+    expect_null(result$posthoc)
+})
+
+test_that("significant interactions trigger conditional post hoc follow-ups", {
+    set.seed(2)
+    d <- expand.grid(first = factor(c("A", "B")), second = factor(c("C", "D")), rep = seq_len(30))
+    match_cell <- (d$first == "A" & d$second == "C") |
+        (d$first == "B" & d$second == "D")
+    d$outcome <- ifelse(match_cell, 8, 0) + stats::rnorm(nrow(d), sd = .5)
+    result <- edu_anova_between(d, "outcome", c("first", "second"))
+    terms <- .jr_significant_posthoc_terms(result, list("first"))
+
+    expect_false(any(vapply(terms, function(term) identical(term, "first"), logical(1))))
+    expect_true(any(vapply(terms, function(term) identical(term, c("first", "second")), logical(1))))
 })
 
 test_that("post hoc term parsing retains factorial interaction components", {

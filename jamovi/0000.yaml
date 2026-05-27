@@ -1,12 +1,12 @@
 ---
 title: JamoviReport
 name: JamoviReport
-version: 0.1.0.9009
+version: 0.1.0.9010
 jms: '1.0'
 authors:
   - Christian Higton
 maintainer: Christian Higton <christianhigton@gmail.com>
-date: '2026-05-26'
+date: '2026-05-27'
 type: R
 description: >
   Guided analyses with assumption diagnostics, effect sizes, visualisations, and
@@ -166,6 +166,13 @@ analyses:
     menuGroup: Report Add-ons
     menuTitle: Automatic Report for ANCOVA
     addonFor: jmv::ancova
+    category: analyses
+  - title: Automatic Report for MANOVA / MANCOVA
+    name: jrReportMancova
+    ns: JamoviReport
+    menuGroup: Report Add-ons
+    menuTitle: Automatic Report for MANOVA / MANCOVA
+    addonFor: jmv::mancova
     category: analyses
   - title: Automatic Report for Linear Regression
     name: jrReportLinReg

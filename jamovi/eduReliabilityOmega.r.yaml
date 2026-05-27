@@ -3,7 +3,7 @@ name: eduReliabilityOmega
 title: "Guided Reliability: McDonald's Omega"
 jrs: '1.1'
 items:
-    - { name: overview, title: Overview and Why Omega?, type: Html }
+    - { name: overview, title: 'JamoviReport: Overview and Why Omega?', type: Html }
     - name: main
       title: Reliability Estimate
       type: Table

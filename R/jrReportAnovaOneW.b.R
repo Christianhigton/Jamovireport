@@ -37,7 +37,7 @@ jrReportAnovaOneWClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Cla
                     target <- i
                     if (inherits(results[[target]], "try-error") && length(methods) > 1L)
                         target <- i + length(outcomes)
-                    if (inherits(results[[target]], "edu_analysis")) {
+                    if (.jr_has_significant_omnibus(results[[target]])) {
                         results[[target]]$posthoc_report <- .jr_oneway_posthoc(
                             self$data, outcomes[i], group, posthoc_method
                         )

@@ -200,7 +200,7 @@ eduReliabilityOmegaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6:
             self$add(jmvcore::Html$new(
                 options=options,
                 name="overview",
-                title="Overview and Why Omega?"))
+                title="JamoviReport: Overview and Why Omega?"))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="main",

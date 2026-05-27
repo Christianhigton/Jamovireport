@@ -97,6 +97,11 @@
     corrections[nzchar(corrections)]
 }
 
+.jr_has_significant_omnibus <- function(result) {
+    inherits(result, "edu_analysis") &&
+        any(is.finite(result$statistics$p) & result$statistics$p < .05)
+}
+
 .jr_emmeans_adjustment <- function(correction) {
     switch(correction,
         bonf = "bonferroni",
@@ -123,7 +128,8 @@
     if (length(terms) == 0L || length(corrections) == 0L)
         return(.jr_empty_posthoc_rows())
     rows <- list()
-    for (term in terms) {
+    eligible_terms <- .jr_significant_posthoc_terms(result, terms, term_map)
+    for (term in eligible_terms) {
         model_term <- term
         if (!is.null(term_map)) {
             model_term <- vapply(term, function(item) {
@@ -167,6 +173,34 @@
         }
     }
     if (length(rows) == 0L) .jr_empty_posthoc_rows() else do.call(rbind, rows)
+}
+
+.jr_significant_posthoc_terms <- function(result, terms, term_map = NULL) {
+    terms <- .jr_posthoc_terms(terms)
+    translated <- lapply(terms, function(term) {
+        if (is.null(term_map))
+            return(term)
+        vapply(term, function(item) term_map[[item]] %||% item, character(1))
+    })
+    statistic_terms <- as.character(result$statistics$term)
+    significant <- statistic_terms[
+        is.finite(result$statistics$p) & result$statistics$p < .05
+    ]
+    eligible <- terms[vapply(translated, function(term) {
+        paste(term, collapse = ":") %in% significant
+    }, logical(1))]
+
+    interaction_terms <- strsplit(significant[grepl(":", significant, fixed = TRUE)], ":", fixed = TRUE)
+    for (interaction in interaction_terms) {
+        original <- interaction
+        if (!is.null(term_map)) {
+            reverse_map <- stats::setNames(names(term_map), unlist(term_map, use.names = FALSE))
+            original <- vapply(interaction, function(item) reverse_map[[item]] %||% item, character(1))
+        }
+        if (!any(vapply(eligible, function(term) identical(term, original), logical(1))))
+            eligible[[length(eligible) + 1L]] <- original
+    }
+    eligible
 }
 
 .jr_addon_posthoc_rows <- function(results) {

@@ -57,10 +57,10 @@ jobs:
           if ($null -eq $exe) {
             throw "The jamovi runtime was not extracted; 7-Zip exit code: $sevenZipExitCode."
           }
-          $global:LASTEXITCODE = 0
           $home = Split-Path (Split-Path $exe.FullName -Parent) -Parent
           "JAMOVI_HOME=$home" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           Write-Output "Using jamovi at $home"
+          exit 0
 
       - name: Install jamovi compiler
         run: npm install --global git+https://github.com/jamovi/jamovi-compiler.git

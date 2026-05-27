@@ -17,6 +17,7 @@ confidence intervals, and report-ready prose over raw output alone.
 - Repeated-measures ANOVA with sphericity guidance
 - Mixed ANOVA with within-subject correction and interaction guidance
 - ANCOVA with homogeneity-of-regression-slopes diagnostics
+- MANOVA/MANCOVA automatic reporting using Pillai's trace
 - Reliability analysis reporting McDonald's omega total with item-quality guidance
 - Pearson, Spearman, and Kendall correlation
 - Chi-square test of independence with Cramer's V and expected-cell guidance
@@ -96,7 +97,8 @@ interpretation, and cautions.
 
 jamovi does not allow an `addonFor` analysis to insert new report controls into
 a built-in analysis options panel. Configurable style/tone controls therefore
-remain available only in the module's optional Educational Analyses entries.
+remain available only in the module's optional **Educational Analyses**
+entries. JamoviReport labels this distinction in its results output.
 
 Initial report add-ons cover:
 
@@ -106,6 +108,7 @@ Initial report add-ons cover:
 - Factorial ANOVA
 - Repeated-measures ANOVA and one-factor mixed ANOVA
 - ANCOVA
+- MANOVA/MANCOVA, reporting Pillai's trace for the multivariate model
 - Correlation matrix reporting for Pearson, Spearman, and Kendall analyses
 - Chi-square tests of independence and goodness-of-fit, with observed-versus-
   expected counts and follow-up residual information
@@ -115,8 +118,10 @@ Initial report add-ons cover:
 - Reliability analysis, reporting McDonald's omega rather than alpha
 
 When post hoc comparisons are selected in supported native ANOVA analyses, the
-add-on also appends an **APA Post Hoc Comparisons** table and explanatory
-follow-up interpretation using the selected correction procedure.
+add-on only reports comparisons for a statistically significant omnibus main
+effect. If a factorial interaction is significant, it reports follow-up
+comparisons for that interaction so main effects are not interpreted without
+examining the conditional pattern. Selected correction procedures are retained.
 
 For ANOVA, ANCOVA, repeated-measures, linear regression, and logistic regression
 outputs with model choices that may change interpretation, the report card

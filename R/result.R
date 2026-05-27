@@ -121,6 +121,8 @@ edu_report <- function(
             text <- gsub(", eta-squared = -?[0-9.]+(?:, [0-9]+% CI \\[[^]]+\\])?", "", text, perl = TRUE)
         if (analysis %in% c("anova_between", "ancova", "anova_rm", "anova_mixed"))
             text <- gsub(", partial eta-squared = -?[0-9.]+(?:, [0-9]+% CI \\[[^]]+\\])?", "", text, perl = TRUE)
+        if (analysis == "manova")
+            text <- gsub(", Pillai's trace = -?[0-9.]+", "", text, perl = TRUE)
         if (analysis == "reliability_omega")
             text <- gsub(", omega = -?[0-9.]+(?:, [0-9]+% bootstrap CI \\[[^]]+\\])?", "", text, perl = TRUE)
         if (analysis == "regression") {

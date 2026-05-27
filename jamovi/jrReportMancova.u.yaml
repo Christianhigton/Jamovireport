@@ -1,0 +1,8 @@
+---
+name: jrReportMancova
+title: Automatic Report for MANOVA / MANCOVA
+jus: '2.0'
+stage: 0
+compilerMode: tame
+children: []
+...

@@ -187,7 +187,7 @@ eduChiSquareIndependenceResults <- if (requireNamespace("jmvcore", quietly=TRUE)
             self$add(jmvcore::Html$new(
                 options=options,
                 name="overview",
-                title="Overview and Why This Test?"))
+                title="JamoviReport: Overview and Why This Test?"))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="fit",

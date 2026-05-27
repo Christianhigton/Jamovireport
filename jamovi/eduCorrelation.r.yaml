@@ -3,7 +3,7 @@ name: eduCorrelation
 title: Guided Correlation
 jrs: '1.1'
 items:
-    - { name: overview, title: Overview and Why This Test?, type: Html }
+    - { name: overview, title: 'JamoviReport: Overview and Why This Test?', type: Html }
     - name: main
       title: Main Result
       type: Table

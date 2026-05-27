@@ -89,6 +89,23 @@ test_that("ANCOVA identifies the regression-slope assumption", {
     expect_match(edu_report(result), "homogeneity of regression slopes assumption", ignore.case = TRUE)
 })
 
+test_that("MANOVA and MANCOVA report multivariate Pillai tests", {
+    d <- iris
+    manova_result <- edu_manova(d, c("Sepal.Length", "Sepal.Width"), "Species")
+    d$Petal.Length.Centered <- d$Petal.Length - mean(d$Petal.Length)
+    mancova_result <- edu_manova(
+        d, c("Sepal.Length", "Sepal.Width"), "Species", "Petal.Length.Centered"
+    )
+
+    expect_equal(manova_result$label, "MANOVA")
+    expect_equal(mancova_result$label, "MANCOVA")
+    expect_equal(manova_result$analysis, "manova")
+    expect_true(all(c("statistic", "df1", "df2", "p", "effect") %in% names(manova_result$statistics)))
+    expect_match(edu_report(manova_result), "Pillai's trace")
+    expect_match(edu_report(mancova_result), "MANCOVA")
+    expect_true("Homogeneity of covariance matrices" %in% manova_result$diagnostics$check)
+})
+
 test_that("repeated-measures and mixed ANOVA return guided within-subject results", {
     set.seed(42)
     d <- data.frame(

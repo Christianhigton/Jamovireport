@@ -49,8 +49,10 @@ jobs:
             throw "7-Zip is not installed on the Windows runner."
           }
           New-Item -ItemType Directory -Force -Path $extract | Out-Null
+          $ErrorActionPreference = "Continue"
           & $sevenZip x "$env:JAMOVI_ZIP" "-o$extract" -y
           $sevenZipExitCode = $LASTEXITCODE
+          $ErrorActionPreference = "Stop"
           $exe = Get-ChildItem -Path $extract -Recurse -Filter "jamovi.exe" |
             Where-Object { $_.FullName -match '\\bin\\jamovi\.exe$' } |
             Select-Object -First 1

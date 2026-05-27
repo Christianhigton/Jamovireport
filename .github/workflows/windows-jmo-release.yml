@@ -44,25 +44,18 @@ jobs:
         shell: pwsh
         run: |
           $extract = Join-Path $env:RUNNER_TEMP "jamovi-windows"
-          $sevenZip = Join-Path $env:ProgramFiles "7-Zip\7z.exe"
-          if (-not (Test-Path $sevenZip)) {
-            throw "7-Zip is not installed on the Windows runner."
-          }
           New-Item -ItemType Directory -Force -Path $extract | Out-Null
-          $arguments = @(
-            "x",
-            "$env:JAMOVI_ZIP",
-            "-o$extract",
-            "-y",
-            "jamovi/bin/jamovi.exe",
-            "jamovi/Frameworks/R/*",
-            "jamovi/Resources/modules/base/R/*",
-            "jamovi/Resources/modules/jmv/R/*"
-          )
-          $process = Start-Process -FilePath $sevenZip -ArgumentList $arguments -Wait -PassThru -NoNewWindow
+          tar.exe -xf "$env:JAMOVI_ZIP" -C "$extract" `
+            "jamovi/bin/jamovi.exe" `
+            "jamovi/Frameworks/R" `
+            "jamovi/Resources/modules/base/R" `
+            "jamovi/Resources/modules/jmv/R"
+          if ($LASTEXITCODE -ne 0) {
+            throw "Unable to extract the required jamovi Windows build runtime."
+          }
           $home = Join-Path $extract "jamovi"
           if (-not (Test-Path (Join-Path $home "bin\jamovi.exe"))) {
-            throw "The jamovi runtime was not extracted; 7-Zip exit code: $($process.ExitCode)."
+            throw "The jamovi runtime was not extracted from the official Windows archive."
           }
           "JAMOVI_HOME=$home" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           Write-Output "Using jamovi at $home"

@@ -40,11 +40,40 @@ jobs:
           }
           "JAMOVI_ZIP=$zip" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
-      - name: Extract jamovi build dependencies
+      - name: Validate jamovi archive layout
+        shell: pwsh
+        run: |
+          Add-Type -AssemblyName System.IO.Compression.FileSystem
+          $archive = [System.IO.Compression.ZipFile]::OpenRead("$env:JAMOVI_ZIP")
+          try {
+            if ($null -eq $archive.GetEntry("jamovi/bin/jamovi.exe")) {
+              throw "The official Windows archive does not contain jamovi/bin/jamovi.exe."
+            }
+          }
+          finally {
+            $archive.Dispose()
+          }
+
+      - name: Extract jamovi executable marker
         shell: pwsh
         run: |
           $extract = Join-Path $env:RUNNER_TEMP "jamovi-windows"
-          New-Item -ItemType Directory -Force -Path $extract | Out-Null
+          $destination = Join-Path $extract "jamovi\bin\jamovi.exe"
+          New-Item -ItemType Directory -Force -Path (Split-Path $destination -Parent) | Out-Null
+          Add-Type -AssemblyName System.IO.Compression.FileSystem
+          $archive = [System.IO.Compression.ZipFile]::OpenRead("$env:JAMOVI_ZIP")
+          try {
+            $entry = $archive.GetEntry("jamovi/bin/jamovi.exe")
+            [System.IO.Compression.ZipFileExtensions]::ExtractToFile($entry, $destination, $true)
+          }
+          finally {
+            $archive.Dispose()
+          }
+
+      - name: Extract jamovi R build libraries
+        shell: pwsh
+        run: |
+          $extract = Join-Path $env:RUNNER_TEMP "jamovi-windows"
           Add-Type -AssemblyName System.IO.Compression.FileSystem
           $prefixes = @(
             "jamovi/Frameworks/R/",
@@ -54,7 +83,7 @@ jobs:
           $archive = [System.IO.Compression.ZipFile]::OpenRead("$env:JAMOVI_ZIP")
           try {
             foreach ($entry in $archive.Entries) {
-              $required = $entry.FullName -eq "jamovi/bin/jamovi.exe"
+              $required = $false
               foreach ($prefix in $prefixes) {
                 $required = $required -or $entry.FullName.StartsWith($prefix)
               }
@@ -70,9 +99,17 @@ jobs:
           finally {
             $archive.Dispose()
           }
+
+      - name: Register jamovi build home
+        shell: pwsh
+        run: |
+          $extract = Join-Path $env:RUNNER_TEMP "jamovi-windows"
           $home = Join-Path $extract "jamovi"
           if (-not (Test-Path (Join-Path $home "bin\jamovi.exe"))) {
             throw "The jamovi runtime was not extracted from the official Windows archive."
+          }
+          if (-not (Test-Path (Join-Path $home "Frameworks\R\bin\x64\R.exe"))) {
+            throw "The jamovi R runtime was not extracted from the official Windows archive."
           }
           "JAMOVI_HOME=$home" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           Write-Output "Using jamovi at $home"

@@ -1,0 +1,69 @@
+---
+name: eduReliabilityOmega
+title: "Guided Reliability: McDonald's Omega"
+menuGroup: Educational Analyses
+version: '0.1.0'
+jas: '1.2'
+description:
+    main: >
+        Estimate and report internal consistency using McDonald's omega total,
+        with item diagnostics and clear interpretation guidance.
+options:
+    - { name: data, type: Data }
+    - name: items
+      title: Scale items
+      type: Variables
+      suggested: [continuous, ordinal]
+      permitted: [numeric]
+    - name: reverseItems
+      title: Reverse-keyed items
+      type: Variables
+      suggested: [continuous, ordinal]
+      permitted: [numeric]
+      default: []
+    - name: correlationType
+      title: Item correlation type
+      type: List
+      options:
+        - { name: pearson, title: Pearson correlations }
+        - { name: polychoric, title: Polychoric correlations for ordinal items }
+      default: pearson
+    - { name: bootstrapCI, title: Bootstrap confidence interval, type: Bool, default: true }
+    - { name: bootstrapSamples, title: Bootstrap resamples, type: Number, min: 20, max: 5000, default: 200 }
+    - { name: ciWidth, title: Confidence level, type: Number, min: 50, max: 99.9, default: 95 }
+    - { name: showPlot, title: Display item-quality visualisation, type: Bool, default: true }
+    - name: reportStyle
+      title: Report style
+      type: List
+      options:
+        - { name: apa7, title: APA 7th edition }
+        - { name: plain, title: Plain English / teaching explanation }
+        - { name: journal, title: Journal style }
+        - { name: dissertation, title: Dissertation style }
+      default: apa7
+    - name: reportFormat
+      title: Report format
+      type: List
+      options:
+        - { name: short, title: Short APA sentence }
+        - { name: paragraph, title: Full results paragraph }
+        - { name: bullets, title: Bullet-point interpretation }
+        - { name: table_paragraph, title: Table plus paragraph }
+        - { name: copy_ready, title: Copy-ready report block }
+      default: paragraph
+    - name: reportTone
+      title: Tone of explanation
+      type: List
+      options:
+        - { name: concise, title: Concise }
+        - { name: student_friendly, title: Student-friendly }
+        - { name: detailed, title: Detailed }
+        - { name: critical, title: Critical / publication-focused }
+      default: student_friendly
+    - { name: reportDescriptives, title: Include scale and sample description, type: Bool, default: true }
+    - { name: reportAssumptions, title: Include item and data-quality guidance, type: Bool, default: true }
+    - { name: reportEffect, title: Include omega estimate, type: Bool, default: true }
+    - { name: reportCI, title: Include confidence interval, type: Bool, default: true }
+    - { name: reportInterpretation, title: Include interpretation of reliability, type: Bool, default: true }
+    - { name: reportCautions, title: Include cautions or scoring warnings, type: Bool, default: true }
+...

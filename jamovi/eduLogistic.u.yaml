@@ -1,0 +1,41 @@
+---
+name: eduLogistic
+title: Guided Binomial Logistic Regression
+jus: '2.0'
+stage: 0
+compilerMode: tame
+children:
+  - type: VariableSupplier
+    persistentItems: false
+    children:
+      - type: TargetLayoutBox
+        label: Binary outcome
+        children: [{ type: VariablesListBox, name: outcome, maxItemCount: 1, isTarget: true }]
+      - type: TargetLayoutBox
+        label: Numeric predictors
+        children: [{ type: VariablesListBox, name: covariates, isTarget: true }]
+      - type: TargetLayoutBox
+        label: Categorical predictors
+        children: [{ type: VariablesListBox, name: factors, isTarget: true }]
+  - type: CollapseBox
+    label: Analysis
+    collapsed: false
+    children:
+      - { type: TextBox, name: ciWidth, format: number }
+  - type: CollapseBox
+    label: Reporting
+    collapsed: false
+    children:
+      - { type: ComboBox, name: reportStyle }
+      - { type: ComboBox, name: reportFormat }
+      - { type: ComboBox, name: reportTone }
+      - { type: CheckBox, name: reportDescriptives }
+      - { type: CheckBox, name: reportAssumptions }
+      - { type: CheckBox, name: reportStatistic }
+      - { type: CheckBox, name: reportDf }
+      - { type: CheckBox, name: reportP }
+      - { type: CheckBox, name: reportEffect }
+      - { type: CheckBox, name: reportCI }
+      - { type: CheckBox, name: reportInterpretation }
+      - { type: CheckBox, name: reportCautions }
+...

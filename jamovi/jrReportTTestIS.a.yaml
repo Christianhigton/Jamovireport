@@ -1,0 +1,9 @@
+---
+name: jrReportTTestIS
+title: Automatic Report for Independent Samples T-Test
+menuGroup: Report Add-ons
+version: '0.1.0'
+jas: '1.2'
+options:
+    - { name: data, type: Data }
+...

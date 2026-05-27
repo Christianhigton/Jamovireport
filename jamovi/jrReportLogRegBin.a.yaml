@@ -1,0 +1,9 @@
+---
+name: jrReportLogRegBin
+title: Automatic Report for Binomial Logistic Regression
+menuGroup: Report Add-ons
+version: '0.1.0'
+jas: '1.2'
+options:
+    - { name: data, type: Data }
+...

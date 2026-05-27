@@ -1,0 +1,11 @@
+.Rhistory
+.RData
+.Ruserdata
+.DS_Store
+.Rproj.user/
+*.Rcheck/
+*.tar.gz
+*.jmo
+build/
+man/figures/JamoviReport-logo-source.png
+Julie Pallant - SPSS Survival Manual_ A Step by Step Guide to Data Analysis Using IBM SPSS-Open University Press (2016).pdf

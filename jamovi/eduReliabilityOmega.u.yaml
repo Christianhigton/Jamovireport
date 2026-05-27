@@ -1,0 +1,40 @@
+---
+name: eduReliabilityOmega
+title: "Guided Reliability: McDonald's Omega"
+jus: '2.0'
+stage: 0
+compilerMode: tame
+children:
+  - type: VariableSupplier
+    suggested: [continuous, ordinal]
+    persistentItems: false
+    children:
+      - type: TargetLayoutBox
+        label: Scale items
+        children: [{ type: VariablesListBox, name: items, isTarget: true }]
+      - type: TargetLayoutBox
+        label: Reverse-keyed items
+        children: [{ type: VariablesListBox, name: reverseItems, isTarget: true }]
+  - type: CollapseBox
+    label: Reliability Analysis
+    collapsed: false
+    children:
+      - { type: ComboBox, name: correlationType }
+      - { type: CheckBox, name: bootstrapCI }
+      - { type: TextBox, name: bootstrapSamples, format: number, enable: (bootstrapCI) }
+      - { type: TextBox, name: ciWidth, format: number, enable: (bootstrapCI) }
+      - { type: CheckBox, name: showPlot }
+  - type: CollapseBox
+    label: Reporting
+    collapsed: false
+    children:
+      - { type: ComboBox, name: reportStyle }
+      - { type: ComboBox, name: reportFormat }
+      - { type: ComboBox, name: reportTone }
+      - { type: CheckBox, name: reportDescriptives }
+      - { type: CheckBox, name: reportAssumptions }
+      - { type: CheckBox, name: reportEffect }
+      - { type: CheckBox, name: reportCI }
+      - { type: CheckBox, name: reportInterpretation }
+      - { type: CheckBox, name: reportCautions }
+...

@@ -1,0 +1,8 @@
+---
+name: jrReportLinReg
+title: Automatic Report for Linear Regression
+jus: '2.0'
+stage: 0
+compilerMode: tame
+children: []
+...

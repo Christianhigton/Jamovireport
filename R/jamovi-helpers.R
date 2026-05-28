@@ -30,6 +30,67 @@
     do.call(edu_report, c(list(x = result), args))
 }
 
+.jr_variable_display_name <- function(data, variable) {
+    if (is.null(data) || length(variable) != 1L || !variable %in% names(data))
+        return(variable)
+    values <- data[[variable]]
+    description <- attr(values, "description", exact = TRUE)
+    if (is.null(description) || !length(description) || !nzchar(trimws(as.character(description)[1])))
+        return(variable)
+    trimws(as.character(description)[1])
+}
+
+.jr_variable_display_labels <- function(data) {
+    if (is.null(data) || is.null(names(data)))
+        return(stats::setNames(character(), character()))
+    stats::setNames(
+        vapply(names(data), function(variable) .jr_variable_display_name(data, variable), character(1)),
+        names(data)
+    )
+}
+
+.jr_regex_escape <- function(text) {
+    gsub("([][{}()+*^$|\\\\?.])", "\\\\\\1", text)
+}
+
+.jr_replace_variable_names <- function(text, labels) {
+    if (!is.character(text) || !length(labels))
+        return(text)
+    variables <- names(labels)[labels != names(labels) & nzchar(labels)]
+    variables <- variables[order(nchar(variables), decreasing = TRUE)]
+    for (variable in variables) {
+        pattern <- paste0(
+            "(?<![[:alnum:]_.])", .jr_regex_escape(variable),
+            "(?![[:alnum:]_.])"
+        )
+        text <- gsub(pattern, labels[[variable]], text, perl = TRUE)
+    }
+    text
+}
+
+.jr_apply_variable_descriptions <- function(result, data) {
+    if (!inherits(result, "edu_analysis"))
+        return(result)
+    labels <- .jr_variable_display_labels(data)
+    if (!any(labels != names(labels)))
+        return(result)
+    replace <- function(value) .jr_replace_variable_names(value, labels)
+    for (field in c("question", "requirements", "interpretation", "caution"))
+        result[[field]] <- replace(result[[field]])
+    result$report_blocks <- lapply(result$report_blocks, replace)
+    for (field in c("main", "descriptives", "effects", "diagnostics", "statistics",
+                    "parameters", "cells", "posthoc_report")) {
+        table <- result[[field]]
+        if (!is.data.frame(table))
+            next
+        character_columns <- vapply(table, is.character, logical(1))
+        table[character_columns] <- lapply(table[character_columns], replace)
+        result[[field]] <- table
+    }
+    result$variable_labels <- labels
+    result
+}
+
 .jr_html_escape <- function(text) {
     text <- gsub("&", "&amp;", text, fixed = TRUE)
     text <- gsub("<", "&lt;", text, fixed = TRUE)
@@ -519,6 +580,9 @@
 }
 
 .jr_addon_set_card <- function(self, results, note = "") {
+    results <- lapply(results, function(result) {
+        .jr_apply_variable_descriptions(result, self$data)
+    })
     .jr_addon_set_tables(self, results)
     self$parent$results$get("jamoviReportCard")$setContent(
         .jr_addon_report_html(results, options = .jr_addon_reporting_options(), note = note)

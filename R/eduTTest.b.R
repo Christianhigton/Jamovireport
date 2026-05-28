@@ -20,6 +20,7 @@ eduTTestClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class(
                 var_equal = self$options$varEqual,
                 ci = self$options$ciWidth / 100
             )
+            result <- .jr_apply_variable_descriptions(result, self$data)
             self$results$overview$setContent(.jr_jamovi_overview_html(result))
             self$results$main$addRow(rowKey = 1, values = as.list(result$statistics[1, ]))
 

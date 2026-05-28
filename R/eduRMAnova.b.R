@@ -18,6 +18,7 @@ eduRMAnovaClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class(
                 self$data, self$options$measures, labels,
                 ci = self$options$ciWidth / 100
             )
+            result <- .jr_apply_variable_descriptions(result, self$data)
             self$results$overview$setContent(.jr_jamovi_overview_html(result))
             for (i in seq_len(nrow(result$statistics)))
                 self$results$main$addRow(rowKey = i, values = as.list(result$statistics[i, ]))

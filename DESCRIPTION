@@ -1,7 +1,7 @@
 Package: JamoviReport
 Type: Package
 Title: Educational Statistical Reporting for R and jamovi
-Version: 0.1.0.9010
+Version: 0.1.0.9011
 Authors@R: person("Christian", "Higton", role = c("aut", "cre"),
     email = "christianhigton@gmail.com")
 Description: Provides guided statistical analyses with assumption diagnostics,

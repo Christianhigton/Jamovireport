@@ -206,36 +206,36 @@ eduCorrelationResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
             self$add(jmvcore::Html$new(
                 options=options,
                 name="overview",
-                title="JamoviReport: Overview and Why This Test?"))
+                title="jamovi Report: Overview and Why This Test?"))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="main",
                 title="Main Result",
                 columns=list(
                     list(
-                        `name`="test", 
-                        `title`="Method", 
+                        `name`="test",
+                        `title`="Method",
                         `type`="text"),
                     list(
-                        `name`="statistic", 
-                        `title`="Coefficient", 
+                        `name`="statistic",
+                        `title`="Coefficient",
                         `type`="number"),
                     list(
-                        `name`="df", 
-                        `title`="df", 
+                        `name`="df",
+                        `title`="df",
                         `type`="number"),
                     list(
-                        `name`="p", 
-                        `title`="p", 
-                        `type`="number", 
+                        `name`="p",
+                        `title`="p",
+                        `type`="number",
                         `format`="zto,pvalue"),
                     list(
-                        `name`="ci_low", 
-                        `title`="CI Lower", 
+                        `name`="ci_low",
+                        `title`="CI Lower",
                         `type`="number"),
                     list(
-                        `name`="ci_high", 
-                        `title`="CI Upper", 
+                        `name`="ci_high",
+                        `title`="CI Upper",
                         `type`="number"))))
             self$add(jmvcore::Table$new(
                 options=options,
@@ -243,20 +243,20 @@ eduCorrelationResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
                 title="Descriptive Statistics",
                 columns=list(
                     list(
-                        `name`="label", 
-                        `title`="Variable", 
+                        `name`="label",
+                        `title`="Variable",
                         `type`="text"),
                     list(
-                        `name`="n", 
-                        `title`="N", 
+                        `name`="n",
+                        `title`="N",
                         `type`="integer"),
                     list(
-                        `name`="mean", 
-                        `title`="Mean", 
+                        `name`="mean",
+                        `title`="Mean",
                         `type`="number"),
                     list(
-                        `name`="sd", 
-                        `title`="SD", 
+                        `name`="sd",
+                        `title`="SD",
                         `type`="number"))))
             self$add(jmvcore::Table$new(
                 options=options,
@@ -264,29 +264,33 @@ eduCorrelationResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
                 title="Assumption Checks and Guidance",
                 columns=list(
                     list(
-                        `name`="check", 
-                        `title`="Check", 
+                        `name`="check",
+                        `title`="Check",
                         `type`="text"),
                     list(
-                        `name`="statistic", 
-                        `title`="Statistic", 
+                        `name`="tested",
+                        `title`="Tested?",
+                        `type`="text"),
+                    list(
+                        `name`="statistic",
+                        `title`="Statistic",
                         `type`="number"),
                     list(
-                        `name`="p", 
-                        `title`="p", 
-                        `type`="number", 
+                        `name`="p",
+                        `title`="p",
+                        `type`="number",
                         `format`="zto,pvalue"),
                     list(
-                        `name`="status", 
-                        `title`="Status", 
+                        `name`="status",
+                        `title`="Status",
                         `type`="text"),
                     list(
-                        `name`="interpretation", 
-                        `title`="Interpretation", 
+                        `name`="interpretation",
+                        `title`="Interpretation",
                         `type`="text"),
                     list(
-                        `name`="action", 
-                        `title`="Recommended Action", 
+                        `name`="action",
+                        `title`="Recommended Action",
                         `type`="text"))))
             self$add(jmvcore::Html$new(
                 options=options,
@@ -328,9 +332,9 @@ eduCorrelationBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
 
 #' Guided Correlation
 #'
-#' Explain the direction, strength, assumptions, and reporting of an 
+#' Explain the direction, strength, assumptions, and reporting of an
 #' association between two numeric variables.
-#' 
+#'
 #' @param data .
 #' @param x .
 #' @param y .

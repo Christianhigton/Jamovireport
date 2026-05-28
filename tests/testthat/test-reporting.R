@@ -46,6 +46,18 @@ test_that("factorial ANOVA effect sizes can be omitted from reporting", {
     )
 
     expect_false(grepl("partial eta-squared", text, fixed = TRUE))
+    expect_false(grepl("Interpretation note", text, fixed = TRUE))
+})
+
+test_that("reported effect sizes include benchmarks and interpretation note", {
+    result <- edu_t_test(ToothGrowth, "len", "supp")
+    text <- edu_report(result, format = "short")
+    rows <- .jr_addon_apa_rows(list(result))
+
+    expect_match(text, "Effect-size benchmark")
+    expect_match(text, "Interpretation note")
+    expect_match(text, "Cohen, 1988; Cumming, 2014", fixed = TRUE)
+    expect_match(rows$effect[1], "large|medium|small|below small")
 })
 
 test_that("omega estimates and intervals follow reporting inclusion controls", {
@@ -76,7 +88,7 @@ test_that("jamovi report content is rendered as structured HTML cards", {
     interpretation <- .jr_jamovi_interpretation_html(result)
 
     expect_match(overview, "<div")
-    expect_match(overview, "JamoviReport")
+    expect_match(overview, "jamovi Report")
     expect_match(overview, "Reporting controls")
     expect_match(report, "Copy-ready reporting")
     expect_match(report, "Welch independent-samples t-test")
@@ -139,7 +151,7 @@ test_that("native add-ons use a fixed automatic APA reporting profile", {
     expect_match(report, "Student's independent-samples t-test")
     expect_match(report, "Cohen")
     expect_match(report, "95% CI")
-    expect_match(.jr_addon_heading_html(), "Educational Analyses")
+    expect_match(.jr_addon_heading_html(), "jamovi Report")
 })
 
 test_that("automatic native reports render for supported group comparison designs", {
@@ -317,8 +329,9 @@ test_that("native assumption table identifies concerns and recommended actions",
     result <- edu_t_test(ToothGrowth, "len", "supp")
     rows <- .jr_addon_assumption_rows(list(result))
 
-    expect_named(rows, c("analysis", "assumption", "statistic", "p", "met", "interpretation", "action"))
+    expect_named(rows, c("analysis", "assumption", "tested", "statistic", "p", "met", "interpretation", "action"))
     expect_true(any(rows$met == "Concern"))
+    expect_true(all(rows$tested %in% c("Yes", "No")))
     expect_true(any(nzchar(rows$action)))
     expect_match(rows$assumption, "Normality|Homogeneity", all = FALSE)
 })

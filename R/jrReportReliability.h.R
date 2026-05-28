@@ -54,7 +54,7 @@ jrReportReliabilityBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6
 
 #' Automatic Omega Report for Reliability Analysis
 #'
-#' 
+#'
 #' @param data .
 #' @return A results object containing:
 #' \tabular{llllll}{

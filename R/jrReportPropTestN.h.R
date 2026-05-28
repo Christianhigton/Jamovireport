@@ -54,7 +54,7 @@ jrReportPropTestNBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
 
 #' Automatic Report for Chi-Square Goodness-of-Fit
 #'
-#' 
+#'
 #' @param data .
 #' @return A results object containing:
 #' \tabular{llllll}{

@@ -54,7 +54,7 @@ jrReportAnovaRMBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
 
 #' Automatic Report for Repeated Measures ANOVA
 #'
-#' 
+#'
 #' @param data .
 #' @return A results object containing:
 #' \tabular{llllll}{

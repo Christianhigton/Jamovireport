@@ -200,35 +200,35 @@ eduReliabilityOmegaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6:
             self$add(jmvcore::Html$new(
                 options=options,
                 name="overview",
-                title="JamoviReport: Overview and Why Omega?"))
+                title="jamovi Report: Overview and Why Omega?"))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="main",
                 title="Reliability Estimate",
                 columns=list(
                     list(
-                        `name`="coefficient", 
-                        `title`="Coefficient", 
+                        `name`="coefficient",
+                        `title`="Coefficient",
                         `type`="text"),
                     list(
-                        `name`="estimate", 
-                        `title`="Estimate", 
+                        `name`="estimate",
+                        `title`="Estimate",
                         `type`="number"),
                     list(
-                        `name`="ci_low", 
-                        `title`="CI Lower", 
+                        `name`="ci_low",
+                        `title`="CI Lower",
                         `type`="number"),
                     list(
-                        `name`="ci_high", 
-                        `title`="CI Upper", 
+                        `name`="ci_high",
+                        `title`="CI Upper",
                         `type`="number"),
                     list(
-                        `name`="n", 
-                        `title`="Complete N", 
+                        `name`="n",
+                        `title`="Complete N",
                         `type`="integer"),
                     list(
-                        `name`="items", 
-                        `title`="Items", 
+                        `name`="items",
+                        `title`="Items",
                         `type`="integer"))))
             self$add(jmvcore::Table$new(
                 options=options,
@@ -236,32 +236,32 @@ eduReliabilityOmegaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6:
                 title="Item Quality Guidance",
                 columns=list(
                     list(
-                        `name`="item", 
-                        `title`="Item", 
+                        `name`="item",
+                        `title`="Item",
                         `type`="text"),
                     list(
-                        `name`="scoring", 
-                        `title`="Scoring Direction", 
+                        `name`="scoring",
+                        `title`="Scoring Direction",
                         `type`="text"),
                     list(
-                        `name`="n", 
-                        `title`="N", 
+                        `name`="n",
+                        `title`="N",
                         `type`="integer"),
                     list(
-                        `name`="mean", 
-                        `title`="Mean", 
+                        `name`="mean",
+                        `title`="Mean",
                         `type`="number"),
                     list(
-                        `name`="sd", 
-                        `title`="SD", 
+                        `name`="sd",
+                        `title`="SD",
                         `type`="number"),
                     list(
-                        `name`="item_total_r", 
-                        `title`="Corrected Item-Total r", 
+                        `name`="item_total_r",
+                        `title`="Corrected Item-Total r",
                         `type`="number"),
                     list(
-                        `name`="loading", 
-                        `title`="Factor Loading", 
+                        `name`="loading",
+                        `title`="Factor Loading",
                         `type`="number"))))
             self$add(jmvcore::Table$new(
                 options=options,
@@ -269,29 +269,33 @@ eduReliabilityOmegaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6:
                 title="Data and Interpretation Guidance",
                 columns=list(
                     list(
-                        `name`="check", 
-                        `title`="Check", 
+                        `name`="check",
+                        `title`="Check",
                         `type`="text"),
                     list(
-                        `name`="statistic", 
-                        `title`="Statistic", 
+                        `name`="tested",
+                        `title`="Tested?",
+                        `type`="text"),
+                    list(
+                        `name`="statistic",
+                        `title`="Statistic",
                         `type`="number"),
                     list(
-                        `name`="p", 
-                        `title`="p", 
-                        `type`="number", 
+                        `name`="p",
+                        `title`="p",
+                        `type`="number",
                         `format`="zto,pvalue"),
                     list(
-                        `name`="status", 
-                        `title`="Status", 
+                        `name`="status",
+                        `title`="Status",
                         `type`="text"),
                     list(
-                        `name`="interpretation", 
-                        `title`="Interpretation", 
+                        `name`="interpretation",
+                        `title`="Interpretation",
                         `type`="text"),
                     list(
-                        `name`="action", 
-                        `title`="Recommended Action", 
+                        `name`="action",
+                        `title`="Recommended Action",
                         `type`="text"))))
             self$add(jmvcore::Html$new(
                 options=options,
@@ -333,9 +337,9 @@ eduReliabilityOmegaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6
 
 #' Guided Reliability: McDonald's Omega
 #'
-#' Estimate and report internal consistency using McDonald's omega total, with 
+#' Estimate and report internal consistency using McDonald's omega total, with
 #' item diagnostics and clear interpretation guidance.
-#' 
+#'
 #' @param data .
 #' @param items .
 #' @param reverseItems .

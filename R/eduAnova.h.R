@@ -212,44 +212,44 @@ eduAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$add(jmvcore::Html$new(
                 options=options,
                 name="overview",
-                title="JamoviReport: Overview and Why This Test?"))
+                title="jamovi Report: Overview and Why This Test?"))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="main",
                 title="Main Results and Effect Size",
                 columns=list(
                     list(
-                        `name`="test", 
-                        `title`="Test", 
+                        `name`="test",
+                        `title`="Test",
                         `type`="text"),
                     list(
-                        `name`="statistic", 
-                        `title`="F", 
+                        `name`="statistic",
+                        `title`="F",
                         `type`="number"),
                     list(
-                        `name`="df1", 
-                        `title`="df1", 
+                        `name`="df1",
+                        `title`="df1",
                         `type`="number"),
                     list(
-                        `name`="df2", 
-                        `title`="df2", 
+                        `name`="df2",
+                        `title`="df2",
                         `type`="number"),
                     list(
-                        `name`="p", 
-                        `title`="p", 
-                        `type`="number", 
+                        `name`="p",
+                        `title`="p",
+                        `type`="number",
                         `format`="zto,pvalue"),
                     list(
-                        `name`="effect", 
-                        `title`="Eta-squared", 
+                        `name`="effect",
+                        `title`="Eta-squared",
                         `type`="number"),
                     list(
-                        `name`="ci_low", 
-                        `title`="CI Lower", 
+                        `name`="ci_low",
+                        `title`="CI Lower",
                         `type`="number"),
                     list(
-                        `name`="ci_high", 
-                        `title`="CI Upper", 
+                        `name`="ci_high",
+                        `title`="CI Upper",
                         `type`="number"))))
             self$add(jmvcore::Table$new(
                 options=options,
@@ -257,20 +257,20 @@ eduAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 title="Descriptive Statistics",
                 columns=list(
                     list(
-                        `name`="label", 
-                        `title`="Group", 
+                        `name`="label",
+                        `title`="Group",
                         `type`="text"),
                     list(
-                        `name`="n", 
-                        `title`="N", 
+                        `name`="n",
+                        `title`="N",
                         `type`="integer"),
                     list(
-                        `name`="mean", 
-                        `title`="Mean", 
+                        `name`="mean",
+                        `title`="Mean",
                         `type`="number"),
                     list(
-                        `name`="sd", 
-                        `title`="SD", 
+                        `name`="sd",
+                        `title`="SD",
                         `type`="number"))))
             self$add(jmvcore::Table$new(
                 options=options,
@@ -278,29 +278,33 @@ eduAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 title="Assumption Checks and Guidance",
                 columns=list(
                     list(
-                        `name`="check", 
-                        `title`="Check", 
+                        `name`="check",
+                        `title`="Check",
                         `type`="text"),
                     list(
-                        `name`="statistic", 
-                        `title`="Statistic", 
+                        `name`="tested",
+                        `title`="Tested?",
+                        `type`="text"),
+                    list(
+                        `name`="statistic",
+                        `title`="Statistic",
                         `type`="number"),
                     list(
-                        `name`="p", 
-                        `title`="p", 
-                        `type`="number", 
+                        `name`="p",
+                        `title`="p",
+                        `type`="number",
                         `format`="zto,pvalue"),
                     list(
-                        `name`="status", 
-                        `title`="Status", 
+                        `name`="status",
+                        `title`="Status",
                         `type`="text"),
                     list(
-                        `name`="interpretation", 
-                        `title`="Interpretation", 
+                        `name`="interpretation",
+                        `title`="Interpretation",
                         `type`="text"),
                     list(
-                        `name`="action", 
-                        `title`="Recommended Action", 
+                        `name`="action",
+                        `title`="Recommended Action",
                         `type`="text"))))
             self$add(jmvcore::Html$new(
                 options=options,
@@ -342,9 +346,9 @@ eduAnovaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 
 #' Guided One-Way ANOVA
 #'
-#' Compare means across three or more independent groups with effect sizes, 
+#' Compare means across three or more independent groups with effect sizes,
 #' assumption guidance, and report-ready explanation.
-#' 
+#'
 #' @param data .
 #' @param outcome .
 #' @param group .

@@ -54,7 +54,7 @@ jrReportTTestISBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
 
 #' Automatic Report for Independent Samples T-Test
 #'
-#' 
+#'
 #' @param data .
 #' @return A results object containing:
 #' \tabular{llllll}{

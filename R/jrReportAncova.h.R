@@ -54,7 +54,7 @@ jrReportAncovaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
 
 #' Automatic Report for ANCOVA
 #'
-#' 
+#'
 #' @param data .
 #' @return A results object containing:
 #' \tabular{llllll}{

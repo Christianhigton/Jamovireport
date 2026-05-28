@@ -54,7 +54,7 @@ jrReportLinRegBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
 
 #' Automatic Report for Linear Regression
 #'
-#' 
+#'
 #' @param data .
 #' @return A results object containing:
 #' \tabular{llllll}{

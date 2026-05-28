@@ -24,6 +24,11 @@ edu_reporting_options <- function(
                               descriptives, effects, diagnostics, interpretation,
                               caution, plot_data, report_blocks, statistics,
                               call = NULL) {
+    diagnostics <- .jr_normalize_diagnostics(diagnostics)
+    diagnostics <- .jr_normalize_diagnostics(rbind(
+        .jr_default_assumptions(analysis),
+        diagnostics
+    ))
     structure(
         list(
             analysis = analysis,
@@ -66,6 +71,11 @@ edu_report <- function(
     options <- edu_reporting_options(style, format, include, tone)
     blocks <- x$report_blocks
     blocks$apa <- .jr_apply_inclusions(blocks$apa, x$analysis, options$include)
+    if ("effect_size" %in% options$include) {
+        effect_text <- .jr_effect_benchmark_text(x)
+        if (nzchar(effect_text))
+            blocks$apa <- paste(blocks$apa, effect_text, .jr_effect_interpretation_note(), sep = " ")
+    }
 
     if (options$style == "plain") {
         opening <- sprintf("What this analysis asks: %s", x$question)
@@ -93,6 +103,92 @@ edu_report <- function(
     if (options$format == "bullets")
         return(paste0("- ", selected, collapse = "\n"))
     paste(selected, collapse = "\n\n")
+}
+
+.jr_effect_interpretation_note <- function() {
+    paste(
+        "Interpretation note: Conventional benchmarks for effect sizes (e.g., Cohen's small, medium, and large guidelines) are intended as rough aids to interpretation rather than strict cut-offs.",
+        "Values close to a boundary should not be interpreted differently simply because they fall on one side of a threshold.",
+        "The practical importance of an effect should be considered in the context of the research area, measurement scale, and existing literature (Cohen, 1988; Cumming, 2014)."
+    )
+}
+
+.jr_effect_size_name <- function(analysis) {
+    switch(
+        analysis,
+        ttest = "Cohen's d",
+        mann_whitney = "rank-biserial r",
+        wilcoxon_signed_rank = "rank-biserial r",
+        anova_oneway = "eta-squared",
+        anova_between = "partial eta-squared",
+        ancova = "partial eta-squared",
+        anova_rm = "partial eta-squared",
+        anova_mixed = "partial eta-squared",
+        manova = "Pillai's trace",
+        correlation = "correlation coefficient",
+        regression = "R-squared",
+        logistic_regression = "McFadden's R-squared",
+        chisq_independence = "Cramer's V",
+        chisq_gof = "Cohen's w",
+        reliability_omega = "omega",
+        ""
+    )
+}
+
+.jr_effect_values <- function(x) {
+    statistics <- x$statistics
+    if (!is.data.frame(statistics) || nrow(statistics) == 0L)
+        return(numeric())
+    if (x$analysis == "correlation" && "statistic" %in% names(statistics))
+        return(abs(statistics$statistic))
+    if (x$analysis == "reliability_omega" && "estimate" %in% names(statistics))
+        return(statistics$estimate)
+    if (x$analysis %in% c("regression", "logistic_regression") && "r2" %in% names(statistics))
+        return(statistics$r2)
+    if ("effect" %in% names(statistics))
+        return(abs(statistics$effect))
+    numeric()
+}
+
+.jr_effect_magnitude <- function(analysis, value) {
+    value <- abs(as.numeric(value))
+    if (!is.finite(value))
+        return("not benchmarked")
+    cutoffs <- switch(
+        analysis,
+        ttest = c(.2, .5, .8),
+        mann_whitney = c(.1, .3, .5),
+        wilcoxon_signed_rank = c(.1, .3, .5),
+        correlation = c(.1, .3, .5),
+        anova_oneway = c(.01, .06, .14),
+        anova_between = c(.01, .06, .14),
+        ancova = c(.01, .06, .14),
+        anova_rm = c(.01, .06, .14),
+        anova_mixed = c(.01, .06, .14),
+        chisq_gof = c(.1, .3, .5),
+        chisq_independence = c(.1, .3, .5),
+        regression = c(.02, .13, .26),
+        logistic_regression = c(.02, .13, .26),
+        reliability_omega = c(.5, .7, .8),
+        manova = c(.01, .06, .14),
+        NULL
+    )
+    if (is.null(cutoffs))
+        return("not benchmarked")
+    if (value < cutoffs[1]) "below small" else if (value < cutoffs[2]) "small" else if (value < cutoffs[3]) "medium" else "large"
+}
+
+.jr_effect_benchmark_text <- function(x) {
+    values <- .jr_effect_values(x)
+    name <- .jr_effect_size_name(x$analysis)
+    if (!length(values) || !nzchar(name))
+        return("")
+    magnitudes <- vapply(values, function(value) .jr_effect_magnitude(x$analysis, value), character(1))
+    values <- vapply(values, .jr_num, character(1), digits = 2L, omit_zero = TRUE)
+    if (length(values) == 1L)
+        return(sprintf("Effect-size benchmark: %s = %s is conventionally interpreted as %s.", name, values, magnitudes))
+    summary <- paste(sprintf("%s (%s)", values, magnitudes), collapse = ", ")
+    sprintf("Effect-size benchmarks for %s: %s.", name, summary)
 }
 
 .jr_apply_inclusions <- function(text, analysis, include) {

@@ -54,7 +54,7 @@ jrReportCorrMatrixBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
 
 #' Automatic Report for Correlation Matrix
 #'
-#' 
+#'
 #' @param data .
 #' @return A results object containing:
 #' \tabular{llllll}{

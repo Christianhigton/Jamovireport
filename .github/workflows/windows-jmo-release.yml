@@ -70,7 +70,8 @@ jobs:
           try {
             foreach ($requiredEntry in $requiredEntries) {
               $entry = $archive.GetEntry($requiredEntry)
-              $destination = Join-Path $extract $requiredEntry
+              $relative = $requiredEntry.Replace("/", [System.IO.Path]::DirectorySeparatorChar)
+              $destination = Join-Path $extract $relative
               New-Item -ItemType Directory -Force -Path (Split-Path $destination -Parent) | Out-Null
               [System.IO.Compression.ZipFileExtensions]::ExtractToFile($entry, $destination, $true)
             }

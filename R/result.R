@@ -71,10 +71,12 @@ edu_report <- function(
     options <- edu_reporting_options(style, format, include, tone)
     blocks <- x$report_blocks
     blocks$apa <- .jr_apply_inclusions(blocks$apa, x$analysis, options$include)
+    note <- ""
     if ("effect_size" %in% options$include) {
         effect_text <- .jr_effect_benchmark_text(x)
         if (nzchar(effect_text))
-            blocks$apa <- paste(blocks$apa, effect_text, .jr_effect_interpretation_note(), sep = " ")
+            blocks$apa <- paste(blocks$apa, effect_text, sep = " ")
+        note <- .jr_effect_interpretation_note()
     }
 
     if (options$style == "plain") {
@@ -100,6 +102,10 @@ edu_report <- function(
     }
 
     selected <- selected[nzchar(selected)]
+    if (nzchar(note)) {
+        note <- paste0("*", note, "*")
+        selected <- c(selected, note)
+    }
     if (options$format == "bullets")
         return(paste0("- ", selected, collapse = "\n"))
     paste(selected, collapse = "\n\n")

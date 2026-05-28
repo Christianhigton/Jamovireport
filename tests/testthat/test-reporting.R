@@ -56,6 +56,7 @@ test_that("reported effect sizes include benchmarks and interpretation note", {
 
     expect_match(text, "Effect-size benchmark")
     expect_match(text, "Interpretation note")
+    expect_match(text, "\n\n\\*Interpretation note:")
     expect_match(text, "Cohen, 1988; Cumming, 2014", fixed = TRUE)
     expect_match(rows$effect[1], "large|medium|small|below small")
 })

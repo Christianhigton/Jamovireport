@@ -1,6 +1,7 @@
 export(edu_anova_oneway)
 export(edu_anova_between)
 export(edu_ancova)
+export(eduMancova)
 export(edu_anova_mixed)
 export(edu_anova_rm)
 export(edu_manova)

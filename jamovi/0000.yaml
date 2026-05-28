@@ -1,7 +1,7 @@
 ---
 title: JamoviReport
 name: JamoviReport
-version: 0.1.0.9011
+version: 0.1.0.9012
 jms: '1.0'
 authors:
   - Christian Higton
@@ -121,6 +121,16 @@ analyses:
     description: >
       Compare adjusted group means while explicitly checking whether
       covariate-outcome slopes are comparable across groups.
+    category: analyses
+  - title: Guided MANOVA / MANCOVA
+    name: eduMancova
+    ns: JamoviReport
+    menuGroup: Educational Analyses
+    menuSubgroup: Group Comparisons
+    menuTitle: Guided MANOVA / MANCOVA
+    description: >
+      Test whether two or more dependent variables jointly vary across
+      categorical factors and optional numeric covariates.
     category: analyses
   - title: 'Guided Reliability: McDonald''s Omega'
     name: eduReliabilityOmega

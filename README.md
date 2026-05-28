@@ -105,7 +105,7 @@ solid series. Separate compatible builds or a jamovi Library release are
 required for those environments.
 
 Windows x64 development builds use the filename
-`JamoviReport_0.1.0.9011_windows_x64_jamovi-2.7.jmo`, generated on a Windows
+`JamoviReport_0.1.0.9012_windows_x64_jamovi-2.7.jmo`, generated on a Windows
 runner for the jamovi 2.7 series.
 
 ## Report Add-ons

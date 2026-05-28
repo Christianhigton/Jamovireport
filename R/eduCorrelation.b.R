@@ -10,6 +10,7 @@ eduCorrelationClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class(
                 self$data, self$options$x, self$options$y,
                 method = self$options$method, ci = self$options$ciWidth / 100
             )
+            result <- .jr_apply_variable_descriptions(result, self$data)
             self$results$overview$setContent(.jr_jamovi_overview_html(result))
             self$results$main$addRow(rowKey = 1, values = as.list(result$statistics[1, ]))
             for (i in seq_len(nrow(result$descriptives))) {

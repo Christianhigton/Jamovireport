@@ -23,6 +23,7 @@ eduChiSquareGoodnessClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6
                 self$data, self$options$variable, counts = self$options$counts,
                 expected = expected
             )
+            result <- .jr_apply_variable_descriptions(result, self$data)
             self$results$overview$setContent(.jr_jamovi_overview_html(result))
             self$results$fit$addRow(rowKey = 1, values = as.list(result$statistics[1, ]))
             for (i in seq_len(nrow(result$cells)))

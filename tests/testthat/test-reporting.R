@@ -83,6 +83,38 @@ test_that("jamovi report content is rendered as structured HTML cards", {
     expect_match(interpretation, "What does this mean")
 })
 
+test_that("jamovi report display names prefer variable descriptions with name fallback", {
+    d <- ToothGrowth
+    attr(d$len, "description") <- "Tooth length in millimetres"
+    attr(d$supp, "description") <- " "
+    attr(d$supp, "label") <- "Supplement label should not be used"
+    result <- .jr_apply_variable_descriptions(edu_t_test(d, "len", "supp"), d)
+    text <- edu_report(result, style = "plain", format = "paragraph")
+
+    expect_match(text, "Tooth length in millimetres", fixed = TRUE)
+    expect_match(text, "supp", fixed = TRUE)
+    expect_false(grepl("Supplement label should not be used", text, fixed = TRUE))
+    expect_match(result$question, "Tooth length in millimetres", fixed = TRUE)
+    expect_match(result$question, "supp", fixed = TRUE)
+})
+
+test_that("MANOVA report display names use variable descriptions", {
+    d <- iris
+    attr(d$Sepal.Length, "description") <- "Sepal length"
+    attr(d$Sepal.Width, "description") <- "Sepal width"
+    attr(d$Species, "description") <- "Flower species"
+    result <- .jr_apply_variable_descriptions(
+        edu_manova(d, c("Sepal.Length", "Sepal.Width"), "Species"),
+        d
+    )
+    text <- edu_report(result, style = "apa7", format = "short")
+
+    expect_match(text, "Sepal length", fixed = TRUE)
+    expect_match(text, "Sepal width", fixed = TRUE)
+    expect_match(text, "Flower species", fixed = TRUE)
+    expect_equal(result$statistics$term[1], "Flower species")
+})
+
 test_that("add-on report options update the guided report card content", {
     result <- edu_t_test(ToothGrowth, "len", "supp")
     options <- list(

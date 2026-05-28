@@ -54,7 +54,7 @@ jrReportAnovaOneWBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
 
 #' Automatic Report for One-Way ANOVA
 #'
-#' 
+#'
 #' @param data .
 #' @return A results object containing:
 #' \tabular{llllll}{

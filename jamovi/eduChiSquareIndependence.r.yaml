@@ -3,7 +3,7 @@ name: eduChiSquareIndependence
 title: Guided Chi-Square Test of Independence
 jrs: '1.1'
 items:
-    - { name: overview, title: 'JamoviReport: Overview and Why This Test?', type: Html }
+    - { name: overview, title: 'jamovi Report: Overview and Why This Test?', type: Html }
     - name: fit
       title: Main Results and Effect Size
       type: Table
@@ -27,6 +27,7 @@ items:
       type: Table
       columns:
         - { name: check, title: Check, type: text }
+        - { name: tested, title: "Tested?", type: text }
         - { name: statistic, title: Statistic, type: number }
         - { name: p, title: p, type: number, format: "zto,pvalue" }
         - { name: status, title: Status, type: text }

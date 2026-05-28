@@ -1,10 +1,10 @@
-# JamoviReport
+# jamovi Report
 
 <p align="center">
   <img src="man/figures/JamoviReport-logo.png" alt="JamoviReport logo" width="220" />
 </p>
 
-`JamoviReport` is an early dual-use R package and jamovi module for guided
+`jamovi Report` is an early dual-use R package and jamovi module for guided
 statistical reporting. It prioritises explanations, diagnostics, effect sizes,
 confidence intervals, and report-ready prose over raw output alone.
 
@@ -29,7 +29,7 @@ confidence intervals, and report-ready prose over raw output alone.
 ## R Usage
 
 ```r
-library(JamoviReport)
+library(jamovi Report)
 
 t_test <- edu_t_test(ToothGrowth, "len", "supp")
 edu_report(t_test, style = "apa7", format = "paragraph")
@@ -76,13 +76,21 @@ edu_report(reliability, style = "apa7", format = "paragraph")
 
 ## jamovi Module
 
-The jamovi module exposes twelve analyses under **Educational Analyses**, including
+The jamovi module exposes supported analyses under **jamovi Report**, including
 between-subjects ANOVA, repeated-measures ANOVA, mixed ANOVA, ANCOVA, and
 omega-based reliability analysis. Guided analyses now show overview,
 interpretation, and copy-ready report text as separate formatted result cards.
 Each includes a consistent **Reporting** section with style, format, tone, and
 included-content controls. Reports update when options change because they are
 rendered from the same structured result object used by the R API.
+
+Simplified report-style output is available only for supported analyses and
+will appear when those analyses are run from their respective jamovi analysis
+menus. Assumption tables state whether each assumption was tested, the statistic
+and p value where available, whether the assumption appears to have been met,
+and guidance for interpreting violations or checks that require design review.
+Effect sizes include conventional benchmark language plus a caution that those
+benchmarks are rough interpretive aids rather than strict cut-offs.
 
 ## Installing in jamovi
 
@@ -105,7 +113,7 @@ solid series. Separate compatible builds or a jamovi Library release are
 required for those environments.
 
 Windows x64 development builds use the filename
-`JamoviReport_0.1.0.9012_windows_x64_jamovi-2.7.jmo`, generated on a Windows
+`JamoviReport_0.1.0.9013_windows_x64_jamovi-2.7.jmo`, generated on a Windows
 runner for the jamovi 2.7 series.
 
 ## Report Add-ons
@@ -113,7 +121,7 @@ runner for the jamovi 2.7 series.
 The module follows the `moretests` pattern by registering **Report Add-ons**
 for standard jamovi analyses. Once installed, supported built-in analyses
 automatically append an **APA Results Summary**, an **Assumptions and Recommended
-Actions** table, and an **Automatic Report (JamoviReport)** output block after
+Actions** table, and an **Automatic Report (jamovi Report)** output block after
 valid variables have been entered. Native add-on reports use a consistent APA
 paragraph profile containing descriptives, assumption guidance, test
 statistics, effect sizes, confidence intervals where available,
@@ -121,8 +129,8 @@ interpretation, and cautions.
 
 jamovi does not allow an `addonFor` analysis to insert new report controls into
 a built-in analysis options panel. Configurable style/tone controls therefore
-remain available only in the module's optional **Educational Analyses**
-entries. JamoviReport labels this distinction in its results output.
+remain available only in the module's optional **jamovi Report**
+entries. jamovi Report labels this distinction in its results output.
 
 Initial report add-ons cover:
 
@@ -156,11 +164,26 @@ correction choices, and other settings that affect wording.
 
 Assumption diagnostics are presented as interpretation guidance. They do not
 silently replace a planned analysis solely because a preliminary diagnostic
-test is significant.
+test is significant. Some assumptions, such as independence, category
+exclusivity, model specification, and measurement-scale suitability, cannot be
+verified from the selected columns alone and are therefore flagged as requiring
+research-design review.
+
+## Effect Size Benchmarks
+
+Effect size benchmarks follow common conventions such as Cohen's small, medium,
+and large guidelines. The module reports them as rough interpretive aids rather
+than strict thresholds. Practical importance should be judged in the context of
+the research area, measurement scale, and existing literature.
+
+References:
+
+- Cohen, J. (1988). *Statistical Power Analysis for the Behavioral Sciences* (2nd ed.). Lawrence Erlbaum Associates.
+- Cumming, G. (2014). The new statistics: Why and how. *Psychological Science, 25*(1), 7-29.
 
 ## Licence and Sharing
 
-JamoviReport is licensed under the GNU General Public License version 3
+jamovi Report is licensed under the GNU General Public License version 3
 (`GPL-3`). See [LICENSE.md](LICENSE.md) for the full repository copy of the
 licence and [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) for the current
 jamovi module dependency audit. When a `.jmo` build is shared, its corresponding

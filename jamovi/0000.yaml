@@ -1,7 +1,7 @@
 ---
-title: JamoviReport
+title: jamovi Report
 name: JamoviReport
-version: 0.1.0.9012
+version: 0.1.0.9013
 jms: '1.0'
 authors:
   - Christian Higton
@@ -15,7 +15,7 @@ analyses:
   - title: Guided T-Test
     name: eduTTest
     ns: JamoviReport
-    menuGroup: Educational Analyses
+    menuGroup: jamovi Report
     menuSubgroup: Group Comparisons
     menuTitle: Guided T-Test
     description: >
@@ -25,7 +25,7 @@ analyses:
   - title: Guided One-Way ANOVA
     name: eduAnova
     ns: JamoviReport
-    menuGroup: Educational Analyses
+    menuGroup: jamovi Report
     menuSubgroup: Group Comparisons
     menuTitle: Guided One-Way ANOVA
     description: >
@@ -35,7 +35,7 @@ analyses:
   - title: Guided Correlation
     name: eduCorrelation
     ns: JamoviReport
-    menuGroup: Educational Analyses
+    menuGroup: jamovi Report
     menuSubgroup: Association
     menuTitle: Guided Correlation
     description: >
@@ -45,7 +45,7 @@ analyses:
   - title: Guided Chi-Square Test of Independence
     name: eduChiSquareIndependence
     ns: JamoviReport
-    menuGroup: Educational Analyses
+    menuGroup: jamovi Report
     menuSubgroup: Frequencies
     menuTitle: Guided Chi-Square Test of Independence
     description: >
@@ -55,7 +55,7 @@ analyses:
   - title: Guided Chi-Square Goodness-of-Fit
     name: eduChiSquareGoodness
     ns: JamoviReport
-    menuGroup: Educational Analyses
+    menuGroup: jamovi Report
     menuSubgroup: Frequencies
     menuTitle: Guided Chi-Square Goodness-of-Fit
     description: >
@@ -65,7 +65,7 @@ analyses:
   - title: Guided Linear Regression
     name: eduRegression
     ns: JamoviReport
-    menuGroup: Educational Analyses
+    menuGroup: jamovi Report
     menuSubgroup: Regression
     menuTitle: Guided Linear Regression
     description: >
@@ -75,7 +75,7 @@ analyses:
   - title: Guided Binomial Logistic Regression
     name: eduLogistic
     ns: JamoviReport
-    menuGroup: Educational Analyses
+    menuGroup: jamovi Report
     menuSubgroup: Regression
     menuTitle: Guided Binomial Logistic Regression
     description: >
@@ -85,7 +85,7 @@ analyses:
   - title: Guided Between-Subjects ANOVA
     name: eduBetweenAnova
     ns: JamoviReport
-    menuGroup: Educational Analyses
+    menuGroup: jamovi Report
     menuSubgroup: Group Comparisons
     menuTitle: Guided Between-Subjects ANOVA
     description: >
@@ -95,7 +95,7 @@ analyses:
   - title: Guided Repeated-Measures ANOVA
     name: eduRMAnova
     ns: JamoviReport
-    menuGroup: Educational Analyses
+    menuGroup: jamovi Report
     menuSubgroup: Repeated Measures
     menuTitle: Guided Repeated-Measures ANOVA
     description: >
@@ -105,7 +105,7 @@ analyses:
   - title: Guided Mixed ANOVA
     name: eduMixedAnova
     ns: JamoviReport
-    menuGroup: Educational Analyses
+    menuGroup: jamovi Report
     menuSubgroup: Repeated Measures
     menuTitle: Guided Mixed ANOVA
     description: >
@@ -115,7 +115,7 @@ analyses:
   - title: Guided ANCOVA
     name: eduAncova
     ns: JamoviReport
-    menuGroup: Educational Analyses
+    menuGroup: jamovi Report
     menuSubgroup: Group Comparisons
     menuTitle: Guided ANCOVA
     description: >
@@ -125,7 +125,7 @@ analyses:
   - title: Guided MANOVA / MANCOVA
     name: eduMancova
     ns: JamoviReport
-    menuGroup: Educational Analyses
+    menuGroup: jamovi Report
     menuSubgroup: Group Comparisons
     menuTitle: Guided MANOVA / MANCOVA
     description: >
@@ -135,7 +135,7 @@ analyses:
   - title: 'Guided Reliability: McDonald''s Omega'
     name: eduReliabilityOmega
     ns: JamoviReport
-    menuGroup: Educational Analyses
+    menuGroup: jamovi Report
     menuSubgroup: Psychometrics
     menuTitle: 'Guided Reliability: McDonald''s Omega'
     description: >

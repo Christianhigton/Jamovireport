@@ -89,6 +89,7 @@
 }
 
 .jr_diagnostic_text <- function(diagnostics) {
+    diagnostics <- .jr_normalize_diagnostics(diagnostics)
     if (nrow(diagnostics) == 0L)
         return("No automatic diagnostic checks were requested.")
     cautions <- diagnostics$status %in% c("Caution", "Serious")
@@ -100,6 +101,90 @@
         ))
     }
     "The reported diagnostics did not indicate a material assumption concern; study-design assumptions still require justification."
+}
+
+.jr_normalize_diagnostics <- function(diagnostics) {
+    if (is.null(diagnostics) || nrow(diagnostics) == 0L)
+        return(data.frame(
+            check = character(), tested = character(), statistic = numeric(), p = numeric(),
+            status = character(), interpretation = character(), action = character(),
+            stringsAsFactors = FALSE
+        ))
+    if (!"tested" %in% names(diagnostics)) {
+        tested <- ifelse(
+            diagnostics$status %in% c("Not assessed", "Not required"),
+            "No", "Yes"
+        )
+        diagnostics$tested <- tested
+    }
+    diagnostics <- diagnostics[, c(
+        "check", "tested", "statistic", "p", "status", "interpretation", "action"
+    )]
+    diagnostics
+}
+
+.jr_assumption_row <- function(check, tested = "No", statistic = NA_real_, p = NA_real_,
+                               status = "Not assessed", interpretation, action) {
+    data.frame(
+        check = check, tested = tested, statistic = statistic, p = p, status = status,
+        interpretation = interpretation, action = action, stringsAsFactors = FALSE
+    )
+}
+
+.jr_default_assumptions <- function(analysis) {
+    rows <- list()
+    add <- function(check, interpretation, action) {
+        rows[[length(rows) + 1L]] <<- .jr_assumption_row(check, interpretation = interpretation, action = action)
+    }
+    if (analysis %in% c("ttest", "mann_whitney", "bayes_ttest", "anova_oneway",
+                        "anova_between", "ancova", "manova", "correlation",
+                        "regression", "logistic_regression", "chisq_independence",
+                        "chisq_gof")) {
+        add(
+            "Independence of observations",
+            "Independence is a design assumption and is not tested from the data.",
+            "Confirm the sampling, grouping, or assignment process; dependence can make p values and intervals too optimistic."
+        )
+    }
+    if (analysis %in% c("ttest", "anova_oneway", "anova_between", "ancova", "manova",
+                        "regression", "correlation")) {
+        add(
+            "Measurement level and scale suitability",
+            "The selected variables are checked for numeric/factor type where possible, but the measurement scale must be justified by the researcher.",
+            "Confirm that numeric outcomes and covariates are meaningful for the chosen model and that categorical factors represent the intended groups."
+        )
+    }
+    if (analysis %in% c("regression", "logistic_regression", "ancova", "manova")) {
+        add(
+            "Model specification",
+            "Automatic diagnostics cannot confirm that the model contains all important terms, transformations, interactions, or confounders.",
+            "Check the research design, theory, and plots before interpreting coefficients or adjusted effects."
+        )
+    }
+    if (analysis %in% c("manova")) {
+        add(
+            "Multivariate normality",
+            "The report checks residual normality for each dependent variable, but it does not provide a full multivariate normality test.",
+            "Inspect multivariate outliers, residual plots, and the sensitivity of conclusions to influential cases."
+        )
+    }
+    if (analysis %in% c("chisq_independence", "chisq_gof")) {
+        add(
+            "Mutually exclusive categories",
+            "Category exclusivity is a data-coding assumption and is not tested automatically.",
+            "Confirm that each case contributes to one appropriate category unless the analysis explicitly models repeated counts."
+        )
+    }
+    if (analysis %in% c("reliability_omega")) {
+        add(
+            "Common construct and item direction",
+            "Internal consistency assumes the selected items are intended to measure a shared construct.",
+            "Review item content, reverse-keying, dimensionality, and item-total diagnostics before reporting omega as scale reliability."
+        )
+    }
+    if (length(rows) == 0L)
+        return(.jr_normalize_diagnostics(data.frame()))
+    do.call(rbind, rows)
 }
 
 .jr_complete <- function(data, columns) {

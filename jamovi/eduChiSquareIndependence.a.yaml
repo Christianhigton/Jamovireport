@@ -1,7 +1,7 @@
 ---
 name: eduChiSquareIndependence
 title: Guided Chi-Square Test of Independence
-menuGroup: Educational Analyses
+menuGroup: jamovi Report
 version: '0.1.0'
 jas: '1.2'
 description:

@@ -1,7 +1,7 @@
 ---
 name: eduAncova
 title: Guided ANCOVA
-menuGroup: Educational Analyses
+menuGroup: jamovi Report
 version: '0.1.0'
 jas: '1.2'
 description:

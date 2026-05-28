@@ -192,40 +192,40 @@ eduRegressionResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
             self$add(jmvcore::Html$new(
                 options=options,
                 name="overview",
-                title="JamoviReport: Overview and Why This Test?"))
+                title="jamovi Report: Overview and Why This Test?"))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="fit",
                 title="Main Results and Model Fit",
                 columns=list(
                     list(
-                        `name`="test", 
-                        `title`="Test", 
+                        `name`="test",
+                        `title`="Test",
                         `type`="text"),
                     list(
-                        `name`="statistic", 
-                        `title`="F", 
+                        `name`="statistic",
+                        `title`="F",
                         `type`="number"),
                     list(
-                        `name`="df1", 
-                        `title`="df1", 
+                        `name`="df1",
+                        `title`="df1",
                         `type`="number"),
                     list(
-                        `name`="df2", 
-                        `title`="df2", 
+                        `name`="df2",
+                        `title`="df2",
                         `type`="number"),
                     list(
-                        `name`="p", 
-                        `title`="p", 
-                        `type`="number", 
+                        `name`="p",
+                        `title`="p",
+                        `type`="number",
                         `format`="zto,pvalue"),
                     list(
-                        `name`="r2", 
-                        `title`="R-squared", 
+                        `name`="r2",
+                        `title`="R-squared",
                         `type`="number"),
                     list(
-                        `name`="adjusted_r2", 
-                        `title`="Adjusted R-squared", 
+                        `name`="adjusted_r2",
+                        `title`="Adjusted R-squared",
                         `type`="number"))))
             self$add(jmvcore::Table$new(
                 options=options,
@@ -233,37 +233,37 @@ eduRegressionResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                 title="Coefficients and Effect Interpretation",
                 columns=list(
                     list(
-                        `name`="term", 
-                        `title`="Predictor", 
+                        `name`="term",
+                        `title`="Predictor",
                         `type`="text"),
                     list(
-                        `name`="estimate", 
-                        `title`="B", 
+                        `name`="estimate",
+                        `title`="B",
                         `type`="number"),
                     list(
-                        `name`="se", 
-                        `title`="SE", 
+                        `name`="se",
+                        `title`="SE",
                         `type`="number"),
                     list(
-                        `name`="lower", 
-                        `title`="CI Lower", 
+                        `name`="lower",
+                        `title`="CI Lower",
                         `type`="number"),
                     list(
-                        `name`="upper", 
-                        `title`="CI Upper", 
+                        `name`="upper",
+                        `title`="CI Upper",
                         `type`="number"),
                     list(
-                        `name`="beta", 
-                        `title`="Standardised Beta", 
+                        `name`="beta",
+                        `title`="Standardised Beta",
                         `type`="number"),
                     list(
-                        `name`="statistic", 
-                        `title`="t", 
+                        `name`="statistic",
+                        `title`="t",
                         `type`="number"),
                     list(
-                        `name`="p", 
-                        `title`="p", 
-                        `type`="number", 
+                        `name`="p",
+                        `title`="p",
+                        `type`="number",
                         `format`="zto,pvalue"))))
             self$add(jmvcore::Table$new(
                 options=options,
@@ -271,29 +271,33 @@ eduRegressionResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                 title="Assumption Checks and Guidance",
                 columns=list(
                     list(
-                        `name`="check", 
-                        `title`="Check", 
+                        `name`="check",
+                        `title`="Check",
                         `type`="text"),
                     list(
-                        `name`="statistic", 
-                        `title`="Statistic", 
+                        `name`="tested",
+                        `title`="Tested?",
+                        `type`="text"),
+                    list(
+                        `name`="statistic",
+                        `title`="Statistic",
                         `type`="number"),
                     list(
-                        `name`="p", 
-                        `title`="p", 
-                        `type`="number", 
+                        `name`="p",
+                        `title`="p",
+                        `type`="number",
                         `format`="zto,pvalue"),
                     list(
-                        `name`="status", 
-                        `title`="Status", 
+                        `name`="status",
+                        `title`="Status",
                         `type`="text"),
                     list(
-                        `name`="interpretation", 
-                        `title`="Interpretation", 
+                        `name`="interpretation",
+                        `title`="Interpretation",
                         `type`="text"),
                     list(
-                        `name`="action", 
-                        `title`="Recommended Action", 
+                        `name`="action",
+                        `title`="Recommended Action",
                         `type`="text"))))
             self$add(jmvcore::Html$new(
                 options=options,
@@ -335,9 +339,9 @@ eduRegressionBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 
 #' Guided Linear Regression
 #'
-#' Model a numeric outcome using one or more numeric predictors with model 
+#' Model a numeric outcome using one or more numeric predictors with model
 #' fit, coefficients, diagnostic guidance, and interpretable reporting.
-#' 
+#'
 #' @param data .
 #' @param outcome .
 #' @param predictors .

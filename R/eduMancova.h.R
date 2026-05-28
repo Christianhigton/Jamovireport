@@ -185,36 +185,36 @@ eduMancovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$add(jmvcore::Html$new(
                 options=options,
                 name="overview",
-                title="JamoviReport: Overview and Why This Test?"))
+                title="jamovi Report: Overview and Why This Test?"))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="main",
                 title="Multivariate Tests",
                 columns=list(
                     list(
-                        `name`="term", 
-                        `title`="Effect", 
+                        `name`="term",
+                        `title`="Effect",
                         `type`="text"),
                     list(
-                        `name`="statistic", 
-                        `title`="F", 
+                        `name`="statistic",
+                        `title`="F",
                         `type`="number"),
                     list(
-                        `name`="df1", 
-                        `title`="df1", 
+                        `name`="df1",
+                        `title`="df1",
                         `type`="number"),
                     list(
-                        `name`="df2", 
-                        `title`="df2", 
+                        `name`="df2",
+                        `title`="df2",
                         `type`="number"),
                     list(
-                        `name`="p", 
-                        `title`="p", 
-                        `type`="number", 
+                        `name`="p",
+                        `title`="p",
+                        `type`="number",
                         `format`="zto,pvalue"),
                     list(
-                        `name`="effect", 
-                        `title`="Pillai's Trace", 
+                        `name`="effect",
+                        `title`="Pillai's Trace",
                         `type`="number"))))
             self$add(jmvcore::Table$new(
                 options=options,
@@ -222,20 +222,20 @@ eduMancovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 title="Dependent-Variable Descriptives",
                 columns=list(
                     list(
-                        `name`="label", 
-                        `title`="Dependent Variable", 
+                        `name`="label",
+                        `title`="Dependent Variable",
                         `type`="text"),
                     list(
-                        `name`="n", 
-                        `title`="N", 
+                        `name`="n",
+                        `title`="N",
                         `type`="integer"),
                     list(
-                        `name`="mean", 
-                        `title`="Mean", 
+                        `name`="mean",
+                        `title`="Mean",
                         `type`="number"),
                     list(
-                        `name`="sd", 
-                        `title`="SD", 
+                        `name`="sd",
+                        `title`="SD",
                         `type`="number"))))
             self$add(jmvcore::Table$new(
                 options=options,
@@ -243,29 +243,33 @@ eduMancovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 title="Assumption Checks and Guidance",
                 columns=list(
                     list(
-                        `name`="check", 
-                        `title`="Check", 
+                        `name`="check",
+                        `title`="Check",
                         `type`="text"),
                     list(
-                        `name`="statistic", 
-                        `title`="Statistic", 
+                        `name`="tested",
+                        `title`="Tested?",
+                        `type`="text"),
+                    list(
+                        `name`="statistic",
+                        `title`="Statistic",
                         `type`="number"),
                     list(
-                        `name`="p", 
-                        `title`="p", 
-                        `type`="number", 
+                        `name`="p",
+                        `title`="p",
+                        `type`="number",
                         `format`="zto,pvalue"),
                     list(
-                        `name`="status", 
-                        `title`="Status", 
+                        `name`="status",
+                        `title`="Status",
                         `type`="text"),
                     list(
-                        `name`="interpretation", 
-                        `title`="Interpretation", 
+                        `name`="interpretation",
+                        `title`="Interpretation",
                         `type`="text"),
                     list(
-                        `name`="action", 
-                        `title`="Recommended Action", 
+                        `name`="action",
+                        `title`="Recommended Action",
                         `type`="text"))))
             self$add(jmvcore::Html$new(
                 options=options,
@@ -299,9 +303,9 @@ eduMancovaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 
 #' Guided MANOVA / MANCOVA
 #'
-#' Test whether two or more dependent variables jointly vary across 
+#' Test whether two or more dependent variables jointly vary across
 #' categorical factors and optional numeric covariates.
-#' 
+#'
 #' @param data .
 #' @param outcomes .
 #' @param factors .

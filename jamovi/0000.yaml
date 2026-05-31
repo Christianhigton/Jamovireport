@@ -130,7 +130,9 @@ analyses:
     menuTitle: Guided MANOVA / MANCOVA
     description: >
       Test whether two or more dependent variables jointly vary across
-      categorical factors and optional numeric covariates.
+      categorical factors and optional numeric covariates. Significant Pillai
+      omnibus effects are followed by Holm-adjusted univariate ANOVA/ANCOVA
+      summaries for each dependent variable.
     category: analyses
   - title: 'Guided Reliability: McDonald''s Omega'
     name: eduReliabilityOmega

@@ -7,7 +7,9 @@ jas: '1.2'
 description:
     main: >
         Test whether two or more dependent variables jointly vary across
-        categorical factors and optional numeric covariates.
+        categorical factors and optional numeric covariates. Significant
+        Pillai omnibus effects are followed by Holm-adjusted univariate
+        ANOVA/ANCOVA summaries for each dependent variable.
 options:
     - { name: data, type: Data }
     - name: outcomes

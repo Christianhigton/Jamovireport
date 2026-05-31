@@ -12,11 +12,8 @@ jrReportPropTestNClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Cla
                 return()
             ratios <- self$parent$options$ratio
             expected <- NULL
-            if (!is.null(ratios) && length(ratios) > 0L) {
-                expected <- vapply(ratios, function(value) {
-                    as.numeric(value$ratio %||% value)
-                }, numeric(1))
-            }
+            if (!is.null(ratios) && length(ratios) > 0L)
+                expected <- .jr_expected_ratio_values(ratios)
             result <- try(
                 edu_chisq_gof(self$data, variable, counts = self$parent$options$counts, expected = expected),
                 silent = TRUE

@@ -33,6 +33,19 @@ items:
         - { name: status, title: Status, type: text }
         - { name: interpretation, title: Interpretation, type: text }
         - { name: action, title: Recommended Action, type: text }
+    - name: followups
+      title: Follow-up Analyses
+      type: Table
+      visible: false
+      columns:
+        - { name: term, title: Effect, type: text }
+        - { name: outcome, title: Outcome, type: text }
+        - { name: statistic, title: F, type: number }
+        - { name: df1, title: df1, type: number }
+        - { name: df2, title: df2, type: number }
+        - { name: p, title: p, type: number, format: "zto,pvalue" }
+        - { name: p_holm, title: "Holm-adjusted p", type: number, format: "zto,pvalue" }
+        - { name: effect, title: "Partial eta-squared", type: number }
     - { name: report, title: Reporting, type: Html }
     - { name: interpretation, title: Plain-Language Interpretation, type: Html }
 ...

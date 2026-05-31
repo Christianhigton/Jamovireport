@@ -37,7 +37,10 @@
     description <- attr(values, "description", exact = TRUE)
     if (is.null(description) || !length(description) || !nzchar(trimws(as.character(description)[1])))
         return(variable)
-    trimws(as.character(description)[1])
+    description <- trimws(as.character(description)[1])
+    if (identical(description, variable))
+        return(variable)
+    description
 }
 
 .jr_variable_display_labels <- function(data) {
@@ -79,7 +82,7 @@
         result[[field]] <- replace(result[[field]])
     result$report_blocks <- lapply(result$report_blocks, replace)
     for (field in c("main", "descriptives", "effects", "diagnostics", "statistics",
-                    "parameters", "cells", "posthoc_report")) {
+                    "parameters", "cells", "posthoc_report", "followups")) {
         table <- result[[field]]
         if (!is.data.frame(table))
             next
@@ -89,6 +92,26 @@
     }
     result$variable_labels <- labels
     result
+}
+
+.jr_expected_ratio_values <- function(ratios) {
+    if (is.null(ratios) || length(ratios) == 0L)
+        return(NULL)
+    values <- vapply(seq_along(ratios), function(i) {
+        value <- ratios[[i]]
+        if (is.list(value)) {
+            if (is.null(value$ratio))
+                return(NA_real_)
+            value <- value$ratio
+        }
+        value <- suppressWarnings(as.numeric(value))
+        if (length(value) == 0L || !is.finite(value[1]))
+            return(NA_real_)
+        value[1]
+    }, numeric(1))
+    if (anyNA(values))
+        return(NULL)
+    values
 }
 
 .jr_html_escape <- function(text) {
@@ -340,7 +363,7 @@
                 test = .jr_addon_test_label(result, i),
                 statistic = as.numeric(value),
                 df1 = as.numeric(df1),
-                df2 = as.numeric(df2),
+                df2 = if (is.finite(as.numeric(df2))) .jr_num(df2, 2L) else "",
                 p = if ("p" %in% names(statistic)) as.numeric(statistic$p) else NA_real_,
                 effect = .jr_addon_effect_label(result, i),
                 ci = if (is.finite(lower) && is.finite(upper))
@@ -423,7 +446,33 @@
     do.call(rbind, rows)
 }
 
-.jr_addon_insert_tables <- function(self, posthoc = FALSE, coefficients = FALSE, cells = FALSE) {
+.jr_addon_followup_rows <- function(results) {
+    results <- Filter(function(x) inherits(x, "edu_analysis") &&
+        identical(x$analysis, "manova") && is.data.frame(x$followups), results)
+    if (length(results) == 0L)
+        return(data.frame())
+    rows <- lapply(results, function(result) {
+        followups <- result$followups
+        if (nrow(followups) == 0L)
+            return(data.frame())
+        data.frame(
+            analysis = result$label,
+            term = followups$term,
+            outcome = followups$outcome,
+            statistic = followups$statistic,
+            df1 = followups$df1,
+            df2 = followups$df2,
+            p = followups$p,
+            p_holm = followups$p_holm,
+            effect = followups$effect,
+            stringsAsFactors = FALSE
+        )
+    })
+    do.call(rbind, rows)
+}
+
+.jr_addon_insert_tables <- function(self, posthoc = FALSE, coefficients = FALSE, cells = FALSE,
+                                    followups = FALSE) {
     self$parent$results$add(jmvcore::Table$new(
         options = self$options,
         name = "jamoviReportApaTable",
@@ -433,7 +482,7 @@
             list(name = "test", title = "Test / Effect", type = "text"),
             list(name = "statistic", title = "Statistic", type = "number"),
             list(name = "df1", title = "df1", type = "number"),
-            list(name = "df2", title = "df2", type = "number"),
+            list(name = "df2", title = "df2", type = "text"),
             list(name = "p", title = "p", type = "number", format = "zto,pvalue"),
             list(name = "effect", title = "Effect Size", type = "text"),
             list(name = "ci", title = "Effect 95% CI", type = "text")
@@ -506,6 +555,25 @@
             )
         ))
     }
+    if (isTRUE(followups)) {
+        self$parent$results$add(jmvcore::Table$new(
+            options = self$options,
+            name = "jamoviReportFollowUps",
+            title = "MANOVA/MANCOVA Follow-up Analyses (jamovi Report)",
+            visible = FALSE,
+            columns = list(
+                list(name = "analysis", title = "Analysis", type = "text"),
+                list(name = "term", title = "Effect", type = "text"),
+                list(name = "outcome", title = "Outcome", type = "text"),
+                list(name = "statistic", title = "F", type = "number"),
+                list(name = "df1", title = "df1", type = "number"),
+                list(name = "df2", title = "df2", type = "number"),
+                list(name = "p", title = "p", type = "number", format = "zto,pvalue"),
+                list(name = "p_holm", title = "Holm-adjusted p", type = "number", format = "zto,pvalue"),
+                list(name = "effect", title = "Partial eta-squared", type = "number")
+            )
+        ))
+    }
 }
 
 .jr_addon_set_tables <- function(self, results) {
@@ -562,9 +630,23 @@
                 cell_table$addRow(rowKey = i, values = as.list(cell_rows[i, ]))
         }
     }
+    followup_table <- tryCatch(
+        self$parent$results$get("jamoviReportFollowUps"),
+        error = function(e) NULL
+    )
+    if (!is.null(followup_table)) {
+        followup_table$deleteRows()
+        followup_rows <- .jr_addon_followup_rows(results)
+        followup_table$setVisible(nrow(followup_rows) > 0L)
+        if (nrow(followup_rows) > 0L) {
+            for (i in seq_len(nrow(followup_rows)))
+                followup_table$addRow(rowKey = i, values = as.list(followup_rows[i, ]))
+        }
+    }
 }
 
-.jr_addon_insert_card <- function(self, posthoc = FALSE, coefficients = FALSE, cells = FALSE) {
+.jr_addon_insert_card <- function(self, posthoc = FALSE, coefficients = FALSE, cells = FALSE,
+                                  followups = FALSE) {
     .jr_addon_enable_library()
     heading <- jmvcore::Html$new(
         options = self$options,
@@ -573,7 +655,10 @@
         content = .jr_addon_heading_html()
     )
     self$parent$results$add(heading)
-    .jr_addon_insert_tables(self, posthoc = posthoc, coefficients = coefficients, cells = cells)
+    .jr_addon_insert_tables(
+        self, posthoc = posthoc, coefficients = coefficients,
+        cells = cells, followups = followups
+    )
     card <- jmvcore::Html$new(
         options = self$options,
         name = "jamoviReportCard",

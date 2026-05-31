@@ -126,6 +126,31 @@ test_that("MANOVA report display names use variable descriptions", {
     expect_match(text, "Sepal width", fixed = TRUE)
     expect_match(text, "Flower species", fixed = TRUE)
     expect_equal(result$statistics$term[1], "Flower species")
+    expect_true(all(c("Sepal length", "Sepal width") %in% result$followups$outcome))
+})
+
+test_that("variable display names ignore blank and identical descriptions", {
+    d <- data.frame(
+        raw = rnorm(10),
+        described = rnorm(10)
+    )
+    attr(d$raw, "description") <- "raw"
+    attr(d$described, "description") <- "Meaningful outcome"
+
+    labels <- .jr_variable_display_labels(d)
+
+    expect_equal(labels[["raw"]], "raw")
+    expect_equal(labels[["described"]], "Meaningful outcome")
+})
+
+test_that("chi-square goodness add-on accepts atomic and list expected ratios", {
+    list_ratios <- list(list(ratio = 1), list(ratio = 2), list(ratio = 3))
+    atomic_ratios <- c(1, 2, 3)
+    malformed_ratios <- list(list(ratio = 1), list(other = 2), list(ratio = 3))
+
+    expect_equal(.jr_expected_ratio_values(list_ratios), c(1, 2, 3))
+    expect_equal(.jr_expected_ratio_values(atomic_ratios), c(1, 2, 3))
+    expect_null(.jr_expected_ratio_values(malformed_ratios))
 })
 
 test_that("add-on report options update the guided report card content", {
@@ -282,6 +307,8 @@ test_that("native add-ons generate APA results table rows across analysis famili
 
     expect_equal(nrow(rows), 6L)
     expect_named(rows, c("analysis", "test", "statistic", "df1", "df2", "p", "effect", "ci"))
+    expect_equal(rows$df2[1], "")
+    expect_true(nzchar(rows$df2[3]))
     expect_match(rows$effect[1], "Cohen's d")
     expect_match(rows$effect[2], "Rank-biserial")
     expect_match(rows$effect[3], "Eta-squared")

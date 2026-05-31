@@ -106,6 +106,36 @@ test_that("MANOVA and MANCOVA report multivariate Pillai tests", {
     expect_true("Homogeneity of covariance matrices" %in% manova_result$diagnostics$check)
 })
 
+test_that("significant MANOVA and MANCOVA add Holm-adjusted univariate follow-ups", {
+    d <- iris
+    manova_result <- edu_manova(d, c("Sepal.Length", "Sepal.Width"), "Species")
+    d$Petal.Length.Centered <- d$Petal.Length - mean(d$Petal.Length)
+    mancova_result <- edu_manova(
+        d, c("Sepal.Length", "Sepal.Width"), "Species", "Petal.Length.Centered"
+    )
+
+    expect_true(nrow(manova_result$followups) > 0L)
+    expect_true(all(c("term", "outcome", "statistic", "df1", "df2", "p", "p_holm", "effect") %in% names(manova_result$followups)))
+    expect_true(all(manova_result$followups$p_holm >= manova_result$followups$p))
+    expect_true(nrow(mancova_result$followups) > 0L)
+    expect_match(edu_report(manova_result), "Follow-up analyses")
+    expect_match(edu_report(manova_result), "Holm procedure")
+    expect_match(edu_report(manova_result), "Field, 2024")
+})
+
+test_that("non-significant MANOVA omits automatic follow-ups", {
+    set.seed(123)
+    d <- data.frame(
+        group = factor(rep(c("A", "B"), each = 20)),
+        y1 = rnorm(40),
+        y2 = rnorm(40)
+    )
+    result <- edu_manova(d, c("y1", "y2"), "group")
+
+    expect_equal(nrow(result$followups), 0L)
+    expect_false(grepl("Follow-up analyses", edu_report(result), fixed = TRUE))
+})
+
 test_that("repeated-measures and mixed ANOVA return guided within-subject results", {
     set.seed(42)
     d <- data.frame(

@@ -17,7 +17,8 @@ confidence intervals, and report-ready prose over raw output alone.
 - Repeated-measures ANOVA with sphericity guidance
 - Mixed ANOVA with within-subject correction and interaction guidance
 - ANCOVA with homogeneity-of-regression-slopes diagnostics
-- MANOVA/MANCOVA automatic reporting using Pillai's trace
+- MANOVA/MANCOVA automatic reporting using Pillai's trace with automatic
+  Holm-adjusted univariate follow-up analyses after significant omnibus effects
 - Reliability analysis reporting McDonald's omega total with item-quality guidance
 - Pearson, Spearman, and Kendall correlation
 - Chi-square test of independence with Cramer's V and expected-cell guidance
@@ -91,6 +92,11 @@ and p value where available, whether the assumption appears to have been met,
 and guidance for interpreting violations or checks that require design review.
 Effect sizes include conventional benchmark language plus a caution that those
 benchmarks are rough interpretive aids rather than strict cut-offs.
+Where jamovi variables include a description, jamovi Report uses that
+description in report text, assumption tables, headings, and interpretation
+notes. Blank descriptions or descriptions identical to the raw variable name
+fall back to the variable name, and calculations continue to use the original
+variable names internally.
 
 ## Installing in jamovi
 
@@ -140,7 +146,9 @@ Initial report add-ons cover:
 - Factorial ANOVA
 - Repeated-measures ANOVA and one-factor mixed ANOVA
 - ANCOVA
-- MANOVA/MANCOVA, reporting Pillai's trace for the multivariate model
+- MANOVA/MANCOVA, reporting Pillai's trace for the multivariate model and
+  automatic Holm-adjusted univariate follow-up analyses when the omnibus
+  effect is significant
 - Correlation matrix reporting for Pearson, Spearman, and Kendall analyses
 - Chi-square tests of independence and goodness-of-fit, with observed-versus-
   expected counts and follow-up residual information
@@ -154,6 +162,14 @@ add-on only reports comparisons for a statistically significant omnibus main
 effect. If a factorial interaction is significant, it reports follow-up
 comparisons for that interaction so main effects are not interpreted without
 examining the conditional pattern. Selected correction procedures are retained.
+
+For MANOVA/MANCOVA, significant Pillai omnibus effects trigger automatic
+follow-up univariate ANOVA/ANCOVA models for each dependent variable using the
+same factor and covariate structure. Raw p values and Holm-adjusted p values
+are reported to control the family-wise error rate across dependent variables.
+These follow-ups are exploratory defaults: planned contrasts cannot be
+generated automatically because the module cannot know which hypotheses were
+specified before data collection.
 
 For ANOVA, ANCOVA, repeated-measures, linear regression, and logistic regression
 outputs with model choices that may change interpretation, the report card

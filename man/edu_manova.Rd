@@ -16,7 +16,8 @@ edu_manova(data, outcomes, factors = character(), covariates = character())
 \item{covariates}{Character vector of numeric covariates.}
 }
 \value{
-An \code{edu_analysis} object reporting Pillai's trace.
+An \code{edu_analysis} object reporting Pillai's trace and, when an
+omnibus effect is significant, Holm-adjusted univariate follow-up analyses.
 }
 \description{
 Guided multivariate analysis of variance or covariance

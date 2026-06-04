@@ -1,8 +1,10 @@
 ---
 name: eduChiSquareGoodness
 title: Guided Chi-Square Goodness-of-Fit
-menuGroup: jamovi Report
-version: '0.1.0'
+menuGroup: jReport
+version: '1.0.0'
+refs:
+    - effectsize
 jas: '1.2'
 description:
     main: >
@@ -50,13 +52,13 @@ options:
         - { name: detailed, title: Detailed }
         - { name: critical, title: Critical / publication-focused }
       default: student_friendly
-    - { name: reportDescriptives, title: Include observed and expected counts, type: Bool, default: true }
-    - { name: reportAssumptions, title: Include expected-count check, type: Bool, default: true }
-    - { name: reportStatistic, title: Include test statistic, type: Bool, default: true }
-    - { name: reportDf, title: Include degrees of freedom, type: Bool, default: true }
-    - { name: reportP, title: Include exact p value, type: Bool, default: true }
-    - { name: reportEffect, title: Include Cohen's w, type: Bool, default: true }
-    - { name: reportCI, title: Include confidence intervals where available, type: Bool, default: true }
-    - { name: reportInterpretation, title: Include interpretation of findings, type: Bool, default: true }
-    - { name: reportCautions, title: Include cautions or assumption warnings, type: Bool, default: true }
+    - { name: reportDescriptives, title: Observed and expected counts, type: Bool, default: true }
+    - { name: reportAssumptions, title: Expected-count check, type: Bool, default: true }
+    - { name: reportStatistic, title: Test statistic, type: Bool, default: true }
+    - { name: reportDf, title: Degrees of freedom, type: Bool, default: true }
+    - { name: reportP, title: Exact p value, type: Bool, default: true }
+    - { name: reportEffect, title: Cohen's w, type: Bool, default: true }
+    - { name: reportCI, title: Confidence intervals where available, type: Bool, default: true }
+    - { name: reportInterpretation, title: Interpretation of findings, type: Bool, default: true }
+    - { name: reportCautions, title: Cautions or assumption warnings, type: Bool, default: true }
 ...

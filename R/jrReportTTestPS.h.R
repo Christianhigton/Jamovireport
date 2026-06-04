@@ -8,7 +8,7 @@ jrReportTTestPSOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
         initialize = function( ...) {
 
             super$initialize(
-                package="JamoviReport",
+                package="jReport",
                 name="jrReportTTestPS",
                 requiresData=TRUE,
                 ...)
@@ -37,7 +37,7 @@ jrReportTTestPSBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
     public = list(
         initialize = function(options, data=NULL, datasetId="", analysisId="", revision=0) {
             super$initialize(
-                package = "JamoviReport",
+                package = "jReport",
                 name = "jrReportTTestPS",
                 version = c(0,1,0),
                 options = options,

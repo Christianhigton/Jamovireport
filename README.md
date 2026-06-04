@@ -1,10 +1,10 @@
-# jamovi Report
+# jReport
 
 <p align="center">
-  <img src="man/figures/JamoviReport-logo.png" alt="JamoviReport logo" width="220" />
+  <img src="man/figures/jReport-logo.png" alt="jReport logo" width="220" />
 </p>
 
-`jamovi Report` is an early dual-use R package and jamovi module for guided
+`jReport` is an early dual-use R package and jamovi module for guided
 statistical reporting. It prioritises explanations, diagnostics, effect sizes,
 confidence intervals, and report-ready prose over raw output alone.
 
@@ -30,7 +30,7 @@ confidence intervals, and report-ready prose over raw output alone.
 ## R Usage
 
 ```r
-library(jamovi Report)
+library(jReport)
 
 t_test <- edu_t_test(ToothGrowth, "len", "supp")
 edu_report(t_test, style = "apa7", format = "paragraph")
@@ -77,7 +77,7 @@ edu_report(reliability, style = "apa7", format = "paragraph")
 
 ## jamovi Module
 
-The jamovi module exposes supported analyses under **jamovi Report**, including
+The jamovi module exposes supported analyses under **jReport**, including
 between-subjects ANOVA, repeated-measures ANOVA, mixed ANOVA, ANCOVA, and
 omega-based reliability analysis. Guided analyses now show overview,
 interpretation, and copy-ready report text as separate formatted result cards.
@@ -92,7 +92,7 @@ and p value where available, whether the assumption appears to have been met,
 and guidance for interpreting violations or checks that require design review.
 Effect sizes include conventional benchmark language plus a caution that those
 benchmarks are rough interpretive aids rather than strict cut-offs.
-Where jamovi variables include a description, jamovi Report uses that
+Where jamovi variables include a description, jReport uses that
 description in report text, assumption tables, headings, and interpretation
 notes. Blank descriptions or descriptions identical to the raw variable name
 fall back to the variable name, and calculations continue to use the original
@@ -101,15 +101,15 @@ variable names internally.
 ## Installing in jamovi
 
 A compiled `.jmo` installer can be provided for direct download as an asset on
-the [GitHub Releases page](https://github.com/Christianhigton/Jamovireport/releases).
+the [GitHub Releases page](https://github.com/Christianhigton/jReport/releases).
 Compiled installers are not kept in the source-code branch because they are
 build artifacts. If no `.jmo` asset is shown on the Releases page, a
 downloadable build has not yet been published.
 
 To install a released build:
 
-1. Open the [Releases page](https://github.com/Christianhigton/Jamovireport/releases).
-2. Download the `JamoviReport_*.jmo` file that matches your system and jamovi version.
+1. Open the [Releases page](https://github.com/Christianhigton/jReport/releases).
+2. Download the `jReport_*.jmo` file that matches your system and jamovi version.
 3. In jamovi, open the module manager, choose to sideload/install a module, and select the downloaded `.jmo` file.
 
 A `.jmo` build is platform-specific. For example, the current development
@@ -119,7 +119,7 @@ solid series. Separate compatible builds or a jamovi Library release are
 required for those environments.
 
 Windows x64 development builds use the filename
-`JamoviReport_0.1.0.9013_windows_x64_jamovi-2.7.jmo`, generated on a Windows
+`jReport_1.0.0_windows_x64_jamovi-2.7.jmo`, generated on a Windows
 runner for the jamovi 2.7 series.
 
 ## Report Add-ons
@@ -127,7 +127,7 @@ runner for the jamovi 2.7 series.
 The module follows the `moretests` pattern by registering **Report Add-ons**
 for standard jamovi analyses. Once installed, supported built-in analyses
 automatically append an **APA Results Summary**, an **Assumptions and Recommended
-Actions** table, and an **Automatic Report (jamovi Report)** output block after
+Actions** table, and an **Automatic Report (jReport)** output block after
 valid variables have been entered. Native add-on reports use a consistent APA
 paragraph profile containing descriptives, assumption guidance, test
 statistics, effect sizes, confidence intervals where available,
@@ -135,8 +135,8 @@ interpretation, and cautions.
 
 jamovi does not allow an `addonFor` analysis to insert new report controls into
 a built-in analysis options panel. Configurable style/tone controls therefore
-remain available only in the module's optional **jamovi Report**
-entries. jamovi Report labels this distinction in its results output.
+remain available only in the module's optional **jReport**
+entries. jReport labels this distinction in its results output.
 
 Initial report add-ons cover:
 
@@ -199,7 +199,7 @@ References:
 
 ## Licence and Sharing
 
-jamovi Report is licensed under the GNU General Public License version 3
+jReport is licensed under the GNU General Public License version 3
 (`GPL-3`). See [LICENSE.md](LICENSE.md) for the full repository copy of the
 licence and [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) for the current
 jamovi module dependency audit. When a `.jmo` build is shared, its corresponding

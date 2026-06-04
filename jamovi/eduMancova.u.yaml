@@ -10,17 +10,17 @@ children:
     persistentItems: false
     children:
       - type: TargetLayoutBox
-        label: Dependent variables
+        label: Dependent Variables
         children: [{ type: VariablesListBox, name: outcomes, isTarget: true }]
       - type: TargetLayoutBox
-        label: Fixed factors
+        label: Fixed Factors
         children: [{ type: VariablesListBox, name: factors, isTarget: true }]
       - type: TargetLayoutBox
         label: Covariates
         children: [{ type: VariablesListBox, name: covariates, isTarget: true }]
   - type: CollapseBox
     label: Reporting
-    collapsed: false
+    collapsed: true
     children:
       - { type: ComboBox, name: reportStyle }
       - { type: ComboBox, name: reportFormat }

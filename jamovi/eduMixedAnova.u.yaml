@@ -10,10 +10,10 @@ children:
     persistentItems: false
     children:
       - type: TargetLayoutBox
-        label: Repeated measurements (in order)
+        label: Repeated Measurements (in Order)
         children: [{ type: VariablesListBox, name: measures, isTarget: true }]
       - type: TargetLayoutBox
-        label: Between-subjects group
+        label: Between-Subjects Group
         children: [{ type: VariablesListBox, name: group, maxItemCount: 1, isTarget: true }]
   - type: CollapseBox
     label: Analysis
@@ -24,7 +24,7 @@ children:
       - { type: CheckBox, name: showPlot }
   - type: CollapseBox
     label: Reporting
-    collapsed: false
+    collapsed: true
     children:
       - { type: ComboBox, name: reportStyle }
       - { type: ComboBox, name: reportFormat }

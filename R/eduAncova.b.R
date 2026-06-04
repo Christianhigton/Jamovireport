@@ -7,10 +7,10 @@ eduAncovaClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class(
             if (is.null(self$options$outcome) || length(self$options$factors) == 0L ||
                 length(self$options$covariates) == 0L)
                 return()
-            result <- edu_ancova(
+            result <- .jr_guided_computation(edu_ancova(
                 self$data, self$options$outcome, self$options$factors,
                 self$options$covariates, ci = self$options$ciWidth / 100
-            )
+            ))
             result <- .jr_apply_variable_descriptions(result, self$data)
             self$results$overview$setContent(.jr_jamovi_overview_html(result))
             for (i in seq_len(nrow(result$statistics)))

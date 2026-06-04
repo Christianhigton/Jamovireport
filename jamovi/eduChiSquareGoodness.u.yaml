@@ -9,10 +9,10 @@ children:
     persistentItems: false
     children:
       - type: TargetLayoutBox
-        label: Categorical variable
+        label: Categorical Variable
         children: [{ type: VariablesListBox, name: variable, maxItemCount: 1, isTarget: true }]
       - type: TargetLayoutBox
-        label: Counts (optional)
+        label: Counts (Optional)
         children: [{ type: VariablesListBox, name: counts, maxItemCount: 1, isTarget: true }]
   - type: CollapseBox
     label: Expected Distribution
@@ -21,7 +21,7 @@ children:
       - { type: TextBox, name: expectedRatios, format: string }
   - type: CollapseBox
     label: Reporting
-    collapsed: false
+    collapsed: true
     children:
       - { type: ComboBox, name: reportStyle }
       - { type: ComboBox, name: reportFormat }

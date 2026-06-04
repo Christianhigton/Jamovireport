@@ -13,7 +13,7 @@ eduMancovaClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class(
                 covariates <- character()
             if (length(outcomes) < 2L || length(c(factors, covariates)) == 0L)
                 return()
-            result <- edu_manova(self$data, outcomes, factors, covariates)
+            result <- .jr_guided_computation(edu_manova(self$data, outcomes, factors, covariates))
             result <- .jr_apply_variable_descriptions(result, self$data)
             self$results$overview$setContent(.jr_jamovi_overview_html(result))
             for (i in seq_len(nrow(result$statistics)))

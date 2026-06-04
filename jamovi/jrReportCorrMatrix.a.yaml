@@ -2,7 +2,10 @@
 name: jrReportCorrMatrix
 title: Automatic Report for Correlation Matrix
 menuGroup: Report Add-ons
-version: '0.1.0'
+version: '1.0.0'
+refs:
+    - jmvcore
+    - effectsize
 jas: '1.2'
 options:
     - { name: data, type: Data }

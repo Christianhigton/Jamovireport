@@ -1,8 +1,13 @@
 ---
 name: eduAnova
 title: Guided One-Way ANOVA
-menuGroup: jamovi Report
-version: '0.1.0'
+menuGroup: jReport
+version: '1.0.0'
+refs:
+    - car
+    - effectsize
+    - emmeans
+    - ggplot2
 jas: '1.2'
 description:
     main: >
@@ -29,7 +34,7 @@ options:
       default: standard
     - { name: posthoc, title: Post hoc comparisons, type: Bool, default: true }
     - { name: ciWidth, title: Confidence level, type: Number, min: 50, max: 99.9, default: 95 }
-    - { name: showPlot, title: Display visualisation, type: Bool, default: true }
+    - { name: showPlot, title: Visualisation, type: Bool, default: true }
     - name: reportStyle
       title: Report style
       type: List
@@ -58,13 +63,13 @@ options:
         - { name: detailed, title: Detailed }
         - { name: critical, title: Critical / publication-focused }
       default: student_friendly
-    - { name: reportDescriptives, title: Include descriptive statistics, type: Bool, default: true }
-    - { name: reportAssumptions, title: Include assumption checks, type: Bool, default: true }
-    - { name: reportStatistic, title: Include test statistic, type: Bool, default: true }
-    - { name: reportDf, title: Include degrees of freedom, type: Bool, default: true }
-    - { name: reportP, title: Include exact p value, type: Bool, default: true }
-    - { name: reportEffect, title: Include effect size, type: Bool, default: true }
-    - { name: reportCI, title: Include confidence intervals, type: Bool, default: true }
-    - { name: reportInterpretation, title: Include interpretation of findings, type: Bool, default: true }
-    - { name: reportCautions, title: Include cautions or assumption warnings, type: Bool, default: true }
+    - { name: reportDescriptives, title: Descriptive statistics, type: Bool, default: true }
+    - { name: reportAssumptions, title: Assumption checks, type: Bool, default: true }
+    - { name: reportStatistic, title: Test statistic, type: Bool, default: true }
+    - { name: reportDf, title: Degrees of freedom, type: Bool, default: true }
+    - { name: reportP, title: Exact p value, type: Bool, default: true }
+    - { name: reportEffect, title: Effect size, type: Bool, default: true }
+    - { name: reportCI, title: Confidence intervals, type: Bool, default: true }
+    - { name: reportInterpretation, title: Interpretation of findings, type: Bool, default: true }
+    - { name: reportCautions, title: Cautions or assumption warnings, type: Bool, default: true }
 ...

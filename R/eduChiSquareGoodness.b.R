@@ -19,10 +19,10 @@ eduChiSquareGoodnessClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6
                     return()
                 }
             }
-            result <- edu_chisq_gof(
+            result <- .jr_guided_computation(edu_chisq_gof(
                 self$data, self$options$variable, counts = self$options$counts,
                 expected = expected
-            )
+            ))
             result <- .jr_apply_variable_descriptions(result, self$data)
             self$results$overview$setContent(.jr_jamovi_overview_html(result))
             self$results$fit$addRow(rowKey = 1, values = as.list(result$statistics[1, ]))

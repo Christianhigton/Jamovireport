@@ -6,10 +6,10 @@ eduCorrelationClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class(
         .run = function() {
             if (is.null(self$options$x) || is.null(self$options$y))
                 return()
-            result <- edu_correlation(
+            result <- .jr_guided_computation(edu_correlation(
                 self$data, self$options$x, self$options$y,
                 method = self$options$method, ci = self$options$ciWidth / 100
-            )
+            ))
             result <- .jr_apply_variable_descriptions(result, self$data)
             self$results$overview$setContent(.jr_jamovi_overview_html(result))
             self$results$main$addRow(rowKey = 1, values = as.list(result$statistics[1, ]))

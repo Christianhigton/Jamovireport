@@ -8,7 +8,7 @@ jrReportCorrMatrixOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::
         initialize = function( ...) {
 
             super$initialize(
-                package="JamoviReport",
+                package="jReport",
                 name="jrReportCorrMatrix",
                 requiresData=TRUE,
                 ...)
@@ -37,7 +37,7 @@ jrReportCorrMatrixBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
     public = list(
         initialize = function(options, data=NULL, datasetId="", analysisId="", revision=0) {
             super$initialize(
-                package = "JamoviReport",
+                package = "jReport",
                 name = "jrReportCorrMatrix",
                 version = c(0,1,0),
                 options = options,

@@ -3,10 +3,17 @@ name: eduReliabilityOmega
 title: "Guided Reliability: McDonald's Omega"
 jrs: '1.1'
 items:
-    - { name: overview, title: 'jamovi Report: Overview and Why Omega?', type: Html }
+    - { name: overview, title: 'jReport: Overview and Why Omega?', type: Html }
     - name: main
       title: Reliability Estimate
       type: Table
+      clearWith:
+        - items
+        - reverseItems
+        - correlationType
+        - bootstrapCI
+        - bootstrapSamples
+        - ciWidth
       columns:
         - { name: coefficient, title: Coefficient, type: text }
         - { name: estimate, title: Estimate, type: number }
@@ -17,6 +24,13 @@ items:
     - name: items
       title: Item Quality Guidance
       type: Table
+      clearWith:
+        - items
+        - reverseItems
+        - correlationType
+        - bootstrapCI
+        - bootstrapSamples
+        - ciWidth
       columns:
         - { name: item, title: Item, type: text }
         - { name: scoring, title: Scoring Direction, type: text }
@@ -28,6 +42,13 @@ items:
     - name: diagnostics
       title: Data and Interpretation Guidance
       type: Table
+      clearWith:
+        - items
+        - reverseItems
+        - correlationType
+        - bootstrapCI
+        - bootstrapSamples
+        - ciWidth
       columns:
         - { name: check, title: Check, type: text }
         - { name: tested, title: "Tested?", type: text }
@@ -42,6 +63,13 @@ items:
       title: Item Contribution Plot
       type: Image
       visible: (showPlot)
+      clearWith:
+        - items
+        - reverseItems
+        - correlationType
+        - bootstrapCI
+        - bootstrapSamples
+        - ciWidth
       width: 520
       height: 360
       renderFun: .plot

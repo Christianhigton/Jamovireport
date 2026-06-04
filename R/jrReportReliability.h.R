@@ -8,7 +8,7 @@ jrReportReliabilityOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6:
         initialize = function( ...) {
 
             super$initialize(
-                package="JamoviReport",
+                package="jReport",
                 name="jrReportReliability",
                 requiresData=TRUE,
                 ...)
@@ -37,7 +37,7 @@ jrReportReliabilityBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6
     public = list(
         initialize = function(options, data=NULL, datasetId="", analysisId="", revision=0) {
             super$initialize(
-                package = "JamoviReport",
+                package = "jReport",
                 name = "jrReportReliability",
                 version = c(0,1,0),
                 options = options,

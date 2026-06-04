@@ -1,6 +1,6 @@
-# JamoviReport Licence Notice
+# jReport Licence Notice
 
-JamoviReport is free software licensed under the **GNU General Public License
+jReport is free software licensed under the **GNU General Public License
 version 3** (`GPL-3`), as declared in `DESCRIPTION`.
 
 The repository includes `LICENSE.md` so that people viewing or cloning the

@@ -8,7 +8,7 @@ jrReportContTablesOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::
         initialize = function( ...) {
 
             super$initialize(
-                package="JamoviReport",
+                package="jReport",
                 name="jrReportContTables",
                 requiresData=TRUE,
                 ...)
@@ -37,7 +37,7 @@ jrReportContTablesBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
     public = list(
         initialize = function(options, data=NULL, datasetId="", analysisId="", revision=0) {
             super$initialize(
-                package = "JamoviReport",
+                package = "jReport",
                 name = "jrReportContTables",
                 version = c(0,1,0),
                 options = options,

@@ -13,7 +13,7 @@ children:
         label: Outcome
         children: [{ type: VariablesListBox, name: outcome, maxItemCount: 1, isTarget: true }]
       - type: TargetLayoutBox
-        label: Grouping variable
+        label: Grouping Variable
         children: [{ type: VariablesListBox, name: group, maxItemCount: 1, isTarget: true }]
   - type: CollapseBox
     label: Analysis
@@ -25,7 +25,7 @@ children:
       - { type: CheckBox, name: showPlot }
   - type: CollapseBox
     label: Reporting
-    collapsed: false
+    collapsed: true
     children:
       - { type: ComboBox, name: reportStyle }
       - { type: ComboBox, name: reportFormat }

@@ -2,7 +2,12 @@
 name: jrReportLinReg
 title: Automatic Report for Linear Regression
 menuGroup: Report Add-ons
-version: '0.1.0'
+version: '1.0.0'
+refs:
+    - jmvcore
+    - parameters
+    - performance
+    - effectsize
 jas: '1.2'
 options:
     - { name: data, type: Data }

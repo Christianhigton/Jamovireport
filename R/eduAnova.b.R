@@ -6,11 +6,11 @@ eduAnovaClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class(
         .run = function() {
             if (is.null(self$options$outcome) || is.null(self$options$group))
                 return()
-            result <- edu_anova_oneway(
+            result <- .jr_guided_computation(edu_anova_oneway(
                 self$data, self$options$outcome, self$options$group,
                 method = self$options$method, ci = self$options$ciWidth / 100,
                 posthoc = self$options$posthoc
-            )
+            ))
             result <- .jr_apply_variable_descriptions(result, self$data)
             self$results$overview$setContent(.jr_jamovi_overview_html(result))
             self$results$main$addRow(rowKey = 1, values = as.list(result$statistics[1, ]))

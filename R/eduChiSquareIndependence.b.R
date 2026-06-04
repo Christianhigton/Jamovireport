@@ -6,10 +6,10 @@ eduChiSquareIndependenceClass <- if (requireNamespace("jmvcore", quietly = TRUE)
         .run = function() {
             if (is.null(self$options$rowVariable) || is.null(self$options$columnVariable))
                 return()
-            result <- edu_chisq_independence(
+            result <- .jr_guided_computation(edu_chisq_independence(
                 self$data, self$options$rowVariable, self$options$columnVariable,
                 counts = self$options$counts
-            )
+            ))
             result <- .jr_apply_variable_descriptions(result, self$data)
             self$results$overview$setContent(.jr_jamovi_overview_html(result))
             self$results$fit$addRow(rowKey = 1, values = as.list(result$statistics[1, ]))

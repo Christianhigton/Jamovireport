@@ -23,7 +23,7 @@ eduChiSquareIndependenceOptions <- if (requireNamespace("jmvcore", quietly=TRUE)
             reportCautions = TRUE, ...) {
 
             super$initialize(
-                package="JamoviReport",
+                package="jReport",
                 name="eduChiSquareIndependence",
                 requiresData=TRUE,
                 ...)
@@ -187,7 +187,7 @@ eduChiSquareIndependenceResults <- if (requireNamespace("jmvcore", quietly=TRUE)
             self$add(jmvcore::Html$new(
                 options=options,
                 name="overview",
-                title="jamovi Report: Overview and Why This Test?"))
+                title="jReport: Overview and Why This Test?"))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="fit",
@@ -288,7 +288,7 @@ eduChiSquareIndependenceBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R
     public = list(
         initialize = function(options, data=NULL, datasetId="", analysisId="", revision=0) {
             super$initialize(
-                package = "JamoviReport",
+                package = "jReport",
                 name = "eduChiSquareIndependence",
                 version = c(0,1,0),
                 options = options,

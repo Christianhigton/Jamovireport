@@ -8,13 +8,13 @@ eduReliabilityOmegaClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6C
                 return()
             if (!all(self$options$reverseItems %in% self$options$items))
                 jmvcore::reject("Reverse-keyed items must also be selected as scale items.")
-            result <- edu_reliability_omega(
+            result <- .jr_guided_computation(edu_reliability_omega(
                 self$data, self$options$items, self$options$reverseItems,
                 correlation = self$options$correlationType,
                 ci = self$options$ciWidth / 100,
                 bootstrap = self$options$bootstrapCI,
                 boot_iterations = self$options$bootstrapSamples
-            )
+            ))
             result <- .jr_apply_variable_descriptions(result, self$data)
             self$results$overview$setContent(.jr_jamovi_overview_html(result))
             self$results$main$addRow(rowKey = 1, values = as.list(result$statistics[1, ]))

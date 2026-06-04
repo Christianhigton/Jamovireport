@@ -1,8 +1,11 @@
 ---
 name: eduMancova
 title: Guided MANOVA / MANCOVA
-menuGroup: jamovi Report
-version: '0.1.0'
+menuGroup: jReport
+version: '1.0.0'
+refs:
+    - car
+    - effectsize
 jas: '1.2'
 description:
     main: >
@@ -55,13 +58,13 @@ options:
         - { name: detailed, title: Detailed }
         - { name: critical, title: Critical / publication-focused }
       default: student_friendly
-    - { name: reportDescriptives, title: Include dependent-variable descriptives, type: Bool, default: true }
-    - { name: reportAssumptions, title: Include assumption checks, type: Bool, default: true }
-    - { name: reportStatistic, title: Include test statistic, type: Bool, default: true }
-    - { name: reportDf, title: Include degrees of freedom, type: Bool, default: true }
-    - { name: reportP, title: Include exact p value, type: Bool, default: true }
-    - { name: reportEffect, title: Include Pillai's trace, type: Bool, default: true }
-    - { name: reportCI, title: Include confidence intervals where available, type: Bool, default: true }
-    - { name: reportInterpretation, title: Include interpretation of findings, type: Bool, default: true }
-    - { name: reportCautions, title: Include cautions or assumption warnings, type: Bool, default: true }
+    - { name: reportDescriptives, title: Dependent-variable descriptives, type: Bool, default: true }
+    - { name: reportAssumptions, title: Assumption checks, type: Bool, default: true }
+    - { name: reportStatistic, title: Test statistic, type: Bool, default: true }
+    - { name: reportDf, title: Degrees of freedom, type: Bool, default: true }
+    - { name: reportP, title: Exact p value, type: Bool, default: true }
+    - { name: reportEffect, title: Pillai's trace, type: Bool, default: true }
+    - { name: reportCI, title: Confidence intervals where available, type: Bool, default: true }
+    - { name: reportInterpretation, title: Interpretation of findings, type: Bool, default: true }
+    - { name: reportCautions, title: Cautions or assumption warnings, type: Bool, default: true }
 ...

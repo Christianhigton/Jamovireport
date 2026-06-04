@@ -25,7 +25,7 @@ eduMixedAnovaOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
             reportCautions = TRUE, ...) {
 
             super$initialize(
-                package="JamoviReport",
+                package="jReport",
                 name="eduMixedAnova",
                 requiresData=TRUE,
                 ...)
@@ -201,7 +201,7 @@ eduMixedAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
             self$add(jmvcore::Html$new(
                 options=options,
                 name="overview",
-                title="jamovi Report: Overview and Why This Test?"))
+                title="jReport: Overview and Why This Test?"))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="main",
@@ -318,7 +318,7 @@ eduMixedAnovaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     public = list(
         initialize = function(options, data=NULL, datasetId="", analysisId="", revision=0) {
             super$initialize(
-                package = "JamoviReport",
+                package = "jReport",
                 name = "eduMixedAnova",
                 version = c(0,1,0),
                 options = options,

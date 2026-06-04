@@ -24,7 +24,7 @@ eduLogisticOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
             reportCautions = TRUE, ...) {
 
             super$initialize(
-                package="JamoviReport",
+                package="jReport",
                 name="eduLogistic",
                 requiresData=TRUE,
                 ...)
@@ -196,7 +196,7 @@ eduLogisticResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
             self$add(jmvcore::Html$new(
                 options=options,
                 name="overview",
-                title="jamovi Report: Overview and Why This Test?"))
+                title="jReport: Overview and Why This Test?"))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="fit",
@@ -310,7 +310,7 @@ eduLogisticBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     public = list(
         initialize = function(options, data=NULL, datasetId="", analysisId="", revision=0) {
             super$initialize(
-                package = "JamoviReport",
+                package = "jReport",
                 name = "eduLogistic",
                 version = c(0,1,0),
                 options = options,

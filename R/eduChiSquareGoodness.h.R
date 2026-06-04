@@ -23,7 +23,7 @@ eduChiSquareGoodnessOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6
             reportCautions = TRUE, ...) {
 
             super$initialize(
-                package="JamoviReport",
+                package="jReport",
                 name="eduChiSquareGoodness",
                 requiresData=TRUE,
                 ...)
@@ -183,7 +183,7 @@ eduChiSquareGoodnessResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6
             self$add(jmvcore::Html$new(
                 options=options,
                 name="overview",
-                title="jamovi Report: Overview and Why This Test?"))
+                title="jReport: Overview and Why This Test?"))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="fit",
@@ -284,7 +284,7 @@ eduChiSquareGoodnessBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R
     public = list(
         initialize = function(options, data=NULL, datasetId="", analysisId="", revision=0) {
             super$initialize(
-                package = "JamoviReport",
+                package = "jReport",
                 name = "eduChiSquareGoodness",
                 version = c(0,1,0),
                 options = options,

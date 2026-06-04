@@ -1,6 +1,6 @@
 # Third-Party Licence Notes
 
-JamoviReport is distributed under GPL-3. The built jamovi module may bundle R
+jReport is distributed under GPL-3. The built jamovi module may bundle R
 package dependencies needed at runtime. The current compiled dependency audit
 identified:
 

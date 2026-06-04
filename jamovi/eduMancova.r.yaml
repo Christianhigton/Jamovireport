@@ -3,10 +3,14 @@ name: eduMancova
 title: Guided MANOVA / MANCOVA
 jrs: '1.1'
 items:
-    - { name: overview, title: 'jamovi Report: Overview and Why This Test?', type: Html }
+    - { name: overview, title: 'jReport: Overview and Why This Test?', type: Html }
     - name: main
       title: Multivariate Tests
       type: Table
+      clearWith:
+        - outcomes
+        - factors
+        - covariates
       columns:
         - { name: term, title: Effect, type: text }
         - { name: statistic, title: F, type: number }
@@ -17,6 +21,10 @@ items:
     - name: descriptives
       title: Dependent-Variable Descriptives
       type: Table
+      clearWith:
+        - outcomes
+        - factors
+        - covariates
       columns:
         - { name: label, title: Dependent Variable, type: text }
         - { name: n, title: N, type: integer }
@@ -25,6 +33,10 @@ items:
     - name: diagnostics
       title: Assumption Checks and Guidance
       type: Table
+      clearWith:
+        - outcomes
+        - factors
+        - covariates
       columns:
         - { name: check, title: Check, type: text }
         - { name: tested, title: "Tested?", type: text }
@@ -37,6 +49,10 @@ items:
       title: Follow-up Analyses
       type: Table
       visible: false
+      clearWith:
+        - outcomes
+        - factors
+        - covariates
       columns:
         - { name: term, title: Effect, type: text }
         - { name: outcome, title: Outcome, type: text }

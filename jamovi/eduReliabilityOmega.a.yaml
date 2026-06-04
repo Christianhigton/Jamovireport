@@ -1,8 +1,11 @@
 ---
 name: eduReliabilityOmega
 title: "Guided Reliability: McDonald's Omega"
-menuGroup: jamovi Report
-version: '0.1.0'
+menuGroup: jReport
+version: '1.0.0'
+refs:
+    - psych
+    - ggplot2
 jas: '1.2'
 description:
     main: >
@@ -31,7 +34,7 @@ options:
     - { name: bootstrapCI, title: Bootstrap confidence interval, type: Bool, default: true }
     - { name: bootstrapSamples, title: Bootstrap resamples, type: Number, min: 20, max: 5000, default: 200 }
     - { name: ciWidth, title: Confidence level, type: Number, min: 50, max: 99.9, default: 95 }
-    - { name: showPlot, title: Display item-quality visualisation, type: Bool, default: true }
+    - { name: showPlot, title: Item-quality visualisation, type: Bool, default: true }
     - name: reportStyle
       title: Report style
       type: List
@@ -60,10 +63,10 @@ options:
         - { name: detailed, title: Detailed }
         - { name: critical, title: Critical / publication-focused }
       default: student_friendly
-    - { name: reportDescriptives, title: Include scale and sample description, type: Bool, default: true }
-    - { name: reportAssumptions, title: Include item and data-quality guidance, type: Bool, default: true }
-    - { name: reportEffect, title: Include omega estimate, type: Bool, default: true }
-    - { name: reportCI, title: Include confidence interval, type: Bool, default: true }
-    - { name: reportInterpretation, title: Include interpretation of reliability, type: Bool, default: true }
-    - { name: reportCautions, title: Include cautions or scoring warnings, type: Bool, default: true }
+    - { name: reportDescriptives, title: Scale and sample description, type: Bool, default: true }
+    - { name: reportAssumptions, title: Item and data-quality guidance, type: Bool, default: true }
+    - { name: reportEffect, title: Omega estimate, type: Bool, default: true }
+    - { name: reportCI, title: Confidence interval, type: Bool, default: true }
+    - { name: reportInterpretation, title: Interpretation of reliability, type: Bool, default: true }
+    - { name: reportCautions, title: Cautions or scoring warnings, type: Bool, default: true }
 ...

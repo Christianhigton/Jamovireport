@@ -3,7 +3,7 @@ name: eduAncova
 title: Guided ANCOVA
 jrs: '1.1'
 items:
-    - { name: overview, title: 'jamovi Report: Overview and Why This Test?', type: Html }
+    - { name: overview, title: 'jReport: Overview and Why This Test?', type: Html }
     - name: main
       title: Main Results and Effect Sizes
       type: Table

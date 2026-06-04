@@ -9,13 +9,13 @@ children:
     persistentItems: false
     children:
       - type: TargetLayoutBox
-        label: Binary outcome
+        label: Binary Outcome
         children: [{ type: VariablesListBox, name: outcome, maxItemCount: 1, isTarget: true }]
       - type: TargetLayoutBox
-        label: Numeric predictors
+        label: Numeric Predictors
         children: [{ type: VariablesListBox, name: covariates, isTarget: true }]
       - type: TargetLayoutBox
-        label: Categorical predictors
+        label: Categorical Predictors
         children: [{ type: VariablesListBox, name: factors, isTarget: true }]
   - type: CollapseBox
     label: Analysis
@@ -24,7 +24,7 @@ children:
       - { type: TextBox, name: ciWidth, format: number }
   - type: CollapseBox
     label: Reporting
-    collapsed: false
+    collapsed: true
     children:
       - { type: ComboBox, name: reportStyle }
       - { type: ComboBox, name: reportFormat }

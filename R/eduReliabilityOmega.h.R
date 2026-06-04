@@ -24,7 +24,7 @@ eduReliabilityOmegaOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6:
             reportCautions = TRUE, ...) {
 
             super$initialize(
-                package="JamoviReport",
+                package="jReport",
                 name="eduReliabilityOmega",
                 requiresData=TRUE,
                 ...)
@@ -200,7 +200,7 @@ eduReliabilityOmegaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6:
             self$add(jmvcore::Html$new(
                 options=options,
                 name="overview",
-                title="jamovi Report: Overview and Why Omega?"))
+                title="jReport: Overview and Why Omega?"))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="main",
@@ -320,7 +320,7 @@ eduReliabilityOmegaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6
     public = list(
         initialize = function(options, data=NULL, datasetId="", analysisId="", revision=0) {
             super$initialize(
-                package = "JamoviReport",
+                package = "jReport",
                 name = "eduReliabilityOmega",
                 version = c(0,1,0),
                 options = options,

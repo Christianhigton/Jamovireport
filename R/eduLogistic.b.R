@@ -8,7 +8,9 @@ eduLogisticClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class(
             if (is.null(self$options$outcome) || length(predictors) == 0L)
                 return()
             formula <- stats::reformulate(predictors, response = self$options$outcome)
-            result <- edu_logistic_regression(self$data, formula, ci = self$options$ciWidth / 100)
+            result <- .jr_guided_computation(
+                edu_logistic_regression(self$data, formula, ci = self$options$ciWidth / 100)
+            )
             result <- .jr_apply_variable_descriptions(result, self$data)
             self$results$overview$setContent(.jr_jamovi_overview_html(result))
             self$results$fit$addRow(rowKey = 1, values = as.list(result$statistics[1, ]))

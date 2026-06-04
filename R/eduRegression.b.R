@@ -7,7 +7,7 @@ eduRegressionClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class(
             if (is.null(self$options$outcome) || length(self$options$predictors) == 0L)
                 return()
             formula <- stats::reformulate(self$options$predictors, response = self$options$outcome)
-            result <- edu_lm(self$data, formula, ci = self$options$ciWidth / 100)
+            result <- .jr_guided_computation(edu_lm(self$data, formula, ci = self$options$ciWidth / 100))
             result <- .jr_apply_variable_descriptions(result, self$data)
             self$results$overview$setContent(.jr_jamovi_overview_html(result))
             self$results$fit$addRow(rowKey = 1, values = as.list(result$statistics[1, ]))

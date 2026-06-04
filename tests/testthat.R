@@ -1,4 +1,4 @@
 library(testthat)
-library(JamoviReport)
+library(jReport)
 
-test_check("JamoviReport")
+test_check("jReport")

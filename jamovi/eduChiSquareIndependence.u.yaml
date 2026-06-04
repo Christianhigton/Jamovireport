@@ -9,17 +9,17 @@ children:
     persistentItems: false
     children:
       - type: TargetLayoutBox
-        label: Row variable
+        label: Row Variable
         children: [{ type: VariablesListBox, name: rowVariable, maxItemCount: 1, isTarget: true }]
       - type: TargetLayoutBox
-        label: Column variable
+        label: Column Variable
         children: [{ type: VariablesListBox, name: columnVariable, maxItemCount: 1, isTarget: true }]
       - type: TargetLayoutBox
-        label: Counts (optional)
+        label: Counts (Optional)
         children: [{ type: VariablesListBox, name: counts, maxItemCount: 1, isTarget: true }]
   - type: CollapseBox
     label: Reporting
-    collapsed: false
+    collapsed: true
     children:
       - { type: ComboBox, name: reportStyle }
       - { type: ComboBox, name: reportFormat }

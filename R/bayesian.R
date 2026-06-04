@@ -1,11 +1,4 @@
 .jr_enable_bayesfactor_library <- function() {
-    if (requireNamespace("BayesFactor", quietly = TRUE))
-        return(TRUE)
-    candidates <- c("/Applications/jamovi.app/Contents/Resources/modules/jmv/R")
-    for (candidate in candidates) {
-        if (dir.exists(file.path(candidate, "BayesFactor")))
-            .libPaths(unique(c(candidate, .libPaths())))
-    }
     requireNamespace("BayesFactor", quietly = TRUE)
 }
 

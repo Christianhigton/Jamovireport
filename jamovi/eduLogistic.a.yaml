@@ -1,8 +1,12 @@
 ---
 name: eduLogistic
 title: Guided Binomial Logistic Regression
-menuGroup: jamovi Report
-version: '0.1.0'
+menuGroup: jReport
+version: '1.0.0'
+refs:
+    - parameters
+    - performance
+    - effectsize
 jas: '1.2'
 description:
     main: >
@@ -56,13 +60,13 @@ options:
         - { name: detailed, title: Detailed }
         - { name: critical, title: Critical / publication-focused }
       default: student_friendly
-    - { name: reportDescriptives, title: Include model fit and coefficients, type: Bool, default: true }
-    - { name: reportAssumptions, title: Include diagnostic checks, type: Bool, default: true }
-    - { name: reportStatistic, title: Include test statistic, type: Bool, default: true }
-    - { name: reportDf, title: Include degrees of freedom, type: Bool, default: true }
-    - { name: reportP, title: Include exact p value, type: Bool, default: true }
-    - { name: reportEffect, title: Include pseudo R-squared and odds ratios, type: Bool, default: true }
-    - { name: reportCI, title: Include confidence intervals, type: Bool, default: true }
-    - { name: reportInterpretation, title: Include interpretation of findings, type: Bool, default: true }
-    - { name: reportCautions, title: Include cautions or diagnostic warnings, type: Bool, default: true }
+    - { name: reportDescriptives, title: Model fit and coefficients, type: Bool, default: true }
+    - { name: reportAssumptions, title: Diagnostic checks, type: Bool, default: true }
+    - { name: reportStatistic, title: Test statistic, type: Bool, default: true }
+    - { name: reportDf, title: Degrees of freedom, type: Bool, default: true }
+    - { name: reportP, title: Exact p value, type: Bool, default: true }
+    - { name: reportEffect, title: Pseudo R-squared and odds ratios, type: Bool, default: true }
+    - { name: reportCI, title: Confidence intervals, type: Bool, default: true }
+    - { name: reportInterpretation, title: Interpretation of findings, type: Bool, default: true }
+    - { name: reportCautions, title: Cautions or diagnostic warnings, type: Bool, default: true }
 ...

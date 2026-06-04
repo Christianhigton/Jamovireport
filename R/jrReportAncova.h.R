@@ -8,7 +8,7 @@ jrReportAncovaOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
         initialize = function( ...) {
 
             super$initialize(
-                package="JamoviReport",
+                package="jReport",
                 name="jrReportAncova",
                 requiresData=TRUE,
                 ...)
@@ -37,7 +37,7 @@ jrReportAncovaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
     public = list(
         initialize = function(options, data=NULL, datasetId="", analysisId="", revision=0) {
             super$initialize(
-                package = "JamoviReport",
+                package = "jReport",
                 name = "jrReportAncova",
                 version = c(0,1,0),
                 options = options,

@@ -1,9 +1,12 @@
-^# Statistical Test Reporting Standards a\.R$
-^JamoviReport\.Rproj$
+^notes$
+^\.github$
+^jReport\.Rproj$
 ^\.Rproj\.user$
 ^build$
 ^.*\.jmo$
 ^.*\.tar\.gz$
-^man/figures/JamoviReport-logo-source\.png$
+^man/figures/jReport-logo-source\.png$
 ^LICENSE\.md$
 ^Julie Pallant - SPSS Survival Manual_ A Step by Step Guide to Data Analysis Using IBM SPSS-Open University Press \(2016\)\.pdf$
+^jReport\.Rcheck$
+^\.\.Rcheck$

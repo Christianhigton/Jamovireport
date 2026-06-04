@@ -1,7 +1,7 @@
-Package: JamoviReport
+Package: jReport
 Type: Package
-Title: jamovi Report Statistical Reporting for R and jamovi
-Version: 0.1.0.9015
+Title: jReport: Automated Statistical Reporting for R and jamovi
+Version: 1.0.0
 Authors@R: person("Christian", "Higton", role = c("aut", "cre"),
     email = "christianhigton@gmail.com")
 Description: Provides guided statistical analyses with assumption diagnostics,
@@ -24,7 +24,8 @@ Imports:
     psych,
     R6,
     stats,
-    tools
+    tools,
+    utils
 Suggests:
     BayesFactor,
     emmeans,

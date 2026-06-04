@@ -75,7 +75,7 @@ test_that("omega estimates and intervals follow reporting inclusion controls", {
     expect_false(grepl("bootstrap CI", text, fixed = TRUE))
 })
 
-test_that("jamovi report content is rendered as structured HTML cards", {
+test_that("jReport content is rendered as structured HTML cards", {
     result <- edu_t_test(ToothGrowth, "len", "supp")
     options <- list(
         reportStyle = "apa7", reportFormat = "paragraph", reportTone = "student_friendly",
@@ -89,14 +89,14 @@ test_that("jamovi report content is rendered as structured HTML cards", {
     interpretation <- .jr_jamovi_interpretation_html(result)
 
     expect_match(overview, "<div")
-    expect_match(overview, "jamovi Report")
+    expect_match(overview, "jReport")
     expect_match(overview, "Reporting controls")
     expect_match(report, "Copy-ready reporting")
     expect_match(report, "Welch independent-samples t-test")
     expect_match(interpretation, "What does this mean")
 })
 
-test_that("jamovi report display names prefer variable descriptions with name fallback", {
+test_that("jReport display names prefer variable descriptions with name fallback", {
     d <- ToothGrowth
     attr(d$len, "description") <- "Tooth length in millimetres"
     attr(d$supp, "description") <- " "
@@ -177,7 +177,7 @@ test_that("native add-ons use a fixed automatic APA reporting profile", {
     expect_match(report, "Student's independent-samples t-test")
     expect_match(report, "Cohen")
     expect_match(report, "95% CI")
-    expect_match(.jr_addon_heading_html(), "jamovi Report")
+    expect_match(.jr_addon_heading_html(), "jReport")
 })
 
 test_that("automatic native reports render for supported group comparison designs", {
@@ -280,15 +280,17 @@ test_that("automatic native reports display calculation failures clearly", {
     expect_match(report, "example failure")
 })
 
-test_that("native add-ons register their installed dependency library path", {
-    module_library <- file.path(tempdir(), "JamoviReport-module-library")
-    dir.create(file.path(module_library, "JamoviReport"), recursive = TRUE, showWarnings = FALSE)
+test_that("native add-ons do not mutate the global library path", {
     original <- .libPaths()
-    on.exit(.libPaths(original), add = TRUE)
-    .libPaths(setdiff(original, module_library))
 
-    expect_true(.jr_addon_enable_library(file.path(module_library, "JamoviReport")))
-    expect_true(normalizePath(module_library) %in% normalizePath(.libPaths()))
+    expect_true(.jr_addon_enable_library())
+    expect_equal(.libPaths(), original)
+    package_code <- unlist(lapply(
+        list.files("R", pattern = "\\.R$", full.names = TRUE),
+        readLines,
+        warn = FALSE
+    ))
+    expect_false(any(grepl("\\.libPaths\\(", package_code)))
 })
 
 test_that("native add-ons generate APA results table rows across analysis families", {

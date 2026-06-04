@@ -11,7 +11,7 @@ eduTTestClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class(
             if (self$options$testType == "paired" && is.null(self$options$pairedOutcome))
                 return()
 
-            result <- edu_t_test(
+            result <- .jr_guided_computation(edu_t_test(
                 data = self$data,
                 outcome = self$options$outcome,
                 group = self$options$group,
@@ -19,7 +19,7 @@ eduTTestClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class(
                 type = self$options$testType,
                 var_equal = self$options$varEqual,
                 ci = self$options$ciWidth / 100
-            )
+            ))
             result <- .jr_apply_variable_descriptions(result, self$data)
             self$results$overview$setContent(.jr_jamovi_overview_html(result))
             self$results$main$addRow(rowKey = 1, values = as.list(result$statistics[1, ]))

@@ -13,8 +13,8 @@ permissions:
 
 env:
   JAMOVI_VERSION: 2.7.24.0
-  RELEASE_TAG: v0.1.0.9011
-  JMO_NAME: JamoviReport_0.1.0.9011_windows_x64_jamovi-2.7.jmo
+  RELEASE_TAG: v1.0.0
+  JMO_NAME: jReport_1.0.0_windows_x64_jamovi-2.7.jmo
 
 jobs:
   build-windows:
@@ -150,7 +150,7 @@ jobs:
       - name: Upload workflow artifact
         uses: actions/upload-artifact@v4
         with:
-          name: JamoviReport-windows-x64-jamovi-2.7
+          name: jReport-windows-x64-jamovi-2.7
           path: ${{ env.JMO_NAME }}
 
       - name: Publish Windows prerelease asset
@@ -166,8 +166,8 @@ jobs:
           else {
             gh release create "$env:RELEASE_TAG" "$asset" `
               --target "$env:GITHUB_SHA" `
-              --title "JamoviReport 0.1.0.9011 (development build)" `
-              --notes "Development build for sideloading in jamovi. This Windows x64 asset is built for the jamovi 2.7 series. Download the .jmo file and install it using jamovi's sideload module option." `
+              --title "jReport 1.0.0" `
+              --notes "Windows x64 build for sideloading in jamovi. This asset is built for the jamovi 2.7 series. Download the .jmo file and install it using jamovi's sideload module option." `
               --prerelease `
               --repo "$env:GITHUB_REPOSITORY"
           }

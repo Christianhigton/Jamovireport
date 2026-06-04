@@ -1,7 +1,7 @@
 ---
-title: jamovi Report
-name: JamoviReport
-version: 0.1.0.9013
+title: jReport
+name: jReport
+version: 1.0.0
 jms: '1.0'
 authors:
   - Christian Higton
@@ -14,8 +14,8 @@ description: >
 analyses:
   - title: Guided T-Test
     name: eduTTest
-    ns: JamoviReport
-    menuGroup: jamovi Report
+    ns: jReport
+    menuGroup: jReport
     menuSubgroup: Group Comparisons
     menuTitle: Guided T-Test
     description: >
@@ -24,8 +24,8 @@ analyses:
     category: analyses
   - title: Guided One-Way ANOVA
     name: eduAnova
-    ns: JamoviReport
-    menuGroup: jamovi Report
+    ns: jReport
+    menuGroup: jReport
     menuSubgroup: Group Comparisons
     menuTitle: Guided One-Way ANOVA
     description: >
@@ -34,8 +34,8 @@ analyses:
     category: analyses
   - title: Guided Correlation
     name: eduCorrelation
-    ns: JamoviReport
-    menuGroup: jamovi Report
+    ns: jReport
+    menuGroup: jReport
     menuSubgroup: Association
     menuTitle: Guided Correlation
     description: >
@@ -44,8 +44,8 @@ analyses:
     category: analyses
   - title: Guided Chi-Square Test of Independence
     name: eduChiSquareIndependence
-    ns: JamoviReport
-    menuGroup: jamovi Report
+    ns: jReport
+    menuGroup: jReport
     menuSubgroup: Frequencies
     menuTitle: Guided Chi-Square Test of Independence
     description: >
@@ -54,8 +54,8 @@ analyses:
     category: analyses
   - title: Guided Chi-Square Goodness-of-Fit
     name: eduChiSquareGoodness
-    ns: JamoviReport
-    menuGroup: jamovi Report
+    ns: jReport
+    menuGroup: jReport
     menuSubgroup: Frequencies
     menuTitle: Guided Chi-Square Goodness-of-Fit
     description: >
@@ -64,8 +64,8 @@ analyses:
     category: analyses
   - title: Guided Linear Regression
     name: eduRegression
-    ns: JamoviReport
-    menuGroup: jamovi Report
+    ns: jReport
+    menuGroup: jReport
     menuSubgroup: Regression
     menuTitle: Guided Linear Regression
     description: >
@@ -74,8 +74,8 @@ analyses:
     category: analyses
   - title: Guided Binomial Logistic Regression
     name: eduLogistic
-    ns: JamoviReport
-    menuGroup: jamovi Report
+    ns: jReport
+    menuGroup: jReport
     menuSubgroup: Regression
     menuTitle: Guided Binomial Logistic Regression
     description: >
@@ -84,8 +84,8 @@ analyses:
     category: analyses
   - title: Guided Between-Subjects ANOVA
     name: eduBetweenAnova
-    ns: JamoviReport
-    menuGroup: jamovi Report
+    ns: jReport
+    menuGroup: jReport
     menuSubgroup: Group Comparisons
     menuTitle: Guided Between-Subjects ANOVA
     description: >
@@ -94,8 +94,8 @@ analyses:
     category: analyses
   - title: Guided Repeated-Measures ANOVA
     name: eduRMAnova
-    ns: JamoviReport
-    menuGroup: jamovi Report
+    ns: jReport
+    menuGroup: jReport
     menuSubgroup: Repeated Measures
     menuTitle: Guided Repeated-Measures ANOVA
     description: >
@@ -104,8 +104,8 @@ analyses:
     category: analyses
   - title: Guided Mixed ANOVA
     name: eduMixedAnova
-    ns: JamoviReport
-    menuGroup: jamovi Report
+    ns: jReport
+    menuGroup: jReport
     menuSubgroup: Repeated Measures
     menuTitle: Guided Mixed ANOVA
     description: >
@@ -114,8 +114,8 @@ analyses:
     category: analyses
   - title: Guided ANCOVA
     name: eduAncova
-    ns: JamoviReport
-    menuGroup: jamovi Report
+    ns: jReport
+    menuGroup: jReport
     menuSubgroup: Group Comparisons
     menuTitle: Guided ANCOVA
     description: >
@@ -124,8 +124,8 @@ analyses:
     category: analyses
   - title: Guided MANOVA / MANCOVA
     name: eduMancova
-    ns: JamoviReport
-    menuGroup: jamovi Report
+    ns: jReport
+    menuGroup: jReport
     menuSubgroup: Group Comparisons
     menuTitle: Guided MANOVA / MANCOVA
     description: >
@@ -136,8 +136,8 @@ analyses:
     category: analyses
   - title: 'Guided Reliability: McDonald''s Omega'
     name: eduReliabilityOmega
-    ns: JamoviReport
-    menuGroup: jamovi Report
+    ns: jReport
+    menuGroup: jReport
     menuSubgroup: Psychometrics
     menuTitle: 'Guided Reliability: McDonald''s Omega'
     description: >
@@ -146,91 +146,91 @@ analyses:
     category: analyses
   - title: Automatic Report for Independent Samples T-Test
     name: jrReportTTestIS
-    ns: JamoviReport
+    ns: jReport
     menuGroup: Report Add-ons
     menuTitle: Automatic Report for Independent Samples T-Test
     addonFor: jmv::ttestIS
     category: analyses
   - title: Automatic Report for Paired Samples T-Test
     name: jrReportTTestPS
-    ns: JamoviReport
+    ns: jReport
     menuGroup: Report Add-ons
     menuTitle: Automatic Report for Paired Samples T-Test
     addonFor: jmv::ttestPS
     category: analyses
   - title: Automatic Report for One-Way ANOVA
     name: jrReportAnovaOneW
-    ns: JamoviReport
+    ns: jReport
     menuGroup: Report Add-ons
     menuTitle: Automatic Report for One-Way ANOVA
     addonFor: jmv::anovaOneW
     category: analyses
   - title: Automatic Report for ANOVA
     name: jrReportAnova
-    ns: JamoviReport
+    ns: jReport
     menuGroup: Report Add-ons
     menuTitle: Automatic Report for ANOVA
     addonFor: jmv::anova
     category: analyses
   - title: Automatic Report for ANCOVA
     name: jrReportAncova
-    ns: JamoviReport
+    ns: jReport
     menuGroup: Report Add-ons
     menuTitle: Automatic Report for ANCOVA
     addonFor: jmv::ancova
     category: analyses
   - title: Automatic Report for MANOVA / MANCOVA
     name: jrReportMancova
-    ns: JamoviReport
+    ns: jReport
     menuGroup: Report Add-ons
     menuTitle: Automatic Report for MANOVA / MANCOVA
     addonFor: jmv::mancova
     category: analyses
   - title: Automatic Report for Linear Regression
     name: jrReportLinReg
-    ns: JamoviReport
+    ns: jReport
     menuGroup: Report Add-ons
     menuTitle: Automatic Report for Linear Regression
     addonFor: jmv::linReg
     category: analyses
   - title: Automatic Report for Binomial Logistic Regression
     name: jrReportLogRegBin
-    ns: JamoviReport
+    ns: jReport
     menuGroup: Report Add-ons
     menuTitle: Automatic Report for Binomial Logistic Regression
     addonFor: jmv::logRegBin
     category: analyses
   - title: Automatic Report for Correlation Matrix
     name: jrReportCorrMatrix
-    ns: JamoviReport
+    ns: jReport
     menuGroup: Report Add-ons
     menuTitle: Automatic Report for Correlation Matrix
     addonFor: jmv::corrMatrix
     category: analyses
   - title: Automatic Report for Chi-Square Independence
     name: jrReportContTables
-    ns: JamoviReport
+    ns: jReport
     menuGroup: Report Add-ons
     menuTitle: Automatic Report for Chi-Square Independence
     addonFor: jmv::contTables
     category: analyses
   - title: Automatic Report for Chi-Square Goodness-of-Fit
     name: jrReportPropTestN
-    ns: JamoviReport
+    ns: jReport
     menuGroup: Report Add-ons
     menuTitle: Automatic Report for Chi-Square Goodness-of-Fit
     addonFor: jmv::propTestN
     category: analyses
   - title: Automatic Report for Repeated Measures ANOVA
     name: jrReportAnovaRM
-    ns: JamoviReport
+    ns: jReport
     menuGroup: Report Add-ons
     menuTitle: Automatic Report for Repeated Measures ANOVA
     addonFor: jmv::anovaRM
     category: analyses
   - title: Automatic Omega Report for Reliability Analysis
     name: jrReportReliability
-    ns: JamoviReport
+    ns: jReport
     menuGroup: Report Add-ons
     menuTitle: Automatic Omega Report for Reliability Analysis
     addonFor: jmv::reliability

@@ -39,7 +39,7 @@ jrReportAnovaRMBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
             super$initialize(
                 package = "jReport",
                 name = "jrReportAnovaRM",
-                version = c(0,1,0),
+                version = c(1,0,0),
                 options = options,
                 results = jrReportAnovaRMResults$new(options=options),
                 data = data,
@@ -54,6 +54,13 @@ jrReportAnovaRMBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
 
 #' Automatic Report for Repeated Measures ANOVA
 #'
+#' 
+#' @section References:
+#' jmvcore
+#'
+#' afex
+#'
+#' effectsize
 #'
 #' @param data .
 #' @return A results object containing:

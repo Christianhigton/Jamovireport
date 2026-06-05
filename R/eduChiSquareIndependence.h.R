@@ -192,86 +192,98 @@ eduChiSquareIndependenceResults <- if (requireNamespace("jmvcore", quietly=TRUE)
                 options=options,
                 name="fit",
                 title="Main Results and Effect Size",
+                clearWith=list(
+                    "rowVariable",
+                    "columnVariable",
+                    "counts"),
                 columns=list(
                     list(
-                        `name`="test",
-                        `title`="Test",
+                        `name`="test", 
+                        `title`="Test", 
                         `type`="text"),
                     list(
-                        `name`="statistic",
-                        `title`="Chi-square",
+                        `name`="statistic", 
+                        `title`="Chi-square", 
                         `type`="number"),
                     list(
-                        `name`="df",
-                        `title`="df",
+                        `name`="df", 
+                        `title`="df", 
                         `type`="number"),
                     list(
-                        `name`="p",
-                        `title`="p",
-                        `type`="number",
+                        `name`="p", 
+                        `title`="p", 
+                        `type`="number", 
                         `format`="zto,pvalue"),
                     list(
-                        `name`="effect",
-                        `title`="Cramer's V",
+                        `name`="effect", 
+                        `title`="Cramer's V", 
                         `type`="number"),
                     list(
-                        `name`="n",
-                        `title`="N",
+                        `name`="n", 
+                        `title`="N", 
                         `type`="number"))))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="cells",
                 title="Observed, Expected, and Standardised Residual Counts",
+                clearWith=list(
+                    "rowVariable",
+                    "columnVariable",
+                    "counts"),
                 columns=list(
                     list(
-                        `name`="category",
-                        `title`="Cell",
+                        `name`="category", 
+                        `title`="Cell", 
                         `type`="text"),
                     list(
-                        `name`="observed",
-                        `title`="Observed",
+                        `name`="observed", 
+                        `title`="Observed", 
                         `type`="number"),
                     list(
-                        `name`="expected",
-                        `title`="Expected",
+                        `name`="expected", 
+                        `title`="Expected", 
                         `type`="number"),
                     list(
-                        `name`="standardised_residual",
-                        `title`="Standardised Residual",
+                        `name`="standardised_residual", 
+                        `title`="Standardised Residual", 
                         `type`="number"))))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="diagnostics",
                 title="Assumption Checks and Guidance",
+                clearWith=list(
+                    "rowVariable",
+                    "columnVariable",
+                    "counts"),
                 columns=list(
                     list(
-                        `name`="check",
-                        `title`="Check",
+                        `name`="check", 
+                        `title`="Check", 
                         `type`="text"),
                     list(
-                        `name`="tested",
-                        `title`="Tested?",
+                        `name`="tested", 
+                        `title`="Tested?", 
                         `type`="text"),
                     list(
-                        `name`="statistic",
-                        `title`="Statistic",
+                        `name`="statistic", 
+                        `title`="Statistic", 
                         `type`="number"),
                     list(
-                        `name`="p",
-                        `title`="p",
-                        `type`="number",
+                        `name`="p", 
+                        `title`="p", 
+                        `type`="number", 
                         `format`="zto,pvalue"),
                     list(
-                        `name`="status",
-                        `title`="Status",
+                        `name`="status", 
+                        `title`="Status", 
                         `type`="text"),
                     list(
-                        `name`="interpretation",
-                        `title`="Interpretation",
+                        `name`="interpretation", 
+                        `title`="Interpretation", 
                         `type`="text"),
                     list(
-                        `name`="action",
-                        `title`="Recommended Action",
+                        `name`="action", 
+                        `title`="Recommended Action", 
                         `type`="text"))))
             self$add(jmvcore::Html$new(
                 options=options,
@@ -290,7 +302,7 @@ eduChiSquareIndependenceBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R
             super$initialize(
                 package = "jReport",
                 name = "eduChiSquareIndependence",
-                version = c(0,1,0),
+                version = c(1,0,0),
                 options = options,
                 results = eduChiSquareIndependenceResults$new(options=options),
                 data = data,
@@ -305,8 +317,11 @@ eduChiSquareIndependenceBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R
 
 #' Guided Chi-Square Test of Independence
 #'
-#' Assess whether two categorical variables are associated, with expected
+#' Assess whether two categorical variables are associated, with expected 
 #' count checks, Cramer's V, and report-ready explanation.
+#' 
+#' @section References:
+#' effectsize
 #'
 #' @param data .
 #' @param rowVariable .

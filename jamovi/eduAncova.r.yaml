@@ -7,6 +7,11 @@ items:
     - name: main
       title: Main Results and Effect Sizes
       type: Table
+      clearWith:
+        - outcome
+        - factors
+        - covariates
+        - ciWidth
       columns:
         - { name: term, title: Effect, type: text }
         - { name: statistic, title: F, type: number }
@@ -19,6 +24,11 @@ items:
     - name: descriptives
       title: Observed Cell Descriptives
       type: Table
+      clearWith:
+        - outcome
+        - factors
+        - covariates
+        - ciWidth
       columns:
         - { name: label, title: Cell, type: text }
         - { name: n, title: N, type: integer }
@@ -27,6 +37,11 @@ items:
     - name: diagnostics
       title: Assumption Checks and Guidance
       type: Table
+      clearWith:
+        - outcome
+        - factors
+        - covariates
+        - ciWidth
       columns:
         - { name: check, title: Check, type: text }
         - { name: tested, title: "Tested?", type: text }
@@ -41,6 +56,11 @@ items:
       title: Observed Group Visualisation
       type: Image
       visible: (showPlot)
+      clearWith:
+        - outcome
+        - factors
+        - covariates
+        - ciWidth
       width: 520
       height: 360
       renderFun: .plot

@@ -7,6 +7,11 @@ items:
     - name: fit
       title: Main Results and Model Fit
       type: Table
+      clearWith:
+        - outcome
+        - covariates
+        - factors
+        - ciWidth
       columns:
         - { name: test, title: Test, type: text }
         - { name: statistic, title: Chi-square, type: number }
@@ -16,6 +21,11 @@ items:
     - name: coefficients
       title: Coefficients and Odds Ratios
       type: Table
+      clearWith:
+        - outcome
+        - covariates
+        - factors
+        - ciWidth
       columns:
         - { name: term, title: Predictor, type: text }
         - { name: estimate, title: B, type: number }
@@ -28,6 +38,11 @@ items:
     - name: diagnostics
       title: Diagnostic Checks and Guidance
       type: Table
+      clearWith:
+        - outcome
+        - covariates
+        - factors
+        - ciWidth
       columns:
         - { name: check, title: Check, type: text }
         - { name: tested, title: "Tested?", type: text }

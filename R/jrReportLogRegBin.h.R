@@ -39,7 +39,7 @@ jrReportLogRegBinBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
             super$initialize(
                 package = "jReport",
                 name = "jrReportLogRegBin",
-                version = c(0,1,0),
+                version = c(1,0,0),
                 options = options,
                 results = jrReportLogRegBinResults$new(options=options),
                 data = data,
@@ -54,6 +54,15 @@ jrReportLogRegBinBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
 
 #' Automatic Report for Binomial Logistic Regression
 #'
+#' 
+#' @section References:
+#' jmvcore
+#'
+#' parameters
+#'
+#' performance
+#'
+#' effectsize
 #'
 #' @param data .
 #' @return A results object containing:

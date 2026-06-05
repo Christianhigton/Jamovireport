@@ -3,11 +3,11 @@ name: eduReliabilityOmega
 title: "Guided Reliability: McDonald's Omega"
 menuGroup: jReport
 version: '1.0.0'
-refs:
-    - psych
-    - ggplot2
 jas: '1.2'
 description:
+    references:
+        - psych
+        - ggplot2
     main: >
         Estimate and report internal consistency using McDonald's omega total,
         with item diagnostics and clear interpretation guidance.

@@ -39,7 +39,7 @@ jrReportTTestPSBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
             super$initialize(
                 package = "jReport",
                 name = "jrReportTTestPS",
-                version = c(0,1,0),
+                version = c(1,0,0),
                 options = options,
                 results = jrReportTTestPSResults$new(options=options),
                 data = data,
@@ -54,6 +54,13 @@ jrReportTTestPSBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
 
 #' Automatic Report for Paired Samples T-Test
 #'
+#' 
+#' @section References:
+#' jmvcore
+#'
+#' effectsize
+#'
+#' BayesFactor
 #'
 #' @param data .
 #' @return A results object containing:

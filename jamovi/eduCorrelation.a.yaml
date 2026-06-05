@@ -3,11 +3,11 @@ name: eduCorrelation
 title: Guided Correlation
 menuGroup: jReport
 version: '1.0.0'
-refs:
-    - effectsize
-    - ggplot2
 jas: '1.2'
 description:
+    references:
+        - effectsize
+        - ggplot2
     main: >
         Explain the direction, strength, assumptions, and reporting of an
         association between two numeric variables.

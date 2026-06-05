@@ -3,11 +3,12 @@ name: jrReportTTestIS
 title: Automatic Report for Independent Samples T-Test
 menuGroup: Report Add-ons
 version: '1.0.0'
-refs:
-    - jmvcore
-    - effectsize
-    - BayesFactor
 jas: '1.2'
+description:
+    references:
+        - jmvcore
+        - effectsize
+        - BayesFactor
 options:
     - { name: data, type: Data }
 ...

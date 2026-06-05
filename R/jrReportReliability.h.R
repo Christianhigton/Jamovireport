@@ -39,7 +39,7 @@ jrReportReliabilityBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6
             super$initialize(
                 package = "jReport",
                 name = "jrReportReliability",
-                version = c(0,1,0),
+                version = c(1,0,0),
                 options = options,
                 results = jrReportReliabilityResults$new(options=options),
                 data = data,
@@ -54,6 +54,11 @@ jrReportReliabilityBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6
 
 #' Automatic Omega Report for Reliability Analysis
 #'
+#' 
+#' @section References:
+#' jmvcore
+#'
+#' psych
 #'
 #' @param data .
 #' @return A results object containing:

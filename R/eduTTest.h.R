@@ -230,90 +230,111 @@ eduTTestResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 options=options,
                 name="main",
                 title="Main Results and Effect Size",
+                clearWith=list(
+                    "outcome",
+                    "testType",
+                    "group",
+                    "pairedOutcome",
+                    "varEqual",
+                    "ciWidth"),
                 columns=list(
                     list(
-                        `name`="test",
-                        `title`="Test",
+                        `name`="test", 
+                        `title`="Test", 
                         `type`="text"),
                     list(
-                        `name`="statistic",
-                        `title`="Statistic",
+                        `name`="statistic", 
+                        `title`="Statistic", 
                         `type`="number"),
                     list(
-                        `name`="df",
-                        `title`="df",
+                        `name`="df", 
+                        `title`="df", 
                         `type`="number"),
                     list(
-                        `name`="p",
-                        `title`="p",
-                        `type`="number",
+                        `name`="p", 
+                        `title`="p", 
+                        `type`="number", 
                         `format`="zto,pvalue"),
                     list(
-                        `name`="effect",
-                        `title`="Cohen's d",
+                        `name`="effect", 
+                        `title`="Cohen's d", 
                         `type`="number"),
                     list(
-                        `name`="ci_low",
-                        `title`="CI Lower",
+                        `name`="ci_low", 
+                        `title`="CI Lower", 
                         `type`="number"),
                     list(
-                        `name`="ci_high",
-                        `title`="CI Upper",
+                        `name`="ci_high", 
+                        `title`="CI Upper", 
                         `type`="number"))))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="descriptives",
                 title="Descriptive Statistics",
+                clearWith=list(
+                    "outcome",
+                    "testType",
+                    "group",
+                    "pairedOutcome",
+                    "varEqual",
+                    "ciWidth"),
                 columns=list(
                     list(
-                        `name`="label",
-                        `title`="Group / Occasion",
+                        `name`="label", 
+                        `title`="Group / Occasion", 
                         `type`="text"),
                     list(
-                        `name`="n",
-                        `title`="N",
+                        `name`="n", 
+                        `title`="N", 
                         `type`="integer"),
                     list(
-                        `name`="mean",
-                        `title`="Mean",
+                        `name`="mean", 
+                        `title`="Mean", 
                         `type`="number"),
                     list(
-                        `name`="sd",
-                        `title`="SD",
+                        `name`="sd", 
+                        `title`="SD", 
                         `type`="number"))))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="diagnostics",
                 title="Assumption Checks and Guidance",
+                clearWith=list(
+                    "outcome",
+                    "testType",
+                    "group",
+                    "pairedOutcome",
+                    "varEqual",
+                    "ciWidth"),
                 columns=list(
                     list(
-                        `name`="check",
-                        `title`="Check",
+                        `name`="check", 
+                        `title`="Check", 
                         `type`="text"),
                     list(
-                        `name`="tested",
-                        `title`="Tested?",
+                        `name`="tested", 
+                        `title`="Tested?", 
                         `type`="text"),
                     list(
-                        `name`="statistic",
-                        `title`="Statistic",
+                        `name`="statistic", 
+                        `title`="Statistic", 
                         `type`="number"),
                     list(
-                        `name`="p",
-                        `title`="p",
-                        `type`="number",
+                        `name`="p", 
+                        `title`="p", 
+                        `type`="number", 
                         `format`="zto,pvalue"),
                     list(
-                        `name`="status",
-                        `title`="Status",
+                        `name`="status", 
+                        `title`="Status", 
                         `type`="text"),
                     list(
-                        `name`="interpretation",
-                        `title`="Interpretation",
+                        `name`="interpretation", 
+                        `title`="Interpretation", 
                         `type`="text"),
                     list(
-                        `name`="action",
-                        `title`="Recommended Action",
+                        `name`="action", 
+                        `title`="Recommended Action", 
                         `type`="text"))))
             self$add(jmvcore::Html$new(
                 options=options,
@@ -328,6 +349,13 @@ eduTTestResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 name="plot",
                 title="Visualisation",
                 visible="(showPlot)",
+                clearWith=list(
+                    "outcome",
+                    "testType",
+                    "group",
+                    "pairedOutcome",
+                    "varEqual",
+                    "ciWidth"),
                 width=520,
                 height=360,
                 renderFun=".plot"))}))
@@ -340,7 +368,7 @@ eduTTestBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             super$initialize(
                 package = "jReport",
                 name = "eduTTest",
-                version = c(0,1,0),
+                version = c(1,0,0),
                 options = options,
                 results = eduTTestResults$new(options=options),
                 data = data,
@@ -355,8 +383,15 @@ eduTTestBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 
 #' Guided T-Test
 #'
-#' Compare two means while explaining test selection, assumptions, effect
+#' Compare two means while explaining test selection, assumptions, effect 
 #' size, and reporting in accessible language.
+#' 
+#' @section References:
+#' effectsize
+#'
+#' ggplot2
+#'
+#' BayesFactor
 #'
 #' @param data .
 #' @param outcome .

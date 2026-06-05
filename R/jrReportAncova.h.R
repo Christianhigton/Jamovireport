@@ -39,7 +39,7 @@ jrReportAncovaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
             super$initialize(
                 package = "jReport",
                 name = "jrReportAncova",
-                version = c(0,1,0),
+                version = c(1,0,0),
                 options = options,
                 results = jrReportAncovaResults$new(options=options),
                 data = data,
@@ -54,6 +54,15 @@ jrReportAncovaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
 
 #' Automatic Report for ANCOVA
 #'
+#' 
+#' @section References:
+#' jmvcore
+#'
+#' car
+#'
+#' effectsize
+#'
+#' emmeans
 #'
 #' @param data .
 #' @return A results object containing:

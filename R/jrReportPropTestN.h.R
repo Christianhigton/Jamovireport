@@ -39,7 +39,7 @@ jrReportPropTestNBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
             super$initialize(
                 package = "jReport",
                 name = "jrReportPropTestN",
-                version = c(0,1,0),
+                version = c(1,0,0),
                 options = options,
                 results = jrReportPropTestNResults$new(options=options),
                 data = data,
@@ -54,6 +54,11 @@ jrReportPropTestNBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
 
 #' Automatic Report for Chi-Square Goodness-of-Fit
 #'
+#' 
+#' @section References:
+#' jmvcore
+#'
+#' effectsize
 #'
 #' @param data .
 #' @return A results object containing:

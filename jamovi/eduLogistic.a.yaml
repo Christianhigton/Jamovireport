@@ -3,12 +3,12 @@ name: eduLogistic
 title: Guided Binomial Logistic Regression
 menuGroup: jReport
 version: '1.0.0'
-refs:
-    - parameters
-    - performance
-    - effectsize
 jas: '1.2'
 description:
+    references:
+        - parameters
+        - performance
+        - effectsize
     main: >
         Model a binary outcome using numeric or categorical predictors with
         odds ratios, model-fit explanation, and reporting guidance.

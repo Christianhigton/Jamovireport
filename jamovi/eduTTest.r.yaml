@@ -9,6 +9,13 @@ items:
     - name: main
       title: Main Results and Effect Size
       type: Table
+      clearWith:
+        - outcome
+        - testType
+        - group
+        - pairedOutcome
+        - varEqual
+        - ciWidth
       columns:
         - { name: test, title: Test, type: text }
         - { name: statistic, title: Statistic, type: number }
@@ -20,6 +27,13 @@ items:
     - name: descriptives
       title: Descriptive Statistics
       type: Table
+      clearWith:
+        - outcome
+        - testType
+        - group
+        - pairedOutcome
+        - varEqual
+        - ciWidth
       columns:
         - { name: label, title: Group / Occasion, type: text }
         - { name: n, title: N, type: integer }
@@ -28,6 +42,13 @@ items:
     - name: diagnostics
       title: Assumption Checks and Guidance
       type: Table
+      clearWith:
+        - outcome
+        - testType
+        - group
+        - pairedOutcome
+        - varEqual
+        - ciWidth
       columns:
         - { name: check, title: Check, type: text }
         - { name: tested, title: "Tested?", type: text }
@@ -46,6 +67,13 @@ items:
       title: Visualisation
       type: Image
       visible: (showPlot)
+      clearWith:
+        - outcome
+        - testType
+        - group
+        - pairedOutcome
+        - varEqual
+        - ciWidth
       width: 520
       height: 360
       renderFun: .plot

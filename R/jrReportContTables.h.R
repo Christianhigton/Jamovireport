@@ -39,7 +39,7 @@ jrReportContTablesBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
             super$initialize(
                 package = "jReport",
                 name = "jrReportContTables",
-                version = c(0,1,0),
+                version = c(1,0,0),
                 options = options,
                 results = jrReportContTablesResults$new(options=options),
                 data = data,
@@ -54,6 +54,11 @@ jrReportContTablesBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
 
 #' Automatic Report for Chi-Square Independence
 #'
+#' 
+#' @section References:
+#' jmvcore
+#'
+#' effectsize
 #'
 #' @param data .
 #' @return A results object containing:

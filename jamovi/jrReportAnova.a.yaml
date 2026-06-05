@@ -3,12 +3,13 @@ name: jrReportAnova
 title: Automatic Report for ANOVA
 menuGroup: Report Add-ons
 version: '1.0.0'
-refs:
-    - jmvcore
-    - afex
-    - effectsize
-    - emmeans
 jas: '1.2'
+description:
+    references:
+        - jmvcore
+        - afex
+        - effectsize
+        - emmeans
 options:
     - { name: data, type: Data }
 ...

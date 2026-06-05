@@ -39,7 +39,7 @@ jrReportCorrMatrixBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
             super$initialize(
                 package = "jReport",
                 name = "jrReportCorrMatrix",
-                version = c(0,1,0),
+                version = c(1,0,0),
                 options = options,
                 results = jrReportCorrMatrixResults$new(options=options),
                 data = data,
@@ -54,6 +54,11 @@ jrReportCorrMatrixBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
 
 #' Automatic Report for Correlation Matrix
 #'
+#' 
+#' @section References:
+#' jmvcore
+#'
+#' effectsize
 #'
 #' @param data .
 #' @return A results object containing:

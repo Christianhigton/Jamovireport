@@ -3,10 +3,11 @@ name: jrReportReliability
 title: Automatic Omega Report for Reliability Analysis
 menuGroup: Report Add-ons
 version: '1.0.0'
-refs:
-    - jmvcore
-    - psych
 jas: '1.2'
+description:
+    references:
+        - jmvcore
+        - psych
 options:
     - { name: data, type: Data }
 ...

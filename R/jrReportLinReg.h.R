@@ -39,7 +39,7 @@ jrReportLinRegBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
             super$initialize(
                 package = "jReport",
                 name = "jrReportLinReg",
-                version = c(0,1,0),
+                version = c(1,0,0),
                 options = options,
                 results = jrReportLinRegResults$new(options=options),
                 data = data,
@@ -54,6 +54,15 @@ jrReportLinRegBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
 
 #' Automatic Report for Linear Regression
 #'
+#' 
+#' @section References:
+#' jmvcore
+#'
+#' parameters
+#'
+#' performance
+#'
+#' effectsize
 #'
 #' @param data .
 #' @return A results object containing:

@@ -3,10 +3,10 @@ name: eduChiSquareGoodness
 title: Guided Chi-Square Goodness-of-Fit
 menuGroup: jReport
 version: '1.0.0'
-refs:
-    - effectsize
 jas: '1.2'
 description:
+    references:
+        - effectsize
     main: >
         Compare observed categorical frequencies with an expected distribution,
         with assumption guidance and report-ready explanation.

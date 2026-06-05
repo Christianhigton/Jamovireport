@@ -20,7 +20,7 @@ eduAnovaClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class(
                     label = d$group, n = d$n, mean = d$mean, sd = d$sd
                 ))
             }
-            .jr_populate_diagnostics(self$results$diagnostics, result$diagnostics)
+            .jr_populate_diagnostics(self$results$diagnostics, result$diagnostics, fixed = TRUE)
             self$results$report$setContent(.jr_jamovi_report_html(result, self$options))
             self$results$interpretation$setContent(.jr_jamovi_interpretation_html(result))
             if (self$options$showPlot)

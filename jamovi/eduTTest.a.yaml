@@ -3,12 +3,12 @@ name: eduTTest
 title: Guided T-Test
 menuGroup: jReport
 version: '1.0.0'
-refs:
-    - effectsize
-    - ggplot2
-    - BayesFactor
 jas: '1.2'
 description:
+    references:
+        - effectsize
+        - ggplot2
+        - BayesFactor
     main: >
         Compare two means while explaining test selection, assumptions,
         effect size, and reporting in accessible language.

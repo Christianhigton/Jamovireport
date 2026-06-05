@@ -3,11 +3,12 @@ name: jrReportAnovaOneW
 title: Automatic Report for One-Way ANOVA
 menuGroup: Report Add-ons
 version: '1.0.0'
-refs:
-    - jmvcore
-    - effectsize
-    - emmeans
 jas: '1.2'
+description:
+    references:
+        - jmvcore
+        - effectsize
+        - emmeans
 options:
     - { name: data, type: Data }
 ...

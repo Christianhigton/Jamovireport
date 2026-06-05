@@ -7,6 +7,10 @@ items:
     - name: main
       title: Within-Subjects Result and Effect Size
       type: Table
+      clearWith:
+        - measures
+        - occasionLabels
+        - ciWidth
       columns:
         - { name: term, title: Effect, type: text }
         - { name: statistic, title: F, type: number }
@@ -19,6 +23,10 @@ items:
     - name: descriptives
       title: Occasion Descriptives
       type: Table
+      clearWith:
+        - measures
+        - occasionLabels
+        - ciWidth
       columns:
         - { name: label, title: Occasion, type: text }
         - { name: n, title: N, type: integer }
@@ -27,6 +35,10 @@ items:
     - name: diagnostics
       title: Assumption Checks and Guidance
       type: Table
+      clearWith:
+        - measures
+        - occasionLabels
+        - ciWidth
       columns:
         - { name: check, title: Check, type: text }
         - { name: tested, title: "Tested?", type: text }
@@ -41,6 +53,10 @@ items:
       title: Visualisation
       type: Image
       visible: (showPlot)
+      clearWith:
+        - measures
+        - occasionLabels
+        - ciWidth
       width: 520
       height: 360
       renderFun: .plot

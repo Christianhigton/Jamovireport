@@ -3,12 +3,13 @@ name: jrReportLinReg
 title: Automatic Report for Linear Regression
 menuGroup: Report Add-ons
 version: '1.0.0'
-refs:
-    - jmvcore
-    - parameters
-    - performance
-    - effectsize
 jas: '1.2'
+description:
+    references:
+        - jmvcore
+        - parameters
+        - performance
+        - effectsize
 options:
     - { name: data, type: Data }
 ...

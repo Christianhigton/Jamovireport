@@ -194,94 +194,106 @@ eduRMAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 options=options,
                 name="main",
                 title="Within-Subjects Result and Effect Size",
+                clearWith=list(
+                    "measures",
+                    "occasionLabels",
+                    "ciWidth"),
                 columns=list(
                     list(
-                        `name`="term",
-                        `title`="Effect",
+                        `name`="term", 
+                        `title`="Effect", 
                         `type`="text"),
                     list(
-                        `name`="statistic",
-                        `title`="F",
+                        `name`="statistic", 
+                        `title`="F", 
                         `type`="number"),
                     list(
-                        `name`="df1",
-                        `title`="df1",
+                        `name`="df1", 
+                        `title`="df1", 
                         `type`="number"),
                     list(
-                        `name`="df2",
-                        `title`="df2",
+                        `name`="df2", 
+                        `title`="df2", 
                         `type`="number"),
                     list(
-                        `name`="p",
-                        `title`="p",
-                        `type`="number",
+                        `name`="p", 
+                        `title`="p", 
+                        `type`="number", 
                         `format`="zto,pvalue"),
                     list(
-                        `name`="effect",
-                        `title`="Partial Eta-squared",
+                        `name`="effect", 
+                        `title`="Partial Eta-squared", 
                         `type`="number"),
                     list(
-                        `name`="ci_low",
-                        `title`="CI Lower",
+                        `name`="ci_low", 
+                        `title`="CI Lower", 
                         `type`="number"),
                     list(
-                        `name`="ci_high",
-                        `title`="CI Upper",
+                        `name`="ci_high", 
+                        `title`="CI Upper", 
                         `type`="number"))))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="descriptives",
                 title="Occasion Descriptives",
+                clearWith=list(
+                    "measures",
+                    "occasionLabels",
+                    "ciWidth"),
                 columns=list(
                     list(
-                        `name`="label",
-                        `title`="Occasion",
+                        `name`="label", 
+                        `title`="Occasion", 
                         `type`="text"),
                     list(
-                        `name`="n",
-                        `title`="N",
+                        `name`="n", 
+                        `title`="N", 
                         `type`="integer"),
                     list(
-                        `name`="mean",
-                        `title`="Mean",
+                        `name`="mean", 
+                        `title`="Mean", 
                         `type`="number"),
                     list(
-                        `name`="sd",
-                        `title`="SD",
+                        `name`="sd", 
+                        `title`="SD", 
                         `type`="number"))))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="diagnostics",
                 title="Assumption Checks and Guidance",
+                clearWith=list(
+                    "measures",
+                    "occasionLabels",
+                    "ciWidth"),
                 columns=list(
                     list(
-                        `name`="check",
-                        `title`="Check",
+                        `name`="check", 
+                        `title`="Check", 
                         `type`="text"),
                     list(
-                        `name`="tested",
-                        `title`="Tested?",
+                        `name`="tested", 
+                        `title`="Tested?", 
                         `type`="text"),
                     list(
-                        `name`="statistic",
-                        `title`="Statistic",
+                        `name`="statistic", 
+                        `title`="Statistic", 
                         `type`="number"),
                     list(
-                        `name`="p",
-                        `title`="p",
-                        `type`="number",
+                        `name`="p", 
+                        `title`="p", 
+                        `type`="number", 
                         `format`="zto,pvalue"),
                     list(
-                        `name`="status",
-                        `title`="Status",
+                        `name`="status", 
+                        `title`="Status", 
                         `type`="text"),
                     list(
-                        `name`="interpretation",
-                        `title`="Interpretation",
+                        `name`="interpretation", 
+                        `title`="Interpretation", 
                         `type`="text"),
                     list(
-                        `name`="action",
-                        `title`="Recommended Action",
+                        `name`="action", 
+                        `title`="Recommended Action", 
                         `type`="text"))))
             self$add(jmvcore::Html$new(
                 options=options,
@@ -296,6 +308,10 @@ eduRMAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 name="plot",
                 title="Visualisation",
                 visible="(showPlot)",
+                clearWith=list(
+                    "measures",
+                    "occasionLabels",
+                    "ciWidth"),
                 width=520,
                 height=360,
                 renderFun=".plot"))}))
@@ -308,7 +324,7 @@ eduRMAnovaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             super$initialize(
                 package = "jReport",
                 name = "eduRMAnova",
-                version = c(0,1,0),
+                version = c(1,0,0),
                 options = options,
                 results = eduRMAnovaResults$new(options=options),
                 data = data,
@@ -323,8 +339,15 @@ eduRMAnovaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 
 #' Guided Repeated-Measures ANOVA
 #'
-#' Compare repeated measurements from the same participants and explain
+#' Compare repeated measurements from the same participants and explain 
 #' sphericity and Greenhouse-Geisser-corrected inference.
+#' 
+#' @section References:
+#' afex
+#'
+#' effectsize
+#'
+#' ggplot2
 #'
 #' @param data .
 #' @param measures .

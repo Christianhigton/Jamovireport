@@ -197,107 +197,119 @@ eduRegressionResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                 options=options,
                 name="fit",
                 title="Main Results and Model Fit",
+                clearWith=list(
+                    "outcome",
+                    "predictors",
+                    "ciWidth"),
                 columns=list(
                     list(
-                        `name`="test",
-                        `title`="Test",
+                        `name`="test", 
+                        `title`="Test", 
                         `type`="text"),
                     list(
-                        `name`="statistic",
-                        `title`="F",
+                        `name`="statistic", 
+                        `title`="F", 
                         `type`="number"),
                     list(
-                        `name`="df1",
-                        `title`="df1",
+                        `name`="df1", 
+                        `title`="df1", 
                         `type`="number"),
                     list(
-                        `name`="df2",
-                        `title`="df2",
+                        `name`="df2", 
+                        `title`="df2", 
                         `type`="number"),
                     list(
-                        `name`="p",
-                        `title`="p",
-                        `type`="number",
+                        `name`="p", 
+                        `title`="p", 
+                        `type`="number", 
                         `format`="zto,pvalue"),
                     list(
-                        `name`="r2",
-                        `title`="R-squared",
+                        `name`="r2", 
+                        `title`="R-squared", 
                         `type`="number"),
                     list(
-                        `name`="adjusted_r2",
-                        `title`="Adjusted R-squared",
+                        `name`="adjusted_r2", 
+                        `title`="Adjusted R-squared", 
                         `type`="number"))))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="coefficients",
                 title="Coefficients and Effect Interpretation",
+                clearWith=list(
+                    "outcome",
+                    "predictors",
+                    "ciWidth"),
                 columns=list(
                     list(
-                        `name`="term",
-                        `title`="Predictor",
+                        `name`="term", 
+                        `title`="Predictor", 
                         `type`="text"),
                     list(
-                        `name`="estimate",
-                        `title`="B",
+                        `name`="estimate", 
+                        `title`="B", 
                         `type`="number"),
                     list(
-                        `name`="se",
-                        `title`="SE",
+                        `name`="se", 
+                        `title`="SE", 
                         `type`="number"),
                     list(
-                        `name`="lower",
-                        `title`="CI Lower",
+                        `name`="lower", 
+                        `title`="CI Lower", 
                         `type`="number"),
                     list(
-                        `name`="upper",
-                        `title`="CI Upper",
+                        `name`="upper", 
+                        `title`="CI Upper", 
                         `type`="number"),
                     list(
-                        `name`="beta",
-                        `title`="Standardised Beta",
+                        `name`="beta", 
+                        `title`="Standardised Beta", 
                         `type`="number"),
                     list(
-                        `name`="statistic",
-                        `title`="t",
+                        `name`="statistic", 
+                        `title`="t", 
                         `type`="number"),
                     list(
-                        `name`="p",
-                        `title`="p",
-                        `type`="number",
+                        `name`="p", 
+                        `title`="p", 
+                        `type`="number", 
                         `format`="zto,pvalue"))))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="diagnostics",
                 title="Assumption Checks and Guidance",
+                clearWith=list(
+                    "outcome",
+                    "predictors",
+                    "ciWidth"),
                 columns=list(
                     list(
-                        `name`="check",
-                        `title`="Check",
+                        `name`="check", 
+                        `title`="Check", 
                         `type`="text"),
                     list(
-                        `name`="tested",
-                        `title`="Tested?",
+                        `name`="tested", 
+                        `title`="Tested?", 
                         `type`="text"),
                     list(
-                        `name`="statistic",
-                        `title`="Statistic",
+                        `name`="statistic", 
+                        `title`="Statistic", 
                         `type`="number"),
                     list(
-                        `name`="p",
-                        `title`="p",
-                        `type`="number",
+                        `name`="p", 
+                        `title`="p", 
+                        `type`="number", 
                         `format`="zto,pvalue"),
                     list(
-                        `name`="status",
-                        `title`="Status",
+                        `name`="status", 
+                        `title`="Status", 
                         `type`="text"),
                     list(
-                        `name`="interpretation",
-                        `title`="Interpretation",
+                        `name`="interpretation", 
+                        `title`="Interpretation", 
                         `type`="text"),
                     list(
-                        `name`="action",
-                        `title`="Recommended Action",
+                        `name`="action", 
+                        `title`="Recommended Action", 
                         `type`="text"))))
             self$add(jmvcore::Html$new(
                 options=options,
@@ -312,6 +324,10 @@ eduRegressionResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                 name="plot",
                 title="Residual Visualisation",
                 visible="(showPlot)",
+                clearWith=list(
+                    "outcome",
+                    "predictors",
+                    "ciWidth"),
                 width=520,
                 height=360,
                 renderFun=".plot"))}))
@@ -324,7 +340,7 @@ eduRegressionBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             super$initialize(
                 package = "jReport",
                 name = "eduRegression",
-                version = c(0,1,0),
+                version = c(1,0,0),
                 options = options,
                 results = eduRegressionResults$new(options=options),
                 data = data,
@@ -339,8 +355,17 @@ eduRegressionBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 
 #' Guided Linear Regression
 #'
-#' Model a numeric outcome using one or more numeric predictors with model
+#' Model a numeric outcome using one or more numeric predictors with model 
 #' fit, coefficients, diagnostic guidance, and interpretable reporting.
+#' 
+#' @section References:
+#' parameters
+#'
+#' performance
+#'
+#' effectsize
+#'
+#' ggplot2
 #'
 #' @param data .
 #' @param outcome .

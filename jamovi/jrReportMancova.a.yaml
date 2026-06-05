@@ -3,11 +3,12 @@ name: jrReportMancova
 title: Automatic Report for MANOVA / MANCOVA
 menuGroup: Report Add-ons
 version: '1.0.0'
-refs:
-    - jmvcore
-    - car
-    - effectsize
 jas: '1.2'
+description:
+    references:
+        - jmvcore
+        - car
+        - effectsize
 options:
     - { name: data, type: Data }
 ...

@@ -282,9 +282,31 @@
     )
 }
 
+.jr_module_library_path <- function(package = "jReport") {
+    package_path <- suppressWarnings(system.file(package = package))
+    if (!nzchar(package_path))
+        return(NULL)
+    module_library <- dirname(package_path)
+    if (!dir.exists(module_library))
+        return(NULL)
+    module_library
+}
+
+.jr_require_module_namespace <- function(package, module_library = .jr_module_library_path()) {
+    if (is.null(module_library) || !dir.exists(file.path(module_library, package)))
+        return(requireNamespace(package, quietly = TRUE))
+    requireNamespace(package, quietly = TRUE, lib.loc = module_library)
+}
+
 .jr_addon_enable_library <- function(package_path = NULL) {
     package <- if (is.null(package_path)) "jReport" else basename(package_path)
-    invisible(requireNamespace(package, quietly = TRUE))
+    module_library <- .jr_module_library_path(package)
+    required <- c(
+        "jReport", "afex", "car", "effectsize", "ggplot2", "jmvcore",
+        "parameters", "performance", "psych", "R6"
+    )
+    loaded <- vapply(required, .jr_require_module_namespace, logical(1), module_library = module_library)
+    invisible(all(loaded))
 }
 
 .jr_addon_effect_label <- function(result, row) {
@@ -678,28 +700,63 @@
     )
 }
 
-.jr_guided_computation <- function(expr, code = "analysisFailed") {
-    message <- paste(
+.jr_guided_error_message <- function(error) {
+    original <- conditionMessage(error)
+    if (grepl("logistic regression requires an outcome with exactly two levels", original, ignore.case = TRUE))
+        return("Logistic regression requires a binary outcome variable.")
+    paste(
         "The analysis could not be completed.",
         "Check that the selected variables have enough complete cases, appropriate measurement levels, and no singular or perfectly collinear model terms."
     )
+}
+
+.jr_guided_computation <- function(expr, code = "analysisFailed") {
     tryCatch(
         force(expr),
-        error = function(e) jmvcore::reject(message, code = code)
+        error = function(e) jmvcore::reject(.jr_guided_error_message(e), code = code)
     )
 }
 
-.jr_populate_diagnostics <- function(table, diagnostics) {
+.jr_diagnostic_row_values <- function(diagnostics, i) {
+    list(
+        check = diagnostics$check[i],
+        tested = diagnostics$tested[i],
+        statistic = diagnostics$statistic[i],
+        p = diagnostics$p[i],
+        status = diagnostics$status[i],
+        interpretation = diagnostics$interpretation[i],
+        action = diagnostics$action[i]
+    )
+}
+
+.jr_prefill_diagnostic_rows <- function(table, n) {
+    existing <- table$rowKeys
+    for (i in seq_len(n)) {
+        key <- as.character(i)
+        if (!key %in% existing) {
+            table$addRow(rowKey = i, values = list(
+                check = "",
+                tested = "",
+                statistic = NA_real_,
+                p = NA_real_,
+                status = "",
+                interpretation = "",
+                action = ""
+            ))
+            existing <- table$rowKeys
+        }
+    }
+}
+
+.jr_populate_diagnostics <- function(table, diagnostics, fixed = FALSE) {
     diagnostics <- .jr_normalize_diagnostics(diagnostics)
+    if (isTRUE(fixed))
+        .jr_prefill_diagnostic_rows(table, nrow(diagnostics))
     for (i in seq_len(nrow(diagnostics))) {
-        table$addRow(rowKey = i, values = list(
-            check = diagnostics$check[i],
-            tested = diagnostics$tested[i],
-            statistic = diagnostics$statistic[i],
-            p = diagnostics$p[i],
-            status = diagnostics$status[i],
-            interpretation = diagnostics$interpretation[i],
-            action = diagnostics$action[i]
-        ))
+        values <- .jr_diagnostic_row_values(diagnostics, i)
+        if (isTRUE(fixed))
+            table$setRow(rowKey = i, values = values)
+        else
+            table$addRow(rowKey = i, values = values)
     }
 }

@@ -15,7 +15,7 @@ eduChiSquareIndependenceClass <- if (requireNamespace("jmvcore", quietly = TRUE)
             self$results$fit$addRow(rowKey = 1, values = as.list(result$statistics[1, ]))
             for (i in seq_len(nrow(result$cells)))
                 self$results$cells$addRow(rowKey = i, values = as.list(result$cells[i, ]))
-            .jr_populate_diagnostics(self$results$diagnostics, result$diagnostics)
+            .jr_populate_diagnostics(self$results$diagnostics, result$diagnostics, fixed = TRUE)
             self$results$report$setContent(.jr_jamovi_report_html(result, self$options))
             self$results$interpretation$setContent(.jr_jamovi_interpretation_html(result))
         }

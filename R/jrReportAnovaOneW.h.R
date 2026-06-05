@@ -39,7 +39,7 @@ jrReportAnovaOneWBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
             super$initialize(
                 package = "jReport",
                 name = "jrReportAnovaOneW",
-                version = c(0,1,0),
+                version = c(1,0,0),
                 options = options,
                 results = jrReportAnovaOneWResults$new(options=options),
                 data = data,
@@ -54,6 +54,13 @@ jrReportAnovaOneWBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
 
 #' Automatic Report for One-Way ANOVA
 #'
+#' 
+#' @section References:
+#' jmvcore
+#'
+#' effectsize
+#'
+#' emmeans
 #'
 #' @param data .
 #' @return A results object containing:

@@ -3,11 +3,11 @@ name: eduMancova
 title: Guided MANOVA / MANCOVA
 menuGroup: jReport
 version: '1.0.0'
-refs:
-    - car
-    - effectsize
 jas: '1.2'
 description:
+    references:
+        - car
+        - effectsize
     main: >
         Test whether two or more dependent variables jointly vary across
         categorical factors and optional numeric covariates. Significant

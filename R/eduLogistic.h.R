@@ -201,99 +201,114 @@ eduLogisticResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                 options=options,
                 name="fit",
                 title="Main Results and Model Fit",
+                clearWith=list(
+                    "outcome",
+                    "covariates",
+                    "factors",
+                    "ciWidth"),
                 columns=list(
                     list(
-                        `name`="test",
-                        `title`="Test",
+                        `name`="test", 
+                        `title`="Test", 
                         `type`="text"),
                     list(
-                        `name`="statistic",
-                        `title`="Chi-square",
+                        `name`="statistic", 
+                        `title`="Chi-square", 
                         `type`="number"),
                     list(
-                        `name`="df",
-                        `title`="df",
+                        `name`="df", 
+                        `title`="df", 
                         `type`="number"),
                     list(
-                        `name`="p",
-                        `title`="p",
-                        `type`="number",
+                        `name`="p", 
+                        `title`="p", 
+                        `type`="number", 
                         `format`="zto,pvalue"),
                     list(
-                        `name`="r2",
-                        `title`="McFadden R-squared",
+                        `name`="r2", 
+                        `title`="McFadden R-squared", 
                         `type`="number"))))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="coefficients",
                 title="Coefficients and Odds Ratios",
+                clearWith=list(
+                    "outcome",
+                    "covariates",
+                    "factors",
+                    "ciWidth"),
                 columns=list(
                     list(
-                        `name`="term",
-                        `title`="Predictor",
+                        `name`="term", 
+                        `title`="Predictor", 
                         `type`="text"),
                     list(
-                        `name`="estimate",
-                        `title`="B",
+                        `name`="estimate", 
+                        `title`="B", 
                         `type`="number"),
                     list(
-                        `name`="se",
-                        `title`="SE",
+                        `name`="se", 
+                        `title`="SE", 
                         `type`="number"),
                     list(
-                        `name`="statistic",
-                        `title`="z",
+                        `name`="statistic", 
+                        `title`="z", 
                         `type`="number"),
                     list(
-                        `name`="p",
-                        `title`="p",
-                        `type`="number",
+                        `name`="p", 
+                        `title`="p", 
+                        `type`="number", 
                         `format`="zto,pvalue"),
                     list(
-                        `name`="odds_ratio",
-                        `title`="Odds Ratio",
+                        `name`="odds_ratio", 
+                        `title`="Odds Ratio", 
                         `type`="number"),
                     list(
-                        `name`="lower",
-                        `title`="OR CI Lower",
+                        `name`="lower", 
+                        `title`="OR CI Lower", 
                         `type`="number"),
                     list(
-                        `name`="upper",
-                        `title`="OR CI Upper",
+                        `name`="upper", 
+                        `title`="OR CI Upper", 
                         `type`="number"))))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="diagnostics",
                 title="Diagnostic Checks and Guidance",
+                clearWith=list(
+                    "outcome",
+                    "covariates",
+                    "factors",
+                    "ciWidth"),
                 columns=list(
                     list(
-                        `name`="check",
-                        `title`="Check",
+                        `name`="check", 
+                        `title`="Check", 
                         `type`="text"),
                     list(
-                        `name`="tested",
-                        `title`="Tested?",
+                        `name`="tested", 
+                        `title`="Tested?", 
                         `type`="text"),
                     list(
-                        `name`="statistic",
-                        `title`="Statistic",
+                        `name`="statistic", 
+                        `title`="Statistic", 
                         `type`="number"),
                     list(
-                        `name`="p",
-                        `title`="p",
-                        `type`="number",
+                        `name`="p", 
+                        `title`="p", 
+                        `type`="number", 
                         `format`="zto,pvalue"),
                     list(
-                        `name`="status",
-                        `title`="Status",
+                        `name`="status", 
+                        `title`="Status", 
                         `type`="text"),
                     list(
-                        `name`="interpretation",
-                        `title`="Interpretation",
+                        `name`="interpretation", 
+                        `title`="Interpretation", 
                         `type`="text"),
                     list(
-                        `name`="action",
-                        `title`="Recommended Action",
+                        `name`="action", 
+                        `title`="Recommended Action", 
                         `type`="text"))))
             self$add(jmvcore::Html$new(
                 options=options,
@@ -312,7 +327,7 @@ eduLogisticBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             super$initialize(
                 package = "jReport",
                 name = "eduLogistic",
-                version = c(0,1,0),
+                version = c(1,0,0),
                 options = options,
                 results = eduLogisticResults$new(options=options),
                 data = data,
@@ -327,8 +342,15 @@ eduLogisticBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 
 #' Guided Binomial Logistic Regression
 #'
-#' Model a binary outcome using numeric or categorical predictors with odds
+#' Model a binary outcome using numeric or categorical predictors with odds 
 #' ratios, model-fit explanation, and reporting guidance.
+#' 
+#' @section References:
+#' parameters
+#'
+#' performance
+#'
+#' effectsize
 #'
 #' @param data .
 #' @param outcome .

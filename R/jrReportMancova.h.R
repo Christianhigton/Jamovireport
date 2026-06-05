@@ -39,7 +39,7 @@ jrReportMancovaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
             super$initialize(
                 package = "jReport",
                 name = "jrReportMancova",
-                version = c(0,1,0),
+                version = c(1,0,0),
                 options = options,
                 results = jrReportMancovaResults$new(options=options),
                 data = data,
@@ -54,6 +54,13 @@ jrReportMancovaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
 
 #' Automatic Report for MANOVA / MANCOVA
 #'
+#' 
+#' @section References:
+#' jmvcore
+#'
+#' car
+#'
+#' effectsize
 #'
 #' @param data .
 #' @return A results object containing:
@@ -82,3 +89,4 @@ jrReportMancova <- function(
 
     analysis$results
 }
+

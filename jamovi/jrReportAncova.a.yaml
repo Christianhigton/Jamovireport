@@ -3,12 +3,13 @@ name: jrReportAncova
 title: Automatic Report for ANCOVA
 menuGroup: Report Add-ons
 version: '1.0.0'
-refs:
-    - jmvcore
-    - car
-    - effectsize
-    - emmeans
 jas: '1.2'
+description:
+    references:
+        - jmvcore
+        - car
+        - effectsize
+        - emmeans
 options:
     - { name: data, type: Data }
 ...

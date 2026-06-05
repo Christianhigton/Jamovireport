@@ -59,7 +59,14 @@ test_that("package code does not mutate global library paths", {
     expect_false(any(grepl("\\.libPaths\\(", package_code)))
 })
 
-test_that("jamovi YAML files parse and analysis refs are declared", {
+test_that("automatic report dependency preload avoids library path mutation", {
+    before <- .libPaths()
+    expect_true(isTRUE(.jr_addon_enable_library()))
+    expect_identical(.libPaths(), before)
+    expect_true(requireNamespace("effectsize", quietly = TRUE))
+})
+
+test_that("jamovi YAML files parse and analysis references are declared", {
     skip_if_not_installed("yaml")
 
     root <- audit_root()
@@ -70,7 +77,7 @@ test_that("jamovi YAML files parse and analysis refs are declared", {
     declared_refs <- names(parsed[["00refs.yaml"]])
     analysis_files <- list.files(file.path(root, "jamovi"), pattern = "\\.a\\.yaml$", full.names = TRUE)
     for (file in analysis_files) {
-        refs <- parsed[[basename(file)]][["refs"]]
+        refs <- parsed[[basename(file)]][["description"]][["references"]]
         expect_true(length(refs) > 0L, info = basename(file))
         expect_true(all(refs %in% declared_refs), info = basename(file))
     }
@@ -94,4 +101,59 @@ test_that("guided UI reporting sections are collapsed and labels are polished", 
     ))
     expect_false(any(grepl("title: (Include|Display|Use|Show) ", analysis_text)))
     expect_false(any(grepl("title: [a-z]", analysis_text)))
+})
+
+test_that("guided computational result elements declare clearWith", {
+    skip_if_not_installed("yaml")
+
+    root <- audit_root()
+    result_files <- list.files(file.path(root, "jamovi"), pattern = "^edu.*\\.r\\.yaml$", full.names = TRUE)
+    for (file in result_files) {
+        parsed <- yaml::read_yaml(file)
+        computational <- Filter(function(item) {
+            identical(item[["type"]], "Table") || identical(item[["type"]], "Image")
+        }, parsed[["items"]])
+        missing_clear_with <- vapply(computational, function(item) {
+            length(item[["clearWith"]]) == 0L
+        }, logical(1))
+
+        expect_false(
+            any(missing_clear_with),
+            info = paste(basename(file), paste(vapply(computational[missing_clear_with], `[[`, character(1), "name"), collapse = ", "))
+        )
+    }
+})
+
+test_that("fixed diagnostics use stable row updates and dynamic diagnostics remain append-based", {
+    root <- audit_root()
+    fixed_backends <- c(
+        "eduAnova.b.R",
+        "eduBetweenAnova.b.R",
+        "eduAncova.b.R",
+        "eduCorrelation.b.R",
+        "eduChiSquareIndependence.b.R",
+        "eduChiSquareGoodness.b.R",
+        "eduRMAnova.b.R",
+        "eduMixedAnova.b.R",
+        "eduReliabilityOmega.b.R"
+    )
+    dynamic_backends <- c(
+        "eduTTest.b.R",
+        "eduRegression.b.R",
+        "eduLogistic.b.R",
+        "eduMancova.b.R"
+    )
+
+    for (file in fixed_backends) {
+        text <- paste(readLines(file.path(root, "R", file), warn = FALSE), collapse = "\n")
+        expect_true(grepl("\\.jr_populate_diagnostics\\(self\\$results\\$diagnostics, result\\$diagnostics, fixed = TRUE\\)", text),
+                    info = file)
+    }
+
+    for (file in dynamic_backends) {
+        text <- paste(readLines(file.path(root, "R", file), warn = FALSE), collapse = "\n")
+        expect_true(grepl("\\.jr_populate_diagnostics\\(self\\$results\\$diagnostics, result\\$diagnostics\\)", text),
+                    info = file)
+        expect_false(grepl("fixed = TRUE", text, fixed = TRUE), info = file)
+    }
 })

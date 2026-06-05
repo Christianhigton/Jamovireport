@@ -3,11 +3,12 @@ name: jrReportAnovaRM
 title: Automatic Report for Repeated Measures ANOVA
 menuGroup: Report Add-ons
 version: '1.0.0'
-refs:
-    - jmvcore
-    - afex
-    - effectsize
 jas: '1.2'
+description:
+    references:
+        - jmvcore
+        - afex
+        - effectsize
 options:
     - { name: data, type: Data }
 ...

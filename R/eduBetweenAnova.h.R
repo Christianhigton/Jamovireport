@@ -198,94 +198,106 @@ eduBetweenAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
                 options=options,
                 name="main",
                 title="Main Results and Effect Sizes",
+                clearWith=list(
+                    "outcome",
+                    "factors",
+                    "ciWidth"),
                 columns=list(
                     list(
-                        `name`="term",
-                        `title`="Effect",
+                        `name`="term", 
+                        `title`="Effect", 
                         `type`="text"),
                     list(
-                        `name`="statistic",
-                        `title`="F",
+                        `name`="statistic", 
+                        `title`="F", 
                         `type`="number"),
                     list(
-                        `name`="df1",
-                        `title`="df1",
+                        `name`="df1", 
+                        `title`="df1", 
                         `type`="number"),
                     list(
-                        `name`="df2",
-                        `title`="df2",
+                        `name`="df2", 
+                        `title`="df2", 
                         `type`="number"),
                     list(
-                        `name`="p",
-                        `title`="p",
-                        `type`="number",
+                        `name`="p", 
+                        `title`="p", 
+                        `type`="number", 
                         `format`="zto,pvalue"),
                     list(
-                        `name`="effect",
-                        `title`="Partial Eta-squared",
+                        `name`="effect", 
+                        `title`="Partial Eta-squared", 
                         `type`="number"),
                     list(
-                        `name`="ci_low",
-                        `title`="CI Lower",
+                        `name`="ci_low", 
+                        `title`="CI Lower", 
                         `type`="number"),
                     list(
-                        `name`="ci_high",
-                        `title`="CI Upper",
+                        `name`="ci_high", 
+                        `title`="CI Upper", 
                         `type`="number"))))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="descriptives",
                 title="Cell Descriptives",
+                clearWith=list(
+                    "outcome",
+                    "factors",
+                    "ciWidth"),
                 columns=list(
                     list(
-                        `name`="label",
-                        `title`="Cell",
+                        `name`="label", 
+                        `title`="Cell", 
                         `type`="text"),
                     list(
-                        `name`="n",
-                        `title`="N",
+                        `name`="n", 
+                        `title`="N", 
                         `type`="integer"),
                     list(
-                        `name`="mean",
-                        `title`="Mean",
+                        `name`="mean", 
+                        `title`="Mean", 
                         `type`="number"),
                     list(
-                        `name`="sd",
-                        `title`="SD",
+                        `name`="sd", 
+                        `title`="SD", 
                         `type`="number"))))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="diagnostics",
                 title="Assumption Checks and Guidance",
+                clearWith=list(
+                    "outcome",
+                    "factors",
+                    "ciWidth"),
                 columns=list(
                     list(
-                        `name`="check",
-                        `title`="Check",
+                        `name`="check", 
+                        `title`="Check", 
                         `type`="text"),
                     list(
-                        `name`="tested",
-                        `title`="Tested?",
+                        `name`="tested", 
+                        `title`="Tested?", 
                         `type`="text"),
                     list(
-                        `name`="statistic",
-                        `title`="Statistic",
+                        `name`="statistic", 
+                        `title`="Statistic", 
                         `type`="number"),
                     list(
-                        `name`="p",
-                        `title`="p",
-                        `type`="number",
+                        `name`="p", 
+                        `title`="p", 
+                        `type`="number", 
                         `format`="zto,pvalue"),
                     list(
-                        `name`="status",
-                        `title`="Status",
+                        `name`="status", 
+                        `title`="Status", 
                         `type`="text"),
                     list(
-                        `name`="interpretation",
-                        `title`="Interpretation",
+                        `name`="interpretation", 
+                        `title`="Interpretation", 
                         `type`="text"),
                     list(
-                        `name`="action",
-                        `title`="Recommended Action",
+                        `name`="action", 
+                        `title`="Recommended Action", 
                         `type`="text"))))
             self$add(jmvcore::Html$new(
                 options=options,
@@ -300,6 +312,10 @@ eduBetweenAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
                 name="plot",
                 title="Visualisation",
                 visible="(showPlot)",
+                clearWith=list(
+                    "outcome",
+                    "factors",
+                    "ciWidth"),
                 width=520,
                 height=360,
                 renderFun=".plot"))}))
@@ -312,7 +328,7 @@ eduBetweenAnovaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
             super$initialize(
                 package = "jReport",
                 name = "eduBetweenAnova",
-                version = c(0,1,0),
+                version = c(1,0,0),
                 options = options,
                 results = eduBetweenAnovaResults$new(options=options),
                 data = data,
@@ -327,8 +343,19 @@ eduBetweenAnovaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
 
 #' Guided Between-Subjects ANOVA
 #'
-#' Examine mean differences across one or more independent categorical
+#' Examine mean differences across one or more independent categorical 
 #' factors, prioritising interaction interpretation when appropriate.
+#' 
+#' @section References:
+#' afex
+#'
+#' car
+#'
+#' effectsize
+#'
+#' emmeans
+#'
+#' ggplot2
 #'
 #' @param data .
 #' @param outcome .

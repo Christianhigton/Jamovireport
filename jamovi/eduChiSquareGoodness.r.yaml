@@ -7,6 +7,10 @@ items:
     - name: fit
       title: Main Results and Effect Size
       type: Table
+      clearWith:
+        - variable
+        - counts
+        - expectedRatios
       columns:
         - { name: test, title: Test, type: text }
         - { name: statistic, title: Chi-square, type: number }
@@ -17,6 +21,10 @@ items:
     - name: cells
       title: Observed, Expected, and Standardised Residual Counts
       type: Table
+      clearWith:
+        - variable
+        - counts
+        - expectedRatios
       columns:
         - { name: category, title: Category, type: text }
         - { name: observed, title: Observed, type: number }
@@ -25,6 +33,10 @@ items:
     - name: diagnostics
       title: Assumption Checks and Guidance
       type: Table
+      clearWith:
+        - variable
+        - counts
+        - expectedRatios
       columns:
         - { name: check, title: Check, type: text }
         - { name: tested, title: "Tested?", type: text }

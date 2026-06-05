@@ -7,6 +7,11 @@ items:
     - name: main
       title: Main Result
       type: Table
+      clearWith:
+        - x
+        - y
+        - method
+        - ciWidth
       columns:
         - { name: test, title: Method, type: text }
         - { name: statistic, title: Coefficient, type: number }
@@ -17,6 +22,11 @@ items:
     - name: descriptives
       title: Descriptive Statistics
       type: Table
+      clearWith:
+        - x
+        - y
+        - method
+        - ciWidth
       columns:
         - { name: label, title: Variable, type: text }
         - { name: n, title: N, type: integer }
@@ -25,6 +35,11 @@ items:
     - name: diagnostics
       title: Assumption Checks and Guidance
       type: Table
+      clearWith:
+        - x
+        - y
+        - method
+        - ciWidth
       columns:
         - { name: check, title: Check, type: text }
         - { name: tested, title: "Tested?", type: text }
@@ -39,6 +54,11 @@ items:
       title: Visualisation
       type: Image
       visible: (showPlot)
+      clearWith:
+        - x
+        - y
+        - method
+        - ciWidth
       width: 520
       height: 360
       renderFun: .plot

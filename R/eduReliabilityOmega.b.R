@@ -20,7 +20,7 @@ eduReliabilityOmegaClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6C
             self$results$main$addRow(rowKey = 1, values = as.list(result$statistics[1, ]))
             for (i in seq_len(nrow(result$descriptives)))
                 self$results$items$addRow(rowKey = i, values = as.list(result$descriptives[i, ]))
-            .jr_populate_diagnostics(self$results$diagnostics, result$diagnostics)
+            .jr_populate_diagnostics(self$results$diagnostics, result$diagnostics, fixed = TRUE)
             self$results$report$setContent(.jr_jamovi_report_html(result, self$options))
             self$results$interpretation$setContent(.jr_jamovi_interpretation_html(result))
             if (self$options$showPlot)

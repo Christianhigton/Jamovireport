@@ -3,13 +3,13 @@ name: eduAncova
 title: Guided ANCOVA
 menuGroup: jReport
 version: '1.0.0'
-refs:
-    - car
-    - effectsize
-    - emmeans
-    - ggplot2
 jas: '1.2'
 description:
+    references:
+        - car
+        - effectsize
+        - emmeans
+        - ggplot2
     main: >
         Compare adjusted group means while explicitly checking whether
         covariate-outcome slopes are comparable across groups.

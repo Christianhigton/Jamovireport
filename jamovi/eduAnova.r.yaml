@@ -7,6 +7,12 @@ items:
     - name: main
       title: Main Results and Effect Size
       type: Table
+      clearWith:
+        - outcome
+        - group
+        - method
+        - posthoc
+        - ciWidth
       columns:
         - { name: test, title: Test, type: text }
         - { name: statistic, title: F, type: number }
@@ -19,6 +25,12 @@ items:
     - name: descriptives
       title: Descriptive Statistics
       type: Table
+      clearWith:
+        - outcome
+        - group
+        - method
+        - posthoc
+        - ciWidth
       columns:
         - { name: label, title: Group, type: text }
         - { name: n, title: N, type: integer }
@@ -27,6 +39,12 @@ items:
     - name: diagnostics
       title: Assumption Checks and Guidance
       type: Table
+      clearWith:
+        - outcome
+        - group
+        - method
+        - posthoc
+        - ciWidth
       columns:
         - { name: check, title: Check, type: text }
         - { name: tested, title: "Tested?", type: text }
@@ -41,6 +59,12 @@ items:
       title: Visualisation
       type: Image
       visible: (showPlot)
+      clearWith:
+        - outcome
+        - group
+        - method
+        - posthoc
+        - ciWidth
       width: 520
       height: 360
       renderFun: .plot

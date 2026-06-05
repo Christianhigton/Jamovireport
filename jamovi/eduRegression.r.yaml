@@ -7,6 +7,10 @@ items:
     - name: fit
       title: Main Results and Model Fit
       type: Table
+      clearWith:
+        - outcome
+        - predictors
+        - ciWidth
       columns:
         - { name: test, title: Test, type: text }
         - { name: statistic, title: F, type: number }
@@ -18,6 +22,10 @@ items:
     - name: coefficients
       title: Coefficients and Effect Interpretation
       type: Table
+      clearWith:
+        - outcome
+        - predictors
+        - ciWidth
       columns:
         - { name: term, title: Predictor, type: text }
         - { name: estimate, title: B, type: number }
@@ -30,6 +38,10 @@ items:
     - name: diagnostics
       title: Assumption Checks and Guidance
       type: Table
+      clearWith:
+        - outcome
+        - predictors
+        - ciWidth
       columns:
         - { name: check, title: Check, type: text }
         - { name: tested, title: "Tested?", type: text }
@@ -44,6 +56,10 @@ items:
       title: Residual Visualisation
       type: Image
       visible: (showPlot)
+      clearWith:
+        - outcome
+        - predictors
+        - ciWidth
       width: 520
       height: 360
       renderFun: .plot

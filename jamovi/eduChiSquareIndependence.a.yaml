@@ -3,10 +3,10 @@ name: eduChiSquareIndependence
 title: Guided Chi-Square Test of Independence
 menuGroup: jReport
 version: '1.0.0'
-refs:
-    - effectsize
 jas: '1.2'
 description:
+    references:
+        - effectsize
     main: >
         Assess whether two categorical variables are associated, with expected
         count checks, Cramer's V, and report-ready explanation.

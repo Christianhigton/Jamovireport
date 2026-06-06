@@ -1,50 +1,111 @@
----
 name: eduChiSquareGoodness
 title: Guided Chi-Square Goodness-of-Fit
 jrs: '1.1'
+refs:
+- jReport
+- effectsize
 items:
-    - { name: overview, title: 'jReport: Overview and Why This Test?', type: Html }
-    - name: fit
-      title: Main Results and Effect Size
-      type: Table
-      clearWith:
-        - variable
-        - counts
-        - expectedRatios
-      columns:
-        - { name: test, title: Test, type: text }
-        - { name: statistic, title: Chi-square, type: number }
-        - { name: df, title: df, type: number }
-        - { name: p, title: p, type: number, format: "zto,pvalue" }
-        - { name: effect, title: "Cohen's w", type: number }
-        - { name: n, title: N, type: number }
-    - name: cells
-      title: Observed, Expected, and Standardised Residual Counts
-      type: Table
-      clearWith:
-        - variable
-        - counts
-        - expectedRatios
-      columns:
-        - { name: category, title: Category, type: text }
-        - { name: observed, title: Observed, type: number }
-        - { name: expected, title: Expected, type: number }
-        - { name: standardised_residual, title: Standardised Residual, type: number }
-    - name: diagnostics
-      title: Assumption Checks and Guidance
-      type: Table
-      clearWith:
-        - variable
-        - counts
-        - expectedRatios
-      columns:
-        - { name: check, title: Check, type: text }
-        - { name: tested, title: "Tested?", type: text }
-        - { name: statistic, title: Statistic, type: number }
-        - { name: p, title: p, type: number, format: "zto,pvalue" }
-        - { name: status, title: Status, type: text }
-        - { name: interpretation, title: Interpretation, type: text }
-        - { name: action, title: Recommended Action, type: text }
-    - { name: report, title: Reporting, type: Html }
-    - { name: interpretation, title: Plain-Language Interpretation, type: Html }
-...
+- name: overview
+  title: 'jReport: Overview and Why This Test?'
+  type: Html
+  refs:
+  - jReport
+  - effectsize
+- name: fit
+  title: Main Results and Effect Size
+  type: Table
+  clearWith:
+  - variable
+  - counts
+  - expectedRatios
+  columns:
+  - name: test
+    title: Test
+    type: text
+  - name: statistic
+    title: Chi-square
+    type: number
+  - name: df
+    title: df
+    type: number
+  - name: p
+    title: p
+    type: number
+    format: zto,pvalue
+  - name: effect
+    title: Cohen's w
+    type: number
+  - name: n
+    title: N
+    type: number
+  refs:
+  - jReport
+  - effectsize
+- name: cells
+  title: Observed, Expected, and Standardised Residual Counts
+  type: Table
+  clearWith:
+  - variable
+  - counts
+  - expectedRatios
+  columns:
+  - name: category
+    title: Category
+    type: text
+  - name: observed
+    title: Observed
+    type: number
+  - name: expected
+    title: Expected
+    type: number
+  - name: standardised_residual
+    title: Standardised Residual
+    type: number
+  refs:
+  - jReport
+  - effectsize
+- name: diagnostics
+  title: Assumption Checks and Guidance
+  type: Table
+  clearWith:
+  - variable
+  - counts
+  - expectedRatios
+  columns:
+  - name: check
+    title: Check
+    type: text
+  - name: tested
+    title: Tested?
+    type: text
+  - name: statistic
+    title: Statistic
+    type: number
+  - name: p
+    title: p
+    type: number
+    format: zto,pvalue
+  - name: status
+    title: Status
+    type: text
+  - name: interpretation
+    title: Interpretation
+    type: text
+  - name: action
+    title: Recommended Action
+    type: text
+  refs:
+  - jReport
+  - effectsize
+- name: report
+  title: Reporting
+  type: Html
+  refs:
+  - jReport
+  - effectsize
+- name: interpretation
+  title: Plain-Language Interpretation
+  type: Html
+  refs:
+  - jReport
+  - effectsize

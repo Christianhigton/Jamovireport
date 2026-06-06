@@ -182,11 +182,19 @@ eduMancovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             super$initialize(
                 options=options,
                 name="",
-                title="Guided MANOVA / MANCOVA")
+                title="Guided MANOVA / MANCOVA",
+                refs=list(
+                    "jReport",
+                    "car",
+                    "effectsize"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="overview",
-                title="jReport: Overview and Why This Test?"))
+                title="jReport: Overview and Why This Test?",
+                refs=list(
+                    "jReport",
+                    "car",
+                    "effectsize")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="main",
@@ -220,7 +228,11 @@ eduMancovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     list(
                         `name`="effect", 
                         `title`="Pillai's Trace", 
-                        `type`="number"))))
+                        `type`="number")),
+                refs=list(
+                    "jReport",
+                    "car",
+                    "effectsize")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="descriptives",
@@ -245,7 +257,11 @@ eduMancovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     list(
                         `name`="sd", 
                         `title`="SD", 
-                        `type`="number"))))
+                        `type`="number")),
+                refs=list(
+                    "jReport",
+                    "car",
+                    "effectsize")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="diagnostics",
@@ -283,12 +299,16 @@ eduMancovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     list(
                         `name`="action", 
                         `title`="Recommended Action", 
-                        `type`="text"))))
+                        `type`="text")),
+                refs=list(
+                    "jReport",
+                    "car",
+                    "effectsize")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="followups",
                 title="Follow-up Analyses",
-                visible=FALSE,
+                visible="no",
                 clearWith=list(
                     "outcomes",
                     "factors",
@@ -327,15 +347,27 @@ eduMancovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     list(
                         `name`="effect", 
                         `title`="Partial eta-squared", 
-                        `type`="number"))))
+                        `type`="number")),
+                refs=list(
+                    "jReport",
+                    "car",
+                    "effectsize")))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="report",
-                title="Reporting"))
+                title="Reporting",
+                refs=list(
+                    "jReport",
+                    "car",
+                    "effectsize")))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="interpretation",
-                title="Plain-Language Interpretation"))}))
+                title="Plain-Language Interpretation",
+                refs=list(
+                    "jReport",
+                    "car",
+                    "effectsize")))}))
 
 eduMancovaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "eduMancovaBase",
@@ -366,6 +398,8 @@ eduMancovaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' summaries for each dependent variable.
 #' 
 #' @section References:
+#' jReport
+#'
 #' car
 #'
 #' effectsize

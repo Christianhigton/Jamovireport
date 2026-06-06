@@ -72,7 +72,23 @@ test_that("omega estimates and intervals follow reporting inclusion controls", {
     text <- edu_report(result, format = "short", include = c("test"))
 
     expect_false(grepl("omega =", text, fixed = TRUE))
+    expect_false(grepl("alpha =", text, fixed = TRUE))
     expect_false(grepl("bootstrap CI", text, fixed = TRUE))
+})
+
+test_that("package and method references are declared for jamovi references", {
+    module_dir <- system.file("jamovi", package = "jReport")
+    if (!nzchar(module_dir))
+        module_dir <- file.path(getwd(), "jamovi")
+    refs <- yaml::read_yaml(file.path(module_dir, "eduReliabilityOmega.a.yaml"))$description$references
+    all_refs <- yaml::read_yaml(file.path(module_dir, "00refs.yaml"))$refs
+
+    expect_true(all(c("jReport", "psych", "McDonald1999", "RevelleCondon2019") %in% refs))
+    expect_true("jReport" %in% names(all_refs))
+    expect_true("McDonald1999" %in% names(all_refs))
+    expect_true("RevelleCondon2019" %in% names(all_refs))
+    result_refs <- yaml::read_yaml(file.path(module_dir, "eduReliabilityOmega.r.yaml"))$refs
+    expect_true(all(c("jReport", "psych", "McDonald1999", "RevelleCondon2019") %in% result_refs))
 })
 
 test_that("jReport content is rendered as structured HTML cards", {
@@ -93,6 +109,8 @@ test_that("jReport content is rendered as structured HTML cards", {
     expect_match(overview, "Reporting controls")
     expect_match(report, "Copy-ready reporting")
     expect_match(report, "Welch independent-samples t-test")
+    expect_match(report, "border-left:4px solid #4b66a2", fixed = TRUE)
+    expect_match(report, "Interpretation note:")
     expect_match(interpretation, "What does this mean")
 })
 
@@ -177,6 +195,10 @@ test_that("native add-ons use a fixed automatic APA reporting profile", {
     expect_match(report, "Student's independent-samples t-test")
     expect_match(report, "Cohen")
     expect_match(report, "95% CI")
+    expect_match(report, "References")
+    expect_match(report, "jReport: Automated Statistical Reporting", fixed = TRUE)
+    expect_match(report, "Effectsize: Estimation of Effect Size", fixed = TRUE)
+    expect_false(grepl("GAMLj", report, fixed = TRUE))
     expect_match(.jr_addon_heading_html(), "jReport")
 })
 
@@ -215,8 +237,10 @@ test_that("automatic native reports render for supported group comparison design
             list(result), options = .jr_addon_reporting_options()
         )
         expect_match(report, "Report add-on")
+        expect_match(report, "References")
         expect_false(grepl("Select valid analysis variables", report, fixed = TRUE))
         expect_false(grepl("could not be generated", report, fixed = TRUE))
+        expect_false(grepl("GAMLj", report, fixed = TRUE))
     }
 })
 

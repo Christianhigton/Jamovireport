@@ -197,11 +197,21 @@ eduMixedAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
             super$initialize(
                 options=options,
                 name="",
-                title="Guided Mixed ANOVA")
+                title="Guided Mixed ANOVA",
+                refs=list(
+                    "jReport",
+                    "afex",
+                    "effectsize",
+                    "ggplot2"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="overview",
-                title="jReport: Overview and Why This Test?"))
+                title="jReport: Overview and Why This Test?",
+                refs=list(
+                    "jReport",
+                    "afex",
+                    "effectsize",
+                    "ggplot2")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="main",
@@ -244,7 +254,12 @@ eduMixedAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     list(
                         `name`="ci_high", 
                         `title`="CI Upper", 
-                        `type`="number"))))
+                        `type`="number")),
+                refs=list(
+                    "jReport",
+                    "afex",
+                    "effectsize",
+                    "ggplot2")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="descriptives",
@@ -270,7 +285,12 @@ eduMixedAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     list(
                         `name`="sd", 
                         `title`="SD", 
-                        `type`="number"))))
+                        `type`="number")),
+                refs=list(
+                    "jReport",
+                    "afex",
+                    "effectsize",
+                    "ggplot2")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="diagnostics",
@@ -309,15 +329,30 @@ eduMixedAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     list(
                         `name`="action", 
                         `title`="Recommended Action", 
-                        `type`="text"))))
+                        `type`="text")),
+                refs=list(
+                    "jReport",
+                    "afex",
+                    "effectsize",
+                    "ggplot2")))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="report",
-                title="Reporting"))
+                title="Reporting",
+                refs=list(
+                    "jReport",
+                    "afex",
+                    "effectsize",
+                    "ggplot2")))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="interpretation",
-                title="Plain-Language Interpretation"))
+                title="Plain-Language Interpretation",
+                refs=list(
+                    "jReport",
+                    "afex",
+                    "effectsize",
+                    "ggplot2")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",
@@ -330,7 +365,12 @@ eduMixedAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "ciWidth"),
                 width=520,
                 height=360,
-                renderFun=".plot"))}))
+                renderFun=".plot",
+                refs=list(
+                    "jReport",
+                    "afex",
+                    "effectsize",
+                    "ggplot2")))}))
 
 eduMixedAnovaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "eduMixedAnovaBase",
@@ -359,6 +399,8 @@ eduMixedAnovaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' with sphericity-aware reporting.
 #' 
 #' @section References:
+#' jReport
+#'
 #' afex
 #'
 #' effectsize

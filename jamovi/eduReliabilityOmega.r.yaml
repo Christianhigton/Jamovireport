@@ -1,76 +1,169 @@
----
 name: eduReliabilityOmega
-title: "Guided Reliability: McDonald's Omega"
+title: 'Guided Reliability: Omega and Alpha'
 jrs: '1.1'
+refs:
+- jReport
+- psych
+- McDonald1999
+- RevelleCondon2019
+- ggplot2
 items:
-    - { name: overview, title: 'jReport: Overview and Why Omega?', type: Html }
-    - name: main
-      title: Reliability Estimate
-      type: Table
-      clearWith:
-        - items
-        - reverseItems
-        - correlationType
-        - bootstrapCI
-        - bootstrapSamples
-        - ciWidth
-      columns:
-        - { name: coefficient, title: Coefficient, type: text }
-        - { name: estimate, title: Estimate, type: number }
-        - { name: ci_low, title: CI Lower, type: number }
-        - { name: ci_high, title: CI Upper, type: number }
-        - { name: n, title: Complete N, type: integer }
-        - { name: items, title: Items, type: integer }
-    - name: items
-      title: Item Quality Guidance
-      type: Table
-      clearWith:
-        - items
-        - reverseItems
-        - correlationType
-        - bootstrapCI
-        - bootstrapSamples
-        - ciWidth
-      columns:
-        - { name: item, title: Item, type: text }
-        - { name: scoring, title: Scoring Direction, type: text }
-        - { name: n, title: N, type: integer }
-        - { name: mean, title: Mean, type: number }
-        - { name: sd, title: SD, type: number }
-        - { name: item_total_r, title: Corrected Item-Total r, type: number }
-        - { name: loading, title: Factor Loading, type: number }
-    - name: diagnostics
-      title: Data and Interpretation Guidance
-      type: Table
-      clearWith:
-        - items
-        - reverseItems
-        - correlationType
-        - bootstrapCI
-        - bootstrapSamples
-        - ciWidth
-      columns:
-        - { name: check, title: Check, type: text }
-        - { name: tested, title: "Tested?", type: text }
-        - { name: statistic, title: Statistic, type: number }
-        - { name: p, title: p, type: number, format: "zto,pvalue" }
-        - { name: status, title: Status, type: text }
-        - { name: interpretation, title: Interpretation, type: text }
-        - { name: action, title: Recommended Action, type: text }
-    - { name: report, title: Reporting, type: Html }
-    - { name: interpretation, title: Plain-Language Interpretation, type: Html }
-    - name: plot
-      title: Item Contribution Plot
-      type: Image
-      visible: (showPlot)
-      clearWith:
-        - items
-        - reverseItems
-        - correlationType
-        - bootstrapCI
-        - bootstrapSamples
-        - ciWidth
-      width: 520
-      height: 360
-      renderFun: .plot
-...
+- name: overview
+  title: 'jReport: Overview and Why Omega?'
+  type: Html
+  refs:
+  - jReport
+  - psych
+  - McDonald1999
+  - RevelleCondon2019
+  - ggplot2
+- name: main
+  title: Reliability Estimate
+  type: Table
+  clearWith:
+  - items
+  - reverseItems
+  - correlationType
+  - bootstrapCI
+  - bootstrapSamples
+  - ciWidth
+  columns:
+  - name: coefficient
+    title: Coefficient
+    type: text
+  - name: estimate
+    title: Estimate
+    type: number
+  - name: ci_low
+    title: CI Lower
+    type: number
+  - name: ci_high
+    title: CI Upper
+    type: number
+  - name: n
+    title: Complete N
+    type: integer
+  - name: items
+    title: Items
+    type: integer
+  refs:
+  - jReport
+  - psych
+  - McDonald1999
+  - RevelleCondon2019
+  - ggplot2
+- name: items
+  title: Item Quality Guidance
+  type: Table
+  clearWith:
+  - items
+  - reverseItems
+  - correlationType
+  - bootstrapCI
+  - bootstrapSamples
+  - ciWidth
+  columns:
+  - name: item
+    title: Item
+    type: text
+  - name: scoring
+    title: Scoring Direction
+    type: text
+  - name: n
+    title: N
+    type: integer
+  - name: mean
+    title: Mean
+    type: number
+  - name: sd
+    title: SD
+    type: number
+  - name: item_total_r
+    title: Corrected Item-Total r
+    type: number
+  - name: loading
+    title: Factor Loading
+    type: number
+  refs:
+  - jReport
+  - psych
+  - McDonald1999
+  - RevelleCondon2019
+  - ggplot2
+- name: diagnostics
+  title: Data and Interpretation Guidance
+  type: Table
+  clearWith:
+  - items
+  - reverseItems
+  - correlationType
+  - bootstrapCI
+  - bootstrapSamples
+  - ciWidth
+  columns:
+  - name: check
+    title: Check
+    type: text
+  - name: tested
+    title: Tested?
+    type: text
+  - name: statistic
+    title: Statistic
+    type: number
+  - name: p
+    title: p
+    type: number
+    format: zto,pvalue
+  - name: status
+    title: Status
+    type: text
+  - name: interpretation
+    title: Interpretation
+    type: text
+  - name: action
+    title: Recommended Action
+    type: text
+  refs:
+  - jReport
+  - psych
+  - McDonald1999
+  - RevelleCondon2019
+  - ggplot2
+- name: report
+  title: Reporting
+  type: Html
+  refs:
+  - jReport
+  - psych
+  - McDonald1999
+  - RevelleCondon2019
+  - ggplot2
+- name: interpretation
+  title: Plain-Language Interpretation
+  type: Html
+  refs:
+  - jReport
+  - psych
+  - McDonald1999
+  - RevelleCondon2019
+  - ggplot2
+- name: plot
+  title: Item Contribution Plot
+  type: Image
+  visible: (showPlot)
+  clearWith:
+  - items
+  - reverseItems
+  - correlationType
+  - bootstrapCI
+  - bootstrapSamples
+  - ciWidth
+  width: 520
+  height: 360
+  renderFun: .plot
+  refs:
+  - jReport
+  - psych
+  - McDonald1999
+  - RevelleCondon2019
+  - ggplot2

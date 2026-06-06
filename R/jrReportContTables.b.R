@@ -4,7 +4,10 @@ jrReportContTablesClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Cl
     inherit = jrReportContTablesBase,
     private = list(
         .init = function() {
-            .jr_addon_insert_card(self, cells = TRUE)
+            .jr_addon_insert_card(
+                self, cells = TRUE,
+                refs = c("jReport", "jmvcore", "effectsize")
+            )
         },
         .run = function() {
             row <- self$parent$options$rows

@@ -221,11 +221,21 @@ eduTTestResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             super$initialize(
                 options=options,
                 name="",
-                title="Guided T-Test")
+                title="Guided T-Test",
+                refs=list(
+                    "jReport",
+                    "effectsize",
+                    "ggplot2",
+                    "BayesFactor"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="overview",
-                title="jReport: Overview and Why This Test?"))
+                title="jReport: Overview and Why This Test?",
+                refs=list(
+                    "jReport",
+                    "effectsize",
+                    "ggplot2",
+                    "BayesFactor")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="main",
@@ -266,7 +276,12 @@ eduTTestResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     list(
                         `name`="ci_high", 
                         `title`="CI Upper", 
-                        `type`="number"))))
+                        `type`="number")),
+                refs=list(
+                    "jReport",
+                    "effectsize",
+                    "ggplot2",
+                    "BayesFactor")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="descriptives",
@@ -294,7 +309,12 @@ eduTTestResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     list(
                         `name`="sd", 
                         `title`="SD", 
-                        `type`="number"))))
+                        `type`="number")),
+                refs=list(
+                    "jReport",
+                    "effectsize",
+                    "ggplot2",
+                    "BayesFactor")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="diagnostics",
@@ -335,15 +355,30 @@ eduTTestResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     list(
                         `name`="action", 
                         `title`="Recommended Action", 
-                        `type`="text"))))
+                        `type`="text")),
+                refs=list(
+                    "jReport",
+                    "effectsize",
+                    "ggplot2",
+                    "BayesFactor")))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="report",
-                title="Reporting"))
+                title="Reporting",
+                refs=list(
+                    "jReport",
+                    "effectsize",
+                    "ggplot2",
+                    "BayesFactor")))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="interpretation",
-                title="Plain-Language Interpretation"))
+                title="Plain-Language Interpretation",
+                refs=list(
+                    "jReport",
+                    "effectsize",
+                    "ggplot2",
+                    "BayesFactor")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",
@@ -358,7 +393,12 @@ eduTTestResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "ciWidth"),
                 width=520,
                 height=360,
-                renderFun=".plot"))}))
+                renderFun=".plot",
+                refs=list(
+                    "jReport",
+                    "effectsize",
+                    "ggplot2",
+                    "BayesFactor")))}))
 
 eduTTestBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "eduTTestBase",
@@ -387,6 +427,8 @@ eduTTestBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' size, and reporting in accessible language.
 #' 
 #' @section References:
+#' jReport
+#'
 #' effectsize
 #'
 #' ggplot2

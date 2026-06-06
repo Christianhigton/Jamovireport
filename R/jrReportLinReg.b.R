@@ -4,7 +4,10 @@ jrReportLinRegClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class(
     inherit = jrReportLinRegBase,
     private = list(
         .init = function() {
-            .jr_addon_insert_card(self)
+            .jr_addon_insert_card(
+                self,
+                refs = c("jReport", "jmvcore", "parameters", "performance", "effectsize")
+            )
         },
         .run = function() {
             outcome <- self$parent$options$dep

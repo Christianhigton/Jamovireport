@@ -189,11 +189,25 @@ eduBetweenAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
             super$initialize(
                 options=options,
                 name="",
-                title="Guided Between-Subjects ANOVA")
+                title="Guided Between-Subjects ANOVA",
+                refs=list(
+                    "jReport",
+                    "afex",
+                    "car",
+                    "effectsize",
+                    "emmeans",
+                    "ggplot2"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="overview",
-                title="jReport: Overview and Why This Test?"))
+                title="jReport: Overview and Why This Test?",
+                refs=list(
+                    "jReport",
+                    "afex",
+                    "car",
+                    "effectsize",
+                    "emmeans",
+                    "ggplot2")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="main",
@@ -235,7 +249,14 @@ eduBetweenAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
                     list(
                         `name`="ci_high", 
                         `title`="CI Upper", 
-                        `type`="number"))))
+                        `type`="number")),
+                refs=list(
+                    "jReport",
+                    "afex",
+                    "car",
+                    "effectsize",
+                    "emmeans",
+                    "ggplot2")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="descriptives",
@@ -260,7 +281,14 @@ eduBetweenAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
                     list(
                         `name`="sd", 
                         `title`="SD", 
-                        `type`="number"))))
+                        `type`="number")),
+                refs=list(
+                    "jReport",
+                    "afex",
+                    "car",
+                    "effectsize",
+                    "emmeans",
+                    "ggplot2")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="diagnostics",
@@ -298,15 +326,36 @@ eduBetweenAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
                     list(
                         `name`="action", 
                         `title`="Recommended Action", 
-                        `type`="text"))))
+                        `type`="text")),
+                refs=list(
+                    "jReport",
+                    "afex",
+                    "car",
+                    "effectsize",
+                    "emmeans",
+                    "ggplot2")))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="report",
-                title="Reporting"))
+                title="Reporting",
+                refs=list(
+                    "jReport",
+                    "afex",
+                    "car",
+                    "effectsize",
+                    "emmeans",
+                    "ggplot2")))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="interpretation",
-                title="Plain-Language Interpretation"))
+                title="Plain-Language Interpretation",
+                refs=list(
+                    "jReport",
+                    "afex",
+                    "car",
+                    "effectsize",
+                    "emmeans",
+                    "ggplot2")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",
@@ -318,7 +367,14 @@ eduBetweenAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
                     "ciWidth"),
                 width=520,
                 height=360,
-                renderFun=".plot"))}))
+                renderFun=".plot",
+                refs=list(
+                    "jReport",
+                    "afex",
+                    "car",
+                    "effectsize",
+                    "emmeans",
+                    "ggplot2")))}))
 
 eduBetweenAnovaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "eduBetweenAnovaBase",
@@ -347,6 +403,8 @@ eduBetweenAnovaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
 #' factors, prioritising interaction interpretation when appropriate.
 #' 
 #' @section References:
+#' jReport
+#'
 #' afex
 #'
 #' car

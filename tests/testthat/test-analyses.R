@@ -210,8 +210,12 @@ test_that("reliability analysis reports omega with item-quality guidance", {
 
     expect_equal(result$analysis, "reliability_omega")
     expect_match(text, "McDonald's omega total")
+    expect_match(text, "Cronbach's alpha")
     expect_match(text, "bootstrap CI")
-    expect_false(grepl("Cronbach|alpha", text, ignore.case = TRUE))
+    expect_match(text, "We recommend reporting McDonald's omega alongside Cronbach's alpha", fixed = TRUE)
+    expect_match(text, "McDonald \\(1999\\)")
+    expect_false(grepl("References:", text, fixed = TRUE))
+    expect_false(grepl("Cohen, J. \\(1988\\)", text))
     expect_true("Item direction and consistency" %in% result$diagnostics$check)
     expect_s3_class(edu_plot(result), "ggplot")
     expect_no_error(eduReliabilityOmega(

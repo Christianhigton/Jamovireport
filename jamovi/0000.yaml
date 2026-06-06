@@ -134,15 +134,15 @@ analyses:
       omnibus effects are followed by Holm-adjusted univariate ANOVA/ANCOVA
       summaries for each dependent variable.
     category: analyses
-  - title: 'Guided Reliability: McDonald''s Omega'
+  - title: 'Guided Reliability: Omega and Alpha'
     name: eduReliabilityOmega
     ns: jReport
     menuGroup: jReport
     menuSubgroup: Psychometrics
-    menuTitle: 'Guided Reliability: McDonald''s Omega'
+    menuTitle: 'Guided Reliability: Omega and Alpha'
     description: >
-      Estimate and report internal consistency using McDonald's omega total,
-      with item diagnostics and clear interpretation guidance.
+      Estimate and report internal consistency using McDonald's omega total and
+      Cronbach's alpha, with item diagnostics and clear interpretation guidance.
     category: analyses
   - title: Automatic Report for Independent Samples T-Test
     name: jrReportTTestIS
@@ -228,11 +228,11 @@ analyses:
     menuTitle: Automatic Report for Repeated Measures ANOVA
     addonFor: jmv::anovaRM
     category: analyses
-  - title: Automatic Omega Report for Reliability Analysis
+  - title: Automatic Reliability Report
     name: jrReportReliability
     ns: jReport
     menuGroup: Report Add-ons
-    menuTitle: Automatic Omega Report for Reliability Analysis
+    menuTitle: Automatic Reliability Report
     addonFor: jmv::reliability
     category: analyses
 usesNative: true

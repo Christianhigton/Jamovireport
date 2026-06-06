@@ -123,8 +123,26 @@
 }
 
 .jr_html_paragraphs <- function(text) {
-    parts <- strsplit(.jr_html_escape(text), "\n\n", fixed = TRUE)[[1]]
-    paste0("<p style='margin:0 0 10px 0; line-height:1.45;'>", parts, "</p>", collapse = "")
+    parts <- strsplit(text, "\n\n", fixed = TRUE)[[1]]
+    rendered <- vapply(parts, function(part) {
+        part <- trimws(part)
+        is_note <- grepl("^\\*Interpretation note:", part) && grepl("\\*$", part)
+        if (is_note)
+            part <- sub("^\\*", "", sub("\\*$", "", part))
+        part <- gsub("\n", "<br>", .jr_html_escape(part), fixed = TRUE)
+        if (is_note) {
+            return(sprintf(
+                paste0(
+                    "<div style='border:1px solid #d9e3f2; border-left:4px solid #4b66a2;",
+                    "border-radius:4px; background:#f4f7fb; color:#25364a;",
+                    "padding:10px 12px; margin:8px 0 12px 0; line-height:1.45;'>%s</div>"
+                ),
+                part
+            ))
+        }
+        sprintf("<p style='margin:0 0 10px 0; line-height:1.45;'>%s</p>", part)
+    }, character(1))
+    paste0(rendered, collapse = "")
 }
 
 .jr_html_card <- function(eyebrow, title, content, accent = "#237f86") {
@@ -138,6 +156,75 @@
             "%s</div>"
         ),
         accent, .jr_html_escape(eyebrow), .jr_html_escape(title), .jr_html_paragraphs(content)
+    )
+}
+
+.jr_reference_entry_text <- function(key) {
+    refs <- tryCatch(get(".jmvrefs", envir = asNamespace("jReport")), error = function(e) NULL)
+    ref <- refs[[key]]
+    if (is.null(ref)) {
+        return(switch(
+            key,
+            Cohen1988 = "Cohen, J. (1988). Statistical power analysis for the behavioral sciences (2nd ed.). Lawrence Erlbaum Associates.",
+            Cumming2014 = "Cumming, G. (2014). The new statistics: Why and how. Psychological Science, 25(1), 7-29.",
+            ""
+        ))
+    }
+    author <- ref$author %||% ""
+    year <- ref$year %||% "n.d."
+    title <- ref$title %||% key
+    publisher <- ref$publisher %||% ""
+    url <- ref$url %||% ""
+    tail <- paste(c(publisher, url), collapse = ". ")
+    tail <- sub("\\. $", "", tail)
+    if (nzchar(tail))
+        sprintf("%s (%s). %s. %s.", author, year, title, tail)
+    else
+        sprintf("%s (%s). %s.", author, year, title)
+}
+
+.jr_text_reference_keys <- function(result, include_effect_note = TRUE) {
+    keys <- switch(
+        result$analysis,
+        ttest = c("jReport", "effectsize", "ggplot2", "BayesFactor"),
+        bayes_ttest = c("jReport", "BayesFactor"),
+        anova_oneway = c("jReport", "effectsize", "emmeans"),
+        anova_between = c("jReport", "afex", "effectsize", "emmeans"),
+        anova_rm = c("jReport", "afex", "effectsize"),
+        anova_mixed = c("jReport", "afex", "effectsize"),
+        ancova = c("jReport", "car", "effectsize", "emmeans"),
+        manova = c("jReport", "car", "effectsize"),
+        correlation = c("jReport", "effectsize", "ggplot2"),
+        regression = c("jReport", "parameters", "performance", "effectsize", "ggplot2"),
+        logistic_regression = c("jReport", "parameters", "performance", "effectsize", "ggplot2"),
+        chisq_independence = c("jReport", "effectsize", "ggplot2"),
+        chisq_gof = c("jReport", "effectsize", "ggplot2"),
+        reliability_omega = c("jReport", "psych", "McDonald1999", "RevelleCondon2019", "ggplot2"),
+        "jReport"
+    )
+    if (isTRUE(include_effect_note) && !identical(result$analysis, "reliability_omega"))
+        keys <- c(keys, "Cohen1988", "Cumming2014")
+    unique(keys)
+}
+
+.jr_references_html <- function(results, include_effect_note = TRUE) {
+    keys <- unique(unlist(lapply(results, .jr_text_reference_keys, include_effect_note = include_effect_note)))
+    entries <- vapply(keys, .jr_reference_entry_text, character(1))
+    entries <- entries[nzchar(entries)]
+    if (!length(entries))
+        return("")
+    rows <- paste0(
+        "<li style='margin:0 0 8px 0; padding-left:2px;'>",
+        .jr_html_escape(entries),
+        "</li>",
+        collapse = ""
+    )
+    paste0(
+        "<div style='border-top:1px solid #dfe6ea; margin:14px 0 0 0; padding-top:12px;'>",
+        "<div style='font-size:13px; font-weight:600; color:#18242d; margin-bottom:8px;'>References</div>",
+        "<ol style='margin:0; padding-left:22px; line-height:1.45;'>",
+        rows,
+        "</ol></div>"
     )
 }
 
@@ -206,7 +293,12 @@
             .jr_html_card("Follow-up comparisons", "Post hoc interpretation", posthoc_text, accent = "#4b66a2")
         )
     }
-    paste(cards, collapse = "")
+    include_effect_note <- is.null(options) ||
+        isTRUE(tryCatch(options$reportEffect, error = function(e) TRUE))
+    paste0(
+        paste(cards, collapse = ""),
+        .jr_references_html(results, include_effect_note = include_effect_note)
+    )
 }
 
 .jr_addon_heading_html <- function() {
@@ -336,8 +428,11 @@
         return(benchmark(sprintf("Cramer's V = %s", .jr_num(statistic$effect, 2L, TRUE)), statistic$effect))
     if (identical(result$analysis, "chisq_gof"))
         return(benchmark(sprintf("Cohen's w = %s", .jr_num(statistic$effect, 2L, TRUE)), statistic$effect))
-    if (identical(result$analysis, "reliability_omega"))
-        return(benchmark(sprintf("Omega = %s", .jr_num(statistic$estimate, 2L, TRUE)), statistic$estimate))
+    if (identical(result$analysis, "reliability_omega")) {
+        coefficient <- as.character(statistic$coefficient)
+        label <- if (identical(coefficient, "Cronbach's alpha")) "Cronbach's alpha" else "Omega"
+        return(benchmark(sprintf("%s = %s", label, .jr_num(statistic$estimate, 2L, TRUE)), statistic$estimate))
+    }
     ""
 }
 
@@ -484,11 +579,12 @@
 }
 
 .jr_addon_insert_tables <- function(self, posthoc = FALSE, coefficients = FALSE, cells = FALSE,
-                                    followups = FALSE) {
+                                    followups = FALSE, refs = character()) {
     self$parent$results$add(jmvcore::Table$new(
         options = self$options,
         name = "jReportApaTable",
         title = "APA Results Summary (jReport)",
+        refs = refs,
         columns = list(
             list(name = "analysis", title = "Analysis", type = "text"),
             list(name = "test", title = "Test / Effect", type = "text"),
@@ -504,6 +600,7 @@
         options = self$options,
         name = "jReportAssumptions",
         title = "Assumptions and Recommended Actions (jReport)",
+        refs = refs,
         columns = list(
             list(name = "analysis", title = "Analysis", type = "text"),
             list(name = "assumption", title = "Assumption / Check", type = "text"),
@@ -521,6 +618,7 @@
             name = "jReportPostHoc",
             title = "APA Post Hoc Comparisons (jReport)",
             visible = FALSE,
+            refs = refs,
             columns = list(
                 list(name = "analysis", title = "Analysis", type = "text"),
                 list(name = "term", title = "Factor / Term", type = "text"),
@@ -541,6 +639,7 @@
             name = "jReportCoefficients",
             title = "Odds Ratios and Coefficients (jReport)",
             visible = FALSE,
+            refs = refs,
             columns = list(
                 list(name = "predictor", title = "Predictor", type = "text"),
                 list(name = "estimate", title = "B", type = "number"),
@@ -558,6 +657,7 @@
             name = "jReportCells",
             title = "Observed and Expected Counts (jReport)",
             visible = FALSE,
+            refs = refs,
             columns = list(
                 list(name = "analysis", title = "Analysis", type = "text"),
                 list(name = "category", title = "Cell / Category", type = "text"),
@@ -573,6 +673,7 @@
             name = "jReportFollowUps",
             title = "MANOVA/MANCOVA Follow-up Analyses (jReport)",
             visible = FALSE,
+            refs = refs,
             columns = list(
                 list(name = "analysis", title = "Analysis", type = "text"),
                 list(name = "term", title = "Effect", type = "text"),
@@ -658,7 +759,7 @@
 }
 
 .jr_addon_insert_card <- function(self, posthoc = FALSE, coefficients = FALSE, cells = FALSE,
-                                  followups = FALSE) {
+                                  followups = FALSE, refs = character()) {
     .jr_addon_enable_library()
     heading <- jmvcore::Html$new(
         options = self$options,

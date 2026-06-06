@@ -1,6 +1,4 @@
----
 name: jrReportReliability
-title: Automatic Omega Report for Reliability Analysis
+title: Automatic Reliability Report
 jrs: '1.1'
 items: []
-...

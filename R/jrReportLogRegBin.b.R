@@ -4,7 +4,10 @@ jrReportLogRegBinClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Cla
     inherit = jrReportLogRegBinBase,
     private = list(
         .init = function() {
-            .jr_addon_insert_card(self, coefficients = TRUE)
+            .jr_addon_insert_card(
+                self, coefficients = TRUE,
+                refs = c("jReport", "jmvcore", "parameters", "performance", "effectsize")
+            )
         },
         .run = function() {
             outcome <- self$parent$options$dep

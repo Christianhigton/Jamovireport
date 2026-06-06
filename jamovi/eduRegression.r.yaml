@@ -1,66 +1,165 @@
----
 name: eduRegression
 title: Guided Linear Regression
 jrs: '1.1'
+refs:
+- jReport
+- parameters
+- performance
+- effectsize
+- ggplot2
 items:
-    - { name: overview, title: 'jReport: Overview and Why This Test?', type: Html }
-    - name: fit
-      title: Main Results and Model Fit
-      type: Table
-      clearWith:
-        - outcome
-        - predictors
-        - ciWidth
-      columns:
-        - { name: test, title: Test, type: text }
-        - { name: statistic, title: F, type: number }
-        - { name: df1, title: df1, type: number }
-        - { name: df2, title: df2, type: number }
-        - { name: p, title: p, type: number, format: "zto,pvalue" }
-        - { name: r2, title: R-squared, type: number }
-        - { name: adjusted_r2, title: Adjusted R-squared, type: number }
-    - name: coefficients
-      title: Coefficients and Effect Interpretation
-      type: Table
-      clearWith:
-        - outcome
-        - predictors
-        - ciWidth
-      columns:
-        - { name: term, title: Predictor, type: text }
-        - { name: estimate, title: B, type: number }
-        - { name: se, title: SE, type: number }
-        - { name: lower, title: CI Lower, type: number }
-        - { name: upper, title: CI Upper, type: number }
-        - { name: beta, title: Standardised Beta, type: number }
-        - { name: statistic, title: t, type: number }
-        - { name: p, title: p, type: number, format: "zto,pvalue" }
-    - name: diagnostics
-      title: Assumption Checks and Guidance
-      type: Table
-      clearWith:
-        - outcome
-        - predictors
-        - ciWidth
-      columns:
-        - { name: check, title: Check, type: text }
-        - { name: tested, title: "Tested?", type: text }
-        - { name: statistic, title: Statistic, type: number }
-        - { name: p, title: p, type: number, format: "zto,pvalue" }
-        - { name: status, title: Status, type: text }
-        - { name: interpretation, title: Interpretation, type: text }
-        - { name: action, title: Recommended Action, type: text }
-    - { name: report, title: Reporting, type: Html }
-    - { name: interpretation, title: Plain-Language Interpretation, type: Html }
-    - name: plot
-      title: Residual Visualisation
-      type: Image
-      visible: (showPlot)
-      clearWith:
-        - outcome
-        - predictors
-        - ciWidth
-      width: 520
-      height: 360
-      renderFun: .plot
-...
+- name: overview
+  title: 'jReport: Overview and Why This Test?'
+  type: Html
+  refs:
+  - jReport
+  - parameters
+  - performance
+  - effectsize
+  - ggplot2
+- name: fit
+  title: Main Results and Model Fit
+  type: Table
+  clearWith:
+  - outcome
+  - predictors
+  - ciWidth
+  columns:
+  - name: test
+    title: Test
+    type: text
+  - name: statistic
+    title: F
+    type: number
+  - name: df1
+    title: df1
+    type: number
+  - name: df2
+    title: df2
+    type: number
+  - name: p
+    title: p
+    type: number
+    format: zto,pvalue
+  - name: r2
+    title: R-squared
+    type: number
+  - name: adjusted_r2
+    title: Adjusted R-squared
+    type: number
+  refs:
+  - jReport
+  - parameters
+  - performance
+  - effectsize
+  - ggplot2
+- name: coefficients
+  title: Coefficients and Effect Interpretation
+  type: Table
+  clearWith:
+  - outcome
+  - predictors
+  - ciWidth
+  columns:
+  - name: term
+    title: Predictor
+    type: text
+  - name: estimate
+    title: B
+    type: number
+  - name: se
+    title: SE
+    type: number
+  - name: lower
+    title: CI Lower
+    type: number
+  - name: upper
+    title: CI Upper
+    type: number
+  - name: beta
+    title: Standardised Beta
+    type: number
+  - name: statistic
+    title: t
+    type: number
+  - name: p
+    title: p
+    type: number
+    format: zto,pvalue
+  refs:
+  - jReport
+  - parameters
+  - performance
+  - effectsize
+  - ggplot2
+- name: diagnostics
+  title: Assumption Checks and Guidance
+  type: Table
+  clearWith:
+  - outcome
+  - predictors
+  - ciWidth
+  columns:
+  - name: check
+    title: Check
+    type: text
+  - name: tested
+    title: Tested?
+    type: text
+  - name: statistic
+    title: Statistic
+    type: number
+  - name: p
+    title: p
+    type: number
+    format: zto,pvalue
+  - name: status
+    title: Status
+    type: text
+  - name: interpretation
+    title: Interpretation
+    type: text
+  - name: action
+    title: Recommended Action
+    type: text
+  refs:
+  - jReport
+  - parameters
+  - performance
+  - effectsize
+  - ggplot2
+- name: report
+  title: Reporting
+  type: Html
+  refs:
+  - jReport
+  - parameters
+  - performance
+  - effectsize
+  - ggplot2
+- name: interpretation
+  title: Plain-Language Interpretation
+  type: Html
+  refs:
+  - jReport
+  - parameters
+  - performance
+  - effectsize
+  - ggplot2
+- name: plot
+  title: Residual Visualisation
+  type: Image
+  visible: (showPlot)
+  clearWith:
+  - outcome
+  - predictors
+  - ciWidth
+  width: 520
+  height: 360
+  renderFun: .plot
+  refs:
+  - jReport
+  - parameters
+  - performance
+  - effectsize
+  - ggplot2

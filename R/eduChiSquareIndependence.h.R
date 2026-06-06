@@ -183,11 +183,17 @@ eduChiSquareIndependenceResults <- if (requireNamespace("jmvcore", quietly=TRUE)
             super$initialize(
                 options=options,
                 name="",
-                title="Guided Chi-Square Test of Independence")
+                title="Guided Chi-Square Test of Independence",
+                refs=list(
+                    "jReport",
+                    "effectsize"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="overview",
-                title="jReport: Overview and Why This Test?"))
+                title="jReport: Overview and Why This Test?",
+                refs=list(
+                    "jReport",
+                    "effectsize")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="fit",
@@ -221,7 +227,10 @@ eduChiSquareIndependenceResults <- if (requireNamespace("jmvcore", quietly=TRUE)
                     list(
                         `name`="n", 
                         `title`="N", 
-                        `type`="number"))))
+                        `type`="number")),
+                refs=list(
+                    "jReport",
+                    "effectsize")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="cells",
@@ -246,7 +255,10 @@ eduChiSquareIndependenceResults <- if (requireNamespace("jmvcore", quietly=TRUE)
                     list(
                         `name`="standardised_residual", 
                         `title`="Standardised Residual", 
-                        `type`="number"))))
+                        `type`="number")),
+                refs=list(
+                    "jReport",
+                    "effectsize")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="diagnostics",
@@ -284,15 +296,24 @@ eduChiSquareIndependenceResults <- if (requireNamespace("jmvcore", quietly=TRUE)
                     list(
                         `name`="action", 
                         `title`="Recommended Action", 
-                        `type`="text"))))
+                        `type`="text")),
+                refs=list(
+                    "jReport",
+                    "effectsize")))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="report",
-                title="Reporting"))
+                title="Reporting",
+                refs=list(
+                    "jReport",
+                    "effectsize")))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="interpretation",
-                title="Plain-Language Interpretation"))}))
+                title="Plain-Language Interpretation",
+                refs=list(
+                    "jReport",
+                    "effectsize")))}))
 
 eduChiSquareIndependenceBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "eduChiSquareIndependenceBase",
@@ -321,6 +342,8 @@ eduChiSquareIndependenceBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R
 #' count checks, Cramer's V, and report-ready explanation.
 #' 
 #' @section References:
+#' jReport
+#'
 #' effectsize
 #'
 #' @param data .

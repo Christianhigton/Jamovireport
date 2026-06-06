@@ -56,6 +56,8 @@ jrReportAnovaOneWBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
 #'
 #' 
 #' @section References:
+#' jReport
+#'
 #' jmvcore
 #'
 #' effectsize

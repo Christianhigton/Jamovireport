@@ -56,6 +56,8 @@ jrReportAnovaRMBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
 #'
 #' 
 #' @section References:
+#' jReport
+#'
 #' jmvcore
 #'
 #' afex

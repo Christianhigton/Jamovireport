@@ -6,6 +6,7 @@ version: '1.0.0'
 jas: '1.2'
 description:
     references:
+        - jReport
         - jmvcore
         - effectsize
 options:

@@ -56,6 +56,8 @@ jrReportAncovaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
 #'
 #' 
 #' @section References:
+#' jReport
+#'
 #' jmvcore
 #'
 #' car

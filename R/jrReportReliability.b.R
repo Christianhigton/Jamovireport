@@ -4,7 +4,10 @@ jrReportReliabilityClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6C
     inherit = jrReportReliabilityBase,
     private = list(
         .init = function() {
-            .jr_addon_insert_card(self)
+            .jr_addon_insert_card(
+                self,
+                refs = c("jReport", "jmvcore", "psych", "McDonald1999", "RevelleCondon2019")
+            )
         },
         .run = function() {
             items <- self$parent$options$vars
@@ -22,7 +25,7 @@ jrReportReliabilityClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6C
             )
             .jr_addon_set_card(
                 self, list(result),
-                "This report card uses McDonald's omega total. Select McDonald's omega in the standard jamovi output if you also want its native reliability table; alpha is not used in this generated narrative."
+                "This report card reports McDonald's omega total and Cronbach's alpha. We recommend reporting omega alongside alpha and checking item diagnostics before using the values in assessed, clinical, or published work."
             )
         }
     )

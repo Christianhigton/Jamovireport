@@ -4,7 +4,10 @@ jrReportAnovaOneWClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Cla
     inherit = jrReportAnovaOneWBase,
     private = list(
         .init = function() {
-            .jr_addon_insert_card(self, posthoc = TRUE)
+            .jr_addon_insert_card(
+                self, posthoc = TRUE,
+                refs = c("jReport", "jmvcore", "effectsize", "emmeans")
+            )
         },
         .run = function() {
             group <- self$parent$options$group

@@ -29,7 +29,7 @@ jrReportReliabilityResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6:
             super$initialize(
                 options=options,
                 name="",
-                title="Automatic Omega Report for Reliability Analysis")}))
+                title="Automatic Reliability Report")}))
 
 jrReportReliabilityBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "jrReportReliabilityBase",
@@ -52,13 +52,19 @@ jrReportReliabilityBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6
                 weightsSupport = 'auto')
         }))
 
-#' Automatic Omega Report for Reliability Analysis
+#' Automatic Reliability Report
 #'
 #' 
 #' @section References:
+#' jReport
+#'
 #' jmvcore
 #'
 #' psych
+#'
+#' McDonald1999
+#'
+#' RevelleCondon2019
 #'
 #' @param data .
 #' @return A results object containing:

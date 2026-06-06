@@ -38,11 +38,21 @@
     "limited internal consistency"
 }
 
+.jr_cronbach_alpha <- function(scored_data) {
+    scored_data <- as.data.frame(scored_data)
+    item_variances <- vapply(scored_data, stats::var, numeric(1), na.rm = TRUE)
+    total_variance <- stats::var(rowSums(scored_data), na.rm = TRUE)
+    item_count <- ncol(scored_data)
+    if (item_count < 2L || !is.finite(total_variance) || total_variance <= 0)
+        return(NA_real_)
+    item_count / (item_count - 1) * (1 - (sum(item_variances, na.rm = TRUE) / total_variance))
+}
+
 #' Guided reliability analysis using McDonald's omega
 #'
-#' Estimates internal consistency using McDonald's omega total rather than
-#' coefficient alpha. Item diagnostics are supplied to discourage relying on a
-#' single coefficient without inspecting item behaviour.
+#' Estimates internal consistency using McDonald's omega total and Cronbach's
+#' alpha. Item diagnostics are supplied to discourage relying on a single
+#' coefficient without inspecting item behaviour.
 #'
 #' @param data A data frame containing scale items.
 #' @param items Character vector containing three or more numeric item names.
@@ -95,6 +105,7 @@ edu_reliability_omega <- function(data, items, reverse_items = character(),
     }
 
     scored <- sweep(as.matrix(item_data), 2, keys, `*`)
+    alpha <- .jr_cronbach_alpha(scored)
     item_total <- vapply(seq_along(items), function(i) {
         stats::cor(scored[, i], rowMeans(scored[, -i, drop = FALSE]))
     }, numeric(1))
@@ -174,39 +185,55 @@ edu_reliability_omega <- function(data, items, reverse_items = character(),
     }
     strength <- .jr_omega_strength(omega)
     apa <- sprintf(
-        "Internal consistency for the %s-item scale was estimated using McDonald's omega total, omega = %s%s, based on %s complete responses.",
-        length(items), .jr_num(omega, 2L, TRUE), interval_text, n_used
+        "Internal consistency for the %s-item scale was estimated using McDonald's omega total, omega = %s%s, and Cronbach's alpha, alpha = %s, based on %s complete responses.",
+        length(items), .jr_num(omega, 2L, TRUE), interval_text, .jr_num(alpha, 2L, TRUE), n_used
     )
     plain <- sprintf(
-        "The selected items showed %s (omega = %s). This indicates how consistently the item set functions as a composite under the fitted common-factor model; it does not by itself establish validity or a single underlying construct.",
-        strength, .jr_num(omega, 2L, TRUE)
+        "The selected items showed %s (omega = %s; Cronbach's alpha = %s). These coefficients indicate how consistently the item set functions as a composite; they do not by themselves establish validity or a single underlying construct.",
+        strength, .jr_num(omega, 2L, TRUE), .jr_num(alpha, 2L, TRUE)
     )
     assumption_text <- .jr_diagnostic_text(diagnostics)
     caution <- if (any(diagnostics$status %in% c("Caution", "Serious")))
         paste("Caution:", assumption_text)
     else ""
-    statistics <- data.frame(
-        coefficient = "McDonald's omega total",
-        estimate = omega,
-        ci_low = interval[1],
-        ci_high = interval[2],
-        n = n_used,
-        items = length(items),
-        stringsAsFactors = FALSE
+    statistics <- rbind(
+        data.frame(
+            coefficient = "McDonald's omega total",
+            estimate = omega,
+            ci_low = interval[1],
+            ci_high = interval[2],
+            n = n_used,
+            items = length(items),
+            stringsAsFactors = FALSE
+        ),
+        data.frame(
+            coefficient = "Cronbach's alpha",
+            estimate = alpha,
+            ci_low = NA_real_,
+            ci_high = NA_real_,
+            n = n_used,
+            items = length(items),
+            stringsAsFactors = FALSE
+        )
+    )
+    omega_note <- paste(
+        "We recommend reporting McDonald's omega alongside Cronbach's alpha because omega is less dependent on tau-equivalent item loadings.",
+        "See McDonald (1999) and Revelle and Condon (2019)."
     )
     .new_edu_analysis(
-        analysis = "reliability_omega", label = "Reliability Analysis: McDonald's Omega",
+        analysis = "reliability_omega", label = "Reliability Analysis: McDonald's Omega and Cronbach's Alpha",
         question = "How consistently do the selected items function together as a scale?",
         requirements = "Three or more numeric scale items scored in the same conceptual direction, with reverse-keyed items identified before estimation.",
         main = statistics, descriptives = descriptives, effects = statistics,
         diagnostics = diagnostics, interpretation = plain, caution = caution,
         plot_data = descriptives[, c("item", "item_total_r")],
         report_blocks = list(
-            rationale = "McDonald's omega total estimates internal consistency using common-factor loadings and is the reliability coefficient reported for this analysis.",
+            rationale = "McDonald's omega total estimates internal consistency using common-factor loadings; Cronbach's alpha is included for continuity with common reporting practice.",
             descriptives = sprintf("The estimate used %s items and %s complete responses.", length(items), n_used),
             apa = apa,
             assumptions = assumption_text,
-            plain = plain
+            plain = plain,
+            note = omega_note
         ),
         statistics = statistics, call = match.call()
     )

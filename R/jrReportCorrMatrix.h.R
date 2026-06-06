@@ -56,6 +56,8 @@ jrReportCorrMatrixBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
 #'
 #' 
 #' @section References:
+#' jReport
+#'
 #' jmvcore
 #'
 #' effectsize

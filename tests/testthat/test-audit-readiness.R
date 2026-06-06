@@ -74,10 +74,16 @@ test_that("jamovi YAML files parse and analysis references are declared", {
     parsed <- lapply(yaml_files, yaml::read_yaml)
     names(parsed) <- basename(yaml_files)
 
-    declared_refs <- names(parsed[["00refs.yaml"]])
+    declared_refs <- names(parsed[["00refs.yaml"]][["refs"]])
     analysis_files <- list.files(file.path(root, "jamovi"), pattern = "\\.a\\.yaml$", full.names = TRUE)
     for (file in analysis_files) {
         refs <- parsed[[basename(file)]][["description"]][["references"]]
+        expect_true(length(refs) > 0L, info = basename(file))
+        expect_true(all(refs %in% declared_refs), info = basename(file))
+    }
+    result_files <- list.files(file.path(root, "jamovi"), pattern = "^edu.*\\.r\\.yaml$", full.names = TRUE)
+    for (file in result_files) {
+        refs <- parsed[[basename(file)]][["refs"]]
         expect_true(length(refs) > 0L, info = basename(file))
         expect_true(all(refs %in% declared_refs), info = basename(file))
     }

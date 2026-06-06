@@ -188,11 +188,23 @@ eduRegressionResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
             super$initialize(
                 options=options,
                 name="",
-                title="Guided Linear Regression")
+                title="Guided Linear Regression",
+                refs=list(
+                    "jReport",
+                    "parameters",
+                    "performance",
+                    "effectsize",
+                    "ggplot2"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="overview",
-                title="jReport: Overview and Why This Test?"))
+                title="jReport: Overview and Why This Test?",
+                refs=list(
+                    "jReport",
+                    "parameters",
+                    "performance",
+                    "effectsize",
+                    "ggplot2")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="fit",
@@ -230,7 +242,13 @@ eduRegressionResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     list(
                         `name`="adjusted_r2", 
                         `title`="Adjusted R-squared", 
-                        `type`="number"))))
+                        `type`="number")),
+                refs=list(
+                    "jReport",
+                    "parameters",
+                    "performance",
+                    "effectsize",
+                    "ggplot2")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="coefficients",
@@ -272,7 +290,13 @@ eduRegressionResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                         `name`="p", 
                         `title`="p", 
                         `type`="number", 
-                        `format`="zto,pvalue"))))
+                        `format`="zto,pvalue")),
+                refs=list(
+                    "jReport",
+                    "parameters",
+                    "performance",
+                    "effectsize",
+                    "ggplot2")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="diagnostics",
@@ -310,15 +334,33 @@ eduRegressionResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     list(
                         `name`="action", 
                         `title`="Recommended Action", 
-                        `type`="text"))))
+                        `type`="text")),
+                refs=list(
+                    "jReport",
+                    "parameters",
+                    "performance",
+                    "effectsize",
+                    "ggplot2")))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="report",
-                title="Reporting"))
+                title="Reporting",
+                refs=list(
+                    "jReport",
+                    "parameters",
+                    "performance",
+                    "effectsize",
+                    "ggplot2")))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="interpretation",
-                title="Plain-Language Interpretation"))
+                title="Plain-Language Interpretation",
+                refs=list(
+                    "jReport",
+                    "parameters",
+                    "performance",
+                    "effectsize",
+                    "ggplot2")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",
@@ -330,7 +372,13 @@ eduRegressionResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "ciWidth"),
                 width=520,
                 height=360,
-                renderFun=".plot"))}))
+                renderFun=".plot",
+                refs=list(
+                    "jReport",
+                    "parameters",
+                    "performance",
+                    "effectsize",
+                    "ggplot2")))}))
 
 eduRegressionBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "eduRegressionBase",
@@ -359,6 +407,8 @@ eduRegressionBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' fit, coefficients, diagnostic guidance, and interpretable reporting.
 #' 
 #' @section References:
+#' jReport
+#'
 #' parameters
 #'
 #' performance

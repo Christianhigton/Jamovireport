@@ -4,7 +4,10 @@ jrReportCorrMatrixClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Cl
     inherit = jrReportCorrMatrixBase,
     private = list(
         .init = function() {
-            .jr_addon_insert_card(self)
+            .jr_addon_insert_card(
+                self,
+                refs = c("jReport", "jmvcore", "effectsize")
+            )
         },
         .run = function() {
             variables <- self$parent$options$vars

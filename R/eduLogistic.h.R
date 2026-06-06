@@ -192,11 +192,21 @@ eduLogisticResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
             super$initialize(
                 options=options,
                 name="",
-                title="Guided Binomial Logistic Regression")
+                title="Guided Binomial Logistic Regression",
+                refs=list(
+                    "jReport",
+                    "parameters",
+                    "performance",
+                    "effectsize"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="overview",
-                title="jReport: Overview and Why This Test?"))
+                title="jReport: Overview and Why This Test?",
+                refs=list(
+                    "jReport",
+                    "parameters",
+                    "performance",
+                    "effectsize")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="fit",
@@ -227,7 +237,12 @@ eduLogisticResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                     list(
                         `name`="r2", 
                         `title`="McFadden R-squared", 
-                        `type`="number"))))
+                        `type`="number")),
+                refs=list(
+                    "jReport",
+                    "parameters",
+                    "performance",
+                    "effectsize")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="coefficients",
@@ -270,7 +285,12 @@ eduLogisticResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                     list(
                         `name`="upper", 
                         `title`="OR CI Upper", 
-                        `type`="number"))))
+                        `type`="number")),
+                refs=list(
+                    "jReport",
+                    "parameters",
+                    "performance",
+                    "effectsize")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="diagnostics",
@@ -309,15 +329,30 @@ eduLogisticResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                     list(
                         `name`="action", 
                         `title`="Recommended Action", 
-                        `type`="text"))))
+                        `type`="text")),
+                refs=list(
+                    "jReport",
+                    "parameters",
+                    "performance",
+                    "effectsize")))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="report",
-                title="Reporting"))
+                title="Reporting",
+                refs=list(
+                    "jReport",
+                    "parameters",
+                    "performance",
+                    "effectsize")))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="interpretation",
-                title="Plain-Language Interpretation"))}))
+                title="Plain-Language Interpretation",
+                refs=list(
+                    "jReport",
+                    "parameters",
+                    "performance",
+                    "effectsize")))}))
 
 eduLogisticBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "eduLogisticBase",
@@ -346,6 +381,8 @@ eduLogisticBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' ratios, model-fit explanation, and reporting guidance.
 #' 
 #' @section References:
+#' jReport
+#'
 #' parameters
 #'
 #' performance

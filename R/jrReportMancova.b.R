@@ -4,7 +4,10 @@ jrReportMancovaClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class
     inherit = jrReportMancovaBase,
     private = list(
         .init = function() {
-            .jr_addon_insert_card(self, followups = TRUE)
+            .jr_addon_insert_card(
+                self, followups = TRUE,
+                refs = c("jReport", "jmvcore", "car", "effectsize")
+            )
         },
         .run = function() {
             outcomes <- self$parent$options$deps

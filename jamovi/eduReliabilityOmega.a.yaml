@@ -1,16 +1,20 @@
 ---
 name: eduReliabilityOmega
-title: "Guided Reliability: McDonald's Omega"
+title: "Guided Reliability: Omega and Alpha"
 menuGroup: jReport
 version: '1.0.0'
 jas: '1.2'
 description:
     references:
+        - jReport
         - psych
+        - McDonald1999
+        - RevelleCondon2019
         - ggplot2
     main: >
-        Estimate and report internal consistency using McDonald's omega total,
-        with item diagnostics and clear interpretation guidance.
+        Estimate and report internal consistency using McDonald's omega total
+        and Cronbach's alpha, with item diagnostics and clear interpretation
+        guidance.
 options:
     - { name: data, type: Data }
     - name: items

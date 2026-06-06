@@ -1,63 +1,163 @@
----
 name: eduBetweenAnova
 title: Guided Between-Subjects ANOVA
 jrs: '1.1'
+refs:
+- jReport
+- afex
+- car
+- effectsize
+- emmeans
+- ggplot2
 items:
-    - { name: overview, title: 'jReport: Overview and Why This Test?', type: Html }
-    - name: main
-      title: Main Results and Effect Sizes
-      type: Table
-      clearWith:
-        - outcome
-        - factors
-        - ciWidth
-      columns:
-        - { name: term, title: Effect, type: text }
-        - { name: statistic, title: F, type: number }
-        - { name: df1, title: df1, type: number }
-        - { name: df2, title: df2, type: number }
-        - { name: p, title: p, type: number, format: "zto,pvalue" }
-        - { name: effect, title: Partial Eta-squared, type: number }
-        - { name: ci_low, title: CI Lower, type: number }
-        - { name: ci_high, title: CI Upper, type: number }
-    - name: descriptives
-      title: Cell Descriptives
-      type: Table
-      clearWith:
-        - outcome
-        - factors
-        - ciWidth
-      columns:
-        - { name: label, title: Cell, type: text }
-        - { name: n, title: N, type: integer }
-        - { name: mean, title: Mean, type: number }
-        - { name: sd, title: SD, type: number }
-    - name: diagnostics
-      title: Assumption Checks and Guidance
-      type: Table
-      clearWith:
-        - outcome
-        - factors
-        - ciWidth
-      columns:
-        - { name: check, title: Check, type: text }
-        - { name: tested, title: "Tested?", type: text }
-        - { name: statistic, title: Statistic, type: number }
-        - { name: p, title: p, type: number, format: "zto,pvalue" }
-        - { name: status, title: Status, type: text }
-        - { name: interpretation, title: Interpretation, type: text }
-        - { name: action, title: Recommended Action, type: text }
-    - { name: report, title: Reporting, type: Html }
-    - { name: interpretation, title: Plain-Language Interpretation, type: Html }
-    - name: plot
-      title: Visualisation
-      type: Image
-      visible: (showPlot)
-      clearWith:
-        - outcome
-        - factors
-        - ciWidth
-      width: 520
-      height: 360
-      renderFun: .plot
-...
+- name: overview
+  title: 'jReport: Overview and Why This Test?'
+  type: Html
+  refs:
+  - jReport
+  - afex
+  - car
+  - effectsize
+  - emmeans
+  - ggplot2
+- name: main
+  title: Main Results and Effect Sizes
+  type: Table
+  clearWith:
+  - outcome
+  - factors
+  - ciWidth
+  columns:
+  - name: term
+    title: Effect
+    type: text
+  - name: statistic
+    title: F
+    type: number
+  - name: df1
+    title: df1
+    type: number
+  - name: df2
+    title: df2
+    type: number
+  - name: p
+    title: p
+    type: number
+    format: zto,pvalue
+  - name: effect
+    title: Partial Eta-squared
+    type: number
+  - name: ci_low
+    title: CI Lower
+    type: number
+  - name: ci_high
+    title: CI Upper
+    type: number
+  refs:
+  - jReport
+  - afex
+  - car
+  - effectsize
+  - emmeans
+  - ggplot2
+- name: descriptives
+  title: Cell Descriptives
+  type: Table
+  clearWith:
+  - outcome
+  - factors
+  - ciWidth
+  columns:
+  - name: label
+    title: Cell
+    type: text
+  - name: n
+    title: N
+    type: integer
+  - name: mean
+    title: Mean
+    type: number
+  - name: sd
+    title: SD
+    type: number
+  refs:
+  - jReport
+  - afex
+  - car
+  - effectsize
+  - emmeans
+  - ggplot2
+- name: diagnostics
+  title: Assumption Checks and Guidance
+  type: Table
+  clearWith:
+  - outcome
+  - factors
+  - ciWidth
+  columns:
+  - name: check
+    title: Check
+    type: text
+  - name: tested
+    title: Tested?
+    type: text
+  - name: statistic
+    title: Statistic
+    type: number
+  - name: p
+    title: p
+    type: number
+    format: zto,pvalue
+  - name: status
+    title: Status
+    type: text
+  - name: interpretation
+    title: Interpretation
+    type: text
+  - name: action
+    title: Recommended Action
+    type: text
+  refs:
+  - jReport
+  - afex
+  - car
+  - effectsize
+  - emmeans
+  - ggplot2
+- name: report
+  title: Reporting
+  type: Html
+  refs:
+  - jReport
+  - afex
+  - car
+  - effectsize
+  - emmeans
+  - ggplot2
+- name: interpretation
+  title: Plain-Language Interpretation
+  type: Html
+  refs:
+  - jReport
+  - afex
+  - car
+  - effectsize
+  - emmeans
+  - ggplot2
+- name: plot
+  title: Visualisation
+  type: Image
+  visible: (showPlot)
+  clearWith:
+  - outcome
+  - factors
+  - ciWidth
+  width: 520
+  height: 360
+  renderFun: .plot
+  refs:
+  - jReport
+  - afex
+  - car
+  - effectsize
+  - emmeans
+  - ggplot2

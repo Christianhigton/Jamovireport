@@ -4,7 +4,10 @@ jrReportAnovaClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class(
     inherit = jrReportAnovaBase,
     private = list(
         .init = function() {
-            .jr_addon_insert_card(self, posthoc = TRUE)
+            .jr_addon_insert_card(
+                self, posthoc = TRUE,
+                refs = c("jReport", "jmvcore", "afex", "effectsize", "emmeans")
+            )
         },
         .run = function() {
             outcome <- self$parent$options$dep

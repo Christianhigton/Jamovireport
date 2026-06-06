@@ -4,7 +4,10 @@ jrReportTTestISClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class
     inherit = jrReportTTestISBase,
     private = list(
         .init = function() {
-            .jr_addon_insert_card(self)
+            .jr_addon_insert_card(
+                self,
+                refs = c("jReport", "jmvcore", "effectsize", "BayesFactor")
+            )
         },
         .run = function() {
             group <- self$parent$options$group

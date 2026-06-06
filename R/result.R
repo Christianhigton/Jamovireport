@@ -76,7 +76,7 @@ edu_report <- function(
         effect_text <- .jr_effect_benchmark_text(x)
         if (nzchar(effect_text))
             blocks$apa <- paste(blocks$apa, effect_text, sep = " ")
-        note <- .jr_effect_interpretation_note()
+        note <- .jr_effect_interpretation_note(x$analysis)
     }
 
     if (options$style == "plain") {
@@ -106,12 +106,20 @@ edu_report <- function(
         note <- paste0("*", note, "*")
         selected <- c(selected, note)
     }
+    if (!is.null(blocks$note) && nzchar(blocks$note))
+        selected <- c(selected, paste0("*", blocks$note, "*"))
     if (options$format == "bullets")
         return(paste0("- ", selected, collapse = "\n"))
     paste(selected, collapse = "\n\n")
 }
 
-.jr_effect_interpretation_note <- function() {
+.jr_effect_interpretation_note <- function(analysis = NULL) {
+    if (identical(analysis, "reliability_omega")) {
+        return(paste(
+            "Interpretation note: Reliability coefficient benchmarks are rough descriptive aids, not pass/fail rules.",
+            "Interpret omega and alpha with item content, dimensionality, sample characteristics, and the intended use of the scale."
+        ))
+    }
     paste(
         "Interpretation note: Conventional benchmarks for effect sizes (e.g., Cohen's small, medium, and large guidelines) are intended as rough aids to interpretation rather than strict cut-offs.",
         "Values close to a boundary should not be interpreted differently simply because they fall on one side of a threshold.",
@@ -191,6 +199,15 @@ edu_report <- function(
         return("")
     magnitudes <- vapply(values, function(value) .jr_effect_magnitude(x$analysis, value), character(1))
     values <- vapply(values, .jr_num, character(1), digits = 2L, omit_zero = TRUE)
+    if (identical(x$analysis, "reliability_omega") && "coefficient" %in% names(x$statistics)) {
+        labels <- ifelse(
+            x$statistics$coefficient == "Cronbach's alpha",
+            "Cronbach's alpha",
+            "omega"
+        )
+        summary <- paste(sprintf("%s = %s (%s)", labels, values, magnitudes), collapse = ", ")
+        return(sprintf("Reliability benchmarks: %s.", summary))
+    }
     if (length(values) == 1L)
         return(sprintf("Effect-size benchmark: %s = %s is conventionally interpreted as %s.", name, values, magnitudes))
     summary <- paste(sprintf("%s (%s)", values, magnitudes), collapse = ", ")
@@ -225,8 +242,11 @@ edu_report <- function(
             text <- gsub(", partial eta-squared = -?[0-9.]+(?:, [0-9]+% CI \\[[^]]+\\])?", "", text, perl = TRUE)
         if (analysis == "manova")
             text <- gsub(", Pillai's trace = -?[0-9.]+", "", text, perl = TRUE)
-        if (analysis == "reliability_omega")
+        if (analysis == "reliability_omega") {
             text <- gsub(", omega = -?[0-9.]+(?:, [0-9]+% bootstrap CI \\[[^]]+\\])?", "", text, perl = TRUE)
+            text <- gsub(",? and Cronbach's alpha, alpha = -?[0-9.]+", "", text, perl = TRUE)
+            text <- gsub("; Cronbach's alpha = -?[0-9.]+", "", text, perl = TRUE)
+        }
         if (analysis == "regression") {
             text <- gsub(", R-squared = -?[0-9.]+, adjusted R-squared = -?[0-9.]+", "", text, perl = TRUE)
             text <- gsub(", beta = -?[0-9.]+", "", text, perl = TRUE)

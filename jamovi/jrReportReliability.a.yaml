@@ -1,13 +1,16 @@
 ---
 name: jrReportReliability
-title: Automatic Omega Report for Reliability Analysis
+title: Automatic Reliability Report
 menuGroup: Report Add-ons
 version: '1.0.0'
 jas: '1.2'
 description:
     references:
+        - jReport
         - jmvcore
         - psych
+        - McDonald1999
+        - RevelleCondon2019
 options:
     - { name: data, type: Data }
 ...

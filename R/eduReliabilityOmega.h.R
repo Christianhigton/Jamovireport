@@ -196,11 +196,23 @@ eduReliabilityOmegaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6:
             super$initialize(
                 options=options,
                 name="",
-                title="Guided Reliability: McDonald's Omega")
+                title="Guided Reliability: Omega and Alpha",
+                refs=list(
+                    "jReport",
+                    "psych",
+                    "McDonald1999",
+                    "RevelleCondon2019",
+                    "ggplot2"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="overview",
-                title="jReport: Overview and Why Omega?"))
+                title="jReport: Overview and Why Omega?",
+                refs=list(
+                    "jReport",
+                    "psych",
+                    "McDonald1999",
+                    "RevelleCondon2019",
+                    "ggplot2")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="main",
@@ -236,7 +248,13 @@ eduReliabilityOmegaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6:
                     list(
                         `name`="items", 
                         `title`="Items", 
-                        `type`="integer"))))
+                        `type`="integer")),
+                refs=list(
+                    "jReport",
+                    "psych",
+                    "McDonald1999",
+                    "RevelleCondon2019",
+                    "ggplot2")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="items",
@@ -276,7 +294,13 @@ eduReliabilityOmegaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6:
                     list(
                         `name`="loading", 
                         `title`="Factor Loading", 
-                        `type`="number"))))
+                        `type`="number")),
+                refs=list(
+                    "jReport",
+                    "psych",
+                    "McDonald1999",
+                    "RevelleCondon2019",
+                    "ggplot2")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="diagnostics",
@@ -317,15 +341,33 @@ eduReliabilityOmegaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6:
                     list(
                         `name`="action", 
                         `title`="Recommended Action", 
-                        `type`="text"))))
+                        `type`="text")),
+                refs=list(
+                    "jReport",
+                    "psych",
+                    "McDonald1999",
+                    "RevelleCondon2019",
+                    "ggplot2")))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="report",
-                title="Reporting"))
+                title="Reporting",
+                refs=list(
+                    "jReport",
+                    "psych",
+                    "McDonald1999",
+                    "RevelleCondon2019",
+                    "ggplot2")))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="interpretation",
-                title="Plain-Language Interpretation"))
+                title="Plain-Language Interpretation",
+                refs=list(
+                    "jReport",
+                    "psych",
+                    "McDonald1999",
+                    "RevelleCondon2019",
+                    "ggplot2")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",
@@ -340,7 +382,13 @@ eduReliabilityOmegaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6:
                     "ciWidth"),
                 width=520,
                 height=360,
-                renderFun=".plot"))}))
+                renderFun=".plot",
+                refs=list(
+                    "jReport",
+                    "psych",
+                    "McDonald1999",
+                    "RevelleCondon2019",
+                    "ggplot2")))}))
 
 eduReliabilityOmegaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "eduReliabilityOmegaBase",
@@ -363,13 +411,19 @@ eduReliabilityOmegaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6
                 weightsSupport = 'auto')
         }))
 
-#' Guided Reliability: McDonald's Omega
+#' Guided Reliability: Omega and Alpha
 #'
-#' Estimate and report internal consistency using McDonald's omega total, with 
-#' item diagnostics and clear interpretation guidance.
+#' Estimate and report internal consistency using McDonald's omega total and 
+#' Cronbach's alpha, with item diagnostics and clear interpretation guidance.
 #' 
 #' @section References:
+#' jReport
+#'
 #' psych
+#'
+#' McDonald1999
+#'
+#' RevelleCondon2019
 #'
 #' ggplot2
 #'

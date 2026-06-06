@@ -202,18 +202,26 @@ eduCorrelationResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
             super$initialize(
                 options=options,
                 name="",
-                title="Guided Correlation")
+                title="Guided Correlation",
+                refs=list(
+                    "jReport",
+                    "effectsize",
+                    "ggplot2"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="overview",
-                title="jReport: Overview and Why This Test?"))
+                title="jReport: Overview and Why This Test?",
+                refs=list(
+                    "jReport",
+                    "effectsize",
+                    "ggplot2")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="main",
                 title="Main Result",
                 clearWith=list(
                     "x",
-                    "y",
+                    "yes",
                     "method",
                     "ciWidth"),
                 columns=list(
@@ -241,14 +249,18 @@ eduCorrelationResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
                     list(
                         `name`="ci_high", 
                         `title`="CI Upper", 
-                        `type`="number"))))
+                        `type`="number")),
+                refs=list(
+                    "jReport",
+                    "effectsize",
+                    "ggplot2")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="descriptives",
                 title="Descriptive Statistics",
                 clearWith=list(
                     "x",
-                    "y",
+                    "yes",
                     "method",
                     "ciWidth"),
                 columns=list(
@@ -267,14 +279,18 @@ eduCorrelationResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
                     list(
                         `name`="sd", 
                         `title`="SD", 
-                        `type`="number"))))
+                        `type`="number")),
+                refs=list(
+                    "jReport",
+                    "effectsize",
+                    "ggplot2")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="diagnostics",
                 title="Assumption Checks and Guidance",
                 clearWith=list(
                     "x",
-                    "y",
+                    "yes",
                     "method",
                     "ciWidth"),
                 columns=list(
@@ -306,15 +322,27 @@ eduCorrelationResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
                     list(
                         `name`="action", 
                         `title`="Recommended Action", 
-                        `type`="text"))))
+                        `type`="text")),
+                refs=list(
+                    "jReport",
+                    "effectsize",
+                    "ggplot2")))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="report",
-                title="Reporting"))
+                title="Reporting",
+                refs=list(
+                    "jReport",
+                    "effectsize",
+                    "ggplot2")))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="interpretation",
-                title="Plain-Language Interpretation"))
+                title="Plain-Language Interpretation",
+                refs=list(
+                    "jReport",
+                    "effectsize",
+                    "ggplot2")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",
@@ -322,12 +350,16 @@ eduCorrelationResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
                 visible="(showPlot)",
                 clearWith=list(
                     "x",
-                    "y",
+                    "yes",
                     "method",
                     "ciWidth"),
                 width=520,
                 height=360,
-                renderFun=".plot"))}))
+                renderFun=".plot",
+                refs=list(
+                    "jReport",
+                    "effectsize",
+                    "ggplot2")))}))
 
 eduCorrelationBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "eduCorrelationBase",
@@ -356,6 +388,8 @@ eduCorrelationBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
 #' association between two numeric variables.
 #' 
 #' @section References:
+#' jReport
+#'
 #' effectsize
 #'
 #' ggplot2

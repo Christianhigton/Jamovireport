@@ -1,80 +1,156 @@
----
 name: eduTTest
 title: Guided T-Test
 jrs: '1.1'
+refs:
+- jReport
+- effectsize
+- ggplot2
+- BayesFactor
 items:
-    - name: overview
-      title: 'jReport: Overview and Why This Test?'
-      type: Html
-    - name: main
-      title: Main Results and Effect Size
-      type: Table
-      clearWith:
-        - outcome
-        - testType
-        - group
-        - pairedOutcome
-        - varEqual
-        - ciWidth
-      columns:
-        - { name: test, title: Test, type: text }
-        - { name: statistic, title: Statistic, type: number }
-        - { name: df, title: df, type: number }
-        - { name: p, title: p, type: number, format: "zto,pvalue" }
-        - { name: effect, title: Cohen's d, type: number }
-        - { name: ci_low, title: CI Lower, type: number }
-        - { name: ci_high, title: CI Upper, type: number }
-    - name: descriptives
-      title: Descriptive Statistics
-      type: Table
-      clearWith:
-        - outcome
-        - testType
-        - group
-        - pairedOutcome
-        - varEqual
-        - ciWidth
-      columns:
-        - { name: label, title: Group / Occasion, type: text }
-        - { name: n, title: N, type: integer }
-        - { name: mean, title: Mean, type: number }
-        - { name: sd, title: SD, type: number }
-    - name: diagnostics
-      title: Assumption Checks and Guidance
-      type: Table
-      clearWith:
-        - outcome
-        - testType
-        - group
-        - pairedOutcome
-        - varEqual
-        - ciWidth
-      columns:
-        - { name: check, title: Check, type: text }
-        - { name: tested, title: "Tested?", type: text }
-        - { name: statistic, title: Statistic, type: number }
-        - { name: p, title: p, type: number, format: "zto,pvalue" }
-        - { name: status, title: Status, type: text }
-        - { name: interpretation, title: Interpretation, type: text }
-        - { name: action, title: Recommended Action, type: text }
-    - name: report
-      title: Reporting
-      type: Html
-    - name: interpretation
-      title: Plain-Language Interpretation
-      type: Html
-    - name: plot
-      title: Visualisation
-      type: Image
-      visible: (showPlot)
-      clearWith:
-        - outcome
-        - testType
-        - group
-        - pairedOutcome
-        - varEqual
-        - ciWidth
-      width: 520
-      height: 360
-      renderFun: .plot
-...
+- name: overview
+  title: 'jReport: Overview and Why This Test?'
+  type: Html
+  refs:
+  - jReport
+  - effectsize
+  - ggplot2
+  - BayesFactor
+- name: main
+  title: Main Results and Effect Size
+  type: Table
+  clearWith:
+  - outcome
+  - testType
+  - group
+  - pairedOutcome
+  - varEqual
+  - ciWidth
+  columns:
+  - name: test
+    title: Test
+    type: text
+  - name: statistic
+    title: Statistic
+    type: number
+  - name: df
+    title: df
+    type: number
+  - name: p
+    title: p
+    type: number
+    format: zto,pvalue
+  - name: effect
+    title: Cohen's d
+    type: number
+  - name: ci_low
+    title: CI Lower
+    type: number
+  - name: ci_high
+    title: CI Upper
+    type: number
+  refs:
+  - jReport
+  - effectsize
+  - ggplot2
+  - BayesFactor
+- name: descriptives
+  title: Descriptive Statistics
+  type: Table
+  clearWith:
+  - outcome
+  - testType
+  - group
+  - pairedOutcome
+  - varEqual
+  - ciWidth
+  columns:
+  - name: label
+    title: Group / Occasion
+    type: text
+  - name: n
+    title: N
+    type: integer
+  - name: mean
+    title: Mean
+    type: number
+  - name: sd
+    title: SD
+    type: number
+  refs:
+  - jReport
+  - effectsize
+  - ggplot2
+  - BayesFactor
+- name: diagnostics
+  title: Assumption Checks and Guidance
+  type: Table
+  clearWith:
+  - outcome
+  - testType
+  - group
+  - pairedOutcome
+  - varEqual
+  - ciWidth
+  columns:
+  - name: check
+    title: Check
+    type: text
+  - name: tested
+    title: Tested?
+    type: text
+  - name: statistic
+    title: Statistic
+    type: number
+  - name: p
+    title: p
+    type: number
+    format: zto,pvalue
+  - name: status
+    title: Status
+    type: text
+  - name: interpretation
+    title: Interpretation
+    type: text
+  - name: action
+    title: Recommended Action
+    type: text
+  refs:
+  - jReport
+  - effectsize
+  - ggplot2
+  - BayesFactor
+- name: report
+  title: Reporting
+  type: Html
+  refs:
+  - jReport
+  - effectsize
+  - ggplot2
+  - BayesFactor
+- name: interpretation
+  title: Plain-Language Interpretation
+  type: Html
+  refs:
+  - jReport
+  - effectsize
+  - ggplot2
+  - BayesFactor
+- name: plot
+  title: Visualisation
+  type: Image
+  visible: (showPlot)
+  clearWith:
+  - outcome
+  - testType
+  - group
+  - pairedOutcome
+  - varEqual
+  - ciWidth
+  width: 520
+  height: 360
+  renderFun: .plot
+  refs:
+  - jReport
+  - effectsize
+  - ggplot2
+  - BayesFactor

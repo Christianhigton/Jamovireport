@@ -1,89 +1,114 @@
 ---
-RCore:
-  type: Manual
-  title: "R: A Language and Environment for Statistical Computing"
-  author: "R Core Team"
-  year: 2026
-  publisher: "R Foundation for Statistical Computing"
-  url: "https://www.R-project.org/"
+refs:
+    RCore:
+      type: software
+      title: "R: A Language and Environment for Statistical Computing"
+      author: "R Core Team"
+      year: 2026
+      publisher: "R Foundation for Statistical Computing"
+      url: "https://www.R-project.org/"
 
-jmvcore:
-  type: Manual
-  title: "jmvcore: Dependencies for the jamovi Framework"
-  author: "The jamovi Project"
-  year: 2026
-  publisher: "The jamovi Project"
-  url: "https://www.jamovi.org/"
+    jmvcore:
+      type: software
+      title: "jmvcore: Dependencies for the jamovi Framework"
+      author: "The jamovi Project"
+      year: 2026
+      publisher: "The jamovi Project"
+      url: "https://www.jamovi.org/"
 
-afex:
-  type: Article
-  title: "afex: Analysis of Factorial Experiments"
-  author: "Henrik Singmann, Ben Bolker, Jake Westfall, Frederik Aust, Mattan S. Ben-Shachar"
-  year: 2024
-  publisher: "CRAN"
-  url: "https://CRAN.R-project.org/package=afex"
+    jReport:
+      type: software
+      title: "jReport: Automated Statistical Reporting for R and jamovi"
+      author: "Christian Higton"
+      year: 2026
+      publisher: "[jamovi module]. R package version 1.0.0"
+      url: "https://github.com/Christianhigton/Jamovireport"
+      versioning: "jReport: Automated Statistical Reporting for R and jamovi"
 
-car:
-  type: Book
-  title: "An R Companion to Applied Regression"
-  author: "John Fox and Sanford Weisberg"
-  year: 2019
-  publisher: "Sage"
-  url: "https://socialsciences.mcmaster.ca/jfox/Books/Companion/"
+    afex:
+      type: software
+      title: "afex: Analysis of Factorial Experiments"
+      author: "Henrik Singmann, Ben Bolker, Jake Westfall, Frederik Aust, Mattan S. Ben-Shachar"
+      year: 2024
+      publisher: "CRAN"
+      url: "https://CRAN.R-project.org/package=afex"
 
-effectsize:
-  type: Article
-  title: "Effectsize: Estimation of Effect Size Indices and Standardized Parameters"
-  author: "Mattan S. Ben-Shachar, Daniel Lüdecke, Dominique Makowski"
-  year: 2020
-  publisher: "Journal of Open Source Software"
-  url: "https://doi.org/10.21105/joss.02815"
+    car:
+      type: software
+      title: "An R Companion to Applied Regression"
+      author: "John Fox and Sanford Weisberg"
+      year: 2019
+      publisher: "Sage"
+      url: "https://socialsciences.mcmaster.ca/jfox/Books/Companion/"
 
-parameters:
-  type: Article
-  title: "Extracting, Computing and Exploring the Parameters of Statistical Models using R"
-  author: "Daniel Lüdecke, Mattan S. Ben-Shachar, Indrajeet Patil, Philip Waggoner, Dominique Makowski"
-  year: 2020
-  publisher: "Journal of Open Source Software"
-  url: "https://doi.org/10.21105/joss.02445"
+    effectsize:
+      type: software
+      title: "Effectsize: Estimation of Effect Size Indices and Standardized Parameters"
+      author: "Mattan S. Ben-Shachar, Daniel Lüdecke, Dominique Makowski"
+      year: 2020
+      publisher: "Journal of Open Source Software"
+      url: "https://doi.org/10.21105/joss.02815"
 
-performance:
-  type: Article
-  title: "performance: An R Package for Assessment, Comparison and Testing of Statistical Models"
-  author: "Daniel Lüdecke, Mattan S. Ben-Shachar, Indrajeet Patil, Philip Waggoner, Dominique Makowski"
-  year: 2021
-  publisher: "Journal of Open Source Software"
-  url: "https://doi.org/10.21105/joss.03139"
+    parameters:
+      type: software
+      title: "Extracting, Computing and Exploring the Parameters of Statistical Models using R"
+      author: "Daniel Lüdecke, Mattan S. Ben-Shachar, Indrajeet Patil, Philip Waggoner, Dominique Makowski"
+      year: 2020
+      publisher: "Journal of Open Source Software"
+      url: "https://doi.org/10.21105/joss.02445"
 
-psych:
-  type: Article
-  title: "The psych Package for Personality, Psychometric, and Psychological Research"
-  author: "William Revelle"
-  year: 2024
-  publisher: "Northwestern University"
-  url: "https://CRAN.R-project.org/package=psych"
+    performance:
+      type: software
+      title: "performance: An R Package for Assessment, Comparison and Testing of Statistical Models"
+      author: "Daniel Lüdecke, Mattan S. Ben-Shachar, Indrajeet Patil, Philip Waggoner, Dominique Makowski"
+      year: 2021
+      publisher: "Journal of Open Source Software"
+      url: "https://doi.org/10.21105/joss.03139"
 
-ggplot2:
-  type: Book
-  title: "ggplot2: Elegant Graphics for Data Analysis"
-  author: "Hadley Wickham"
-  year: 2016
-  publisher: "Springer-Verlag New York"
-  url: "https://ggplot2.tidyverse.org/"
+    psych:
+      type: software
+      title: "The psych Package for Personality, Psychometric, and Psychological Research"
+      author: "William Revelle"
+      year: 2024
+      publisher: "Northwestern University"
+      url: "https://CRAN.R-project.org/package=psych"
 
-BayesFactor:
-  type: Article
-  title: "BayesFactor: Computation of Bayes Factors for Common Designs"
-  author: "Richard D. Morey and Jeffrey N. Rouder"
-  year: 2024
-  publisher: "CRAN"
-  url: "https://CRAN.R-project.org/package=BayesFactor"
+    McDonald1999:
+      type: book
+      title: "Test Theory: A Unified Treatment"
+      author: "Roderick P. McDonald"
+      year: 1999
+      publisher: "Lawrence Erlbaum Associates"
 
-emmeans:
-  type: Article
-  title: "emmeans: Estimated Marginal Means, aka Least-Squares Means"
-  author: "Russell V. Lenth"
-  year: 2024
-  publisher: "CRAN"
-  url: "https://CRAN.R-project.org/package=emmeans"
+    RevelleCondon2019:
+      type: article
+      title: "Reliability from alpha to omega: A tutorial"
+      author: "William Revelle and David M. Condon"
+      year: 2019
+      publisher: "Psychological Assessment"
+      url: "https://doi.org/10.1037/pas0000754"
+
+    ggplot2:
+      type: software
+      title: "ggplot2: Elegant Graphics for Data Analysis"
+      author: "Hadley Wickham"
+      year: 2016
+      publisher: "Springer-Verlag New York"
+      url: "https://ggplot2.tidyverse.org/"
+
+    BayesFactor:
+      type: software
+      title: "BayesFactor: Computation of Bayes Factors for Common Designs"
+      author: "Richard D. Morey and Jeffrey N. Rouder"
+      year: 2024
+      publisher: "CRAN"
+      url: "https://CRAN.R-project.org/package=BayesFactor"
+
+    emmeans:
+      type: software
+      title: "emmeans: Estimated Marginal Means, aka Least-Squares Means"
+      author: "Russell V. Lenth"
+      year: 2024
+      publisher: "CRAN"
+      url: "https://CRAN.R-project.org/package=emmeans"
 ...

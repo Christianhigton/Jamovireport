@@ -6,7 +6,7 @@ jrReportLogRegBinClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Cla
         .init = function() {
             .jr_addon_insert_card(
                 self, coefficients = TRUE,
-                refs = c("jReport", "jmvcore", "parameters", "performance", "effectsize")
+                refs = c("RCore", "jReport", "jmvcore", "parameters", "performance", "effectsize")
             )
         },
         .run = function() {

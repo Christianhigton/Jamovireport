@@ -45,7 +45,7 @@ edu_logistic_regression <- function(data, formula, ci = 0.95) {
     diagnostics <- .jr_logistic_diagnostics(model, d, outcome)
     significance <- if (p_value < .05) "statistically significant" else "not statistically significant"
     apa <- sprintf(
-        "A binomial logistic regression predicting %s (relative to %s) from %s was %s, chi-square(%s) = %s, p %s, McFadden's R-squared = %s.",
+        "A binomial logistic regression predicting %s (relative to %s) from %s was %s, χ²(%s) = %s, p %s, McFadden's R² = %s.",
         event, reference, paste(terms, collapse = ", "), significance,
         .jr_num(df, 0L), .jr_num(likelihood_ratio), .jr_p(p_value),
         .jr_num(mcfadden, 2L, TRUE)

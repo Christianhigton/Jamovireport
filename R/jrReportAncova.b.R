@@ -6,7 +6,7 @@ jrReportAncovaClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class(
         .init = function() {
             .jr_addon_insert_card(
                 self, posthoc = TRUE,
-                refs = c("jReport", "jmvcore", "car", "effectsize", "emmeans")
+                refs = c("RCore", "jReport", "jmvcore", "car", "effectsize", "emmeans")
             )
         },
         .run = function() {

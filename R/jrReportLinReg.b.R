@@ -6,7 +6,7 @@ jrReportLinRegClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class(
         .init = function() {
             .jr_addon_insert_card(
                 self,
-                refs = c("jReport", "jmvcore", "parameters", "performance", "effectsize")
+                refs = c("RCore", "jReport", "jmvcore", "parameters", "performance", "effectsize")
             )
         },
         .run = function() {

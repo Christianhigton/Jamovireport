@@ -22,9 +22,9 @@
     order <- order(grepl(":", statistics$term), decreasing = TRUE)
     paste(vapply(order, function(i) {
         sprintf(
-            "%s %s, F(%s, %s) = %s, p %s, partial eta-squared = %s, %s%% CI %s.",
+            "%s %s, F(%s, %s) = %s, p %s, ηp² = %s, %s%% CI %s.",
             statistics$term[i],
-            if (statistics$p[i] < .05) "was significant" else "was not significant",
+            if (statistics$p[i] < .05) "was statistically significant" else "was not statistically significant",
             .jr_num(statistics$df1[i], 2L), .jr_num(statistics$df2[i], 2L),
             .jr_num(statistics$statistic[i]), .jr_p(statistics$p[i]),
             .jr_num(statistics$effect[i], 2L, TRUE), .jr_num(ci * 100, 0L),

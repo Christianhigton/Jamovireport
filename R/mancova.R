@@ -153,7 +153,7 @@ edu_manova <- function(data, outcomes, factors = character(), covariates = chara
         sprintf(
             "%s %s, Pillai's trace = %s, F(%s, %s) = %s, p %s.",
             statistics$term[i],
-            if (statistics$p[i] < .05) "was significant" else "was not significant",
+            if (statistics$p[i] < .05) "was statistically significant" else "was not statistically significant",
             .jr_num(statistics$effect[i], 2L, TRUE),
             .jr_num(statistics$df1[i], 2L), .jr_num(statistics$df2[i], 2L),
             .jr_num(statistics$statistic[i]), .jr_p(statistics$p[i])

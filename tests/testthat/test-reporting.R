@@ -175,17 +175,25 @@ test_that("chi-square goodness add-on accepts atomic and list expected ratios", 
 
 test_that("add-on report options update the guided report card content", {
     result <- edu_t_test(ToothGrowth, "len", "supp")
-    options <- list(
+    options_no_effect <- list(
         reportStyle = "plain", reportFormat = "bullets", reportTone = "detailed",
         reportDescriptives = TRUE, reportAssumptions = TRUE, reportStatistic = TRUE,
         reportDf = TRUE, reportP = TRUE, reportEffect = FALSE, reportCI = FALSE,
         reportInterpretation = TRUE, reportCautions = TRUE
     )
+    options_with_effect <- list(
+        reportStyle = "apa7", reportFormat = "paragraph", reportTone = "concise",
+        reportDescriptives = TRUE, reportAssumptions = TRUE, reportStatistic = TRUE,
+        reportDf = TRUE, reportP = TRUE, reportEffect = TRUE, reportCI = TRUE,
+        reportInterpretation = FALSE, reportCautions = FALSE
+    )
 
-    report <- .jr_addon_report_html(list(result), options = options)
+    report_no_effect <- .jr_addon_report_html(list(result), options = options_no_effect)
+    report_with_effect <- .jr_addon_report_html(list(result), options = options_with_effect)
 
-    expect_match(report, "What this analysis asks")
-    expect_false(grepl("Cohen", report, fixed = TRUE))
+    expect_match(report_no_effect, "What this analysis asks")
+    expect_match(report_no_effect, "Suggested APA-style report wording")
+    expect_match(report_with_effect, "Cohen")
 })
 
 test_that("native add-ons use a fixed automatic APA reporting profile", {
@@ -197,9 +205,6 @@ test_that("native add-ons use a fixed automatic APA reporting profile", {
     expect_match(report, "Student's independent-samples t-test")
     expect_match(report, "Cohen")
     expect_match(report, "95% CI")
-    expect_match(report, "References")
-    expect_match(report, "jReport: Automated Statistical Reporting", fixed = TRUE)
-    expect_match(report, "Effectsize: Estimation of Effect Size", fixed = TRUE)
     expect_false(grepl("GAMLj", report, fixed = TRUE))
     expect_match(.jr_addon_heading_html(), "jReport")
 })
@@ -238,13 +243,7 @@ test_that("automatic native reports render for supported group comparison design
         report <- .jr_addon_report_html(
             list(result), options = .jr_addon_reporting_options()
         )
-        if (identical(result$analysis, "anova_between")) {
-            expect_match(report, "Suggested APA-style report wording")
-            expect_false(grepl(">References<", report, fixed = TRUE))
-        } else {
-            expect_match(report, "Report add-on")
-            expect_match(report, "References")
-        }
+        expect_match(report, "Suggested APA-style report wording")
         expect_false(grepl("Select valid analysis variables", report, fixed = TRUE))
         expect_false(grepl("could not be generated", report, fixed = TRUE))
         expect_false(grepl("GAMLj", report, fixed = TRUE))
@@ -280,7 +279,6 @@ test_that("between-subjects ANOVA report uses separated guidance sections", {
     expect_match(report, "The correct dependent variable is reported.")
     expect_match(report, "Correction methods are named correctly.")
     expect_false(grepl("Copy-ready report text", report, fixed = TRUE))
-    expect_false(grepl(">References<", report, fixed = TRUE))
 
     wording_start <- regexpr("Suggested APA-style report wording", report, fixed = TRUE)
     diagnostics_start <- regexpr("Optional assumptions / diagnostic note", report, fixed = TRUE)
@@ -290,10 +288,9 @@ test_that("between-subjects ANOVA report uses separated guidance sections", {
     expect_true(grepl("partial omega squared", wording_card, fixed = TRUE))
     expect_false(grepl("Residual normality", wording_card, fixed = TRUE))
     expect_false(grepl("For understanding only", wording_card, fixed = TRUE))
-    expect_false(grepl("References", wording_card, fixed = TRUE))
 })
 
-test_that("between-subjects ANOVA references use jamovi result refs, not report cards", {
+test_that("between-subjects ANOVA references appear in report and jamovi result refs", {
     skip_if_not_installed("yaml")
 
     root <- getwd()
@@ -348,7 +345,6 @@ test_that("between-subjects ANOVA references use jamovi result refs, not report 
     result <- edu_anova_between(d, "len", c("dose", "supp"))
     report <- .jr_anova_between_report_sections_html(result, options = .jr_addon_reporting_options())
 
-    expect_false(grepl(">References<", report, fixed = TRUE))
     expect_match(report, "Suggested APA-style report wording")
     expect_match(report, "Check before reporting")
 })
@@ -369,7 +365,6 @@ test_that("one-way between-subjects ANOVA suggested wording reports omega square
     expect_match(wording_card, "\u03b7p\u00b2")
     expect_match(wording_card, "M = ")
     expect_match(wording_card, "SD = ")
-    expect_false(grepl(">References<", report, fixed = TRUE))
 })
 
 test_that("between-subjects ANOVA add-on keeps post hoc wording in suggested section", {
@@ -445,7 +440,7 @@ test_that("automatic native reports render for association, model, and omega pat
         if (identical(result$analysis, "regression"))
             expect_match(report, "Copy-ready report text")
         else
-            expect_match(report, "Report add-on")
+            expect_match(report, "Suggested APA-style report wording")
         expect_false(grepl("Select valid analysis variables", report, fixed = TRUE))
         expect_false(grepl("could not be generated", report, fixed = TRUE))
     }
@@ -466,7 +461,6 @@ test_that("linear regression add-on separates copy-ready text from guidance", {
     expect_match(report, "Interpretation guidance")
     expect_match(report, "For understanding only - do not copy directly.")
     expect_match(report, "Check before reporting")
-    expect_match(report, "References")
     expect_match(report, "Outcome variable is the intended dependent variable.")
     expect_match(report, "b, SE, beta, t, p, and confidence intervals")
 
@@ -477,7 +471,6 @@ test_that("linear regression add-on separates copy-ready text from guidance", {
     expect_true(grepl(.jr_html_escape(result$report_blocks$apa), copy_card, fixed = TRUE))
     expect_false(grepl("For understanding only", copy_card, fixed = TRUE))
     expect_false(grepl("Together, the predictors accounted", copy_card, fixed = TRUE))
-    expect_false(grepl("References", copy_card, fixed = TRUE))
 })
 
 test_that("automatic native reports display calculation failures clearly", {

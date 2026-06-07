@@ -6,7 +6,7 @@ jrReportReliabilityClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6C
         .init = function() {
             .jr_addon_insert_card(
                 self,
-                refs = c("jReport", "jmvcore", "psych", "McDonald1999", "RevelleCondon2019")
+                refs = c("RCore", "jReport", "jmvcore", "psych", "McDonald1999", "RevelleCondon2019")
             )
         },
         .run = function() {

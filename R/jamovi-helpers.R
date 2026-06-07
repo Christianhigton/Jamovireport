@@ -251,13 +251,6 @@
             content_html = checklist_html
         ))
     }
-    if (!is.null(references_text) && length(references_text) > 0L) {
-        cards <- paste0(cards, .jr_report_card(
-            "References", "Sources used by this report",
-            "", accent = "#6c757d", background = "#fbfcfd",
-            content_html = .jr_html_numbered(references_text)
-        ))
-    }
     cards
 }
 
@@ -327,13 +320,6 @@
             content_html = checklist_html
         ))
     }
-    if (!is.null(references) && length(references) > 0L) {
-        sections <- c(sections, .jr_report_section_card(
-            "References",
-            "", accent = "#6c757d", background = "#fbfcfd",
-            content_html = .jr_html_numbered(references)
-        ))
-    }
     paste(sections, collapse = "")
 }
 
@@ -362,24 +348,25 @@
 }
 
 .jr_text_reference_keys <- function(result, include_effect_note = TRUE) {
-    keys <- switch(
+    analysis_keys <- switch(
         result$analysis,
-        ttest = c("jReport", "effectsize", "ggplot2", "BayesFactor"),
-        bayes_ttest = c("jReport", "BayesFactor"),
-        anova_oneway = c("jReport", "effectsize", "emmeans"),
-        anova_between = c("jReport", "afex", "effectsize", "emmeans"),
-        anova_rm = c("jReport", "afex", "effectsize"),
-        anova_mixed = c("jReport", "afex", "effectsize"),
-        ancova = c("jReport", "car", "effectsize", "emmeans"),
-        manova = c("jReport", "car", "effectsize"),
-        correlation = c("jReport", "effectsize", "ggplot2"),
-        regression = c("jReport", "parameters", "performance", "effectsize", "ggplot2"),
-        logistic_regression = c("jReport", "parameters", "performance", "effectsize", "ggplot2"),
-        chisq_independence = c("jReport", "effectsize", "ggplot2"),
-        chisq_gof = c("jReport", "effectsize", "ggplot2"),
-        reliability_omega = c("jReport", "psych", "McDonald1999", "RevelleCondon2019", "ggplot2"),
-        "jReport"
+        ttest = c("effectsize", "ggplot2", "BayesFactor"),
+        bayes_ttest = c("BayesFactor"),
+        anova_oneway = c("afex", "effectsize", "emmeans"),
+        anova_between = c("afex", "effectsize", "emmeans"),
+        anova_rm = c("afex", "effectsize"),
+        anova_mixed = c("afex", "effectsize"),
+        ancova = c("car", "effectsize", "emmeans"),
+        manova = c("car", "effectsize"),
+        correlation = c("effectsize", "ggplot2"),
+        regression = c("parameters", "performance", "effectsize", "ggplot2"),
+        logistic_regression = c("parameters", "performance", "effectsize", "ggplot2"),
+        chisq_independence = c("effectsize", "ggplot2"),
+        chisq_gof = c("effectsize", "ggplot2"),
+        reliability_omega = c("psych", "McDonald1999", "RevelleCondon2019", "ggplot2"),
+        character(0)
     )
+    keys <- c("jmvcore", "RCore", "jReport", analysis_keys)
     if (isTRUE(include_effect_note) && !identical(result$analysis, "reliability_omega"))
         keys <- c(keys, "Cohen1988", "Cumming2014")
     unique(keys)
@@ -688,7 +675,7 @@
         interpretation_guidance = .jr_anova_between_guidance_text(result, include, posthoc_text),
         checklist_items = .jr_anova_between_checklist_items(),
         checklist_note = note,
-        references = NULL
+        references = .jr_reference_entries(list(result), include_effect_note = "effect_size" %in% include)
     )
 }
 
@@ -784,32 +771,157 @@
             posthoc_text = .jr_addon_posthoc_text(results)
         ))
     }
-    cards <- vapply(results, function(result) {
-        if (is.null(options)) {
-            text <- edu_report(result, style = "apa7", format = "paragraph")
-        } else {
-            text <- .jr_jamovi_text(result, options)
-        }
-        .jr_html_card("Report add-on", result$label, text, accent = "#4b66a2")
-    }, character(1))
     include_note <- is.null(options) ||
         isTRUE(tryCatch(options$reportCautions, error = function(e) FALSE))
-    if (nzchar(note) && include_note) {
-        cards <- c(
-            cards,
-            .jr_html_card("Check before reporting", "Model alignment", note, accent = "#b46c21")
-        )
-    }
     posthoc_text <- .jr_addon_posthoc_text(results)
-    if (nzchar(posthoc_text)) {
-        cards <- c(
-            cards,
-            .jr_html_card("Follow-up comparisons", "Post hoc interpretation", posthoc_text, accent = "#4b66a2")
+    sections <- vapply(results, function(result) {
+        apa_text <- if (is.null(options)) {
+            result$report_blocks$apa %||% edu_report(result, style = "apa7", format = "paragraph")
+        } else {
+            .jr_jamovi_text(result, options)
+        }
+        diagnostic_text <- result$report_blocks$assumptions %||% ""
+        if (nzchar(result$caution %||% ""))
+            diagnostic_text <- paste(diagnostic_text, result$caution, sep = if (nzchar(diagnostic_text)) "\n\n" else "")
+        guidance_text <- paste(
+            c(
+                result$report_blocks$rationale %||% "",
+                result$interpretation %||% ""
+            ),
+            collapse = "\n\n"
         )
+        checklist <- .jr_analysis_checklist(result$analysis)
+        .jr_build_report_sections_html(
+            apa_wording = apa_text,
+            diagnostic_note = diagnostic_text,
+            interpretation_guidance = guidance_text,
+            checklist_items = checklist,
+            checklist_note = if (nzchar(note) && include_note) note else ""
+        )
+    }, character(1))
+    if (nzchar(posthoc_text)) {
+        sections <- c(sections, .jr_report_section_card(
+            "Post hoc interpretation",
+            "Follow-up comparisons",
+            posthoc_text, accent = "#4b66a2", background = "#f5f9fd"
+        ))
     }
-    paste0(
-        paste(cards, collapse = ""),
-        .jr_references_html(results, include_effect_note = include_effect_note)
+    paste(sections, collapse = "")
+}
+
+.jr_analysis_checklist <- function(analysis_type) {
+    switch(
+        analysis_type,
+        ttest = c(
+            "Group variable has exactly two levels.",
+            "Outcome variable is numeric and continuous.",
+            "t statistic, degrees of freedom, and p value match jamovi output.",
+            "Mean difference and confidence interval match jamovi output.",
+            "Cohen's d effect size matches jamovi output.",
+            "Assumption checks (normality, variance equality) have been reviewed.",
+            "Interpretation matches the research question."
+        ),
+        correlation = c(
+            "Both variables are the intended variables.",
+            "Correlation method (Pearson/Spearman/Kendall) matches the analysis.",
+            "Correlation coefficient and p value match jamovi output.",
+            "Sample size n matches the number of complete pairs.",
+            "Scatterplot has been inspected for outliers and non-linearity.",
+            "Interpretation matches the research question."
+        ),
+        chisq_independence = c(
+            "Row and column variables are the intended categorical variables.",
+            "Chi-square statistic, df, N, and p value match jamovi output.",
+            "Cramer's V matches jamovi output.",
+            "Expected cell frequencies have been checked (all >= 5).",
+            "Interpretation matches the research question."
+        ),
+        chisq_gof = c(
+            "Variable and expected proportions are correctly specified.",
+            "Chi-square statistic, df, N, and p value match jamovi output.",
+            "Cohen's w effect size matches jamovi output.",
+            "Expected cell frequencies have been checked (all >= 5).",
+            "Interpretation matches the research question."
+        ),
+        anova_oneway = c(
+            "Outcome variable is numeric and grouping variable has the correct levels.",
+            "F statistic, df, and p value match jamovi output.",
+            "Effect size (η²) matches jamovi output.",
+            "Post hoc comparisons (if run) match jamovi output.",
+            "Assumption checks (normality, homogeneity of variance) have been reviewed.",
+            "Interpretation matches the research question."
+        ),
+        ancova = c(
+            "Outcome, grouping factor, and covariate(s) are correctly specified.",
+            "F statistics, df, and p values match jamovi output.",
+            "Effect sizes (ηp²) match jamovi output.",
+            "Covariate(s) are measured before the intervention or are not affected by group.",
+            "Assumption checks have been reviewed.",
+            "Interpretation matches the research question."
+        ),
+        anova_rm = c(
+            "Within-subjects factor levels and outcome columns are correctly mapped.",
+            "F statistic, df (with Greenhouse-Geisser correction if applied), and p value match jamovi output.",
+            "Effect size (ηp²) matches jamovi output.",
+            "Sphericity assumption and correction have been noted if applicable.",
+            "Post hoc comparisons (if run) match jamovi output.",
+            "Interpretation matches the research question."
+        ),
+        anova_mixed = c(
+            "Between-subjects and within-subjects factors are correctly specified.",
+            "F statistics, df, and p values for all effects match jamovi output.",
+            "Effect sizes (ηp²) match jamovi output.",
+            "Sphericity and homogeneity of variance assumptions have been reviewed.",
+            "Interpretation of interaction (if significant) takes precedence.",
+            "Interpretation matches the research question."
+        ),
+        manova = c(
+            "All dependent variables and the grouping factor are correctly specified.",
+            "Multivariate test statistic (Pillai's trace/Wilks' lambda) and p value match jamovi output.",
+            "Univariate follow-up results match jamovi output.",
+            "Assumption checks (multivariate normality, homogeneity of covariance) have been reviewed.",
+            "Interpretation matches the research question."
+        ),
+        mann_whitney = c(
+            "Group variable has exactly two independent levels.",
+            "Outcome variable is at least ordinal.",
+            "U statistic and p value match jamovi output.",
+            "Effect size (r) matches jamovi output.",
+            "Interpretation matches the research question."
+        ),
+        wilcoxon_signed_rank = c(
+            "Both conditions or time points are the intended measurements.",
+            "W statistic and p value match jamovi output.",
+            "Effect size (r) matches jamovi output.",
+            "Interpretation matches the research question."
+        ),
+        logistic_regression = c(
+            "Outcome variable is binary with the correct reference category.",
+            "Predictors are the intended covariates and factors.",
+            "Chi-square model fit statistic and p value match jamovi output.",
+            "McFadden's R² matches jamovi output.",
+            "Odds ratios and confidence intervals match the coefficient table.",
+            "Assumption checks (linearity of log-odds, multicollinearity) have been reviewed.",
+            "Interpretation matches the research question."
+        ),
+        reliability_omega = c(
+            "All intended items are included in the analysis.",
+            "McDonald's omega and Cronbach's alpha values match jamovi output.",
+            "Number of items and N match jamovi output.",
+            "Item-total correlations and any flagged items have been reviewed.",
+            "Interpretation matches the research question."
+        ),
+        bayes_ttest = c(
+            "Prior specification matches the intended analysis.",
+            "Bayes Factor (BF10 or BF01) matches jamovi output.",
+            "Direction of evidence is correctly described.",
+            "Interpretation matches the research question."
+        ),
+        c(
+            "All reported statistics match jamovi output.",
+            "Assumption checks have been reviewed.",
+            "Interpretation matches the research question."
+        )
     )
 }
 

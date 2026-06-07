@@ -45,9 +45,13 @@ edu_mann_whitney <- function(data, outcome, group, ci = 0.95) {
     )
     effect_value <- effect$r_rank_biserial[1]
     effect_ci <- effect[1, c("CI_low", "CI_high")]
+    sig_phrase <- if (test$p.value < .05)
+        "indicated a statistically significant difference"
+    else
+        "did not indicate a statistically significant difference"
     apa <- sprintf(
         "A Mann-Whitney U test %s in %s between %s (Mdn = %s, IQR = %s) and %s (Mdn = %s, IQR = %s), U = %s, p %s, rank-biserial r = %s, %s%% CI %s.",
-        if (test$p.value < .05) "indicated a difference" else "did not indicate a clear difference",
+        sig_phrase,
         outcome, descriptives$group[1], .jr_num(descriptives$median[1]),
         .jr_num(descriptives$iqr[1]), descriptives$group[2],
         .jr_num(descriptives$median[2]), .jr_num(descriptives$iqr[2]),
@@ -128,9 +132,13 @@ edu_wilcoxon_signed_rank <- function(data, outcome, paired_outcome, ci = 0.95) {
     )
     effect_value <- effect$r_rank_biserial[1]
     effect_ci <- effect[1, c("CI_low", "CI_high")]
+    sig_phrase <- if (test$p.value < .05)
+        "indicated a statistically significant change"
+    else
+        "did not indicate a statistically significant change"
     apa <- sprintf(
         "A Wilcoxon signed-rank test %s from %s (Mdn = %s, IQR = %s) to %s (Mdn = %s, IQR = %s), W = %s, p %s, rank-biserial r = %s, %s%% CI %s.",
-        if (test$p.value < .05) "indicated a change" else "did not indicate a clear change",
+        sig_phrase,
         outcome, .jr_num(descriptives$median[1]), .jr_num(descriptives$iqr[1]),
         paired_outcome, .jr_num(descriptives$median[2]), .jr_num(descriptives$iqr[2]),
         .jr_num(test$statistic), .jr_p(test$p.value),

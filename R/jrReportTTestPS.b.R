@@ -6,7 +6,7 @@ jrReportTTestPSClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class
         .init = function() {
             .jr_addon_insert_card(
                 self,
-                refs = c("jReport", "jmvcore", "effectsize", "BayesFactor")
+                refs = c("RCore", "jReport", "jmvcore", "effectsize", "BayesFactor")
             )
         },
         .run = function() {

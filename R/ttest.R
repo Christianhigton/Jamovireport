@@ -43,10 +43,13 @@ edu_t_test <- function(data, outcome, group = NULL, paired_outcome = NULL,
         difference <- unname(diff(rev(test$estimate)))
         effect_value <- effect$Cohens_d[1]
         effect_ci <- effect[1, c("CI_low", "CI_high")]
-        significance <- if (test$p.value < .05) "indicated a difference" else "did not indicate a difference"
+        sig_phrase <- if (test$p.value < .05)
+            "indicated a statistically significant difference"
+        else
+            "did not indicate a statistically significant difference"
         apa <- sprintf(
             "A %s %s between %s (M = %s, SD = %s) and %s (M = %s, SD = %s), t(%s) = %s, p %s, mean difference = %s, %s%% CI %s, Cohen's d = %s, %s%% CI %s.",
-            method, significance, descriptives$group[1], .jr_num(descriptives$mean[1]),
+            method, sig_phrase, descriptives$group[1], .jr_num(descriptives$mean[1]),
             .jr_num(descriptives$sd[1]), descriptives$group[2], .jr_num(descriptives$mean[2]),
             .jr_num(descriptives$sd[2]), .jr_num(test$parameter, 2L),
             .jr_num(test$statistic, 2L), .jr_p(test$p.value),
@@ -91,9 +94,13 @@ edu_t_test <- function(data, outcome, group = NULL, paired_outcome = NULL,
         diagnostics <- .jr_shapiro(differences, "Normality of paired differences")
         effect_value <- effect$Cohens_d[1]
         effect_ci <- effect[1, c("CI_low", "CI_high")]
+        sig_phrase <- if (test$p.value < .05)
+            "indicated a statistically significant change"
+        else
+            "did not indicate a statistically significant change"
         apa <- sprintf(
             "A paired-samples t-test %s from %s (M = %s, SD = %s) to %s (M = %s, SD = %s), t(%s) = %s, p %s, mean change = %s, %s%% CI %s, Cohen's d = %s, %s%% CI %s.",
-            if (test$p.value < .05) "indicated a change" else "did not indicate a clear change",
+            sig_phrase,
             outcome, .jr_num(descriptives$mean[1]), .jr_num(descriptives$sd[1]),
             paired_outcome, .jr_num(descriptives$mean[2]), .jr_num(descriptives$sd[2]),
             .jr_num(test$parameter, 0L), .jr_num(test$statistic),

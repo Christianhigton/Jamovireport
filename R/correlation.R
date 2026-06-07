@@ -14,15 +14,22 @@ edu_correlation <- function(data, x, y, method = c("pearson", "spearman", "kenda
     .jr_numeric(d[[y]], y)
     test <- suppressWarnings(stats::cor.test(d[[x]], d[[y]], method = method, conf.level = ci, exact = FALSE))
     coefficient <- unname(test$estimate)
-    coefficient_name <- switch(method, pearson = "r", spearman = "rho", kendall = "tau")
+    coefficient_name <- switch(method, pearson = "r", spearman = "ρ", kendall = "τ")
+    n <- nrow(d)
+    sig_label <- if (test$p.value < .05) "statistically significant" else "not statistically significant"
     direction <- if (coefficient >= 0) "positive" else "negative"
     ci_text <- if (!is.null(test$conf.int))
         sprintf(", %s%% CI %s", .jr_num(ci * 100, 0L), .jr_ci(test$conf.int[1], test$conf.int[2], 2L, TRUE))
     else ""
+    df_text <- if (!is.null(test$parameter) && is.finite(test$parameter))
+        sprintf(", df = %s", .jr_num(test$parameter, 0L))
+    else ""
     apa <- sprintf(
-        "%s correlation indicated a %s association between %s and %s, %s = %s, n = %s, p %s%s.",
-        tools::toTitleCase(method), direction, x, y, coefficient_name,
-        .jr_num(coefficient, 2L, TRUE), nrow(d), .jr_p(test$p.value), ci_text
+        "A %s %s correlation between %s and %s was found, %s(%s) = %s%s, p %s, n = %s.",
+        sig_label, tools::toTitleCase(method), x, y,
+        coefficient_name, .jr_num(if (!is.null(test$parameter) && is.finite(test$parameter)) test$parameter else n - 2L, 0L),
+        .jr_num(coefficient, 2L, TRUE),
+        ci_text, .jr_p(test$p.value), n
     )
     plain <- sprintf(
         "Higher %s values tended to be associated with %s %s values. %s",

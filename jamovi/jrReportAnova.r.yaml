@@ -6,6 +6,7 @@ items:
   title: APA Results Summary (jReport)
   type: Table
   refs:
+  - RCore
   - jReport
   - jmvcore
   - afex
@@ -41,6 +42,7 @@ items:
   title: Assumptions and Recommended Actions (jReport)
   type: Table
   refs:
+  - RCore
   - jReport
   - jmvcore
   - afex
@@ -77,6 +79,7 @@ items:
   type: Table
   visible: false
   refs:
+  - RCore
   - jReport
   - jmvcore
   - afex

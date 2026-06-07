@@ -22,14 +22,158 @@ jrReportAnovaOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
 jrReportAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "jrReportAnovaResults",
     inherit = jmvcore::Group,
-    active = list(),
+    active = list(
+        jReportApaTable = function() private$.items[["jReportApaTable"]],
+        jReportAssumptions = function() private$.items[["jReportAssumptions"]],
+        jReportPostHoc = function() private$.items[["jReportPostHoc"]]),
     private = list(),
     public=list(
         initialize=function(options) {
             super$initialize(
                 options=options,
                 name="",
-                title="Automatic Report for ANOVA")}))
+                title="Automatic Report for ANOVA")
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="jReportApaTable",
+                title="APA Results Summary (jReport)",
+                refs=list(
+                    "jReport",
+                    "jmvcore",
+                    "afex",
+                    "effectsize",
+                    "emmeans"),
+                columns=list(
+                    list(
+                        `name`="analysis",
+                        `title`="Analysis",
+                        `type`="text"),
+                    list(
+                        `name`="test",
+                        `title`="Test / Effect",
+                        `type`="text"),
+                    list(
+                        `name`="statistic",
+                        `title`="Statistic",
+                        `type`="number"),
+                    list(
+                        `name`="df1",
+                        `title`="df1",
+                        `type`="number"),
+                    list(
+                        `name`="df2",
+                        `title`="df2",
+                        `type`="text"),
+                    list(
+                        `name`="p",
+                        `title`="p",
+                        `type`="number",
+                        `format`="zto,pvalue"),
+                    list(
+                        `name`="effect",
+                        `title`="Effect Size",
+                        `type`="text"),
+                    list(
+                        `name`="ci",
+                        `title`="Effect 95% CI",
+                        `type`="text"))))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="jReportAssumptions",
+                title="Assumptions and Recommended Actions (jReport)",
+                refs=list(
+                    "jReport",
+                    "jmvcore",
+                    "afex",
+                    "effectsize",
+                    "emmeans"),
+                columns=list(
+                    list(
+                        `name`="analysis",
+                        `title`="Analysis",
+                        `type`="text"),
+                    list(
+                        `name`="assumption",
+                        `title`="Assumption / Check",
+                        `type`="text"),
+                    list(
+                        `name`="tested",
+                        `title`="Tested?",
+                        `type`="text"),
+                    list(
+                        `name`="statistic",
+                        `title`="Statistic",
+                        `type`="number"),
+                    list(
+                        `name`="p",
+                        `title`="p",
+                        `type`="number",
+                        `format`="zto,pvalue"),
+                    list(
+                        `name`="met",
+                        `title`="Met?",
+                        `type`="text"),
+                    list(
+                        `name`="interpretation",
+                        `title`="What This Means",
+                        `type`="text"),
+                    list(
+                        `name`="action",
+                        `title`="Recommended Action",
+                        `type`="text"))))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="jReportPostHoc",
+                title="APA Post Hoc Comparisons (jReport)",
+                visible=FALSE,
+                refs=list(
+                    "jReport",
+                    "jmvcore",
+                    "afex",
+                    "effectsize",
+                    "emmeans"),
+                columns=list(
+                    list(
+                        `name`="analysis",
+                        `title`="Analysis",
+                        `type`="text"),
+                    list(
+                        `name`="term",
+                        `title`="Factor / Term",
+                        `type`="text"),
+                    list(
+                        `name`="comparison",
+                        `title`="Comparison",
+                        `type`="text"),
+                    list(
+                        `name`="mean_difference",
+                        `title`="Mean Difference",
+                        `type`="number"),
+                    list(
+                        `name`="se",
+                        `title`="SE",
+                        `type`="number"),
+                    list(
+                        `name`="df",
+                        `title`="df",
+                        `type`="number"),
+                    list(
+                        `name`="statistic",
+                        `title`="t",
+                        `type`="number"),
+                    list(
+                        `name`="p",
+                        `title`="Adjusted p",
+                        `type`="number",
+                        `format`="zto,pvalue"),
+                    list(
+                        `name`="adjustment",
+                        `title`="Adjustment",
+                        `type`="text"),
+                    list(
+                        `name`="significant",
+                        `title`="Significant?",
+                        `type`="text"))))}))
 
 jrReportAnovaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "jrReportAnovaBase",
@@ -54,7 +198,7 @@ jrReportAnovaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 
 #' Automatic Report for ANOVA
 #'
-#' 
+#'
 #' @section References:
 #' jReport
 #'
@@ -69,7 +213,16 @@ jrReportAnovaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param data .
 #' @return A results object containing:
 #' \tabular{llllll}{
+#'   \code{results$jReportApaTable} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$jReportAssumptions} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$jReportPostHoc} \tab \tab \tab \tab \tab a table \cr
 #' }
+#'
+#' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
+#'
+#' \code{results$jReportApaTable$asDF}
+#'
+#' \code{as.data.frame(results$jReportApaTable)}
 #'
 #' @export
 jrReportAnova <- function(

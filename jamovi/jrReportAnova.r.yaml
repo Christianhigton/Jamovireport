@@ -1,4 +1,116 @@
 name: jrReportAnova
 title: Automatic Report for ANOVA
 jrs: '1.1'
-items: []
+items:
+- name: jReportApaTable
+  title: APA Results Summary (jReport)
+  type: Table
+  refs:
+  - jReport
+  - jmvcore
+  - afex
+  - effectsize
+  - emmeans
+  columns:
+  - name: analysis
+    title: Analysis
+    type: text
+  - name: test
+    title: Test / Effect
+    type: text
+  - name: statistic
+    title: Statistic
+    type: number
+  - name: df1
+    title: df1
+    type: number
+  - name: df2
+    title: df2
+    type: text
+  - name: p
+    title: p
+    type: number
+    format: zto,pvalue
+  - name: effect
+    title: Effect Size
+    type: text
+  - name: ci
+    title: Effect 95% CI
+    type: text
+- name: jReportAssumptions
+  title: Assumptions and Recommended Actions (jReport)
+  type: Table
+  refs:
+  - jReport
+  - jmvcore
+  - afex
+  - effectsize
+  - emmeans
+  columns:
+  - name: analysis
+    title: Analysis
+    type: text
+  - name: assumption
+    title: Assumption / Check
+    type: text
+  - name: tested
+    title: Tested?
+    type: text
+  - name: statistic
+    title: Statistic
+    type: number
+  - name: p
+    title: p
+    type: number
+    format: zto,pvalue
+  - name: met
+    title: Met?
+    type: text
+  - name: interpretation
+    title: What This Means
+    type: text
+  - name: action
+    title: Recommended Action
+    type: text
+- name: jReportPostHoc
+  title: APA Post Hoc Comparisons (jReport)
+  type: Table
+  visible: false
+  refs:
+  - jReport
+  - jmvcore
+  - afex
+  - effectsize
+  - emmeans
+  columns:
+  - name: analysis
+    title: Analysis
+    type: text
+  - name: term
+    title: Factor / Term
+    type: text
+  - name: comparison
+    title: Comparison
+    type: text
+  - name: mean_difference
+    title: Mean Difference
+    type: number
+  - name: se
+    title: SE
+    type: number
+  - name: df
+    title: df
+    type: number
+  - name: statistic
+    title: t
+    type: number
+  - name: p
+    title: Adjusted p
+    type: number
+    format: zto,pvalue
+  - name: adjustment
+    title: Adjustment
+    type: text
+  - name: significant
+    title: Significant?
+    type: text

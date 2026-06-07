@@ -159,6 +159,184 @@
     )
 }
 
+.jr_report_card <- function(eyebrow, title, subtitle = "", content = "",
+                            accent = "#237f86", background = "#fbfcfd",
+                            content_html = NULL) {
+    subtitle_html <- ""
+    if (nzchar(subtitle)) {
+        subtitle_html <- sprintf(
+            "<div style='font-size:13px; font-weight:600; color:#536472; margin:-3px 0 10px 0;'>%s</div>",
+            .jr_html_escape(subtitle)
+        )
+    }
+    body <- if (is.null(content_html)) .jr_html_paragraphs(content) else content_html
+    sprintf(
+        paste0(
+            "<div style='border:1px solid #dfe6ea; border-left:5px solid %s;",
+            "border-radius:6px; padding:14px 16px; margin:4px 0 12px 0; background:%s;'>",
+            "<div style='font-size:11px; font-weight:700; letter-spacing:0; color:#536472;",
+            "text-transform:uppercase; margin-bottom:6px;'>%s</div>",
+            "<div style='font-size:17px; font-weight:700; color:#18242d; margin-bottom:8px;'>%s</div>",
+            "%s%s</div>"
+        ),
+        accent, background, .jr_html_escape(eyebrow), .jr_html_escape(title),
+        subtitle_html, body
+    )
+}
+
+.jr_html_bullets <- function(items) {
+    items <- items[nzchar(items)]
+    if (!length(items))
+        return("")
+    rows <- paste0(
+        "<li style='margin:0 0 7px 0; padding-left:2px;'>",
+        .jr_html_escape(items),
+        "</li>",
+        collapse = ""
+    )
+    paste0("<ul style='margin:0; padding-left:22px; line-height:1.45;'>", rows, "</ul>")
+}
+
+.jr_html_numbered <- function(items) {
+    items <- items[nzchar(items)]
+    if (!length(items))
+        return("")
+    rows <- paste0(
+        "<li style='margin:0 0 8px 0; padding-left:2px;'>",
+        .jr_html_escape(items),
+        "</li>",
+        collapse = ""
+    )
+    paste0("<ol style='margin:0; padding-left:22px; line-height:1.45;'>", rows, "</ol>")
+}
+
+.jr_build_report_cards_html <- function(analysis_title, copy_ready_text,
+                                        diagnostic_text = NULL,
+                                        guidance_text = NULL,
+                                        checklist_items = NULL,
+                                        references_text = NULL,
+                                        checklist_note = "") {
+    cards <- .jr_report_card(
+        "Copy-ready report text", analysis_title,
+        "Select and copy this paragraph into your report.",
+        copy_ready_text, accent = "#278058", background = "#f6fbf8"
+    )
+    if (!is.null(diagnostic_text) && nzchar(diagnostic_text)) {
+        cards <- paste0(cards, .jr_report_card(
+            "Optional assumptions / diagnostic note", "Assumptions and diagnostics",
+            "Include this only if relevant to your study.",
+            diagnostic_text, accent = "#2f6fa3", background = "#f5f9fd"
+        ))
+    }
+    if (!is.null(guidance_text) && nzchar(guidance_text)) {
+        cards <- paste0(cards, .jr_report_card(
+            "Interpretation guidance", "How to read this result",
+            "For understanding only - do not copy directly.",
+            guidance_text, accent = "#b46c21", background = "#fff9ef"
+        ))
+    }
+    checklist_html <- .jr_html_bullets(checklist_items %||% character())
+    if (nzchar(checklist_note)) {
+        checklist_html <- paste0(
+            checklist_html,
+            "<div style='border-top:1px solid #dfe6ea; margin-top:12px; padding-top:10px;'>",
+            .jr_html_paragraphs(checklist_note),
+            "</div>"
+        )
+    }
+    if (nzchar(checklist_html)) {
+        cards <- paste0(cards, .jr_report_card(
+            "Check before reporting", "Verification checklist",
+            "", accent = "#6d5a8a", background = "#faf8fc",
+            content_html = checklist_html
+        ))
+    }
+    if (!is.null(references_text) && length(references_text) > 0L) {
+        cards <- paste0(cards, .jr_report_card(
+            "References", "Sources used by this report",
+            "", accent = "#6c757d", background = "#fbfcfd",
+            content_html = .jr_html_numbered(references_text)
+        ))
+    }
+    cards
+}
+
+.jr_reference_entries <- function(results, include_effect_note = TRUE) {
+    keys <- unique(unlist(lapply(results, .jr_text_reference_keys, include_effect_note = include_effect_note)))
+    entries <- vapply(keys, .jr_reference_entry_text, character(1))
+    entries[nzchar(entries)]
+}
+
+.jr_report_section_card <- function(title, subtitle = "", content = "",
+                                    accent = "#237f86", background = "#fbfcfd",
+                                    content_html = NULL) {
+    subtitle_html <- ""
+    if (nzchar(subtitle)) {
+        subtitle_html <- sprintf(
+            "<div style='font-size:13px; font-weight:600; color:#536472; margin:-2px 0 10px 0;'>%s</div>",
+            .jr_html_escape(subtitle)
+        )
+    }
+    body <- if (is.null(content_html)) .jr_html_paragraphs(content) else content_html
+    sprintf(
+        paste0(
+            "<div style='border:1px solid #dfe6ea; border-left:5px solid %s;",
+            "border-radius:6px; padding:14px 16px; margin:4px 0 12px 0; background:%s;'>",
+            "<div style='font-size:17px; font-weight:700; color:#18242d; margin-bottom:8px;'>%s</div>",
+            "%s%s</div>"
+        ),
+        accent, background, .jr_html_escape(title), subtitle_html, body
+    )
+}
+
+.jr_build_report_sections_html <- function(apa_wording = NULL,
+                                           diagnostic_note = NULL,
+                                           interpretation_guidance = NULL,
+                                           checklist_items = NULL,
+                                           checklist_note = "",
+                                           references = NULL) {
+    sections <- character()
+    if (!is.null(apa_wording) && nzchar(apa_wording)) {
+        sections <- c(sections, .jr_report_section_card(
+            "Suggested APA-style report wording",
+            "This is suggested wording only. Check all values against your jamovi output and adapt the text for your own study before using it.",
+            apa_wording, accent = "#278058", background = "#f6fbf8"
+        ))
+    }
+    if (!is.null(diagnostic_note) && nzchar(diagnostic_note)) {
+        sections <- c(sections, .jr_report_section_card(
+            "Optional assumptions / diagnostic note",
+            "Include this only if relevant to your study.",
+            diagnostic_note, accent = "#2f6fa3", background = "#f5f9fd"
+        ))
+    }
+    if (!is.null(interpretation_guidance) && nzchar(interpretation_guidance)) {
+        sections <- c(sections, .jr_report_section_card(
+            "Interpretation guidance",
+            "For understanding only - do not copy directly into your report.",
+            interpretation_guidance, accent = "#b46c21", background = "#fff9ef"
+        ))
+    }
+    checklist_html <- .jr_html_bullets(checklist_items %||% character())
+    if (nzchar(checklist_note))
+        checklist_html <- paste0(checklist_html, .jr_html_paragraphs(checklist_note))
+    if (nzchar(checklist_html)) {
+        sections <- c(sections, .jr_report_section_card(
+            "Check before reporting",
+            "", accent = "#6d5a8a", background = "#faf8fc",
+            content_html = checklist_html
+        ))
+    }
+    if (!is.null(references) && length(references) > 0L) {
+        sections <- c(sections, .jr_report_section_card(
+            "References",
+            "", accent = "#6c757d", background = "#fbfcfd",
+            content_html = .jr_html_numbered(references)
+        ))
+    }
+    paste(sections, collapse = "")
+}
+
 .jr_reference_entry_text <- function(key) {
     refs <- tryCatch(get(".jmvrefs", envir = asNamespace("jReport")), error = function(e) NULL)
     ref <- refs[[key]]
@@ -208,9 +386,7 @@
 }
 
 .jr_references_html <- function(results, include_effect_note = TRUE) {
-    keys <- unique(unlist(lapply(results, .jr_text_reference_keys, include_effect_note = include_effect_note)))
-    entries <- vapply(keys, .jr_reference_entry_text, character(1))
-    entries <- entries[nzchar(entries)]
+    entries <- .jr_reference_entries(results, include_effect_note = include_effect_note)
     if (!length(entries))
         return("")
     rows <- paste0(
@@ -257,6 +433,330 @@
     .jr_html_card("Interpretation", "What does this mean?", content, accent = accent)
 }
 
+.jr_nonempty_unique <- function(items) {
+    items <- trimws(items[nzchar(items)])
+    items[!duplicated(items)]
+}
+
+.jr_anova_between_checklist_items <- function() {
+    c(
+        "The correct dependent variable is reported.",
+        "The correct between-subjects factor or factors are reported.",
+        "Group labels are correct.",
+        "Descriptive statistics match the analysis.",
+        "The ANOVA table values are correct.",
+        "Degrees of freedom are correct.",
+        "F values are correct.",
+        "p-values are correct.",
+        "Effect sizes are correct.",
+        "Confidence intervals are correct, where reported.",
+        "Post hoc tests or planned comparisons are described accurately.",
+        "Correction methods are named correctly.",
+        "Assumptions and diagnostics have been reviewed.",
+        "Any assumption violations are reported or justified appropriately.",
+        "The interpretation matches the research question.",
+        "The wording has been adapted to the user's actual study."
+    )
+}
+
+.jr_anova_between_guidance_text <- function(result, include, posthoc_text = "") {
+    guidance <- .jr_nonempty_unique(c(
+        result$report_blocks$rationale %||% "",
+        result$report_blocks$descriptives %||% "",
+        if ("interpretation" %in% include) result$report_blocks$plain %||% "" else "",
+        if (nzchar(posthoc_text))
+            paste(
+                "Post hoc tests are follow-up comparisons used to identify which group means differ after an omnibus ANOVA effect.",
+                "Interpret the named correction method with the post hoc output, because Tukey, Bonferroni, Holm, and Games-Howell control error rates in different ways."
+            )
+        else "",
+        if ("effect_size" %in% include) .jr_effect_benchmark_text(result) else "",
+        if ("effect_size" %in% include) .jr_effect_interpretation_note(result$analysis) else "",
+        paste(
+            "A significant omnibus effect indicates evidence that at least one group mean differs, but it does not by itself identify which groups differ.",
+            "A non-significant omnibus effect means the analysis did not provide clear evidence of group mean differences in this sample.",
+            "Statistical significance should be interpreted alongside effect size, assumptions, sample size, and the research context."
+        )
+    ))
+    paste(guidance, collapse = "\n\n")
+}
+
+.jr_anova_between_diagnostic_text <- function(result, include) {
+    diagnostics <- character()
+    if ("assumptions" %in% include) {
+        rows <- .jr_normalize_diagnostics(result$diagnostics)
+        detail <- vapply(seq_len(nrow(rows)), function(i) {
+            statistic <- if (is.finite(rows$statistic[i]))
+                sprintf(" statistic = %s,", .jr_num(rows$statistic[i]))
+            else ""
+            p <- if (is.finite(rows$p[i]))
+                sprintf(" p %s.", .jr_p(rows$p[i]))
+            else "."
+            paste(
+                sprintf("%s: %s.%s%s", rows$check[i], rows$status[i], statistic, p),
+                rows$interpretation[i],
+                rows$action[i]
+            )
+        }, character(1))
+        diagnostics <- c(diagnostics, result$report_blocks$assumptions %||% "", detail)
+    }
+    if ("cautions" %in% include && nzchar(result$caution)) {
+        diagnostics <- c(
+            diagnostics,
+            "Caution: At least one assumption or diagnostic check was flagged for review."
+        )
+    }
+    paste(.jr_nonempty_unique(diagnostics), collapse = "\n\n")
+}
+
+.jr_anova_between_call_value <- function(result, name, fallback = "") {
+    value <- tryCatch(result$call[[name]], error = function(e) NULL)
+    if (is.null(value))
+        return(fallback)
+    if (is.character(value))
+        return(paste(value, collapse = ", "))
+    if (is.call(value) && identical(as.character(value[[1]]), "c")) {
+        values <- unlist(lapply(as.list(value)[-1], function(item) {
+            if (is.character(item)) item else all.vars(item)
+        }), use.names = FALSE)
+        values <- values[nzchar(values)]
+        if (length(values))
+            return(paste(values, collapse = ", "))
+    }
+    variables <- all.vars(value)
+    if (length(variables))
+        return(paste(variables, collapse = ", "))
+    fallback
+}
+
+.jr_anova_between_descriptive_sentence <- function(result) {
+    descriptives <- result$descriptives
+    if (!is.data.frame(descriptives) || nrow(descriptives) == 0L)
+        return("")
+    descriptives <- descriptives[order(descriptives$mean, decreasing = TRUE), , drop = FALSE]
+    group_text <- vapply(seq_len(nrow(descriptives)), function(i) {
+        sprintf(
+            "%s (M = %s, SD = %s)",
+            descriptives$group[i],
+            .jr_num(descriptives$mean[i]),
+            .jr_num(descriptives$sd[i])
+        )
+    }, character(1))
+    if (length(group_text) == 1L)
+        return(sprintf("Descriptive statistics indicated that the group mean was %s.", group_text))
+    if (length(group_text) == 2L) {
+        return(sprintf(
+            "Descriptive statistics indicated that scores were higher in %s than in %s.",
+            group_text[1], group_text[2]
+        ))
+    }
+    sprintf(
+        "Descriptive statistics indicated that scores were highest in %s, followed by %s, and lowest in %s.",
+        group_text[1],
+        paste(group_text[seq.int(2L, length(group_text) - 1L)], collapse = ", "),
+        group_text[length(group_text)]
+    )
+}
+
+.jr_anova_between_assumption_sentence <- function(result) {
+    diagnostics <- .jr_normalize_diagnostics(result$diagnostics)
+    tested <- diagnostics[diagnostics$tested == "Yes", , drop = FALSE]
+    relevant <- tested[grepl("normality|homogeneity|levene", tested$check, ignore.case = TRUE), , drop = FALSE]
+    if (nrow(relevant) == 0L)
+        return("")
+    if (all(relevant$status == "Acceptable")) {
+        return(
+            "Assumption checks did not indicate substantial violations of residual normality or homogeneity of variance."
+        )
+    }
+    ""
+}
+
+.jr_anova_between_omega <- function(statistic) {
+    omega <- tryCatch(
+        as.data.frame(effectsize::F_to_omega2(
+            f = statistic$statistic,
+            df = statistic$df1,
+            df_error = statistic$df2
+        )),
+        error = function(e) NULL
+    )
+    if (is.null(omega) || !"Omega2_partial" %in% names(omega))
+        return(NA_real_)
+    as.numeric(omega$Omega2_partial[1])
+}
+
+.jr_anova_between_effect_phrase <- function(statistic, one_way, include_ci = TRUE) {
+    eta <- as.numeric(statistic$effect)
+    omega <- .jr_anova_between_omega(statistic)
+    eta_text <- if (is.finite(eta)) {
+        if (isTRUE(include_ci) && is.finite(statistic$ci_low) && is.finite(statistic$ci_high)) {
+            sprintf(
+                "\u03b7p\u00b2 = %s, 95%% CI %s",
+                .jr_num(eta, 2L, TRUE),
+                .jr_ci(statistic$ci_low, statistic$ci_high, 2L, TRUE)
+            )
+        } else {
+            sprintf("\u03b7p\u00b2 = %s", .jr_num(eta, 2L, TRUE))
+        }
+    } else {
+        ""
+    }
+    if (isTRUE(one_way) && is.finite(omega) && nzchar(eta_text)) {
+        return(sprintf(
+            "The effect size was \u03c9\u00b2 = %s, with %s also provided for comparison",
+            .jr_num(omega, 2L, TRUE),
+            eta_text
+        ))
+    }
+    if (isTRUE(one_way) && is.finite(omega))
+        return(sprintf("The effect size was \u03c9\u00b2 = %s", .jr_num(omega, 2L, TRUE)))
+    if (is.finite(omega) && nzchar(eta_text)) {
+        return(sprintf(
+            "%s, with partial omega squared, \u03c9p\u00b2 = %s, also provided as a less biased estimate",
+            eta_text,
+            .jr_num(omega, 2L, TRUE)
+        ))
+    }
+    eta_text
+}
+
+.jr_anova_between_omnibus_sentences <- function(result, include) {
+    statistics <- result$statistics
+    if (!is.data.frame(statistics) || nrow(statistics) == 0L)
+        return("")
+    one_way <- nrow(statistics) == 1L
+    include_ci <- "ci" %in% include
+    include_effect <- "effect_size" %in% include
+    sentences <- vapply(seq_len(nrow(statistics)), function(i) {
+        statistic <- statistics[i, , drop = FALSE]
+        effect_phrase <- if (include_effect)
+            .jr_anova_between_effect_phrase(statistic, one_way, include_ci)
+        else ""
+        effect <- if (nzchar(effect_phrase)) paste0(", ", effect_phrase) else ""
+        conclusion <- if (is.finite(statistic$p) && statistic$p < .05)
+            "This provides evidence of mean differences for this effect."
+        else
+            "This did not provide clear evidence of mean differences for this effect."
+        sprintf(
+            "%s %s, F(%s, %s) = %s, p %s%s. %s",
+            statistic$term,
+            if (is.finite(statistic$p) && statistic$p < .05) "was statistically significant" else "was not statistically significant",
+            .jr_num(statistic$df1, 2L),
+            .jr_num(statistic$df2, 2L),
+            .jr_num(statistic$statistic),
+            .jr_p(statistic$p),
+            effect,
+            conclusion
+        )
+    }, character(1))
+    paste(sentences, collapse = " ")
+}
+
+.jr_anova_between_apa_text <- function(result, include, posthoc_text = "") {
+    outcome <- .jr_anova_between_call_value(result, "outcome", "the dependent variable")
+    factors <- .jr_anova_between_call_value(result, "factors", "the between-subjects factor or factors")
+    opening <- sprintf(
+        "A between-subjects ANOVA examined %s as a function of %s.",
+        outcome,
+        factors
+    )
+    parts <- .jr_nonempty_unique(c(
+        opening,
+        .jr_anova_between_descriptive_sentence(result),
+        .jr_anova_between_assumption_sentence(result),
+        .jr_anova_between_omnibus_sentences(result, include),
+        posthoc_text
+    ))
+    paste(parts, collapse = " ")
+}
+
+.jr_anova_between_report_sections_html <- function(result, options = NULL, note = "",
+                                                   posthoc_text = "",
+                                                   include_references = TRUE) {
+    include <- if (is.null(options)) {
+        .jr_addon_reporting_options()
+    } else {
+        .jr_jamovi_report_args(options)$include
+    }
+    if (is.list(include))
+        include <- .jr_jamovi_report_args(include)$include
+    apa <- .jr_anova_between_apa_text(result, include, posthoc_text)
+    .jr_build_report_sections_html(
+        apa_wording = apa,
+        diagnostic_note = .jr_anova_between_diagnostic_text(result, include),
+        interpretation_guidance = .jr_anova_between_guidance_text(result, include, posthoc_text),
+        checklist_items = .jr_anova_between_checklist_items(),
+        checklist_note = note,
+        references = NULL
+    )
+}
+
+.jr_regression_guidance_text <- function(result) {
+    stats <- result$statistics[1, , drop = FALSE]
+    outcome <- tryCatch(
+        all.vars(stats::formula(result$model))[1],
+        error = function(e) "the outcome"
+    )
+    fit_text <- sprintf(
+        "The F statistic tests whether the set of predictors explains more variation in %s than an intercept-only model. R-squared is the proportion of variation explained by the predictors; adjusted R-squared applies a penalty for the number of predictors and is usually better for comparing models with different numbers of predictors.",
+        outcome
+    )
+    if ("r2" %in% names(stats) && "adjusted_r2" %in% names(stats)) {
+        fit_text <- paste(
+            fit_text,
+            sprintf(
+                "Here, R-squared is %s and adjusted R-squared is %s.",
+                .jr_num(stats$r2, 2L, TRUE), .jr_num(stats$adjusted_r2, 2L, TRUE)
+            )
+        )
+    }
+    coefficient_text <- paste(
+        "Each unstandardized coefficient, B, estimates the expected change in the outcome for a one-unit increase in that predictor while the other predictors are held constant.",
+        "SE describes uncertainty around B, beta is the standardized coefficient for comparing predictors measured on different scales, t and p test whether the coefficient differs from zero, and the confidence interval shows the plausible range of the coefficient."
+    )
+    significance_text <- paste(
+        "A statistically significant predictor provides evidence of an association with the outcome after adjusting for the other predictors in the model.",
+        "A non-significant predictor should usually be described as not showing clear evidence of an adjusted association in this sample, rather than as proof that no relationship exists."
+    )
+    paste(result$interpretation, fit_text, coefficient_text, significance_text, sep = "\n\n")
+}
+
+.jr_regression_checklist_items <- function() {
+    c(
+        "Outcome variable is the intended dependent variable.",
+        "Predictors are the intended covariates and factors.",
+        "Categorical predictors are coded with the correct groups and reference levels.",
+        "Model fit statistics are copied from the final jamovi output.",
+        "R-squared and adjusted R-squared match the final model.",
+        "F statistic and degrees of freedom match the final model.",
+        "b, SE, beta, t, p, and confidence intervals match the coefficient table.",
+        "Assumption checks have been reviewed.",
+        "Interpretation matches the research question."
+    )
+}
+
+.jr_regression_report_cards_html <- function(result, options = NULL, note = "",
+                                            include_effect_note = TRUE) {
+    copy_ready_text <- result$report_blocks$apa %||% ""
+    if (!is.null(options)) {
+        include <- .jr_jamovi_report_args(options)$include
+        copy_ready_text <- .jr_apply_inclusions(copy_ready_text, result$analysis, include)
+    }
+    diagnostic_text <- result$report_blocks$assumptions %||% ""
+    if (nzchar(result$caution))
+        diagnostic_text <- paste(diagnostic_text, result$caution, sep = "\n\n")
+    .jr_build_report_cards_html(
+        analysis_title = result$label,
+        copy_ready_text = copy_ready_text,
+        diagnostic_text = diagnostic_text,
+        guidance_text = .jr_regression_guidance_text(result),
+        checklist_items = .jr_regression_checklist_items(),
+        references_text = .jr_reference_entries(list(result), include_effect_note = include_effect_note),
+        checklist_note = note
+    )
+}
+
 .jr_addon_report_html <- function(results, options = NULL, title = "Guided report", note = "") {
     failures <- Filter(function(x) inherits(x, "try-error"), results)
     results <- Filter(function(x) inherits(x, "edu_analysis"), results)
@@ -270,6 +770,20 @@
     }
     if (length(results) == 0L)
         return(.jr_html_card("Report add-on", title, "Select valid analysis variables to generate report text."))
+    include_effect_note <- is.null(options) ||
+        isTRUE(tryCatch(options$reportEffect, error = function(e) TRUE))
+    if (length(results) == 1L && identical(results[[1]]$analysis, "regression")) {
+        return(.jr_regression_report_cards_html(
+            results[[1]], options = options, note = note,
+            include_effect_note = include_effect_note
+        ))
+    }
+    if (length(results) == 1L && identical(results[[1]]$analysis, "anova_between")) {
+        return(.jr_anova_between_report_sections_html(
+            results[[1]], options = options, note = note,
+            posthoc_text = .jr_addon_posthoc_text(results)
+        ))
+    }
     cards <- vapply(results, function(result) {
         if (is.null(options)) {
             text <- edu_report(result, style = "apa7", format = "paragraph")
@@ -293,8 +807,6 @@
             .jr_html_card("Follow-up comparisons", "Post hoc interpretation", posthoc_text, accent = "#4b66a2")
         )
     }
-    include_effect_note <- is.null(options) ||
-        isTRUE(tryCatch(options$reportEffect, error = function(e) TRUE))
     paste0(
         paste(cards, collapse = ""),
         .jr_references_html(results, include_effect_note = include_effect_note)
@@ -578,9 +1090,18 @@
     do.call(rbind, rows)
 }
 
+.jr_addon_add_result_if_missing <- function(self, name, result) {
+    existing <- tryCatch(
+        self$parent$results$get(name),
+        error = function(e) NULL
+    )
+    if (is.null(existing))
+        self$parent$results$add(result)
+}
+
 .jr_addon_insert_tables <- function(self, posthoc = FALSE, coefficients = FALSE, cells = FALSE,
                                     followups = FALSE, refs = character()) {
-    self$parent$results$add(jmvcore::Table$new(
+    .jr_addon_add_result_if_missing(self, "jReportApaTable", jmvcore::Table$new(
         options = self$options,
         name = "jReportApaTable",
         title = "APA Results Summary (jReport)",
@@ -596,7 +1117,7 @@
             list(name = "ci", title = "Effect 95% CI", type = "text")
         )
     ))
-    self$parent$results$add(jmvcore::Table$new(
+    .jr_addon_add_result_if_missing(self, "jReportAssumptions", jmvcore::Table$new(
         options = self$options,
         name = "jReportAssumptions",
         title = "Assumptions and Recommended Actions (jReport)",
@@ -613,7 +1134,7 @@
         )
     ))
     if (isTRUE(posthoc)) {
-        self$parent$results$add(jmvcore::Table$new(
+        .jr_addon_add_result_if_missing(self, "jReportPostHoc", jmvcore::Table$new(
             options = self$options,
             name = "jReportPostHoc",
             title = "APA Post Hoc Comparisons (jReport)",
@@ -634,7 +1155,7 @@
         ))
     }
     if (isTRUE(coefficients)) {
-        self$parent$results$add(jmvcore::Table$new(
+        .jr_addon_add_result_if_missing(self, "jReportCoefficients", jmvcore::Table$new(
             options = self$options,
             name = "jReportCoefficients",
             title = "Odds Ratios and Coefficients (jReport)",
@@ -652,7 +1173,7 @@
         ))
     }
     if (isTRUE(cells)) {
-        self$parent$results$add(jmvcore::Table$new(
+        .jr_addon_add_result_if_missing(self, "jReportCells", jmvcore::Table$new(
             options = self$options,
             name = "jReportCells",
             title = "Observed and Expected Counts (jReport)",
@@ -668,7 +1189,7 @@
         ))
     }
     if (isTRUE(followups)) {
-        self$parent$results$add(jmvcore::Table$new(
+        .jr_addon_add_result_if_missing(self, "jReportFollowUps", jmvcore::Table$new(
             options = self$options,
             name = "jReportFollowUps",
             title = "MANOVA/MANCOVA Follow-up Analyses (jReport)",
@@ -770,7 +1291,7 @@
     self$parent$results$add(heading)
     .jr_addon_insert_tables(
         self, posthoc = posthoc, coefficients = coefficients,
-        cells = cells, followups = followups
+        cells = cells, followups = followups, refs = refs
     )
     card <- jmvcore::Html$new(
         options = self$options,

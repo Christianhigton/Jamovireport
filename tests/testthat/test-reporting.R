@@ -80,6 +80,8 @@ test_that("package and method references are declared for jamovi references", {
     module_dir <- system.file("jamovi", package = "jReport")
     if (!nzchar(module_dir))
         module_dir <- file.path(getwd(), "jamovi")
+    if (!file.exists(file.path(module_dir, "eduReliabilityOmega.a.yaml")))
+        skip("Source jamovi metadata is not available in this installed-package check context.")
     refs <- yaml::read_yaml(file.path(module_dir, "eduReliabilityOmega.a.yaml"))$description$references
     all_refs <- yaml::read_yaml(file.path(module_dir, "00refs.yaml"))$refs
 
@@ -236,12 +238,164 @@ test_that("automatic native reports render for supported group comparison design
         report <- .jr_addon_report_html(
             list(result), options = .jr_addon_reporting_options()
         )
-        expect_match(report, "Report add-on")
-        expect_match(report, "References")
+        if (identical(result$analysis, "anova_between")) {
+            expect_match(report, "Suggested APA-style report wording")
+            expect_false(grepl(">References<", report, fixed = TRUE))
+        } else {
+            expect_match(report, "Report add-on")
+            expect_match(report, "References")
+        }
         expect_false(grepl("Select valid analysis variables", report, fixed = TRUE))
         expect_false(grepl("could not be generated", report, fixed = TRUE))
         expect_false(grepl("GAMLj", report, fixed = TRUE))
     }
+})
+
+test_that("between-subjects ANOVA report uses separated guidance sections", {
+    d <- ToothGrowth
+    d$dose <- factor(d$dose)
+    result <- edu_anova_between(d, "len", c("dose", "supp"))
+    report <- .jr_anova_between_report_sections_html(
+        result,
+        options = .jr_addon_reporting_options(),
+        note = .jr_accuracy_note("This generated paragraph describes the selected factorial design.")
+    )
+
+    expect_match(report, "Suggested APA-style report wording")
+    expect_match(report, "This is suggested wording only. Check all values against your jamovi output")
+    expect_match(report, "Optional assumptions / diagnostic note")
+    expect_match(report, "Interpretation guidance")
+    expect_match(report, "For understanding only - do not copy directly into your report.")
+    expect_match(report, "Check before reporting")
+    expect_match(report, "A between-subjects ANOVA examined")
+    expect_match(report, "Descriptive statistics indicated")
+    expect_match(report, "M = ")
+    expect_match(report, "SD = ")
+    expect_match(report, "\u03b7p\u00b2")
+    expect_match(report, "\u03c9p\u00b2")
+    expect_match(report, "Assumption checks did not indicate substantial violations")
+    expect_match(report, "Residual normality \\(Shapiro-Wilk\\)")
+    expect_match(report, "A between-subjects ANOVA compares mean")
+    expect_match(report, "Effect-size benchmark")
+    expect_match(report, "The correct dependent variable is reported.")
+    expect_match(report, "Correction methods are named correctly.")
+    expect_false(grepl("Copy-ready report text", report, fixed = TRUE))
+    expect_false(grepl(">References<", report, fixed = TRUE))
+
+    wording_start <- regexpr("Suggested APA-style report wording", report, fixed = TRUE)
+    diagnostics_start <- regexpr("Optional assumptions / diagnostic note", report, fixed = TRUE)
+    wording_card <- substr(report, wording_start, diagnostics_start - 1L)
+
+    expect_true(grepl("Descriptive statistics indicated", wording_card, fixed = TRUE))
+    expect_true(grepl("partial omega squared", wording_card, fixed = TRUE))
+    expect_false(grepl("Residual normality", wording_card, fixed = TRUE))
+    expect_false(grepl("For understanding only", wording_card, fixed = TRUE))
+    expect_false(grepl("References", wording_card, fixed = TRUE))
+})
+
+test_that("between-subjects ANOVA references use jamovi result refs, not report cards", {
+    skip_if_not_installed("yaml")
+
+    root <- getwd()
+    while (!file.exists(file.path(root, "DESCRIPTION"))) {
+        parent <- dirname(root)
+        if (identical(parent, root))
+            skip("Source package root is not available in this installed-package check context.")
+        root <- parent
+    }
+    module_dir <- file.path(root, "jamovi")
+    if (!file.exists(file.path(module_dir, "eduBetweenAnova.r.yaml")))
+        skip("Source jamovi metadata is not available in this installed-package check context.")
+
+    refs_yaml <- yaml::read_yaml(file.path(module_dir, "00refs.yaml"))
+    ref_keys <- names(refs_yaml$refs)
+    result_yaml <- yaml::read_yaml(file.path(module_dir, "eduBetweenAnova.r.yaml"))
+    report_item <- Filter(function(item) identical(item$name, "report"), result_yaml$items)[[1]]
+    stand_alone_refs <- c("jReport", "afex", "car", "effectsize", "emmeans", "ggplot2")
+    expect_true(all(stand_alone_refs %in% report_item$refs))
+    expect_true(all(report_item$refs %in% ref_keys))
+
+    addon_yaml <- yaml::read_yaml(file.path(module_dir, "jrReportAnova.r.yaml"))
+    addon_refs <- c("jReport", "jmvcore", "afex", "effectsize", "emmeans")
+    for (name in c("jReportApaTable", "jReportAssumptions", "jReportPostHoc")) {
+        item <- Filter(function(item) identical(item$name, name), addon_yaml$items)[[1]]
+        expect_true(all(addon_refs %in% item$refs))
+        expect_true(all(item$refs %in% ref_keys))
+    }
+    expect_length(Filter(function(item) identical(item$type, "Html"), addon_yaml$items), 0L)
+
+    helper_text <- paste(readLines(file.path(root, "R", "jamovi-helpers.R"), warn = FALSE), collapse = "\n")
+    heading_start <- regexpr('name = "jReportHeading"', helper_text, fixed = TRUE)
+    card_start <- regexpr('name = "jReportCard"', helper_text, fixed = TRUE)
+    apa_table_start <- regexpr('name = "jReportApaTable"', helper_text, fixed = TRUE)
+    assumptions_table_start <- regexpr('name = "jReportAssumptions"', helper_text, fixed = TRUE)
+    expect_true(heading_start > 0L)
+    expect_true(card_start > 0L)
+    expect_true(apa_table_start > 0L)
+    expect_true(assumptions_table_start > 0L)
+    expect_false(grepl("refs = refs", substr(helper_text, heading_start, heading_start + 250L), fixed = TRUE))
+    expect_false(grepl("refs = refs", substr(helper_text, card_start, card_start + 250L), fixed = TRUE))
+    expect_true(grepl("refs = refs", substr(helper_text, apa_table_start, apa_table_start + 250L), fixed = TRUE))
+    expect_true(grepl("refs = refs", substr(helper_text, assumptions_table_start, assumptions_table_start + 250L), fixed = TRUE))
+    expect_true(grepl(
+        "cells = cells, followups = followups, refs = refs",
+        helper_text,
+        fixed = TRUE
+    ))
+
+    d <- ToothGrowth
+    d$dose <- factor(d$dose)
+    result <- edu_anova_between(d, "len", c("dose", "supp"))
+    report <- .jr_anova_between_report_sections_html(result, options = .jr_addon_reporting_options())
+
+    expect_false(grepl(">References<", report, fixed = TRUE))
+    expect_match(report, "Suggested APA-style report wording")
+    expect_match(report, "Check before reporting")
+})
+
+test_that("one-way between-subjects ANOVA suggested wording reports omega squared", {
+    d <- ToothGrowth
+    d$dose <- factor(d$dose)
+    result <- edu_anova_between(d, "len", "dose")
+    report <- .jr_anova_between_report_sections_html(
+        result,
+        options = .jr_addon_reporting_options()
+    )
+    wording_start <- regexpr("Suggested APA-style report wording", report, fixed = TRUE)
+    diagnostics_start <- regexpr("Optional assumptions / diagnostic note", report, fixed = TRUE)
+    wording_card <- substr(report, wording_start, diagnostics_start - 1L)
+
+    expect_match(wording_card, "\u03c9\u00b2")
+    expect_match(wording_card, "\u03b7p\u00b2")
+    expect_match(wording_card, "M = ")
+    expect_match(wording_card, "SD = ")
+    expect_false(grepl(">References<", report, fixed = TRUE))
+})
+
+test_that("between-subjects ANOVA add-on keeps post hoc wording in suggested section", {
+    skip_if_not_installed("emmeans")
+
+    set.seed(2)
+    d <- expand.grid(first = factor(c("A", "B")), second = factor(c("C", "D")), rep = seq_len(30))
+    match_cell <- (d$first == "A" & d$second == "C") |
+        (d$first == "B" & d$second == "D")
+    d$outcome <- ifelse(match_cell, 8, 0) + stats::rnorm(nrow(d), sd = .5)
+    result <- edu_anova_between(d, "outcome", c("first", "second"))
+    result$posthoc_report <- .jr_model_posthoc(result, list(list("first", "second")), "holm")
+
+    report <- .jr_addon_report_html(
+        list(result), options = .jr_addon_reporting_options()
+    )
+    wording_start <- regexpr("Suggested APA-style report wording", report, fixed = TRUE)
+    diagnostics_start <- regexpr("Optional assumptions / diagnostic note", report, fixed = TRUE)
+    wording_card <- substr(report, wording_start, diagnostics_start - 1L)
+
+    expect_match(report, "Suggested APA-style report wording")
+    expect_match(report, "Optional assumptions / diagnostic note")
+    expect_match(report, "Interpretation guidance")
+    expect_false(grepl("Post hoc interpretation", report, fixed = TRUE))
+    expect_true(grepl("Holm-adjusted post hoc comparisons", wording_card, fixed = TRUE))
+    expect_true(grepl("mean difference", wording_card, fixed = TRUE))
 })
 
 test_that("automatic native report renders selected Bayesian t-test paths", {
@@ -288,10 +442,42 @@ test_that("automatic native reports render for association, model, and omega pat
         report <- .jr_addon_report_html(
             list(result), options = .jr_addon_reporting_options()
         )
-        expect_match(report, "Report add-on")
+        if (identical(result$analysis, "regression"))
+            expect_match(report, "Copy-ready report text")
+        else
+            expect_match(report, "Report add-on")
         expect_false(grepl("Select valid analysis variables", report, fixed = TRUE))
         expect_false(grepl("could not be generated", report, fixed = TRUE))
     }
+})
+
+test_that("linear regression add-on separates copy-ready text from guidance", {
+    result <- edu_lm(mtcars, mpg ~ wt + hp)
+    report <- .jr_addon_report_html(
+        list(result),
+        options = .jr_addon_reporting_options(),
+        note = .jr_accuracy_note("This generated paragraph reports the selected predictors.")
+    )
+
+    expect_match(report, "Copy-ready report text")
+    expect_match(report, "Select and copy this paragraph into your report.")
+    expect_match(report, "Optional assumptions / diagnostic note")
+    expect_match(report, "Include this only if relevant to your study.")
+    expect_match(report, "Interpretation guidance")
+    expect_match(report, "For understanding only - do not copy directly.")
+    expect_match(report, "Check before reporting")
+    expect_match(report, "References")
+    expect_match(report, "Outcome variable is the intended dependent variable.")
+    expect_match(report, "b, SE, beta, t, p, and confidence intervals")
+
+    copy_start <- regexpr("Copy-ready report text", report, fixed = TRUE)
+    diagnostic_start <- regexpr("Optional assumptions / diagnostic note", report, fixed = TRUE)
+    copy_card <- substr(report, copy_start, diagnostic_start - 1L)
+
+    expect_true(grepl(.jr_html_escape(result$report_blocks$apa), copy_card, fixed = TRUE))
+    expect_false(grepl("For understanding only", copy_card, fixed = TRUE))
+    expect_false(grepl("Together, the predictors accounted", copy_card, fixed = TRUE))
+    expect_false(grepl("References", copy_card, fixed = TRUE))
 })
 
 test_that("automatic native reports display calculation failures clearly", {

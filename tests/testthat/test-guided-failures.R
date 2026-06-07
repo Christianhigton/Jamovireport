@@ -3,9 +3,11 @@ guided_failure_root <- function() {
     while (!file.exists(file.path(dir, "DESCRIPTION"))) {
         parent <- dirname(dir)
         if (identical(parent, dir))
-            stop("Could not locate package root.")
+            skip("Source package root is not available in this installed-package check context.")
         dir <- parent
     }
+    if (!dir.exists(file.path(dir, "R")))
+        skip("Source R files are not available in this installed-package check context.")
     dir
 }
 

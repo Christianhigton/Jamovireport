@@ -1203,6 +1203,35 @@
 }
 
 
+# Injects jReport's ref definitions into a parent module's .jmvrefs so that
+# refs set on items in self$parent$results are resolved when the parent calls
+# asProtoBuf() against its own namespace.
+.jr_addon_inject_refs <- function(parent_pkg) {
+    if (is.null(parent_pkg) || !nzchar(parent_pkg)) return(invisible(NULL))
+    jr_ns <- tryCatch(getNamespace("jReport"), error = function(e) NULL)
+    if (is.null(jr_ns) || !(".jmvrefs" %in% names(jr_ns))) return(invisible(NULL))
+    jr_refs <- jr_ns[[".jmvrefs"]]
+
+    parent_ns <- tryCatch(getNamespace(parent_pkg), error = function(e) NULL)
+    if (is.null(parent_ns) || !(".jmvrefs" %in% names(parent_ns))) return(invisible(NULL))
+
+    parent_refs <- parent_ns[[".jmvrefs"]]
+    new_keys <- setdiff(names(jr_refs), names(parent_refs))
+    if (length(new_keys) == 0L) return(invisible(NULL))
+
+    for (key in new_keys)
+        parent_refs[[key]] <- jr_refs[[key]]
+
+    tryCatch({
+        if (bindingIsLocked(".jmvrefs", parent_ns))
+            unlockBinding(".jmvrefs", parent_ns)
+        parent_ns[[".jmvrefs"]] <- parent_refs
+        lockBinding(".jmvrefs", parent_ns)
+    }, error = function(e) invisible(NULL))
+
+    invisible(NULL)
+}
+
 .jr_addon_fill_table <- function(tbl, rows, optional = FALSE) {
     tbl$deleteRows()
     if (nrow(rows) > 0L)
@@ -1225,27 +1254,141 @@
         jReportCells        = .jr_addon_cell_rows(results),
         jReportFollowUps    = .jr_addon_followup_rows(results)
     )
-    tbl <- .jr_addon_get(self$results, "jReportApaTable")
+    tbl <- .jr_addon_get(self$parent$results, "jReportApaTable")
     if (!is.null(tbl)) .jr_addon_fill_table(tbl, apa_rows)
-    tbl <- .jr_addon_get(self$results, "jReportAssumptions")
+    tbl <- .jr_addon_get(self$parent$results, "jReportAssumptions")
     if (!is.null(tbl)) .jr_addon_fill_table(tbl, assumption_rows)
     for (nm in names(optional_rows)) {
-        tbl <- .jr_addon_get(self$results, nm)
+        tbl <- .jr_addon_get(self$parent$results, nm)
         if (!is.null(tbl)) .jr_addon_fill_table(tbl, optional_rows[[nm]], optional = TRUE)
     }
+}
+
+.jr_addon_add_result_if_missing <- function(self, name, result) {
+    existing <- tryCatch(self$parent$results$get(name), error = function(e) NULL)
+    if (is.null(existing))
+        self$parent$results$add(result)
+}
+
+.jr_addon_insert_tables <- function(self, posthoc = FALSE, coefficients = FALSE,
+                                    cells = FALSE, followups = FALSE, refs = character()) {
+    .jr_addon_add_result_if_missing(self, "jReportApaTable", jmvcore::Table$new(
+        options = self$options, name = "jReportApaTable",
+        title = "APA Results Summary (jReport)", refs = refs,
+        columns = list(
+            list(name = "analysis", title = "Analysis", type = "text"),
+            list(name = "test", title = "Test / Effect", type = "text"),
+            list(name = "statistic", title = "Statistic", type = "number"),
+            list(name = "df1", title = "df1", type = "number"),
+            list(name = "df2", title = "df2", type = "text"),
+            list(name = "p", title = "p", type = "number", format = "zto,pvalue"),
+            list(name = "effect", title = "Effect Size", type = "text"),
+            list(name = "ci", title = "Effect 95% CI", type = "text")
+        )
+    ))
+    .jr_addon_add_result_if_missing(self, "jReportAssumptions", jmvcore::Table$new(
+        options = self$options, name = "jReportAssumptions",
+        title = "Assumptions and Recommended Actions (jReport)", refs = refs,
+        columns = list(
+            list(name = "analysis", title = "Analysis", type = "text"),
+            list(name = "assumption", title = "Assumption / Check", type = "text"),
+            list(name = "tested", title = "Tested?", type = "text"),
+            list(name = "statistic", title = "Statistic", type = "number"),
+            list(name = "p", title = "p", type = "number", format = "zto,pvalue"),
+            list(name = "met", title = "Met?", type = "text"),
+            list(name = "interpretation", title = "What This Means", type = "text"),
+            list(name = "action", title = "Recommended Action", type = "text")
+        )
+    ))
+    if (isTRUE(posthoc))
+        .jr_addon_add_result_if_missing(self, "jReportPostHoc", jmvcore::Table$new(
+            options = self$options, name = "jReportPostHoc",
+            title = "APA Post Hoc Comparisons (jReport)", visible = FALSE, refs = refs,
+            columns = list(
+                list(name = "analysis", title = "Analysis", type = "text"),
+                list(name = "term", title = "Factor / Term", type = "text"),
+                list(name = "comparison", title = "Comparison", type = "text"),
+                list(name = "mean_difference", title = "Mean Difference", type = "number"),
+                list(name = "se", title = "SE", type = "number"),
+                list(name = "df", title = "df", type = "number"),
+                list(name = "statistic", title = "t", type = "number"),
+                list(name = "p", title = "Adjusted p", type = "number", format = "zto,pvalue"),
+                list(name = "adjustment", title = "Adjustment", type = "text"),
+                list(name = "significant", title = "Significant?", type = "text")
+            )
+        ))
+    if (isTRUE(coefficients))
+        .jr_addon_add_result_if_missing(self, "jReportCoefficients", jmvcore::Table$new(
+            options = self$options, name = "jReportCoefficients",
+            title = "Odds Ratios and Coefficients (jReport)", visible = FALSE, refs = refs,
+            columns = list(
+                list(name = "predictor", title = "Predictor", type = "text"),
+                list(name = "estimate", title = "B", type = "number"),
+                list(name = "se", title = "SE", type = "number"),
+                list(name = "statistic", title = "z", type = "number"),
+                list(name = "p", title = "p", type = "number", format = "zto,pvalue"),
+                list(name = "odds_ratio", title = "Odds Ratio", type = "number"),
+                list(name = "confidence_interval", title = "Odds Ratio 95% CI", type = "text")
+            )
+        ))
+    if (isTRUE(cells))
+        .jr_addon_add_result_if_missing(self, "jReportCells", jmvcore::Table$new(
+            options = self$options, name = "jReportCells",
+            title = "Observed and Expected Counts (jReport)", visible = FALSE, refs = refs,
+            columns = list(
+                list(name = "analysis", title = "Analysis", type = "text"),
+                list(name = "category", title = "Cell / Category", type = "text"),
+                list(name = "observed", title = "Observed", type = "number"),
+                list(name = "expected", title = "Expected", type = "number"),
+                list(name = "standardised_residual", title = "Standardised Residual", type = "number")
+            )
+        ))
+    if (isTRUE(followups))
+        .jr_addon_add_result_if_missing(self, "jReportFollowUps", jmvcore::Table$new(
+            options = self$options, name = "jReportFollowUps",
+            title = "MANOVA/MANCOVA Follow-up Analyses (jReport)", visible = FALSE, refs = refs,
+            columns = list(
+                list(name = "analysis", title = "Analysis", type = "text"),
+                list(name = "term", title = "Effect", type = "text"),
+                list(name = "outcome", title = "Outcome", type = "text"),
+                list(name = "statistic", title = "F", type = "number"),
+                list(name = "df1", title = "df1", type = "number"),
+                list(name = "df2", title = "df2", type = "number"),
+                list(name = "p", title = "p", type = "number", format = "zto,pvalue"),
+                list(name = "p_holm", title = "Holm-adjusted p", type = "number", format = "zto,pvalue"),
+                list(name = "effect", title = "Partial eta-squared", type = "number")
+            )
+        ))
 }
 
 .jr_addon_insert_card <- function(self, posthoc = FALSE, coefficients = FALSE, cells = FALSE,
                                   followups = FALSE, refs = character()) {
     .jr_addon_enable_library()
+    # Inject jReport ref definitions into the parent module's namespace so refs
+    # appear in jamovi's native References panel after the parent's asProtoBuf() runs.
+    if (!is.null(self$parent))
+        .jr_addon_inject_refs(self$parent$package)
+
     placeholder <- .jr_html_card(
         "Automatic report", "jReport",
         "The report will appear after the standard analysis variables have been selected."
     )
-    h <- .jr_addon_get(self$results, "jReportHeading")
-    if (!is.null(h)) h$setContent(.jr_addon_heading_html())
-    c <- .jr_addon_get(self$results, "jReportCard")
-    if (!is.null(c)) c$setContent(placeholder)
+    .jr_addon_add_result_if_missing(
+        self, "jReportHeading",
+        jmvcore::Html$new(options = self$options, name = "jReportHeading",
+            title = "jReport: Automatic Reporting", content = .jr_addon_heading_html(),
+            refs = refs)
+    )
+    .jr_addon_insert_tables(
+        self, posthoc = posthoc, coefficients = coefficients,
+        cells = cells, followups = followups, refs = refs
+    )
+    .jr_addon_add_result_if_missing(
+        self, "jReportCard",
+        jmvcore::Html$new(options = self$options, name = "jReportCard",
+            title = "Automatic Report (jReport)", content = placeholder,
+            refs = refs)
+    )
 }
 
 .jr_addon_set_card <- function(self, results, note = "") {
@@ -1255,7 +1398,7 @@
     .jr_addon_set_tables(self, results)
     report_html <- .jr_addon_report_html(results, options = .jr_addon_reporting_options(), note = note)
     ref_keys <- unique(unlist(lapply(results, .jr_text_reference_keys, include_effect_note = TRUE)))
-    card <- .jr_addon_get(self$results, "jReportCard")
+    card <- .jr_addon_get(self$parent$results, "jReportCard")
     if (!is.null(card)) {
         card$setContent(report_html)
         if (length(ref_keys) > 0L) card$setRefs(ref_keys)
@@ -1264,7 +1407,7 @@
 
 .jr_addon_message <- function(self, message) {
     .jr_addon_set_tables(self, list())
-    card <- .jr_addon_get(self$results, "jReportCard")
+    card <- .jr_addon_get(self$parent$results, "jReportCard")
     if (!is.null(card))
         card$setContent(.jr_html_card("Automatic report", "jReport", message, accent = "#b46c21"))
 }

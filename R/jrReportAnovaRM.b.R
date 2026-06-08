@@ -36,6 +36,10 @@ jrReportAnovaRMClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class
                 .jr_addon_message(self, "Automatic mixed-ANOVA reporting currently supports one between-subjects factor; more complex factorial mixed reporting is not yet automated.")
                 return()
             }
+            if (inherits(result, "try-error")) {
+                .jr_addon_message(self, .jr_guided_error_message(attr(result, "condition")))
+                return()
+            }
             if (inherits(result, "edu_analysis")) {
                 within_label <- within[[1]]$label
                 term_map <- list()

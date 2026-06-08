@@ -22,6 +22,10 @@ jrReportLogRegBinClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Cla
                 edu_logistic_regression(adjusted_data, model_formula, ci = .jr_parent_ci(self$parent)),
                 silent = TRUE
             )
+            if (inherits(result, "try-error")) {
+                .jr_addon_message(self, .jr_guided_error_message(attr(result, "condition")))
+                return()
+            }
             .jr_addon_set_card(
                 self, list(result),
                 .jr_accuracy_note("This generated paragraph and odds-ratio table summarise the selected binomial logistic regression model.")

@@ -47,6 +47,7 @@ jrReportTTestPSClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class
                     )
                 }))
             }
+            results <- Filter(function(r) !inherits(r, "try-error"), results)
             if (length(results) == 0L) {
                 .jr_addon_message(self, "Select the paired-samples t-test, Wilcoxon signed-rank test, or Bayes factor to generate report text.")
                 return()

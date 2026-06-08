@@ -33,6 +33,7 @@ jrReportCorrMatrixClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Cl
                     )
                 })
             }), recursive = FALSE)
+            results <- Filter(function(r) !inherits(r, "try-error"), results)
             .jr_addon_set_card(
                 self, results,
                 "A report card is generated for each selected correlation method and variable pair."

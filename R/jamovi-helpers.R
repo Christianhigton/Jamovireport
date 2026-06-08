@@ -938,18 +938,10 @@
 
 .jr_addon_reporting_options <- function() {
     list(
-        reportStyle = "apa7",
-        reportFormat = "paragraph",
-        reportTone = "student_friendly",
-        reportDescriptives = TRUE,
-        reportAssumptions = TRUE,
-        reportStatistic = TRUE,
-        reportDf = TRUE,
-        reportP = TRUE,
-        reportEffect = TRUE,
-        reportCI = TRUE,
-        reportInterpretation = TRUE,
-        reportCautions = TRUE
+        reportStyle = "apa7", reportFormat = "paragraph", reportTone = "student_friendly",
+        reportDescriptives = TRUE, reportAssumptions = TRUE, reportStatistic = TRUE,
+        reportDf = TRUE, reportP = TRUE, reportEffect = TRUE,
+        reportCI = TRUE, reportInterpretation = TRUE, reportCautions = TRUE
     )
 }
 
@@ -1481,3 +1473,4 @@
             table$addRow(rowKey = i, values = values)
     }
 }
+

@@ -1422,9 +1422,13 @@
         .jr_apply_variable_descriptions(result, self$data)
     })
     .jr_addon_set_tables(self, results)
-    self$parent$results$get("jReportCard")$setContent(
+    card <- self$parent$results$get("jReportCard")
+    card$setContent(
         .jr_addon_report_html(results, options = .jr_addon_reporting_options(), note = note)
     )
+    ref_keys <- unique(unlist(lapply(results, .jr_text_reference_keys, include_effect_note = TRUE)))
+    if (length(ref_keys) > 0L)
+        card$setRefs(ref_keys)
 }
 
 .jr_addon_message <- function(self, message) {

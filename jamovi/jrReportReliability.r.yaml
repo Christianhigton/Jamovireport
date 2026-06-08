@@ -2,6 +2,9 @@ name: jrReportReliability
 title: Automatic Report for Reliability Analysis
 jrs: '1.1'
 items:
+- name: jReportHeading
+  title: 'jReport: Automatic Reporting'
+  type: Html
 - name: jReportApaTable
   title: APA Results Summary (jReport)
   type: Table
@@ -74,3 +77,7 @@ items:
   - name: action
     title: Recommended Action
     type: text
+- name: jReportCard
+  title: Automatic Report (jReport)
+  type: Html
+

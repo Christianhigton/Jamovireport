@@ -23,9 +23,11 @@ jrReportAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
     "jrReportAnovaResults",
     inherit = jmvcore::Group,
     active = list(
+        jReportHeading = function() private$.items[["jReportHeading"]],
         jReportApaTable = function() private$.items[["jReportApaTable"]],
         jReportAssumptions = function() private$.items[["jReportAssumptions"]],
-        jReportPostHoc = function() private$.items[["jReportPostHoc"]]),
+        jReportPostHoc = function() private$.items[["jReportPostHoc"]],
+        jReportCard = function() private$.items[["jReportCard"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -33,6 +35,16 @@ jrReportAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                 options=options,
                 name="",
                 title="Automatic Report for ANOVA")
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="jReportHeading",
+                title="jReport: Automatic Reporting",
+                refs=list(
+                    "jReport",
+                    "jmvcore",
+                    "afex",
+                    "effectsize",
+                    "emmeans")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="jReportApaTable",
@@ -173,7 +185,17 @@ jrReportAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     list(
                         `name`="significant",
                         `title`="Significant?",
-                        `type`="text"))))}))
+                        `type`="text"))))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="jReportCard",
+                title="Automatic Report (jReport)",
+                refs=list(
+                    "jReport",
+                    "jmvcore",
+                    "afex",
+                    "effectsize",
+                    "emmeans")))}))
 
 jrReportAnovaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "jrReportAnovaBase",

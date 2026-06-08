@@ -21,7 +21,10 @@ jrReportMancovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
     inherit = jmvcore::Group,
     active = list(
         jReportApaTable = function() private$.items[["jReportApaTable"]],
-        jReportAssumptions = function() private$.items[["jReportAssumptions"]]),
+        jReportAssumptions = function() private$.items[["jReportAssumptions"]],
+        jReportFollowUps = function() private$.items[["jReportFollowUps"]],
+        jReportHeading = function() private$.items[["jReportHeading"]],
+        jReportCard = function() private$.items[["jReportCard"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -29,17 +32,23 @@ jrReportMancovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
                 options=options,
                 name="",
                 title="Automatic Report for MANOVA/MANCOVA")
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="jReportHeading",
+                title="jReport: Automatic Reporting",
+                refs=list(                    "jReport",
+                    "jmvcore",
+                    "car",
+                    "effectsize")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="jReportApaTable",
                 title="APA Results Summary (jReport)",
-                refs=list(
-                    "jReport",
+                refs=list(                    "jReport",
                     "jmvcore",
                     "car",
                     "effectsize"),
-                columns=list(
-                    list(`name`="analysis",`title`="Analysis",`type`="text"),
+                columns=list(                    list(`name`="analysis",`title`="Analysis",`type`="text"),
                     list(`name`="test",`title`="Test / Effect",`type`="text"),
                     list(`name`="statistic",`title`="Statistic",`type`="number"),
                     list(`name`="df1",`title`="df1",`type`="number"),
@@ -51,20 +60,42 @@ jrReportMancovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
                 options=options,
                 name="jReportAssumptions",
                 title="Assumptions and Recommended Actions (jReport)",
-                refs=list(
-                    "jReport",
+                refs=list(                    "jReport",
                     "jmvcore",
                     "car",
                     "effectsize"),
-                columns=list(
-                    list(`name`="analysis",`title`="Analysis",`type`="text"),
+                columns=list(                    list(`name`="analysis",`title`="Analysis",`type`="text"),
                     list(`name`="assumption",`title`="Assumption / Check",`type`="text"),
                     list(`name`="tested",`title`="Tested?",`type`="text"),
                     list(`name`="statistic",`title`="Statistic",`type`="number"),
                     list(`name`="p",`title`="p",`type`="number",`format`="zto,pvalue"),
                     list(`name`="met",`title`="Met?",`type`="text"),
                     list(`name`="interpretation",`title`="What This Means",`type`="text"),
-                    list(`name`="action",`title`="Recommended Action",`type`="text"))))}))
+                    list(`name`="action",`title`="Recommended Action",`type`="text"))))
+            self$add(jmvcore::Table$new(
+                options=options, name="jReportFollowUps",
+                title="MANOVA/MANCOVA Follow-up Analyses (jReport)", visible=FALSE,
+                refs=list(                    "jReport",
+                    "jmvcore",
+                    "car",
+                    "effectsize"),
+                columns=list(                    list(`name`="analysis",`title`="Analysis",`type`="text"),
+                    list(`name`="term",`title`="Effect",`type`="text"),
+                    list(`name`="outcome",`title`="Outcome",`type`="text"),
+                    list(`name`="statistic",`title`="F",`type`="number"),
+                    list(`name`="df1",`title`="df1",`type`="number"),
+                    list(`name`="df2",`title`="df2",`type`="number"),
+                    list(`name`="p",`title`="p",`type`="number",`format`="zto,pvalue"),
+                    list(`name`="p_holm",`title`="Holm-adjusted p",`type`="number",`format`="zto,pvalue"),
+                    list(`name`="effect",`title`="Partial eta-squared",`type`="number"))))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="jReportCard",
+                title="Automatic Report (jReport)",
+                refs=list(                    "jReport",
+                    "jmvcore",
+                    "car",
+                    "effectsize")))}))
 
 jrReportMancovaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "jrReportMancovaBase",
@@ -89,7 +120,6 @@ jrReportMancovaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
 
 #' Automatic Report for MANOVA/MANCOVA
 #'
-#'
 #' @section References:
 #' jReport
 #'
@@ -102,8 +132,11 @@ jrReportMancovaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
 #' @param data .
 #' @return A results object containing:
 #' \tabular{llllll}{
-#'   \code{results$jReportApaTable} \tab \tab \tab \tab \tab a table \cr
-#'   \code{results$jReportAssumptions} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$jReportApaTable} \tab \tab \tab \tab \tab a result item \cr
+#'   \code{results$jReportAssumptions} \tab \tab \tab \tab \tab a result item \cr
+#'   \code{results$jReportFollowUps} \tab \tab \tab \tab \tab a result item \cr
+#'   \code{results$jReportHeading} \tab \tab \tab \tab \tab a result item \cr
+#'   \code{results$jReportCard} \tab \tab \tab \tab \tab a result item \cr
 #' }
 #'
 #' @export

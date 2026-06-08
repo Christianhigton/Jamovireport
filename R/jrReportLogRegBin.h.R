@@ -21,7 +21,10 @@ jrReportLogRegBinResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R
     inherit = jmvcore::Group,
     active = list(
         jReportApaTable = function() private$.items[["jReportApaTable"]],
-        jReportAssumptions = function() private$.items[["jReportAssumptions"]]),
+        jReportAssumptions = function() private$.items[["jReportAssumptions"]],
+        jReportCoefficients = function() private$.items[["jReportCoefficients"]],
+        jReportHeading = function() private$.items[["jReportHeading"]],
+        jReportCard = function() private$.items[["jReportCard"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -29,18 +32,25 @@ jrReportLogRegBinResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R
                 options=options,
                 name="",
                 title="Automatic Report for Binomial Logistic Regression")
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="jReportHeading",
+                title="jReport: Automatic Reporting",
+                refs=list(                    "jReport",
+                    "jmvcore",
+                    "parameters",
+                    "performance",
+                    "effectsize")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="jReportApaTable",
                 title="APA Results Summary (jReport)",
-                refs=list(
-                    "jReport",
+                refs=list(                    "jReport",
                     "jmvcore",
                     "parameters",
                     "performance",
                     "effectsize"),
-                columns=list(
-                    list(`name`="analysis",`title`="Analysis",`type`="text"),
+                columns=list(                    list(`name`="analysis",`title`="Analysis",`type`="text"),
                     list(`name`="test",`title`="Test / Effect",`type`="text"),
                     list(`name`="statistic",`title`="Statistic",`type`="number"),
                     list(`name`="df1",`title`="df1",`type`="number"),
@@ -52,21 +62,43 @@ jrReportLogRegBinResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R
                 options=options,
                 name="jReportAssumptions",
                 title="Assumptions and Recommended Actions (jReport)",
-                refs=list(
-                    "jReport",
+                refs=list(                    "jReport",
                     "jmvcore",
                     "parameters",
                     "performance",
                     "effectsize"),
-                columns=list(
-                    list(`name`="analysis",`title`="Analysis",`type`="text"),
+                columns=list(                    list(`name`="analysis",`title`="Analysis",`type`="text"),
                     list(`name`="assumption",`title`="Assumption / Check",`type`="text"),
                     list(`name`="tested",`title`="Tested?",`type`="text"),
                     list(`name`="statistic",`title`="Statistic",`type`="number"),
                     list(`name`="p",`title`="p",`type`="number",`format`="zto,pvalue"),
                     list(`name`="met",`title`="Met?",`type`="text"),
                     list(`name`="interpretation",`title`="What This Means",`type`="text"),
-                    list(`name`="action",`title`="Recommended Action",`type`="text"))))}))
+                    list(`name`="action",`title`="Recommended Action",`type`="text"))))
+            self$add(jmvcore::Table$new(
+                options=options, name="jReportCoefficients",
+                title="Odds Ratios and Coefficients (jReport)", visible=FALSE,
+                refs=list(                    "jReport",
+                    "jmvcore",
+                    "parameters",
+                    "performance",
+                    "effectsize"),
+                columns=list(                    list(`name`="predictor",`title`="Predictor",`type`="text"),
+                    list(`name`="estimate",`title`="B",`type`="number"),
+                    list(`name`="se",`title`="SE",`type`="number"),
+                    list(`name`="statistic",`title`="z",`type`="number"),
+                    list(`name`="p",`title`="p",`type`="number",`format`="zto,pvalue"),
+                    list(`name`="odds_ratio",`title`="Odds Ratio",`type`="number"),
+                    list(`name`="confidence_interval",`title`="Odds Ratio 95% CI",`type`="text"))))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="jReportCard",
+                title="Automatic Report (jReport)",
+                refs=list(                    "jReport",
+                    "jmvcore",
+                    "parameters",
+                    "performance",
+                    "effectsize")))}))
 
 jrReportLogRegBinBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "jrReportLogRegBinBase",
@@ -91,7 +123,6 @@ jrReportLogRegBinBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
 
 #' Automatic Report for Binomial Logistic Regression
 #'
-#'
 #' @section References:
 #' jReport
 #'
@@ -106,8 +137,11 @@ jrReportLogRegBinBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
 #' @param data .
 #' @return A results object containing:
 #' \tabular{llllll}{
-#'   \code{results$jReportApaTable} \tab \tab \tab \tab \tab a table \cr
-#'   \code{results$jReportAssumptions} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$jReportApaTable} \tab \tab \tab \tab \tab a result item \cr
+#'   \code{results$jReportAssumptions} \tab \tab \tab \tab \tab a result item \cr
+#'   \code{results$jReportCoefficients} \tab \tab \tab \tab \tab a result item \cr
+#'   \code{results$jReportHeading} \tab \tab \tab \tab \tab a result item \cr
+#'   \code{results$jReportCard} \tab \tab \tab \tab \tab a result item \cr
 #' }
 #'
 #' @export

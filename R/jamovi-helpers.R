@@ -1202,125 +1202,6 @@
     do.call(rbind, rows)
 }
 
-.jr_addon_add_result_if_missing <- function(self, name, result) {
-    existing <- tryCatch(
-        self$results$get(name),
-        error = function(e) NULL
-    )
-    if (is.null(existing))
-        self$results$add(result)
-}
-
-.jr_addon_insert_tables <- function(self, posthoc = FALSE, coefficients = FALSE, cells = FALSE,
-                                    followups = FALSE, refs = character()) {
-    .jr_addon_add_result_if_missing(self, "jReportApaTable", jmvcore::Table$new(
-        options = self$options,
-        name = "jReportApaTable",
-        title = "APA Results Summary (jReport)",
-        refs = refs,
-        columns = list(
-            list(name = "analysis", title = "Analysis", type = "text"),
-            list(name = "test", title = "Test / Effect", type = "text"),
-            list(name = "statistic", title = "Statistic", type = "number"),
-            list(name = "df1", title = "df1", type = "number"),
-            list(name = "df2", title = "df2", type = "text"),
-            list(name = "p", title = "p", type = "number", format = "zto,pvalue"),
-            list(name = "effect", title = "Effect Size", type = "text"),
-            list(name = "ci", title = "Effect 95% CI", type = "text")
-        )
-    ))
-    .jr_addon_add_result_if_missing(self, "jReportAssumptions", jmvcore::Table$new(
-        options = self$options,
-        name = "jReportAssumptions",
-        title = "Assumptions and Recommended Actions (jReport)",
-        refs = refs,
-        columns = list(
-            list(name = "analysis", title = "Analysis", type = "text"),
-            list(name = "assumption", title = "Assumption / Check", type = "text"),
-            list(name = "tested", title = "Tested?", type = "text"),
-            list(name = "statistic", title = "Statistic", type = "number"),
-            list(name = "p", title = "p", type = "number", format = "zto,pvalue"),
-            list(name = "met", title = "Met?", type = "text"),
-            list(name = "interpretation", title = "What This Means", type = "text"),
-            list(name = "action", title = "Recommended Action", type = "text")
-        )
-    ))
-    if (isTRUE(posthoc)) {
-        .jr_addon_add_result_if_missing(self, "jReportPostHoc", jmvcore::Table$new(
-            options = self$options,
-            name = "jReportPostHoc",
-            title = "APA Post Hoc Comparisons (jReport)",
-            visible = FALSE,
-            refs = refs,
-            columns = list(
-                list(name = "analysis", title = "Analysis", type = "text"),
-                list(name = "term", title = "Factor / Term", type = "text"),
-                list(name = "comparison", title = "Comparison", type = "text"),
-                list(name = "mean_difference", title = "Mean Difference", type = "number"),
-                list(name = "se", title = "SE", type = "number"),
-                list(name = "df", title = "df", type = "number"),
-                list(name = "statistic", title = "t", type = "number"),
-                list(name = "p", title = "Adjusted p", type = "number", format = "zto,pvalue"),
-                list(name = "adjustment", title = "Adjustment", type = "text"),
-                list(name = "significant", title = "Significant?", type = "text")
-            )
-        ))
-    }
-    if (isTRUE(coefficients)) {
-        .jr_addon_add_result_if_missing(self, "jReportCoefficients", jmvcore::Table$new(
-            options = self$options,
-            name = "jReportCoefficients",
-            title = "Odds Ratios and Coefficients (jReport)",
-            visible = FALSE,
-            refs = refs,
-            columns = list(
-                list(name = "predictor", title = "Predictor", type = "text"),
-                list(name = "estimate", title = "B", type = "number"),
-                list(name = "se", title = "SE", type = "number"),
-                list(name = "statistic", title = "z", type = "number"),
-                list(name = "p", title = "p", type = "number", format = "zto,pvalue"),
-                list(name = "odds_ratio", title = "Odds Ratio", type = "number"),
-                list(name = "confidence_interval", title = "Odds Ratio 95% CI", type = "text")
-            )
-        ))
-    }
-    if (isTRUE(cells)) {
-        .jr_addon_add_result_if_missing(self, "jReportCells", jmvcore::Table$new(
-            options = self$options,
-            name = "jReportCells",
-            title = "Observed and Expected Counts (jReport)",
-            visible = FALSE,
-            refs = refs,
-            columns = list(
-                list(name = "analysis", title = "Analysis", type = "text"),
-                list(name = "category", title = "Cell / Category", type = "text"),
-                list(name = "observed", title = "Observed", type = "number"),
-                list(name = "expected", title = "Expected", type = "number"),
-                list(name = "standardised_residual", title = "Standardised Residual", type = "number")
-            )
-        ))
-    }
-    if (isTRUE(followups)) {
-        .jr_addon_add_result_if_missing(self, "jReportFollowUps", jmvcore::Table$new(
-            options = self$options,
-            name = "jReportFollowUps",
-            title = "MANOVA/MANCOVA Follow-up Analyses (jReport)",
-            visible = FALSE,
-            refs = refs,
-            columns = list(
-                list(name = "analysis", title = "Analysis", type = "text"),
-                list(name = "term", title = "Effect", type = "text"),
-                list(name = "outcome", title = "Outcome", type = "text"),
-                list(name = "statistic", title = "F", type = "number"),
-                list(name = "df1", title = "df1", type = "number"),
-                list(name = "df2", title = "df2", type = "number"),
-                list(name = "p", title = "p", type = "number", format = "zto,pvalue"),
-                list(name = "p_holm", title = "Holm-adjusted p", type = "number", format = "zto,pvalue"),
-                list(name = "effect", title = "Partial eta-squared", type = "number")
-            )
-        ))
-    }
-}
 
 .jr_addon_set_tables <- function(self, results) {
     apa_table <- self$results$get("jReportApaTable")
@@ -1394,27 +1275,15 @@
 .jr_addon_insert_card <- function(self, posthoc = FALSE, coefficients = FALSE, cells = FALSE,
                                   followups = FALSE, refs = character()) {
     .jr_addon_enable_library()
-    heading <- jmvcore::Html$new(
-        options = self$options,
-        name = "jReportHeading",
-        title = "jReport: Automatic Reporting",
-        content = .jr_addon_heading_html()
-    )
-    self$results$add(heading)
-    .jr_addon_insert_tables(
-        self, posthoc = posthoc, coefficients = coefficients,
-        cells = cells, followups = followups, refs = refs
-    )
-    card <- jmvcore::Html$new(
-        options = self$options,
-        name = "jReportCard",
-        title = "Automatic Report (jReport)",
-        content = .jr_html_card(
+    heading <- tryCatch(self$results$get("jReportHeading"), error = function(e) NULL)
+    if (!is.null(heading))
+        heading$setContent(.jr_addon_heading_html())
+    card <- tryCatch(self$results$get("jReportCard"), error = function(e) NULL)
+    if (!is.null(card))
+        card$setContent(.jr_html_card(
             "Automatic report", "jReport",
             "The report will appear after the standard analysis variables have been selected."
-        )
-    )
-    self$results$add(card)
+        ))
 }
 
 .jr_addon_set_card <- function(self, results, note = "") {

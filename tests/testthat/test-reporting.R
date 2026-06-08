@@ -319,26 +319,25 @@ test_that("between-subjects ANOVA references appear in report and jamovi result 
         expect_true(all(addon_refs %in% item$refs))
         expect_true(all(item$refs %in% ref_keys))
     }
-    expect_length(Filter(function(item) identical(item$type, "Html"), addon_yaml$items), 0L)
+    html_items <- Filter(function(item) identical(item$type, "Html"), addon_yaml$items)
+    html_names <- sapply(html_items, `[[`, "name")
+    expect_true("jReportHeading" %in% html_names)
+    expect_true("jReportCard" %in% html_names)
 
+    # Items are now declared in h.R files (not dynamically in jamovi-helpers.R)
+    hr_text <- paste(readLines(file.path(root, "R", "jrReportAnova.h.R"), warn = FALSE), collapse = "\n")
+    expect_true(grepl('"jReportApaTable"', hr_text, fixed = TRUE))
+    expect_true(grepl('"jReportAssumptions"', hr_text, fixed = TRUE))
+    expect_true(grepl('"jReportHeading"', hr_text, fixed = TRUE))
+    expect_true(grepl('"jReportCard"', hr_text, fixed = TRUE))
+    expect_true(grepl('refs=list(', hr_text, fixed = TRUE))
+
+    # helpers.R gets items via get() not add()
     helper_text <- paste(readLines(file.path(root, "R", "jamovi-helpers.R"), warn = FALSE), collapse = "\n")
-    heading_start <- regexpr('name = "jReportHeading"', helper_text, fixed = TRUE)
-    card_start <- regexpr('name = "jReportCard"', helper_text, fixed = TRUE)
-    apa_table_start <- regexpr('name = "jReportApaTable"', helper_text, fixed = TRUE)
-    assumptions_table_start <- regexpr('name = "jReportAssumptions"', helper_text, fixed = TRUE)
-    expect_true(heading_start > 0L)
-    expect_true(card_start > 0L)
-    expect_true(apa_table_start > 0L)
-    expect_true(assumptions_table_start > 0L)
-    expect_false(grepl("refs = refs", substr(helper_text, heading_start, heading_start + 250L), fixed = TRUE))
-    expect_false(grepl("refs = refs", substr(helper_text, card_start, card_start + 250L), fixed = TRUE))
-    expect_true(grepl("refs = refs", substr(helper_text, apa_table_start, apa_table_start + 250L), fixed = TRUE))
-    expect_true(grepl("refs = refs", substr(helper_text, assumptions_table_start, assumptions_table_start + 250L), fixed = TRUE))
-    expect_true(grepl(
-        "cells = cells, followups = followups, refs = refs",
-        helper_text,
-        fixed = TRUE
-    ))
+    expect_true(grepl('results$get("jReportHeading")', helper_text, fixed = TRUE))
+    expect_true(grepl('results$get("jReportCard")', helper_text, fixed = TRUE))
+    expect_false(grepl('results$add(heading)', helper_text, fixed = TRUE))
+    expect_false(grepl('results$add(card)', helper_text, fixed = TRUE))
 
     d <- ToothGrowth
     d$dose <- factor(d$dose)

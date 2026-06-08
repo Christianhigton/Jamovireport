@@ -21,7 +21,9 @@ jrReportLinRegResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
     inherit = jmvcore::Group,
     active = list(
         jReportApaTable = function() private$.items[["jReportApaTable"]],
-        jReportAssumptions = function() private$.items[["jReportAssumptions"]]),
+        jReportAssumptions = function() private$.items[["jReportAssumptions"]],
+        jReportHeading = function() private$.items[["jReportHeading"]],
+        jReportCard = function() private$.items[["jReportCard"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -29,18 +31,25 @@ jrReportLinRegResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
                 options=options,
                 name="",
                 title="Automatic Report for Linear Regression")
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="jReportHeading",
+                title="jReport: Automatic Reporting",
+                refs=list(                    "jReport",
+                    "jmvcore",
+                    "parameters",
+                    "performance",
+                    "effectsize")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="jReportApaTable",
                 title="APA Results Summary (jReport)",
-                refs=list(
-                    "jReport",
+                refs=list(                    "jReport",
                     "jmvcore",
                     "parameters",
                     "performance",
                     "effectsize"),
-                columns=list(
-                    list(`name`="analysis",`title`="Analysis",`type`="text"),
+                columns=list(                    list(`name`="analysis",`title`="Analysis",`type`="text"),
                     list(`name`="test",`title`="Test / Effect",`type`="text"),
                     list(`name`="statistic",`title`="Statistic",`type`="number"),
                     list(`name`="df1",`title`="df1",`type`="number"),
@@ -52,21 +61,28 @@ jrReportLinRegResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
                 options=options,
                 name="jReportAssumptions",
                 title="Assumptions and Recommended Actions (jReport)",
-                refs=list(
-                    "jReport",
+                refs=list(                    "jReport",
                     "jmvcore",
                     "parameters",
                     "performance",
                     "effectsize"),
-                columns=list(
-                    list(`name`="analysis",`title`="Analysis",`type`="text"),
+                columns=list(                    list(`name`="analysis",`title`="Analysis",`type`="text"),
                     list(`name`="assumption",`title`="Assumption / Check",`type`="text"),
                     list(`name`="tested",`title`="Tested?",`type`="text"),
                     list(`name`="statistic",`title`="Statistic",`type`="number"),
                     list(`name`="p",`title`="p",`type`="number",`format`="zto,pvalue"),
                     list(`name`="met",`title`="Met?",`type`="text"),
                     list(`name`="interpretation",`title`="What This Means",`type`="text"),
-                    list(`name`="action",`title`="Recommended Action",`type`="text"))))}))
+                    list(`name`="action",`title`="Recommended Action",`type`="text"))))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="jReportCard",
+                title="Automatic Report (jReport)",
+                refs=list(                    "jReport",
+                    "jmvcore",
+                    "parameters",
+                    "performance",
+                    "effectsize")))}))
 
 jrReportLinRegBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "jrReportLinRegBase",
@@ -91,7 +107,6 @@ jrReportLinRegBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
 
 #' Automatic Report for Linear Regression
 #'
-#'
 #' @section References:
 #' jReport
 #'
@@ -106,8 +121,10 @@ jrReportLinRegBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
 #' @param data .
 #' @return A results object containing:
 #' \tabular{llllll}{
-#'   \code{results$jReportApaTable} \tab \tab \tab \tab \tab a table \cr
-#'   \code{results$jReportAssumptions} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$jReportApaTable} \tab \tab \tab \tab \tab a result item \cr
+#'   \code{results$jReportAssumptions} \tab \tab \tab \tab \tab a result item \cr
+#'   \code{results$jReportHeading} \tab \tab \tab \tab \tab a result item \cr
+#'   \code{results$jReportCard} \tab \tab \tab \tab \tab a result item \cr
 #' }
 #'
 #' @export

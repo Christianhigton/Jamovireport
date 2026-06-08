@@ -1204,11 +1204,11 @@
 
 .jr_addon_add_result_if_missing <- function(self, name, result) {
     existing <- tryCatch(
-        self$parent$results$get(name),
+        self$results$get(name),
         error = function(e) NULL
     )
     if (is.null(existing))
-        self$parent$results$add(result)
+        self$results$add(result)
 }
 
 .jr_addon_insert_tables <- function(self, posthoc = FALSE, coefficients = FALSE, cells = FALSE,
@@ -1323,8 +1323,8 @@
 }
 
 .jr_addon_set_tables <- function(self, results) {
-    apa_table <- self$parent$results$get("jReportApaTable")
-    assumption_table <- self$parent$results$get("jReportAssumptions")
+    apa_table <- self$results$get("jReportApaTable")
+    assumption_table <- self$results$get("jReportAssumptions")
     apa_table$deleteRows()
     assumption_table$deleteRows()
     apa_rows <- .jr_addon_apa_rows(results)
@@ -1338,7 +1338,7 @@
             assumption_table$addRow(rowKey = i, values = as.list(assumption_rows[i, ]))
     }
     posthoc_table <- tryCatch(
-        self$parent$results$get("jReportPostHoc"),
+        self$results$get("jReportPostHoc"),
         error = function(e) NULL
     )
     if (!is.null(posthoc_table)) {
@@ -1351,7 +1351,7 @@
         }
     }
     coefficient_table <- tryCatch(
-        self$parent$results$get("jReportCoefficients"),
+        self$results$get("jReportCoefficients"),
         error = function(e) NULL
     )
     if (!is.null(coefficient_table)) {
@@ -1364,7 +1364,7 @@
         }
     }
     cell_table <- tryCatch(
-        self$parent$results$get("jReportCells"),
+        self$results$get("jReportCells"),
         error = function(e) NULL
     )
     if (!is.null(cell_table)) {
@@ -1377,7 +1377,7 @@
         }
     }
     followup_table <- tryCatch(
-        self$parent$results$get("jReportFollowUps"),
+        self$results$get("jReportFollowUps"),
         error = function(e) NULL
     )
     if (!is.null(followup_table)) {
@@ -1400,7 +1400,7 @@
         title = "jReport: Automatic Reporting",
         content = .jr_addon_heading_html()
     )
-    self$parent$results$add(heading)
+    self$results$add(heading)
     .jr_addon_insert_tables(
         self, posthoc = posthoc, coefficients = coefficients,
         cells = cells, followups = followups, refs = refs
@@ -1414,7 +1414,7 @@
             "The report will appear after the standard analysis variables have been selected."
         )
     )
-    self$parent$results$add(card)
+    self$results$add(card)
 }
 
 .jr_addon_set_card <- function(self, results, note = "") {
@@ -1422,7 +1422,7 @@
         .jr_apply_variable_descriptions(result, self$data)
     })
     .jr_addon_set_tables(self, results)
-    card <- self$parent$results$get("jReportCard")
+    card <- self$results$get("jReportCard")
     card$setContent(
         .jr_addon_report_html(results, options = .jr_addon_reporting_options(), note = note)
     )
@@ -1433,7 +1433,7 @@
 
 .jr_addon_message <- function(self, message) {
     .jr_addon_set_tables(self, list())
-    self$parent$results$get("jReportCard")$setContent(
+    self$results$get("jReportCard")$setContent(
         .jr_html_card("Automatic report", "jReport", message, accent = "#b46c21")
     )
 }

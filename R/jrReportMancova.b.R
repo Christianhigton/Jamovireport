@@ -19,6 +19,10 @@ jrReportMancovaClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class
                 edu_manova(self$data, outcomes, factors, covariates),
                 silent = TRUE
             )
+            if (inherits(result, "try-error")) {
+                .jr_addon_message(self, .jr_guided_error_message(attr(result, "condition")))
+                return()
+            }
             .jr_addon_set_card(
                 self, list(result),
                 .jr_accuracy_note(

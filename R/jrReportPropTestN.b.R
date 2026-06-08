@@ -21,6 +21,10 @@ jrReportPropTestNClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Cla
                 edu_chisq_gof(self$data, variable, counts = self$parent$options$counts, expected = expected),
                 silent = TRUE
             )
+            if (inherits(result, "try-error")) {
+                .jr_addon_message(self, .jr_guided_error_message(attr(result, "condition")))
+                return()
+            }
             .jr_addon_set_card(
                 self, list(result),
                 .jr_accuracy_note("This generated paragraph summarises the selected chi-square goodness-of-fit test and expected proportions.")

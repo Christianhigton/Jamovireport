@@ -47,6 +47,7 @@ jrReportAnovaOneWClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Cla
                     }
                 }
             }
+            results <- Filter(function(r) !inherits(r, "try-error"), results)
             .jr_addon_set_card(self, results)
         }
     )

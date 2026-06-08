@@ -1392,6 +1392,15 @@
 }
 
 .jr_addon_set_card <- function(self, results, note = "") {
+    results <- Filter(function(r) !inherits(r, "try-error"), results)
+    if (length(results) == 0L) {
+        .jr_addon_message(self, paste(
+            "The analysis could not be completed.",
+            "Check that the selected variables have enough complete cases,",
+            "appropriate measurement levels, and no singular or perfectly collinear model terms."
+        ))
+        return(invisible(NULL))
+    }
     results <- lapply(results, function(result) {
         .jr_apply_variable_descriptions(result, self$data)
     })

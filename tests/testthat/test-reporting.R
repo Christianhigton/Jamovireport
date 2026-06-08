@@ -324,7 +324,7 @@ test_that("between-subjects ANOVA references appear in report and jamovi result 
     expect_true("jReportHeading" %in% html_names)
     expect_true("jReportCard" %in% html_names)
 
-    # Items are now declared in h.R files (not dynamically in jamovi-helpers.R)
+    # Items are declared in h.R files (jReport namespace, for refs collection)
     hr_text <- paste(readLines(file.path(root, "R", "jrReportAnova.h.R"), warn = FALSE), collapse = "\n")
     expect_true(grepl('"jReportApaTable"', hr_text, fixed = TRUE))
     expect_true(grepl('"jReportAssumptions"', hr_text, fixed = TRUE))
@@ -332,12 +332,12 @@ test_that("between-subjects ANOVA references appear in report and jamovi result 
     expect_true(grepl('"jReportCard"', hr_text, fixed = TRUE))
     expect_true(grepl('refs=list(', hr_text, fixed = TRUE))
 
-    # helpers.R gets items via get() not add()
+    # helpers.R populates both self$results (for refs) and self$parent$results (for display)
     helper_text <- paste(readLines(file.path(root, "R", "jamovi-helpers.R"), warn = FALSE), collapse = "\n")
-    expect_true(grepl('results$get("jReportHeading")', helper_text, fixed = TRUE))
-    expect_true(grepl('results$get("jReportCard")', helper_text, fixed = TRUE))
-    expect_false(grepl('results$add(heading)', helper_text, fixed = TRUE))
-    expect_false(grepl('results$add(card)', helper_text, fixed = TRUE))
+    expect_true(grepl('self$parent$results', helper_text, fixed = TRUE))
+    expect_true(grepl('self$results', helper_text, fixed = TRUE))
+    expect_true(grepl('"jReportApaTable"', helper_text, fixed = TRUE))
+    expect_true(grepl('"jReportAssumptions"', helper_text, fixed = TRUE))
 
     d <- ToothGrowth
     d$dose <- factor(d$dose)

@@ -23,6 +23,10 @@ jrReportReliabilityClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6C
                 ),
                 silent = TRUE
             )
+            if (inherits(result, "try-error")) {
+                .jr_addon_message(self, .jr_guided_error_message(attr(result, "condition")))
+                return()
+            }
             .jr_addon_set_card(
                 self, list(result),
                 "This report card reports McDonald's omega total and Cronbach's alpha. We recommend reporting omega alongside alpha and checking item diagnostics before using the values in assessed, clinical, or published work."

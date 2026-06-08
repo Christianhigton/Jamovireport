@@ -18,6 +18,10 @@ jrReportAnovaClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class(
                 edu_anova_between(self$data, outcome, factors, ci = .jr_parent_ci(self$parent)),
                 silent = TRUE
             )
+            if (inherits(result, "try-error")) {
+                .jr_addon_message(self, .jr_guided_error_message(attr(result, "condition")))
+                return()
+            }
             if (inherits(result, "edu_analysis")) {
                 result$posthoc_report <- .jr_model_posthoc(
                     result,

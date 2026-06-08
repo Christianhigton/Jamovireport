@@ -1,6 +1,6 @@
 ---
 name: jrReportReliability
-title: Automatic Omega Report for Reliability Analysis
+title: Automatic Reliability Report
 jus: '2.0'
 stage: 0
 compilerMode: tame

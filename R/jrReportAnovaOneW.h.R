@@ -6,14 +6,11 @@ jrReportAnovaOneWOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R
     inherit = jmvcore::Options,
     public = list(
         initialize = function( ...) {
-
             super$initialize(
                 package="jReport",
                 name="jrReportAnovaOneW",
                 requiresData=TRUE,
                 ...)
-
-
         }),
     active = list(),
     private = list()
@@ -22,14 +19,84 @@ jrReportAnovaOneWOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R
 jrReportAnovaOneWResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "jrReportAnovaOneWResults",
     inherit = jmvcore::Group,
-    active = list(),
+    active = list(
+        jReportApaTable = function() private$.items[["jReportApaTable"]],
+        jReportAssumptions = function() private$.items[["jReportAssumptions"]],
+        jReportPostHoc = function() private$.items[["jReportPostHoc"]],
+        jReportHeading = function() private$.items[["jReportHeading"]],
+        jReportCard = function() private$.items[["jReportCard"]]),
     private = list(),
     public=list(
         initialize=function(options) {
             super$initialize(
                 options=options,
                 name="",
-                title="Automatic Report for One-Way ANOVA")}))
+                title="Automatic Report for One-Way ANOVA")
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="jReportHeading",
+                title="jReport: Automatic Reporting",
+                refs=list(                    "jReport",
+                    "jmvcore",
+                    "effectsize",
+                    "emmeans")))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="jReportApaTable",
+                title="APA Results Summary (jReport)",
+                refs=list(                    "jReport",
+                    "jmvcore",
+                    "effectsize",
+                    "emmeans"),
+                columns=list(                    list(`name`="analysis",`title`="Analysis",`type`="text"),
+                    list(`name`="test",`title`="Test / Effect",`type`="text"),
+                    list(`name`="statistic",`title`="Statistic",`type`="number"),
+                    list(`name`="df1",`title`="df1",`type`="number"),
+                    list(`name`="df2",`title`="df2",`type`="text"),
+                    list(`name`="p",`title`="p",`type`="number",`format`="zto,pvalue"),
+                    list(`name`="effect",`title`="Effect Size",`type`="text"),
+                    list(`name`="ci",`title`="Effect 95% CI",`type`="text"))))
+            self$add(jmvcore::Table$new(
+                options=options,
+                name="jReportAssumptions",
+                title="Assumptions and Recommended Actions (jReport)",
+                refs=list(                    "jReport",
+                    "jmvcore",
+                    "effectsize",
+                    "emmeans"),
+                columns=list(                    list(`name`="analysis",`title`="Analysis",`type`="text"),
+                    list(`name`="assumption",`title`="Assumption / Check",`type`="text"),
+                    list(`name`="tested",`title`="Tested?",`type`="text"),
+                    list(`name`="statistic",`title`="Statistic",`type`="number"),
+                    list(`name`="p",`title`="p",`type`="number",`format`="zto,pvalue"),
+                    list(`name`="met",`title`="Met?",`type`="text"),
+                    list(`name`="interpretation",`title`="What This Means",`type`="text"),
+                    list(`name`="action",`title`="Recommended Action",`type`="text"))))
+            self$add(jmvcore::Table$new(
+                options=options, name="jReportPostHoc",
+                title="APA Post Hoc Comparisons (jReport)", visible=FALSE,
+                refs=list(                    "jReport",
+                    "jmvcore",
+                    "effectsize",
+                    "emmeans"),
+                columns=list(                    list(`name`="analysis",`title`="Analysis",`type`="text"),
+                    list(`name`="term",`title`="Factor / Term",`type`="text"),
+                    list(`name`="comparison",`title`="Comparison",`type`="text"),
+                    list(`name`="mean_difference",`title`="Mean Difference",`type`="number"),
+                    list(`name`="se",`title`="SE",`type`="number"),
+                    list(`name`="df",`title`="df",`type`="number"),
+                    list(`name`="statistic",`title`="t",`type`="number"),
+                    list(`name`="p",`title`="Adjusted p",`type`="number",`format`="zto,pvalue"),
+                    list(`name`="adjustment",`title`="Adjustment",`type`="text"),
+                    list(`name`="significant",`title`="Significant?",`type`="text"))))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="jReportCard",
+                title="Automatic Report (jReport)",
+                refs=list(                    "jReport",
+                    "jmvcore",
+                    "effectsize",
+                    "emmeans")))}))
 
 jrReportAnovaOneWBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "jrReportAnovaOneWBase",
@@ -49,12 +116,11 @@ jrReportAnovaOneWBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
                 pause = NULL,
                 completeWhenFilled = FALSE,
                 requiresMissings = FALSE,
-                weightsSupport = 'auto')
+                weightsSupport = "auto")
         }))
 
 #' Automatic Report for One-Way ANOVA
 #'
-#' 
 #' @section References:
 #' jReport
 #'
@@ -67,28 +133,22 @@ jrReportAnovaOneWBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
 #' @param data .
 #' @return A results object containing:
 #' \tabular{llllll}{
+#'   \code{results$jReportApaTable} \tab \tab \tab \tab \tab a result item \cr
+#'   \code{results$jReportAssumptions} \tab \tab \tab \tab \tab a result item \cr
+#'   \code{results$jReportPostHoc} \tab \tab \tab \tab \tab a result item \cr
+#'   \code{results$jReportHeading} \tab \tab \tab \tab \tab a result item \cr
+#'   \code{results$jReportCard} \tab \tab \tab \tab \tab a result item \cr
 #' }
 #'
 #' @export
-jrReportAnovaOneW <- function(
-    data) {
-
+jrReportAnovaOneW <- function(data) {
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("jrReportAnovaOneW requires jmvcore to be installed (restart may be required)")
-
     if (missing(data))
-        data <- jmvcore::marshalData(
-            parent.frame())
-
-
+        data <- jmvcore::marshalData(parent.frame())
     options <- jrReportAnovaOneWOptions$new()
-
-    analysis <- jrReportAnovaOneWClass$new(
-        options = options,
-        data = data)
-
+    analysis <- jrReportAnovaOneWClass$new(options = options, data = data)
     analysis$run()
-
     analysis$results
 }
 

@@ -59,6 +59,7 @@ jrReportTTestISClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class
                     )
                 }))
             }
+            results <- Filter(function(r) !inherits(r, "try-error"), results)
             if (length(results) == 0L) {
                 .jr_addon_message(self, "Select Student's, Welch's, Mann-Whitney U, or Bayes factor to generate report text.")
                 return()

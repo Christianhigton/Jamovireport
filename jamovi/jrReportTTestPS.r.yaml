@@ -1,4 +1,81 @@
 name: jrReportTTestPS
 title: Automatic Report for Paired Samples T-Test
 jrs: '1.1'
-items: []
+items:
+- name: jReportHeading
+  title: 'jReport: Automatic Reporting'
+  type: Html
+- name: jReportApaTable
+  title: APA Results Summary (jReport)
+  type: Table
+  refs:
+  - RCore
+  - jReport
+  - jmvcore
+  - effectsize
+  - BayesFactor
+  columns:
+  - name: analysis
+    title: Analysis
+    type: text
+  - name: test
+    title: Test / Effect
+    type: text
+  - name: statistic
+    title: Statistic
+    type: number
+  - name: df1
+    title: df1
+    type: number
+  - name: df2
+    title: df2
+    type: text
+  - name: p
+    title: p
+    type: number
+    format: zto,pvalue
+  - name: effect
+    title: Effect Size
+    type: text
+  - name: ci
+    title: Effect 95% CI
+    type: text
+- name: jReportAssumptions
+  title: Assumptions and Recommended Actions (jReport)
+  type: Table
+  refs:
+  - RCore
+  - jReport
+  - jmvcore
+  - effectsize
+  - BayesFactor
+  columns:
+  - name: analysis
+    title: Analysis
+    type: text
+  - name: assumption
+    title: Assumption / Check
+    type: text
+  - name: tested
+    title: Tested?
+    type: text
+  - name: statistic
+    title: Statistic
+    type: number
+  - name: p
+    title: p
+    type: number
+    format: zto,pvalue
+  - name: met
+    title: Met?
+    type: text
+  - name: interpretation
+    title: What This Means
+    type: text
+  - name: action
+    title: Recommended Action
+    type: text
+- name: jReportCard
+  title: Automatic Report (jReport)
+  type: Html
+

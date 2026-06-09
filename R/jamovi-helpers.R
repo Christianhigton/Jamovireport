@@ -420,6 +420,15 @@
     .jr_html_card("Interpretation", "What does this mean?", content, accent = accent)
 }
 
+.jr_guided_report_sections_html <- function(result, options) {
+    .jr_build_report_sections_html(
+        apa_wording             = .jr_jamovi_text(result, options),
+        diagnostic_note         = result$caution %||% "",
+        interpretation_guidance = result$interpretation %||% "",
+        checklist_items         = .jr_analysis_checklist(result$analysis %||% "")
+    )
+}
+
 .jr_nonempty_unique <- function(items) {
     items <- trimws(items[nzchar(items)])
     items[!duplicated(items)]
@@ -915,6 +924,17 @@
             "Prior specification matches the intended analysis.",
             "Bayes Factor (BF10 or BF01) matches jamovi output.",
             "Direction of evidence is correctly described.",
+            "Interpretation matches the research question."
+        ),
+        regression = c(
+            "Outcome variable is the intended dependent variable.",
+            "Predictors are the intended covariates and factors.",
+            "Categorical predictors are coded with the correct groups and reference levels.",
+            "Model fit statistics are copied from the final jamovi output.",
+            "R-squared and adjusted R-squared match the final model.",
+            "F statistic and degrees of freedom match the final model.",
+            "b, SE, beta, t, p, and confidence intervals match the coefficient table.",
+            "Assumption checks have been reviewed.",
             "Interpretation matches the research question."
         ),
         c(

@@ -19,6 +19,7 @@ Imports:
     effectsize,
     ggplot2,
     jmvcore (>= 0.8.5),
+    nnet,
     parameters,
     performance,
     psych,

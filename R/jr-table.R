@@ -4,9 +4,12 @@
     original <- conditionMessage(error)
     if (grepl("logistic regression requires an outcome with exactly two levels", original, ignore.case = TRUE))
         return("Logistic regression requires a binary outcome variable.")
-    paste(
-        "The analysis could not be completed.",
-        "Check that the selected variables have enough complete cases, appropriate measurement levels, and no singular or perfectly collinear model terms."
+    if (grepl("3 or more levels", original, ignore.case = TRUE))
+        return("Multinomial logistic regression requires an outcome variable with 3 or more categories.")
+    paste0(
+        "The analysis could not be completed. ",
+        "Check that the selected variables have enough complete cases, appropriate measurement levels, and no singular or perfectly collinear model terms.",
+        " (", original, ")"
     )
 }
 

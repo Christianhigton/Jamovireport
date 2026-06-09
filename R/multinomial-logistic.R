@@ -56,8 +56,9 @@ edu_multinomial_logistic <- function(data, formula, ci = 0.95) {
     })
     parameters <- do.call(rbind, params_list)
 
-    null_model <- stats::update(model, stats::as.formula(
-        paste(outcome_var, "~ 1")), data = d, trace = FALSE)
+    null_formula <- stats::as.formula(paste(outcome_var, "~ 1"))
+    environment(null_formula) <- environment()
+    null_model <- nnet::multinom(null_formula, data = d, trace = FALSE)
     lr_stat  <- as.numeric(2 * (stats::logLik(model) - stats::logLik(null_model)))
     df_model <- attr(stats::logLik(model), "df") - attr(stats::logLik(null_model), "df")
     p_value  <- stats::pchisq(lr_stat, df = df_model, lower.tail = FALSE)

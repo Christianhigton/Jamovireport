@@ -211,6 +211,7 @@ eduLogisticResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                 options=options,
                 name="fit",
                 title="Main Results and Model Fit",
+                rows=1,
                 clearWith=list(
                     "outcome",
                     "covariates",

@@ -6,6 +6,7 @@ stage: 0
 compilerMode: tame
 children:
   - type: VariableSupplier
+    stretchFactor: 1
     persistentItems: false
     children:
       - type: TargetLayoutBox

@@ -217,6 +217,7 @@ eduReliabilityOmegaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6:
                 options=options,
                 name="main",
                 title="Reliability Estimate",
+                rows=1,
                 clearWith=list(
                     "items",
                     "reverseItems",

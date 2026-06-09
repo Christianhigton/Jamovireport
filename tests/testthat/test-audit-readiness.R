@@ -165,3 +165,103 @@ test_that("fixed diagnostics use stable row updates and dynamic diagnostics rema
         expect_false(grepl("fixed = TRUE", text, fixed = TRUE), info = file)
     }
 })
+
+test_that("plot state is set unconditionally (no if-showPlot guard)", {
+  files <- c(
+    "R/eduTTest.b.R", "R/eduAnova.b.R", "R/eduBetweenAnova.b.R",
+    "R/eduAncova.b.R", "R/eduCorrelation.b.R", "R/eduMixedAnova.b.R",
+    "R/eduRMAnova.b.R", "R/eduRegression.b.R", "R/eduReliabilityOmega.b.R"
+  )
+  root <- audit_root()
+  for (f in files) {
+    code <- paste(readLines(file.path(root, f), warn = FALSE), collapse = "\n")
+    expect_false(
+      grepl("if\\s*\\(\\s*self\\$options\\$showPlot\\s*\\)\\s*self\\$results\\$plot\\$setState", code),
+      info = paste("Conditional plot setState found in", f)
+    )
+    expect_true(
+      grepl("self\\$results\\$plot\\$setState\\s*\\(", code),
+      info = paste("No unconditional plot setState found in", f)
+    )
+  }
+})
+
+test_that("single-row primary result tables use setRow not addRow", {
+  files <- c(
+    "R/eduTTest.b.R", "R/eduAnova.b.R", "R/eduCorrelation.b.R",
+    "R/eduReliabilityOmega.b.R", "R/eduChiSquareGoodness.b.R",
+    "R/eduChiSquareIndependence.b.R", "R/eduLogistic.b.R", "R/eduRegression.b.R"
+  )
+  forbidden <- c("self\\$results\\$main\\$addRow", "self\\$results\\$fit\\$addRow")
+  root <- audit_root()
+  for (f in files) {
+    code <- paste(readLines(file.path(root, f), warn = FALSE), collapse = "\n")
+    for (pat in forbidden) {
+      expect_false(grepl(pat, code), info = paste("Fixed single-row table uses addRow in", f))
+    }
+  }
+})
+
+test_that("single-row r.yaml tables declare rows: 1", {
+  yamls <- c(
+    "jamovi/eduTTest.r.yaml", "jamovi/eduAnova.r.yaml",
+    "jamovi/eduCorrelation.r.yaml", "jamovi/eduReliabilityOmega.r.yaml",
+    "jamovi/eduChiSquareGoodness.r.yaml", "jamovi/eduChiSquareIndependence.r.yaml",
+    "jamovi/eduLogistic.r.yaml", "jamovi/eduRegression.r.yaml"
+  )
+  root <- audit_root()
+  for (f in yamls) {
+    content <- paste(readLines(file.path(root, f), warn = FALSE), collapse = "\n")
+    expect_true(grepl("rows:\\s*1", content), info = paste("Missing rows: 1 in", f))
+  }
+})
+
+test_that(".gitignore excludes generated files", {
+  root <- audit_root()
+  expect_true(file.exists(file.path(root, ".gitignore")))
+  gi <- readLines(file.path(root, ".gitignore"), warn = FALSE)
+  for (entry in c("build/", "*.jmo", "*.tar.gz", "*.Rcheck/", ".Rproj.user/")) {
+    expect_true(any(gi == entry), info = paste("Missing .gitignore entry:", entry))
+  }
+})
+
+test_that("development artefacts are excluded", {
+  root <- audit_root()
+  rb <- readLines(file.path(root, ".Rbuildignore"), warn = FALSE)
+  expect_true(any(grepl("AUDIT_FIXES_SUMMARY", rb)), info = "AUDIT_FIXES_SUMMARY not in .Rbuildignore")
+  expect_true(any(grepl("audit-fixes\\.patch", rb)), info = "audit-fixes.patch not in .Rbuildignore")
+  expect_false(file.exists(file.path(root, "AUDIT_FIXES_SUMMARY.md")), info = "AUDIT_FIXES_SUMMARY.md still exists")
+  expect_false(file.exists(file.path(root, "audit-fixes.patch")), info = "audit-fixes.patch still exists")
+})
+
+test_that("stale PDF exclusion is not in .Rbuildignore", {
+  root <- audit_root()
+  rb <- readLines(file.path(root, ".Rbuildignore"), warn = FALSE)
+  expect_false(any(grepl("Julie Pallant", rb)), info = "Stale Julie Pallant entry remains in .Rbuildignore")
+})
+
+test_that("core helper functions are available after refactor", {
+  fns <- c(
+    ".jr_html_card", ".jr_html_escape", ".jr_html_paragraphs", ".jr_html_bullets",
+    ".jr_addon_insert_card", ".jr_addon_set_card", ".jr_addon_set_tables",
+    ".jr_reference_entry_text", ".jr_text_reference_keys", ".jr_addon_inject_refs",
+    ".jr_populate_diagnostics", ".jr_prefill_diagnostic_rows",
+    ".jr_guided_error_message", ".jr_guided_computation"
+  )
+  for (fn in fns) {
+    expect_true(exists(fn, envir = asNamespace("jReport"), mode = "function"),
+                info = paste("Missing helper:", fn))
+  }
+})
+
+test_that("analysis .b.R files are represented in manifest", {
+  root <- audit_root()
+  src <- sub("\\.b\\.R$", "", list.files(file.path(root, "R"), pattern = "\\.b\\.R$"))
+  manifest <- paste(readLines(file.path(root, "jamovi", "0000.yaml"), warn = FALSE), collapse = "\n")
+  # jrReport* add-ons use addonFor rather than name entries; edu* guided analyses
+  # are intentionally hidden from the menu (see 0000.yaml) and are excluded here.
+  addon_only <- src[grepl("^jrReport", src)]
+  missing <- addon_only[!vapply(addon_only, function(x) grepl(x, manifest, fixed = TRUE), logical(1))]
+  expect_equal(missing, character(0),
+               info = paste("Missing from manifest:", paste(missing, collapse = ", ")))
+})

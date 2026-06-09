@@ -16,6 +16,7 @@ items:
 - name: main
   title: Main Result
   type: Table
+  rows: 1
   clearWith:
   - x
   - yes

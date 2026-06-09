@@ -20,6 +20,7 @@ items:
 - name: fit
   title: Main Results and Model Fit
   type: Table
+  rows: 1
   clearWith:
   - outcome
   - predictors

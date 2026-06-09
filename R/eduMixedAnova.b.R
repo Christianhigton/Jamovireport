@@ -29,8 +29,7 @@ eduMixedAnovaClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class(
             .jr_populate_diagnostics(self$results$diagnostics, result$diagnostics, fixed = TRUE)
             self$results$report$setContent(.jr_jamovi_report_html(result, self$options))
             self$results$interpretation$setContent(.jr_jamovi_interpretation_html(result))
-            if (self$options$showPlot)
-                self$results$plot$setState(result)
+            self$results$plot$setState(result)
         },
         .plot = function(image, ggtheme, theme, ...) {
             if (is.null(image$state))

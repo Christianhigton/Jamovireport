@@ -194,6 +194,7 @@ eduChiSquareGoodnessResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6
                 options=options,
                 name="fit",
                 title="Main Results and Effect Size",
+                rows=1,
                 clearWith=list(
                     "variable",
                     "counts",

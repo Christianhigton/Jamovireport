@@ -1417,9 +1417,14 @@
     original <- conditionMessage(error)
     if (grepl("logistic regression requires an outcome with exactly two levels", original, ignore.case = TRUE))
         return("Logistic regression requires a binary outcome variable.")
-    paste(
-        "The analysis could not be completed.",
-        "Check that the selected variables have enough complete cases, appropriate measurement levels, and no singular or perfectly collinear model terms."
+    if (grepl("factor.*has only one level|only.*one.*level|perfect|singular|computationally singular|aliased", original, ignore.case = TRUE))
+        return(paste("The model could not be estimated: one or more variables have only one level, or the model terms are perfectly collinear.", paste0("(", original, ")")))
+    if (grepl("not enough.*observations|insufficient.*degrees|residual df", original, ignore.case = TRUE))
+        return(paste("Not enough observations to fit this model. Try fewer factors or covariates.", paste0("(", original, ")")))
+    paste0(
+        "The analysis could not be completed. ",
+        "Check that the selected variables have enough complete cases, appropriate measurement levels, and no singular or perfectly collinear model terms. ",
+        "(", original, ")"
     )
 }
 

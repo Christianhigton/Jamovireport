@@ -22,7 +22,7 @@ eduTTestClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class(
             ))
             result <- .jr_apply_variable_descriptions(result, self$data)
             self$results$overview$setContent(.jr_jamovi_overview_html(result))
-            self$results$main$addRow(rowKey = 1, values = as.list(result$statistics[1, ]))
+            self$results$main$setRow(rowKey = "1", values = as.list(result$statistics[1, ]))
 
             desc <- result$descriptives
             label <- if ("group" %in% names(desc)) desc$group else desc$condition
@@ -34,8 +34,7 @@ eduTTestClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class(
             .jr_populate_diagnostics(self$results$diagnostics, result$diagnostics)
             self$results$report$setContent(.jr_jamovi_report_html(result, self$options))
             self$results$interpretation$setContent(.jr_jamovi_interpretation_html(result))
-            if (self$options$showPlot)
-                self$results$plot$setState(result)
+            self$results$plot$setState(result)
         },
         .plot = function(image, ggtheme, theme, ...) {
             if (is.null(image$state))

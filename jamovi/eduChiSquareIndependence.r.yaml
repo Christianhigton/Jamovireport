@@ -14,6 +14,7 @@ items:
 - name: fit
   title: Main Results and Effect Size
   type: Table
+  rows: 1
   clearWith:
   - rowVariable
   - columnVariable

@@ -127,14 +127,45 @@ edu_ancova <- function(data, outcome, factors, covariates, ci = .95) {
         .jr_numeric(d[[name]], name)
     for (name in factors)
         d[[name]] <- droplevels(factor(d[[name]]))
+    for (name in factors) {
+        lvls <- levels(d[[name]])
+        if (length(lvls) < 2L)
+            .jr_stop(sprintf("Factor '%s' has only one level in the data after removing missing values. ANCOVA requires at least two groups.", name))
+    }
+    n_params <- length(factors) + length(covariates) +
+        sum(vapply(factors, function(f) length(levels(d[[f]])) - 1L, integer(1)))
+    if (nrow(d) <= n_params + 1L)
+        .jr_stop(sprintf(
+            "Not enough complete observations (%d) to fit this model. Need at least %d rows. Try reducing the number of factors or covariates, or collect more data.",
+            nrow(d), n_params + 2L
+        ))
     formula <- .jr_factor_formula(outcome, factors, covariates)
     model <- stats::lm(formula, data = d)
-    statistics <- .jr_term_effects(car::Anova(model, type = 2), stats::df.residual(model), ci)
-    slope_terms <- paste(sprintf("(%s):%s", paste(factors, collapse = " * "), covariates), collapse = " + ")
-    slope_formula <- stats::as.formula(paste(deparse(formula), "+", slope_terms))
-    slope_model <- stats::lm(slope_formula, data = d)
-    slopes <- stats::anova(model, slope_model)
-    slope_p <- slopes[["Pr(>F)"]][2]
+    if (stats::df.residual(model) == 0L)
+        .jr_stop("The model uses all available degrees of freedom (residual df = 0). Reduce the number of predictors or collect more data.")
+    anova_table <- tryCatch(
+        car::Anova(model, type = 2),
+        error = function(e) {
+            msg <- conditionMessage(e)
+            if (grepl("residual sum of squares is 0", msg, fixed = TRUE))
+                .jr_stop("The model fits the data perfectly, leaving no residual variance. Check whether a covariate is perfectly correlated with the outcome, or whether the outcome has no real variability within groups.")
+            stop(e)
+        }
+    )
+    statistics <- .jr_term_effects(anova_table, stats::df.residual(model), ci)
+    slope_terms <- paste(
+        sprintf("(%s):%s", paste(factors, collapse = " * "), covariates),
+        collapse = " + "
+    )
+    slope_formula <- stats::as.formula(paste(
+        paste(deparse(formula), collapse = ""), "+", slope_terms
+    ))
+    slope_model <- tryCatch(
+        stats::lm(slope_formula, data = d),
+        error = function(e) NULL
+    )
+    slopes <- if (!is.null(slope_model)) stats::anova(model, slope_model) else NULL
+    slope_p <- if (!is.null(slopes)) slopes[["Pr(>F)"]][2] else NA_real_
     d$.cell <- interaction(d[, factors, drop = FALSE], sep = " x ", drop = TRUE)
     d$.residual <- stats::residuals(model)
     diagnostics <- rbind(

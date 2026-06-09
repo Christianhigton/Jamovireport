@@ -1,0 +1,74 @@
+---
+name: eduMultinomialLogistic
+title: Guided Multinomial Logistic Regression
+menuGroup: jReport
+version: '1.0.0'
+jas: '1.2'
+description:
+    references:
+        - jReport
+        - parameters
+        - performance
+        - effectsize
+    main: >
+        Model a nominal outcome with 3 or more categories using numeric or
+        categorical predictors with relative risk ratios, model-fit explanation,
+        and reporting guidance.
+options:
+    - { name: data, type: Data }
+    - name: outcome
+      title: Nominal outcome (3+ categories)
+      type: Variable
+      suggested: [nominal]
+      permitted: [factor]
+    - name: covariates
+      title: Numeric predictors
+      type: Variables
+      suggested: [continuous]
+      permitted: [numeric]
+      default: null
+    - name: factors
+      title: Categorical predictors
+      type: Variables
+      suggested: [nominal]
+      permitted: [factor]
+      default: null
+    - { name: ciWidth, title: Confidence level, type: Number, min: 50, max: 99.9, default: 95 }
+    - name: reportStyle
+      title: Report style
+      type: List
+      options:
+        - { name: apa7, title: APA 7th edition }
+        - { name: plain, title: Plain English / teaching explanation }
+        - { name: journal, title: Journal style }
+        - { name: dissertation, title: Dissertation style }
+      default: apa7
+    - name: reportFormat
+      title: Report format
+      type: List
+      options:
+        - { name: short, title: Short APA sentence }
+        - { name: paragraph, title: Full results paragraph }
+        - { name: bullets, title: Bullet-point interpretation }
+        - { name: table_paragraph, title: Table plus paragraph }
+        - { name: copy_ready, title: Copy-ready report block }
+      default: paragraph
+    - name: reportTone
+      title: Tone of explanation
+      type: List
+      options:
+        - { name: concise, title: Concise }
+        - { name: student_friendly, title: Student-friendly }
+        - { name: detailed, title: Detailed }
+        - { name: critical, title: Critical / publication-focused }
+      default: student_friendly
+    - { name: reportDescriptives, title: Model fit and coefficients, type: Bool, default: true }
+    - { name: reportAssumptions, title: Diagnostic checks, type: Bool, default: true }
+    - { name: reportStatistic, title: Test statistic, type: Bool, default: true }
+    - { name: reportDf, title: Degrees of freedom, type: Bool, default: true }
+    - { name: reportP, title: Exact p value, type: Bool, default: true }
+    - { name: reportEffect, title: Pseudo R-squared and relative risk ratios, type: Bool, default: true }
+    - { name: reportCI, title: Confidence intervals, type: Bool, default: true }
+    - { name: reportInterpretation, title: Interpretation of findings, type: Bool, default: true }
+    - { name: reportCautions, title: Cautions or diagnostic warnings, type: Bool, default: true }
+...

@@ -211,6 +211,13 @@ analyses:
     menuTitle: Automatic Report for Binomial Logistic Regression
     addonFor: jmv::logRegBin
     category: analyses
+  - title: Automatic Report for Multinomial Logistic Regression
+    name: jrReportLogRegMulti
+    ns: jReport
+    menuGroup: Report Add-ons
+    menuTitle: Automatic Report for Multinomial Logistic Regression
+    addonFor: jmv::logRegMulti
+    category: analyses
   - title: Automatic Report for Correlation Matrix
     name: jrReportCorrMatrix
     ns: jReport

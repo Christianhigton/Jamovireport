@@ -1,0 +1,17 @@
+---
+name: jrReportLogRegMulti
+title: Automatic Report for Multinomial Logistic Regression
+menuGroup: Report Add-ons
+version: '1.0.0'
+jas: '1.2'
+description:
+    references:
+        - RCore
+        - jReport
+        - jmvcore
+        - parameters
+        - performance
+        - effectsize
+options:
+    - { name: data, type: Data }
+...

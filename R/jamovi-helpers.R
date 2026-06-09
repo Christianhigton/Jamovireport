@@ -926,6 +926,16 @@
             "Direction of evidence is correctly described.",
             "Interpretation matches the research question."
         ),
+        multinomial_logistic = c(
+            "Outcome variable has 3 or more nominal categories.",
+            "Reference category is correctly identified.",
+            "Predictors are the intended covariates and factors.",
+            "Chi-square model fit statistic, df, and p value match jamovi output.",
+            "McFadden's R² matches jamovi output.",
+            "Relative risk ratios and confidence intervals match the coefficient table.",
+            "Assumption checks (convergence, sample size per category) have been reviewed.",
+            "Interpretation matches the research question."
+        ),
         regression = c(
             "Outcome variable is the intended dependent variable.",
             "Predictors are the intended covariates and factors.",

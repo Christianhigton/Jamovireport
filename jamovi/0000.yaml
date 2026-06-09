@@ -82,6 +82,17 @@ analyses:
       Model a binary outcome using numeric or categorical predictors with odds
       ratios, model-fit explanation, and reporting guidance.
     category: analyses
+  - title: Guided Multinomial Logistic Regression
+    name: eduMultinomialLogistic
+    ns: jReport
+    menuGroup: jReport
+    menuSubgroup: Regression
+    menuTitle: Guided Multinomial Logistic Regression
+    description: >
+      Model a nominal outcome with 3 or more categories using numeric or
+      categorical predictors with relative risk ratios, model-fit explanation,
+      and reporting guidance.
+    category: analyses
   - title: Guided Between-Subjects ANOVA
     name: eduBetweenAnova
     ns: jReport

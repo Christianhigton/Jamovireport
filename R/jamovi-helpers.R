@@ -145,17 +145,19 @@
     paste0(rendered, collapse = "")
 }
 
-.jr_html_card <- function(eyebrow, title, content, accent = "#237f86") {
+.jr_html_card <- function(eyebrow, title, content = "", accent = "#237f86",
+                          content_html = NULL) {
+    body <- if (is.null(content_html)) .jr_html_paragraphs(content) else content_html
     sprintf(
         paste0(
-            "<div style='border:1px solid #dfe6ea; border-left:5px solid %s;",
-            "border-radius:6px; padding:14px 16px; margin:4px 0 10px 0; background:#fbfcfd;'>",
-            "<div style='font-size:11px; font-weight:600; letter-spacing:.08em; color:#536472;",
-            "text-transform:uppercase; margin-bottom:6px;'>%s</div>",
-            "<div style='font-size:16px; font-weight:600; color:#18242d; margin-bottom:10px;'>%s</div>",
+            "<div style='width:100%%;box-sizing:border-box;border:1px solid #dfe6ea;border-left:5px solid %s;",
+            "border-radius:6px;padding:14px 16px;margin:4px 0 10px 0;background:#fbfcfd;'>",
+            "<div style='font-size:11px;font-weight:600;letter-spacing:.08em;color:#536472;",
+            "text-transform:uppercase;margin-bottom:6px;'>%s</div>",
+            "<div style='font-size:16px;font-weight:600;color:#18242d;margin-bottom:10px;'>%s</div>",
             "%s</div>"
         ),
-        accent, .jr_html_escape(eyebrow), .jr_html_escape(title), .jr_html_paragraphs(content)
+        accent, .jr_html_escape(eyebrow), .jr_html_escape(title), body
     )
 }
 
@@ -165,18 +167,18 @@
     subtitle_html <- ""
     if (nzchar(subtitle)) {
         subtitle_html <- sprintf(
-            "<div style='font-size:13px; font-weight:600; color:#536472; margin:-3px 0 10px 0;'>%s</div>",
+            "<div style='font-size:13px;font-weight:600;color:#536472;margin:-3px 0 10px 0;'>%s</div>",
             .jr_html_escape(subtitle)
         )
     }
     body <- if (is.null(content_html)) .jr_html_paragraphs(content) else content_html
     sprintf(
         paste0(
-            "<div style='border:1px solid #dfe6ea; border-left:5px solid %s;",
-            "border-radius:6px; padding:14px 16px; margin:4px 0 12px 0; background:%s;'>",
-            "<div style='font-size:11px; font-weight:700; letter-spacing:0; color:#536472;",
-            "text-transform:uppercase; margin-bottom:6px;'>%s</div>",
-            "<div style='font-size:17px; font-weight:700; color:#18242d; margin-bottom:8px;'>%s</div>",
+            "<div style='width:100%%;box-sizing:border-box;border:1px solid #dfe6ea;border-left:5px solid %s;",
+            "border-radius:6px;padding:14px 16px;margin:4px 0 12px 0;background:%s;'>",
+            "<div style='font-size:11px;font-weight:700;letter-spacing:0;color:#536472;",
+            "text-transform:uppercase;margin-bottom:6px;'>%s</div>",
+            "<div style='font-size:17px;font-weight:700;color:#18242d;margin-bottom:8px;'>%s</div>",
             "%s%s</div>"
         ),
         accent, background, .jr_html_escape(eyebrow), .jr_html_escape(title),
@@ -239,7 +241,7 @@
     if (nzchar(checklist_note)) {
         checklist_html <- paste0(
             checklist_html,
-            "<div style='border-top:1px solid #dfe6ea; margin-top:12px; padding-top:10px;'>",
+            "<div style='border-top:1px solid #dfe6ea;margin-top:12px;padding-top:10px;'>",
             .jr_html_paragraphs(checklist_note),
             "</div>"
         )
@@ -250,6 +252,11 @@
             "", accent = "#6d5a8a", background = "#faf8fc",
             content_html = checklist_html
         ))
+    }
+    if (!is.null(references_text) && length(references_text) > 0L) {
+        ref_html <- .jr_references_html_from_entries(references_text)
+        if (nzchar(ref_html))
+            cards <- paste0(cards, ref_html)
     }
     cards
 }
@@ -266,16 +273,16 @@
     subtitle_html <- ""
     if (nzchar(subtitle)) {
         subtitle_html <- sprintf(
-            "<div style='font-size:13px; font-weight:600; color:#536472; margin:-2px 0 10px 0;'>%s</div>",
+            "<div style='font-size:13px;font-weight:600;color:#536472;margin:-2px 0 10px 0;'>%s</div>",
             .jr_html_escape(subtitle)
         )
     }
     body <- if (is.null(content_html)) .jr_html_paragraphs(content) else content_html
     sprintf(
         paste0(
-            "<div style='border:1px solid #dfe6ea; border-left:5px solid %s;",
-            "border-radius:6px; padding:14px 16px; margin:4px 0 12px 0; background:%s;'>",
-            "<div style='font-size:17px; font-weight:700; color:#18242d; margin-bottom:8px;'>%s</div>",
+            "<div style='width:100%%;box-sizing:border-box;border:1px solid #dfe6ea;border-left:5px solid %s;",
+            "border-radius:6px;padding:14px 16px;margin:4px 0 12px 0;background:%s;'>",
+            "<div style='font-size:17px;font-weight:700;color:#18242d;margin-bottom:8px;'>%s</div>",
             "%s%s</div>"
         ),
         accent, background, .jr_html_escape(title), subtitle_html, body
@@ -319,6 +326,11 @@
             "", accent = "#6d5a8a", background = "#faf8fc",
             content_html = checklist_html
         ))
+    }
+    if (!is.null(references) && length(references) > 0L) {
+        ref_html <- .jr_references_html_from_entries(references)
+        if (nzchar(ref_html))
+            sections <- c(sections, ref_html)
     }
     paste(sections, collapse = "")
 }
@@ -372,23 +384,30 @@
     unique(keys)
 }
 
-.jr_references_html <- function(results, include_effect_note = TRUE) {
-    entries <- .jr_reference_entries(results, include_effect_note = include_effect_note)
+.jr_references_html_from_entries <- function(entries) {
+    entries <- entries[nzchar(entries)]
     if (!length(entries))
         return("")
     rows <- paste0(
-        "<li style='margin:0 0 8px 0; padding-left:2px;'>",
+        "<li style='margin:0 0 8px 0;padding-left:2px;'>",
         .jr_html_escape(entries),
         "</li>",
         collapse = ""
     )
     paste0(
-        "<div style='border-top:1px solid #dfe6ea; margin:14px 0 0 0; padding-top:12px;'>",
-        "<div style='font-size:13px; font-weight:600; color:#18242d; margin-bottom:8px;'>References</div>",
-        "<ol style='margin:0; padding-left:22px; line-height:1.45;'>",
+        "<div style='width:100%;box-sizing:border-box;border:1px solid #dfe6ea;border-left:5px solid #536472;",
+        "border-radius:6px;padding:14px 16px;margin:4px 0 12px 0;background:#f9fafb;'>",
+        "<div style='font-size:11px;font-weight:700;letter-spacing:0;color:#536472;",
+        "text-transform:uppercase;margin-bottom:6px;'>References</div>",
+        "<ol style='margin:0;padding-left:22px;line-height:1.55;font-size:13px;color:#25364a;'>",
         rows,
         "</ol></div>"
     )
+}
+
+.jr_references_html <- function(results, include_effect_note = TRUE) {
+    entries <- .jr_reference_entries(results, include_effect_note = include_effect_note)
+    .jr_references_html_from_entries(entries)
 }
 
 .jr_jamovi_overview_html <- function(result) {
@@ -404,9 +423,13 @@
 }
 
 .jr_jamovi_report_html <- function(result, options) {
+    text <- .jr_jamovi_text(result, options)
+    include_effect <- isTRUE(tryCatch(options$reportEffect, error = function(e) TRUE))
+    refs_html <- .jr_references_html(list(result), include_effect_note = include_effect)
+    body_html <- paste0(.jr_html_paragraphs(text), refs_html)
     .jr_html_card(
         "Copy-ready reporting", "Report text",
-        .jr_jamovi_text(result, options), accent = "#4b66a2"
+        accent = "#4b66a2", content_html = body_html
     )
 }
 
@@ -417,6 +440,9 @@
         content <- paste(content, result$caution, sep = "\n\n")
         accent <- "#b46c21"
     }
+    rm_guidance <- .jr_rm_ges_guidance(result)
+    if (nzchar(rm_guidance))
+        content <- paste(content, rm_guidance, sep = "\n\n")
     .jr_html_card("Interpretation", "What does this mean?", content, accent = accent)
 }
 
@@ -744,6 +770,41 @@
     )
 }
 
+.jr_rm_ges_guidance <- function(result) {
+    if (!result$analysis %in% c("anova_rm", "anova_mixed"))
+        return("")
+    stats <- result$statistics
+    if (!is.data.frame(stats) || !"ges" %in% names(stats))
+        return("")
+    ges_vals <- stats$ges[is.finite(stats$ges)]
+    eta_vals <- stats$effect[is.finite(stats$effect)]
+    if (!length(ges_vals) || !length(eta_vals))
+        return("")
+    base <- paste(
+        "Generalised eta squared (ηG²) estimates the proportion of total variance",
+        "explained by an effect and allows comparison across different experimental designs.",
+        "Partial eta squared (ηp²) estimates the proportion of variance explained after",
+        "accounting for other sources of variance in the model and is therefore often larger."
+    )
+    max_ges <- max(ges_vals, na.rm = TRUE)
+    max_eta <- max(eta_vals, na.rm = TRUE)
+    discrepancy <- if (is.finite(max_ges) && is.finite(max_eta) && max_ges > 0 &&
+                       max_eta > 2 * max_ges) {
+        paste(
+            "The difference between ηG² and ηp² suggests that a substantial proportion of",
+            "variability is attributable to individual differences between participants.",
+            "This pattern is common in repeated measures designs where participant characteristics",
+            "account for a large amount of variance."
+        )
+    } else {
+        ""
+    }
+    if (nzchar(discrepancy))
+        paste(base, discrepancy, sep = "\n\n")
+    else
+        base
+}
+
 .jr_addon_report_html <- function(results, options = NULL, title = "Guided report", note = "") {
     failures <- Filter(function(x) inherits(x, "try-error"), results)
     results <- Filter(function(x) inherits(x, "edu_analysis"), results)
@@ -773,6 +834,8 @@
     }
     include_note <- is.null(options) ||
         isTRUE(tryCatch(options$reportCautions, error = function(e) FALSE))
+    include_effect_note <- is.null(options) ||
+        isTRUE(tryCatch(options$reportEffect, error = function(e) TRUE))
     posthoc_text <- .jr_addon_posthoc_text(results)
     sections <- vapply(results, function(result) {
         apa_text <- if (is.null(options)) {
@@ -783,20 +846,23 @@
         diagnostic_text <- result$report_blocks$assumptions %||% ""
         if (nzchar(result$caution %||% ""))
             diagnostic_text <- paste(diagnostic_text, result$caution, sep = if (nzchar(diagnostic_text)) "\n\n" else "")
+        guidance_text <- .jr_rm_ges_guidance(result)
         guidance_text <- paste(
             c(
                 result$report_blocks$rationale %||% "",
-                result$interpretation %||% ""
+                if (nzchar(guidance_text)) guidance_text else result$interpretation %||% ""
             ),
             collapse = "\n\n"
         )
         checklist <- .jr_analysis_checklist(result$analysis)
+        refs <- .jr_reference_entries(list(result), include_effect_note = include_effect_note)
         .jr_build_report_sections_html(
             apa_wording = apa_text,
             diagnostic_note = diagnostic_text,
             interpretation_guidance = guidance_text,
             checklist_items = checklist,
-            checklist_note = if (nzchar(note) && include_note) note else ""
+            checklist_note = if (nzchar(note) && include_note) note else "",
+            references = refs
         )
     }, character(1))
     if (nzchar(posthoc_text)) {

@@ -103,6 +103,125 @@ analyses:
     menuTitle: Automatic Reliability Report
     addonFor: jmv::reliability
     category: analyses
+  - title: Guided ANCOVA
+    name: eduAncova
+    ns: jReport
+    category: analyses
+    menuGroup: jReport
+    menuTitle: Guided ANCOVA
+    description: >
+      Compare adjusted group means while explicitly checking whether
+      covariate-outcome slopes are comparable across groups.
+  - title: Guided One-Way ANOVA
+    name: eduAnova
+    ns: jReport
+    category: analyses
+    menuGroup: jReport
+    menuTitle: Guided One-Way ANOVA
+    description: >
+      Compare means across three or more independent groups with effect sizes,
+      assumption guidance, and report-ready explanation.
+  - title: Guided Between-Subjects ANOVA
+    name: eduBetweenAnova
+    ns: jReport
+    category: analyses
+    menuGroup: jReport
+    menuTitle: Guided Between-Subjects ANOVA
+    description: >
+      Examine mean differences across one or more independent categorical
+      factors, prioritising interaction interpretation when appropriate.
+  - title: Guided Chi-Square Goodness-of-Fit
+    name: eduChiSquareGoodness
+    ns: jReport
+    category: analyses
+    menuGroup: jReport
+    menuTitle: Guided Chi-Square Goodness-of-Fit
+    description: >
+      Compare observed categorical frequencies with an expected distribution,
+      with assumption guidance and report-ready explanation.
+  - title: Guided Chi-Square Test of Independence
+    name: eduChiSquareIndependence
+    ns: jReport
+    category: analyses
+    menuGroup: jReport
+    menuTitle: Guided Chi-Square Test of Independence
+    description: >
+      Assess whether two categorical variables are associated, with expected
+      count checks, Cramer's V, and report-ready explanation.
+  - title: Guided Correlation
+    name: eduCorrelation
+    ns: jReport
+    category: analyses
+    menuGroup: jReport
+    menuTitle: Guided Correlation
+    description: >
+      Explain the direction, strength, assumptions, and reporting of an
+      association between two numeric variables.
+  - title: Guided Binomial Logistic Regression
+    name: eduLogistic
+    ns: jReport
+    category: analyses
+    menuGroup: jReport
+    menuTitle: Guided Binomial Logistic Regression
+    description: >
+      Model a binary outcome using numeric or categorical predictors with odds
+      ratios, model-fit explanation, and reporting guidance.
+  - title: Guided MANOVA / MANCOVA
+    name: eduMancova
+    ns: jReport
+    category: analyses
+    menuGroup: jReport
+    menuTitle: Guided MANOVA / MANCOVA
+    description: >
+      Test whether two or more dependent variables jointly vary across
+      categorical factors and optional numeric covariates. Significant Pillai
+      omnibus effects are followed by Holm-adjusted univariate ANOVA/ANCOVA
+      summaries for each dependent variable.
+  - title: Guided Mixed ANOVA
+    name: eduMixedAnova
+    ns: jReport
+    category: analyses
+    menuGroup: jReport
+    menuTitle: Guided Mixed ANOVA
+    description: >
+      Examine repeated change, between-group differences, and their interaction
+      with sphericity-aware reporting.
+  - title: Guided Linear Regression
+    name: eduRegression
+    ns: jReport
+    category: analyses
+    menuGroup: jReport
+    menuTitle: Guided Linear Regression
+    description: >
+      Model a numeric outcome using one or more numeric predictors with model
+      fit, coefficients, diagnostic guidance, and interpretable reporting.
+  - title: 'Guided Reliability: Omega and Alpha'
+    name: eduReliabilityOmega
+    ns: jReport
+    category: analyses
+    menuGroup: jReport
+    menuTitle: 'Guided Reliability: Omega and Alpha'
+    description: >
+      Estimate and report internal consistency using McDonald's omega total and
+      Cronbach's alpha, with item diagnostics and clear interpretation guidance.
+  - title: Guided Repeated-Measures ANOVA
+    name: eduRMAnova
+    ns: jReport
+    category: analyses
+    menuGroup: jReport
+    menuTitle: Guided Repeated-Measures ANOVA
+    description: >
+      Compare repeated measurements from the same participants and explain
+      sphericity and Greenhouse-Geisser-corrected inference.
+  - title: Guided T-Test
+    name: eduTTest
+    ns: jReport
+    category: analyses
+    menuGroup: jReport
+    menuTitle: Guided T-Test
+    description: >
+      Compare two means while explaining test selection, assumptions, effect
+      size, and reporting in accessible language.
 usesNative: true
 minApp: 1.8.0
 

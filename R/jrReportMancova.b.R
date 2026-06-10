@@ -6,7 +6,8 @@ jrReportMancovaClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class
         .init = function() {
             .jr_addon_insert_card(
                 self, followups = TRUE,
-                refs = c("RCore", "jReport", "jmvcore", "car", "effectsize")
+                refs = c("RCore", "jReport", "jmvcore", "car", "effectsize",
+                         "Cohen1988", "Cumming2014")
             )
         },
         .run = function() {

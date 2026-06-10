@@ -7,6 +7,8 @@ refs:
 - effectsize
 - emmeans
 - ggplot2
+- Cohen1988
+- Cumming2014
 items:
 - name: overview
   title: 'jReport: Overview and Why This Test?'
@@ -17,6 +19,8 @@ items:
   - effectsize
   - emmeans
   - ggplot2
+  - Cohen1988
+  - Cumming2014
 - name: main
   title: Main Results and Effect Sizes
   type: Table
@@ -57,6 +61,8 @@ items:
   - effectsize
   - emmeans
   - ggplot2
+  - Cohen1988
+  - Cumming2014
 - name: descriptives
   title: Observed Cell Descriptives
   type: Table
@@ -84,6 +90,8 @@ items:
   - effectsize
   - emmeans
   - ggplot2
+  - Cohen1988
+  - Cumming2014
 - name: diagnostics
   title: Assumption Checks and Guidance
   type: Table
@@ -121,6 +129,8 @@ items:
   - effectsize
   - emmeans
   - ggplot2
+  - Cohen1988
+  - Cumming2014
 - name: report
   title: Reporting
   type: Html
@@ -130,6 +140,8 @@ items:
   - effectsize
   - emmeans
   - ggplot2
+  - Cohen1988
+  - Cumming2014
 - name: interpretation
   title: Plain-Language Interpretation
   type: Html
@@ -139,6 +151,8 @@ items:
   - effectsize
   - emmeans
   - ggplot2
+  - Cohen1988
+  - Cumming2014
 - name: plot
   title: Observed Group Visualisation
   type: Image
@@ -157,3 +171,5 @@ items:
   - effectsize
   - emmeans
   - ggplot2
+  - Cohen1988
+  - Cumming2014

@@ -14,6 +14,8 @@ items:
   - jmvcore
   - effectsize
   - BayesFactor
+  - Cohen1988
+  - Cumming2014
   columns:
   - name: analysis
     title: Analysis
@@ -49,6 +51,8 @@ items:
   - jmvcore
   - effectsize
   - BayesFactor
+  - Cohen1988
+  - Cumming2014
   columns:
   - name: analysis
     title: Analysis

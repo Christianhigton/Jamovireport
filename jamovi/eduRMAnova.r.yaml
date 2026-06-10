@@ -6,6 +6,8 @@ refs:
 - afex
 - effectsize
 - ggplot2
+- Cohen1988
+- Cumming2014
 items:
 - name: overview
   title: 'jReport: Overview and Why This Test?'
@@ -15,6 +17,8 @@ items:
   - afex
   - effectsize
   - ggplot2
+  - Cohen1988
+  - Cumming2014
 - name: main
   title: Within-Subjects Result and Effect Size
   type: Table
@@ -53,6 +57,8 @@ items:
   - afex
   - effectsize
   - ggplot2
+  - Cohen1988
+  - Cumming2014
 - name: descriptives
   title: Occasion Descriptives
   type: Table
@@ -78,6 +84,8 @@ items:
   - afex
   - effectsize
   - ggplot2
+  - Cohen1988
+  - Cumming2014
 - name: diagnostics
   title: Assumption Checks and Guidance
   type: Table
@@ -113,6 +121,8 @@ items:
   - afex
   - effectsize
   - ggplot2
+  - Cohen1988
+  - Cumming2014
 - name: report
   title: Reporting
   type: Html
@@ -121,6 +131,8 @@ items:
   - afex
   - effectsize
   - ggplot2
+  - Cohen1988
+  - Cumming2014
 - name: interpretation
   title: Plain-Language Interpretation
   type: Html
@@ -129,6 +141,8 @@ items:
   - afex
   - effectsize
   - ggplot2
+  - Cohen1988
+  - Cumming2014
 - name: plot
   title: Visualisation
   type: Image
@@ -145,3 +159,5 @@ items:
   - afex
   - effectsize
   - ggplot2
+  - Cohen1988
+  - Cumming2014

@@ -202,7 +202,9 @@ eduMixedAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "jReport",
                     "afex",
                     "effectsize",
-                    "ggplot2"))
+                    "ggplot2",
+                    "Cohen1988",
+                    "Cumming2014"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="overview",
@@ -211,7 +213,9 @@ eduMixedAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "jReport",
                     "afex",
                     "effectsize",
-                    "ggplot2")))
+                    "ggplot2",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="main",
@@ -259,7 +263,9 @@ eduMixedAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "jReport",
                     "afex",
                     "effectsize",
-                    "ggplot2")))
+                    "ggplot2",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="descriptives",
@@ -290,7 +296,9 @@ eduMixedAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "jReport",
                     "afex",
                     "effectsize",
-                    "ggplot2")))
+                    "ggplot2",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="diagnostics",
@@ -334,7 +342,9 @@ eduMixedAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "jReport",
                     "afex",
                     "effectsize",
-                    "ggplot2")))
+                    "ggplot2",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="report",
@@ -343,7 +353,9 @@ eduMixedAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "jReport",
                     "afex",
                     "effectsize",
-                    "ggplot2")))
+                    "ggplot2",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="interpretation",
@@ -352,7 +364,9 @@ eduMixedAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "jReport",
                     "afex",
                     "effectsize",
-                    "ggplot2")))
+                    "ggplot2",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",
@@ -370,7 +384,9 @@ eduMixedAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "jReport",
                     "afex",
                     "effectsize",
-                    "ggplot2")))}))
+                    "ggplot2",
+                    "Cohen1988",
+                    "Cumming2014")))}))
 
 eduMixedAnovaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "eduMixedAnovaBase",

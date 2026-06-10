@@ -6,6 +6,8 @@ refs:
 - parameters
 - performance
 - effectsize
+- Cohen1988
+- Cumming2014
 items:
 - name: overview
   title: 'jReport: Overview and Why This Test?'
@@ -15,6 +17,8 @@ items:
   - parameters
   - performance
   - effectsize
+  - Cohen1988
+  - Cumming2014
 - name: fit
   title: Main Results and Model Fit
   type: Table
@@ -45,6 +49,8 @@ items:
   - parameters
   - performance
   - effectsize
+  - Cohen1988
+  - Cumming2014
 - name: coefficients
   title: Coefficients and Odds Ratios
   type: Table
@@ -84,6 +90,8 @@ items:
   - parameters
   - performance
   - effectsize
+  - Cohen1988
+  - Cumming2014
 - name: diagnostics
   title: Diagnostic Checks and Guidance
   type: Table
@@ -120,6 +128,8 @@ items:
   - parameters
   - performance
   - effectsize
+  - Cohen1988
+  - Cumming2014
 - name: report
   title: Reporting
   type: Html
@@ -128,6 +138,8 @@ items:
   - parameters
   - performance
   - effectsize
+  - Cohen1988
+  - Cumming2014
 - name: interpretation
   title: Plain-Language Interpretation
   type: Html
@@ -136,3 +148,5 @@ items:
   - parameters
   - performance
   - effectsize
+  - Cohen1988
+  - Cumming2014

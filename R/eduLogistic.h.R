@@ -197,7 +197,9 @@ eduLogisticResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                     "jReport",
                     "parameters",
                     "performance",
-                    "effectsize"))
+                    "effectsize",
+                    "Cohen1988",
+                    "Cumming2014"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="overview",
@@ -206,7 +208,9 @@ eduLogisticResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                     "jReport",
                     "parameters",
                     "performance",
-                    "effectsize")))
+                    "effectsize",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="fit",
@@ -242,7 +246,9 @@ eduLogisticResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                     "jReport",
                     "parameters",
                     "performance",
-                    "effectsize")))
+                    "effectsize",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="coefficients",
@@ -290,7 +296,9 @@ eduLogisticResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                     "jReport",
                     "parameters",
                     "performance",
-                    "effectsize")))
+                    "effectsize",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="diagnostics",
@@ -334,7 +342,9 @@ eduLogisticResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                     "jReport",
                     "parameters",
                     "performance",
-                    "effectsize")))
+                    "effectsize",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="report",
@@ -343,7 +353,9 @@ eduLogisticResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                     "jReport",
                     "parameters",
                     "performance",
-                    "effectsize")))
+                    "effectsize",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="interpretation",
@@ -352,7 +364,9 @@ eduLogisticResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                     "jReport",
                     "parameters",
                     "performance",
-                    "effectsize")))}))
+                    "effectsize",
+                    "Cohen1988",
+                    "Cumming2014")))}))
 
 eduLogisticBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "eduLogisticBase",

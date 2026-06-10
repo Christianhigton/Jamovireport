@@ -5,6 +5,8 @@ refs:
 - jReport
 - car
 - effectsize
+- Cohen1988
+- Cumming2014
 items:
 - name: overview
   title: 'jReport: Overview and Why This Test?'
@@ -13,6 +15,8 @@ items:
   - jReport
   - car
   - effectsize
+  - Cohen1988
+  - Cumming2014
 - name: main
   title: Multivariate Tests
   type: Table
@@ -44,6 +48,8 @@ items:
   - jReport
   - car
   - effectsize
+  - Cohen1988
+  - Cumming2014
 - name: descriptives
   title: Dependent-Variable Descriptives
   type: Table
@@ -68,6 +74,8 @@ items:
   - jReport
   - car
   - effectsize
+  - Cohen1988
+  - Cumming2014
 - name: diagnostics
   title: Assumption Checks and Guidance
   type: Table
@@ -102,6 +110,8 @@ items:
   - jReport
   - car
   - effectsize
+  - Cohen1988
+  - Cumming2014
 - name: followups
   title: Follow-up Analyses
   type: Table
@@ -141,6 +151,8 @@ items:
   - jReport
   - car
   - effectsize
+  - Cohen1988
+  - Cumming2014
 - name: report
   title: Reporting
   type: Html
@@ -148,6 +160,8 @@ items:
   - jReport
   - car
   - effectsize
+  - Cohen1988
+  - Cumming2014
 - name: interpretation
   title: Plain-Language Interpretation
   type: Html
@@ -155,3 +169,5 @@ items:
   - jReport
   - car
   - effectsize
+  - Cohen1988
+  - Cumming2014

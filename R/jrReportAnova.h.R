@@ -38,164 +38,161 @@ jrReportAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
             self$add(jmvcore::Html$new(
                 options=options,
                 name="jReportHeading",
-                title="jReport: Automatic Reporting",
-                refs=list(
-                    "jReport",
-                    "jmvcore",
-                    "afex",
-                    "effectsize",
-                    "emmeans")))
+                title="jReport: Automatic Reporting"))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="jReportApaTable",
                 title="APA Results Summary (jReport)",
                 refs=list(
+                    "RCore",
                     "jReport",
                     "jmvcore",
                     "afex",
                     "effectsize",
-                    "emmeans"),
+                    "emmeans",
+                    "Cohen1988",
+                    "Cumming2014"),
                 columns=list(
                     list(
-                        `name`="analysis",
-                        `title`="Analysis",
+                        `name`="analysis", 
+                        `title`="Analysis", 
                         `type`="text"),
                     list(
-                        `name`="test",
-                        `title`="Test / Effect",
+                        `name`="test", 
+                        `title`="Test / Effect", 
                         `type`="text"),
                     list(
-                        `name`="statistic",
-                        `title`="Statistic",
+                        `name`="statistic", 
+                        `title`="Statistic", 
                         `type`="number"),
                     list(
-                        `name`="df1",
-                        `title`="df1",
+                        `name`="df1", 
+                        `title`="df1", 
                         `type`="number"),
                     list(
-                        `name`="df2",
-                        `title`="df2",
+                        `name`="df2", 
+                        `title`="df2", 
                         `type`="text"),
                     list(
-                        `name`="p",
-                        `title`="p",
-                        `type`="number",
+                        `name`="p", 
+                        `title`="p", 
+                        `type`="number", 
                         `format`="zto,pvalue"),
                     list(
-                        `name`="effect",
-                        `title`="Effect Size",
+                        `name`="effect", 
+                        `title`="Effect Size", 
                         `type`="text"),
                     list(
-                        `name`="ci",
-                        `title`="Effect 95% CI",
+                        `name`="ci", 
+                        `title`="Effect 95% CI", 
                         `type`="text"))))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="jReportAssumptions",
                 title="Assumptions and Recommended Actions (jReport)",
                 refs=list(
+                    "RCore",
                     "jReport",
                     "jmvcore",
                     "afex",
                     "effectsize",
-                    "emmeans"),
+                    "emmeans",
+                    "Cohen1988",
+                    "Cumming2014"),
                 columns=list(
                     list(
-                        `name`="analysis",
-                        `title`="Analysis",
+                        `name`="analysis", 
+                        `title`="Analysis", 
                         `type`="text"),
                     list(
-                        `name`="assumption",
-                        `title`="Assumption / Check",
+                        `name`="assumption", 
+                        `title`="Assumption / Check", 
                         `type`="text"),
                     list(
-                        `name`="tested",
-                        `title`="Tested?",
+                        `name`="tested", 
+                        `title`="Tested?", 
                         `type`="text"),
                     list(
-                        `name`="statistic",
-                        `title`="Statistic",
+                        `name`="statistic", 
+                        `title`="Statistic", 
                         `type`="number"),
                     list(
-                        `name`="p",
-                        `title`="p",
-                        `type`="number",
+                        `name`="p", 
+                        `title`="p", 
+                        `type`="number", 
                         `format`="zto,pvalue"),
                     list(
-                        `name`="met",
-                        `title`="Met?",
+                        `name`="met", 
+                        `title`="Met?", 
                         `type`="text"),
                     list(
-                        `name`="interpretation",
-                        `title`="What This Means",
+                        `name`="interpretation", 
+                        `title`="What This Means", 
                         `type`="text"),
                     list(
-                        `name`="action",
-                        `title`="Recommended Action",
+                        `name`="action", 
+                        `title`="Recommended Action", 
                         `type`="text"))))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="jReportPostHoc",
                 title="APA Post Hoc Comparisons (jReport)",
-                visible=FALSE,
+                visible="no",
                 refs=list(
+                    "RCore",
                     "jReport",
                     "jmvcore",
                     "afex",
                     "effectsize",
-                    "emmeans"),
+                    "emmeans",
+                    "Cohen1988",
+                    "Cumming2014"),
                 columns=list(
                     list(
-                        `name`="analysis",
-                        `title`="Analysis",
+                        `name`="analysis", 
+                        `title`="Analysis", 
                         `type`="text"),
                     list(
-                        `name`="term",
-                        `title`="Factor / Term",
+                        `name`="term", 
+                        `title`="Factor / Term", 
                         `type`="text"),
                     list(
-                        `name`="comparison",
-                        `title`="Comparison",
+                        `name`="comparison", 
+                        `title`="Comparison", 
                         `type`="text"),
                     list(
-                        `name`="mean_difference",
-                        `title`="Mean Difference",
+                        `name`="mean_difference", 
+                        `title`="Mean Difference", 
                         `type`="number"),
                     list(
-                        `name`="se",
-                        `title`="SE",
+                        `name`="se", 
+                        `title`="SE", 
                         `type`="number"),
                     list(
-                        `name`="df",
-                        `title`="df",
+                        `name`="df", 
+                        `title`="df", 
                         `type`="number"),
                     list(
-                        `name`="statistic",
-                        `title`="t",
+                        `name`="statistic", 
+                        `title`="t", 
                         `type`="number"),
                     list(
-                        `name`="p",
-                        `title`="Adjusted p",
-                        `type`="number",
+                        `name`="p", 
+                        `title`="Adjusted p", 
+                        `type`="number", 
                         `format`="zto,pvalue"),
                     list(
-                        `name`="adjustment",
-                        `title`="Adjustment",
+                        `name`="adjustment", 
+                        `title`="Adjustment", 
                         `type`="text"),
                     list(
-                        `name`="significant",
-                        `title`="Significant?",
+                        `name`="significant", 
+                        `title`="Significant?", 
                         `type`="text"))))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="jReportCard",
-                title="Automatic Report (jReport)",
-                refs=list(
-                    "jReport",
-                    "jmvcore",
-                    "afex",
-                    "effectsize",
-                    "emmeans")))}))
+                title="Automatic Report (jReport)"))}))
 
 jrReportAnovaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "jrReportAnovaBase",
@@ -220,8 +217,10 @@ jrReportAnovaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 
 #' Automatic Report for ANOVA
 #'
-#'
+#' 
 #' @section References:
+#' RCore
+#'
 #' jReport
 #'
 #' jmvcore
@@ -235,9 +234,11 @@ jrReportAnovaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param data .
 #' @return A results object containing:
 #' \tabular{llllll}{
+#'   \code{results$jReportHeading} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$jReportApaTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$jReportAssumptions} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$jReportPostHoc} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$jReportCard} \tab \tab \tab \tab \tab a html \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:

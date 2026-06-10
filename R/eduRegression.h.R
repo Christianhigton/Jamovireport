@@ -194,7 +194,9 @@ eduRegressionResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "parameters",
                     "performance",
                     "effectsize",
-                    "ggplot2"))
+                    "ggplot2",
+                    "Cohen1988",
+                    "Cumming2014"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="overview",
@@ -204,7 +206,9 @@ eduRegressionResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "parameters",
                     "performance",
                     "effectsize",
-                    "ggplot2")))
+                    "ggplot2",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="fit",
@@ -248,7 +252,9 @@ eduRegressionResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "parameters",
                     "performance",
                     "effectsize",
-                    "ggplot2")))
+                    "ggplot2",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="coefficients",
@@ -296,7 +302,9 @@ eduRegressionResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "parameters",
                     "performance",
                     "effectsize",
-                    "ggplot2")))
+                    "ggplot2",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="diagnostics",
@@ -340,7 +348,9 @@ eduRegressionResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "parameters",
                     "performance",
                     "effectsize",
-                    "ggplot2")))
+                    "ggplot2",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="report",
@@ -350,7 +360,9 @@ eduRegressionResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "parameters",
                     "performance",
                     "effectsize",
-                    "ggplot2")))
+                    "ggplot2",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="interpretation",
@@ -360,7 +372,9 @@ eduRegressionResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "parameters",
                     "performance",
                     "effectsize",
-                    "ggplot2")))
+                    "ggplot2",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",
@@ -378,7 +392,9 @@ eduRegressionResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     "parameters",
                     "performance",
                     "effectsize",
-                    "ggplot2")))}))
+                    "ggplot2",
+                    "Cohen1988",
+                    "Cumming2014")))}))
 
 eduRegressionBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "eduRegressionBase",

@@ -196,7 +196,9 @@ eduBetweenAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
                     "car",
                     "effectsize",
                     "emmeans",
-                    "ggplot2"))
+                    "ggplot2",
+                    "Cohen1988",
+                    "Cumming2014"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="overview",
@@ -207,7 +209,9 @@ eduBetweenAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
                     "car",
                     "effectsize",
                     "emmeans",
-                    "ggplot2")))
+                    "ggplot2",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="main",
@@ -256,7 +260,9 @@ eduBetweenAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
                     "car",
                     "effectsize",
                     "emmeans",
-                    "ggplot2")))
+                    "ggplot2",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="descriptives",
@@ -288,7 +294,9 @@ eduBetweenAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
                     "car",
                     "effectsize",
                     "emmeans",
-                    "ggplot2")))
+                    "ggplot2",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="diagnostics",
@@ -333,7 +341,9 @@ eduBetweenAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
                     "car",
                     "effectsize",
                     "emmeans",
-                    "ggplot2")))
+                    "ggplot2",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="report",
@@ -344,7 +354,9 @@ eduBetweenAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
                     "car",
                     "effectsize",
                     "emmeans",
-                    "ggplot2")))
+                    "ggplot2",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="interpretation",
@@ -355,7 +367,9 @@ eduBetweenAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
                     "car",
                     "effectsize",
                     "emmeans",
-                    "ggplot2")))
+                    "ggplot2",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",
@@ -374,7 +388,9 @@ eduBetweenAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
                     "car",
                     "effectsize",
                     "emmeans",
-                    "ggplot2")))}))
+                    "ggplot2",
+                    "Cohen1988",
+                    "Cumming2014")))}))
 
 eduBetweenAnovaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "eduBetweenAnovaBase",

@@ -186,14 +186,18 @@ eduChiSquareIndependenceResults <- if (requireNamespace("jmvcore", quietly=TRUE)
                 title="Guided Chi-Square Test of Independence",
                 refs=list(
                     "jReport",
-                    "effectsize"))
+                    "effectsize",
+                    "Cohen1988",
+                    "Cumming2014"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="overview",
                 title="jReport: Overview and Why This Test?",
                 refs=list(
                     "jReport",
-                    "effectsize")))
+                    "effectsize",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="fit",
@@ -230,7 +234,9 @@ eduChiSquareIndependenceResults <- if (requireNamespace("jmvcore", quietly=TRUE)
                         `type`="number")),
                 refs=list(
                     "jReport",
-                    "effectsize")))
+                    "effectsize",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="cells",
@@ -258,7 +264,9 @@ eduChiSquareIndependenceResults <- if (requireNamespace("jmvcore", quietly=TRUE)
                         `type`="number")),
                 refs=list(
                     "jReport",
-                    "effectsize")))
+                    "effectsize",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="diagnostics",
@@ -299,21 +307,27 @@ eduChiSquareIndependenceResults <- if (requireNamespace("jmvcore", quietly=TRUE)
                         `type`="text")),
                 refs=list(
                     "jReport",
-                    "effectsize")))
+                    "effectsize",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="report",
                 title="Reporting",
                 refs=list(
                     "jReport",
-                    "effectsize")))
+                    "effectsize",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="interpretation",
                 title="Plain-Language Interpretation",
                 refs=list(
                     "jReport",
-                    "effectsize")))}))
+                    "effectsize",
+                    "Cohen1988",
+                    "Cumming2014")))}))
 
 eduChiSquareIndependenceBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "eduChiSquareIndependenceBase",

@@ -186,7 +186,9 @@ eduMancovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 refs=list(
                     "jReport",
                     "car",
-                    "effectsize"))
+                    "effectsize",
+                    "Cohen1988",
+                    "Cumming2014"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="overview",
@@ -194,7 +196,9 @@ eduMancovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 refs=list(
                     "jReport",
                     "car",
-                    "effectsize")))
+                    "effectsize",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="main",
@@ -232,7 +236,9 @@ eduMancovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 refs=list(
                     "jReport",
                     "car",
-                    "effectsize")))
+                    "effectsize",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="descriptives",
@@ -261,7 +267,9 @@ eduMancovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 refs=list(
                     "jReport",
                     "car",
-                    "effectsize")))
+                    "effectsize",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="diagnostics",
@@ -303,7 +311,9 @@ eduMancovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 refs=list(
                     "jReport",
                     "car",
-                    "effectsize")))
+                    "effectsize",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="followups",
@@ -351,7 +361,9 @@ eduMancovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 refs=list(
                     "jReport",
                     "car",
-                    "effectsize")))
+                    "effectsize",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="report",
@@ -359,7 +371,9 @@ eduMancovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 refs=list(
                     "jReport",
                     "car",
-                    "effectsize")))
+                    "effectsize",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="interpretation",
@@ -367,7 +381,9 @@ eduMancovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 refs=list(
                     "jReport",
                     "car",
-                    "effectsize")))}))
+                    "effectsize",
+                    "Cohen1988",
+                    "Cumming2014")))}))
 
 eduMancovaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "eduMancovaBase",

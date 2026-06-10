@@ -15,6 +15,8 @@ items:
   - afex
   - effectsize
   - emmeans
+  - Cohen1988
+  - Cumming2014
   columns:
   - name: analysis
     title: Analysis
@@ -51,6 +53,8 @@ items:
   - afex
   - effectsize
   - emmeans
+  - Cohen1988
+  - Cumming2014
   columns:
   - name: analysis
     title: Analysis
@@ -88,6 +92,8 @@ items:
   - afex
   - effectsize
   - emmeans
+  - Cohen1988
+  - Cumming2014
   columns:
   - name: analysis
     title: Analysis

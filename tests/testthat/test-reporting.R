@@ -639,3 +639,100 @@ test_that("significant interactions trigger conditional post hoc follow-ups", {
 test_that("post hoc term parsing retains factorial interaction components", {
     expect_equal(.jr_posthoc_terms(~ dose:supp), list(c("dose", "supp")))
 })
+
+# --- Reference key propagation ---
+
+test_that("Cohen1988 and Cumming2014 reference keys included for t-test", {
+    result <- edu_t_test(ToothGrowth, "len", "supp")
+    keys <- .jr_text_reference_keys(result)
+    expect_true("Cohen1988" %in% keys)
+    expect_true("Cumming2014" %in% keys)
+})
+
+test_that("Cohen1988 and Cumming2014 reference keys included for RM ANOVA", {
+    set.seed(42)
+    d <- data.frame(pre = rnorm(30, 10, 2), mid = rnorm(30, 11, 2), post = rnorm(30, 12, 2))
+    result <- edu_anova_rm(d, c("pre", "mid", "post"), c("Pre", "Mid", "Post"))
+    keys <- .jr_text_reference_keys(result)
+    expect_true("Cohen1988" %in% keys)
+    expect_true("Cumming2014" %in% keys)
+})
+
+test_that("Cohen1988 and Cumming2014 reference keys absent for reliability omega", {
+    data(bfi, package = "psych")
+    scale <- psych::bfi[1:120, c("A1", "A2", "A3", "A4", "A5")]
+    result <- edu_reliability_omega(scale, names(scale), reverse_items = "A1", bootstrap = FALSE)
+    keys <- .jr_text_reference_keys(result)
+    expect_false("Cohen1988" %in% keys)
+    expect_false("Cumming2014" %in% keys)
+})
+
+# --- ηG² and ηp² for RM/mixed ANOVA ---
+
+test_that("RM ANOVA statistics include ges column with ges at most partial eta-squared", {
+    set.seed(42)
+    d <- data.frame(pre = rnorm(30, 10, 2), mid = rnorm(30, 11, 2), post = rnorm(30, 12, 2))
+    result <- edu_anova_rm(d, c("pre", "mid", "post"), c("Pre", "Mid", "Post"))
+    expect_true("ges" %in% names(result$statistics))
+    valid <- is.finite(result$statistics$ges) & is.finite(result$statistics$effect)
+    expect_true(any(valid))
+    expect_true(all(result$statistics$ges[valid] <= result$statistics$effect[valid] + 1e-10))
+})
+
+test_that("mixed ANOVA statistics include ges column with ges at most partial eta-squared", {
+    set.seed(42)
+    d <- data.frame(
+        group = factor(rep(c("control", "treatment"), each = 15)),
+        pre = rnorm(30, 10, 2), mid = rnorm(30, 11, 2), post = rnorm(30, 12, 2)
+    )
+    d$post[d$group == "treatment"] <- d$post[d$group == "treatment"] + 2
+    result <- edu_anova_mixed(d, c("pre", "mid", "post"), "group", c("Pre", "Mid", "Post"))
+    expect_true("ges" %in% names(result$statistics))
+    valid <- is.finite(result$statistics$ges) & is.finite(result$statistics$effect)
+    expect_true(any(valid))
+    expect_true(all(result$statistics$ges[valid] <= result$statistics$effect[valid] + 1e-10))
+})
+
+test_that(".jr_effect_sentences includes both ηG² and ηp² when ges is present", {
+    set.seed(42)
+    d <- data.frame(pre = rnorm(30, 10, 2), mid = rnorm(30, 11, 2), post = rnorm(30, 12, 2))
+    result <- edu_anova_rm(d, c("pre", "mid", "post"), c("Pre", "Mid", "Post"))
+    sentences <- .jr_effect_sentences(result$statistics)
+    expect_match(sentences, "ηG²", fixed = TRUE)
+    expect_match(sentences, "ηp²", fixed = TRUE)
+})
+
+test_that(".jr_rm_ges_guidance returns educational text for RM ANOVA", {
+    set.seed(42)
+    d <- data.frame(pre = rnorm(30, 10, 2), mid = rnorm(30, 11, 2), post = rnorm(30, 12, 2))
+    result <- edu_anova_rm(d, c("pre", "mid", "post"), c("Pre", "Mid", "Post"))
+    guidance <- .jr_rm_ges_guidance(result)
+    expect_true(nzchar(guidance))
+    expect_match(guidance, "Generalised eta squared", fixed = TRUE)
+    expect_match(guidance, "ηG²", fixed = TRUE)
+    expect_match(guidance, "ηp²", fixed = TRUE)
+})
+
+test_that(".jr_rm_ges_guidance returns empty string for non-RM analyses", {
+    result <- edu_t_test(ToothGrowth, "len", "supp")
+    expect_equal(.jr_rm_ges_guidance(result), "")
+})
+
+test_that(".jr_rm_ges_guidance discrepancy note triggers when ηp² exceeds twice ηG²", {
+    set.seed(1)
+    n <- 30
+    # Large participant-level variation dwarfs the time effect so ηp² >> ηG²
+    baselines <- seq(0, 100, length.out = n)
+    d <- data.frame(
+        pre  = baselines + rnorm(n, 0, 0.5),
+        mid  = baselines + 0.5 + rnorm(n, 0, 0.5),
+        post = baselines + 1 + rnorm(n, 0, 0.5)
+    )
+    result <- edu_anova_rm(d, c("pre", "mid", "post"), c("Pre", "Mid", "Post"))
+    stats <- result$statistics
+    valid <- is.finite(stats$effect) & is.finite(stats$ges)
+    if (!any(valid) || !any(stats$effect[valid] > 2 * stats$ges[valid]))
+        skip("Dataset did not produce a large enough ηp²/ηG² ratio")
+    guidance <- .jr_rm_ges_guidance(result)
+    expect_match(guidance, "individual differences", fixed = TRUE)
+})

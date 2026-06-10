@@ -190,7 +190,9 @@ eduRMAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "jReport",
                     "afex",
                     "effectsize",
-                    "ggplot2"))
+                    "ggplot2",
+                    "Cohen1988",
+                    "Cumming2014"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="overview",
@@ -199,7 +201,9 @@ eduRMAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "jReport",
                     "afex",
                     "effectsize",
-                    "ggplot2")))
+                    "ggplot2",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="main",
@@ -246,7 +250,9 @@ eduRMAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "jReport",
                     "afex",
                     "effectsize",
-                    "ggplot2")))
+                    "ggplot2",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="descriptives",
@@ -276,7 +282,9 @@ eduRMAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "jReport",
                     "afex",
                     "effectsize",
-                    "ggplot2")))
+                    "ggplot2",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="diagnostics",
@@ -319,7 +327,9 @@ eduRMAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "jReport",
                     "afex",
                     "effectsize",
-                    "ggplot2")))
+                    "ggplot2",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="report",
@@ -328,7 +338,9 @@ eduRMAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "jReport",
                     "afex",
                     "effectsize",
-                    "ggplot2")))
+                    "ggplot2",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="interpretation",
@@ -337,7 +349,9 @@ eduRMAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "jReport",
                     "afex",
                     "effectsize",
-                    "ggplot2")))
+                    "ggplot2",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",
@@ -354,7 +368,9 @@ eduRMAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "jReport",
                     "afex",
                     "effectsize",
-                    "ggplot2")))}))
+                    "ggplot2",
+                    "Cohen1988",
+                    "Cumming2014")))}))
 
 eduRMAnovaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "eduRMAnovaBase",

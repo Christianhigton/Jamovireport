@@ -226,7 +226,9 @@ eduTTestResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "jReport",
                     "effectsize",
                     "ggplot2",
-                    "BayesFactor"))
+                    "BayesFactor",
+                    "Cohen1988",
+                    "Cumming2014"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="overview",
@@ -235,7 +237,9 @@ eduTTestResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "jReport",
                     "effectsize",
                     "ggplot2",
-                    "BayesFactor")))
+                    "BayesFactor",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="main",
@@ -281,7 +285,9 @@ eduTTestResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "jReport",
                     "effectsize",
                     "ggplot2",
-                    "BayesFactor")))
+                    "BayesFactor",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="descriptives",
@@ -314,7 +320,9 @@ eduTTestResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "jReport",
                     "effectsize",
                     "ggplot2",
-                    "BayesFactor")))
+                    "BayesFactor",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="diagnostics",
@@ -360,7 +368,9 @@ eduTTestResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "jReport",
                     "effectsize",
                     "ggplot2",
-                    "BayesFactor")))
+                    "BayesFactor",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="report",
@@ -369,7 +379,9 @@ eduTTestResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "jReport",
                     "effectsize",
                     "ggplot2",
-                    "BayesFactor")))
+                    "BayesFactor",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="interpretation",
@@ -378,7 +390,9 @@ eduTTestResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "jReport",
                     "effectsize",
                     "ggplot2",
-                    "BayesFactor")))
+                    "BayesFactor",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",
@@ -398,7 +412,9 @@ eduTTestResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "jReport",
                     "effectsize",
                     "ggplot2",
-                    "BayesFactor")))}))
+                    "BayesFactor",
+                    "Cohen1988",
+                    "Cumming2014")))}))
 
 eduTTestBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "eduTTestBase",

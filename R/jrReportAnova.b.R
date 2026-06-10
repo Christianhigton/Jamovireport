@@ -6,7 +6,8 @@ jrReportAnovaClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class(
         .init = function() {
             .jr_addon_insert_card(
                 self, posthoc = TRUE,
-                refs = c("RCore", "jReport", "jmvcore", "afex", "effectsize", "emmeans")
+                refs = c("RCore", "jReport", "jmvcore", "afex", "effectsize", "emmeans",
+                         "Cohen1988", "Cumming2014")
             )
         },
         .run = function() {

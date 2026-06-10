@@ -182,14 +182,18 @@ eduChiSquareGoodnessResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6
                 title="Guided Chi-Square Goodness-of-Fit",
                 refs=list(
                     "jReport",
-                    "effectsize"))
+                    "effectsize",
+                    "Cohen1988",
+                    "Cumming2014"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="overview",
                 title="jReport: Overview and Why This Test?",
                 refs=list(
                     "jReport",
-                    "effectsize")))
+                    "effectsize",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="fit",
@@ -226,7 +230,9 @@ eduChiSquareGoodnessResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6
                         `type`="number")),
                 refs=list(
                     "jReport",
-                    "effectsize")))
+                    "effectsize",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="cells",
@@ -254,7 +260,9 @@ eduChiSquareGoodnessResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6
                         `type`="number")),
                 refs=list(
                     "jReport",
-                    "effectsize")))
+                    "effectsize",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="diagnostics",
@@ -295,21 +303,27 @@ eduChiSquareGoodnessResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6
                         `type`="text")),
                 refs=list(
                     "jReport",
-                    "effectsize")))
+                    "effectsize",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="report",
                 title="Reporting",
                 refs=list(
                     "jReport",
-                    "effectsize")))
+                    "effectsize",
+                    "Cohen1988",
+                    "Cumming2014")))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="interpretation",
                 title="Plain-Language Interpretation",
                 refs=list(
                     "jReport",
-                    "effectsize")))}))
+                    "effectsize",
+                    "Cohen1988",
+                    "Cumming2014")))}))
 
 eduChiSquareGoodnessBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "eduChiSquareGoodnessBase",

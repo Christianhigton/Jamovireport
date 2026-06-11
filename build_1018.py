@@ -200,7 +200,9 @@ def option_to_yaml(opt, indent=6):
     if opt.get("type"):
         lines.append(f"{pad}  type: {opt['type']}")
     if opt.get("title"):
-        lines.append(f"{pad}  title: {opt['title']}")
+        # Always quote titles — plain scalars may not contain ': ' (YAML mapping indicator)
+        t = opt['title'].replace('"', '\\"')
+        lines.append(f'{pad}  title: "{t}"')
     if "suggested" in opt:
         lines.append(f"{pad}  suggested:")
         for s in opt["suggested"]:

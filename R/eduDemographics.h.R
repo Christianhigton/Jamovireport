@@ -6,15 +6,28 @@ eduDemographicsOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
     inherit = jmvcore::Options,
     public = list(
         initialize = function(
-            variables = NULL,
-            tableTitle = "Table 1. Demographic Characteristics of the Sample",
-            includeParagraph = TRUE,
-            includeCustomInParagraph = FALSE,
-            customRow1Var = "", customRow1Cat = "", customRow1N = "", customRow1Pct = "", customRow1Note = "",
-            customRow2Var = "", customRow2Cat = "", customRow2N = "", customRow2Pct = "", customRow2Note = "",
-            customRow3Var = "", customRow3Cat = "", customRow3N = "", customRow3Pct = "", customRow3Note = "",
-            customRow4Var = "", customRow4Cat = "", customRow4N = "", customRow4Pct = "", customRow4Note = "",
-            customRow5Var = "", customRow5Cat = "", customRow5N = "", customRow5Pct = "", customRow5Note = "",
+            tableVariables     = NULL,
+            paragraphVariables = NULL,
+            showTable          = TRUE,
+            showParagraph      = TRUE,
+            tableTitle         = "Demographic Characteristics of the Sample",
+            showOmitNote       = TRUE,
+            statMean           = TRUE,
+            statSD             = TRUE,
+            statMedian         = FALSE,
+            statIQR            = FALSE,
+            statMin            = FALSE,
+            statMax            = FALSE,
+            statRange          = FALSE,
+            statContMissing    = FALSE,
+            statN              = TRUE,
+            statPct            = TRUE,
+            statCatMissing     = FALSE,
+            customRow1Char = "", customRow1Val = "", customRow1Pct = "", customRow1Note = "",
+            customRow2Char = "", customRow2Val = "", customRow2Pct = "", customRow2Note = "",
+            customRow3Char = "", customRow3Val = "", customRow3Pct = "", customRow3Note = "",
+            customRow4Char = "", customRow4Val = "", customRow4Pct = "", customRow4Note = "",
+            customRow5Char = "", customRow5Val = "", customRow5Pct = "", customRow5Note = "",
             ...) {
 
             super$initialize(
@@ -23,113 +36,168 @@ eduDemographicsOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
                 requiresData = TRUE,
                 ...)
 
-            private$..variables <- jmvcore::OptionVariables$new(
-                "variables", variables,
+            private$..tableVariables <- jmvcore::OptionVariables$new(
+                "tableVariables", tableVariables,
                 suggested = list("nominal","ordinal","continuous"),
                 permitted = list("factor","numeric"),
                 default   = NULL)
-            private$..tableTitle               <- jmvcore::OptionString$new("tableTitle",               tableTitle,               default = "Table 1. Demographic Characteristics of the Sample")
-            private$..includeParagraph         <- jmvcore::OptionBool$new("includeParagraph",         includeParagraph,         default = TRUE)
-            private$..includeCustomInParagraph <- jmvcore::OptionBool$new("includeCustomInParagraph", includeCustomInParagraph, default = FALSE)
+            private$..paragraphVariables <- jmvcore::OptionVariables$new(
+                "paragraphVariables", paragraphVariables,
+                suggested = list("nominal","ordinal","continuous"),
+                permitted = list("factor","numeric"),
+                default   = NULL)
 
-            private$..customRow1Var  <- jmvcore::OptionString$new("customRow1Var",  customRow1Var,  default = "")
-            private$..customRow1Cat  <- jmvcore::OptionString$new("customRow1Cat",  customRow1Cat,  default = "")
-            private$..customRow1N    <- jmvcore::OptionString$new("customRow1N",    customRow1N,    default = "")
+            private$..showTable       <- jmvcore::OptionBool$new("showTable",    showTable,    default = TRUE)
+            private$..showParagraph   <- jmvcore::OptionBool$new("showParagraph", showParagraph, default = TRUE)
+            private$..tableTitle      <- jmvcore::OptionString$new("tableTitle", tableTitle,
+                                            default = "Demographic Characteristics of the Sample")
+            private$..showOmitNote    <- jmvcore::OptionBool$new("showOmitNote", showOmitNote, default = TRUE)
+
+            private$..statMean        <- jmvcore::OptionBool$new("statMean",        statMean,        default = TRUE)
+            private$..statSD          <- jmvcore::OptionBool$new("statSD",          statSD,          default = TRUE)
+            private$..statMedian      <- jmvcore::OptionBool$new("statMedian",      statMedian,      default = FALSE)
+            private$..statIQR         <- jmvcore::OptionBool$new("statIQR",         statIQR,         default = FALSE)
+            private$..statMin         <- jmvcore::OptionBool$new("statMin",         statMin,         default = FALSE)
+            private$..statMax         <- jmvcore::OptionBool$new("statMax",         statMax,         default = FALSE)
+            private$..statRange       <- jmvcore::OptionBool$new("statRange",       statRange,       default = FALSE)
+            private$..statContMissing <- jmvcore::OptionBool$new("statContMissing", statContMissing, default = FALSE)
+            private$..statN           <- jmvcore::OptionBool$new("statN",           statN,           default = TRUE)
+            private$..statPct         <- jmvcore::OptionBool$new("statPct",         statPct,         default = TRUE)
+            private$..statCatMissing  <- jmvcore::OptionBool$new("statCatMissing",  statCatMissing,  default = FALSE)
+
+            private$..customRow1Char <- jmvcore::OptionString$new("customRow1Char", customRow1Char, default = "")
+            private$..customRow1Val  <- jmvcore::OptionString$new("customRow1Val",  customRow1Val,  default = "")
             private$..customRow1Pct  <- jmvcore::OptionString$new("customRow1Pct",  customRow1Pct,  default = "")
             private$..customRow1Note <- jmvcore::OptionString$new("customRow1Note", customRow1Note, default = "")
-
-            private$..customRow2Var  <- jmvcore::OptionString$new("customRow2Var",  customRow2Var,  default = "")
-            private$..customRow2Cat  <- jmvcore::OptionString$new("customRow2Cat",  customRow2Cat,  default = "")
-            private$..customRow2N    <- jmvcore::OptionString$new("customRow2N",    customRow2N,    default = "")
+            private$..customRow2Char <- jmvcore::OptionString$new("customRow2Char", customRow2Char, default = "")
+            private$..customRow2Val  <- jmvcore::OptionString$new("customRow2Val",  customRow2Val,  default = "")
             private$..customRow2Pct  <- jmvcore::OptionString$new("customRow2Pct",  customRow2Pct,  default = "")
             private$..customRow2Note <- jmvcore::OptionString$new("customRow2Note", customRow2Note, default = "")
-
-            private$..customRow3Var  <- jmvcore::OptionString$new("customRow3Var",  customRow3Var,  default = "")
-            private$..customRow3Cat  <- jmvcore::OptionString$new("customRow3Cat",  customRow3Cat,  default = "")
-            private$..customRow3N    <- jmvcore::OptionString$new("customRow3N",    customRow3N,    default = "")
+            private$..customRow3Char <- jmvcore::OptionString$new("customRow3Char", customRow3Char, default = "")
+            private$..customRow3Val  <- jmvcore::OptionString$new("customRow3Val",  customRow3Val,  default = "")
             private$..customRow3Pct  <- jmvcore::OptionString$new("customRow3Pct",  customRow3Pct,  default = "")
             private$..customRow3Note <- jmvcore::OptionString$new("customRow3Note", customRow3Note, default = "")
-
-            private$..customRow4Var  <- jmvcore::OptionString$new("customRow4Var",  customRow4Var,  default = "")
-            private$..customRow4Cat  <- jmvcore::OptionString$new("customRow4Cat",  customRow4Cat,  default = "")
-            private$..customRow4N    <- jmvcore::OptionString$new("customRow4N",    customRow4N,    default = "")
+            private$..customRow4Char <- jmvcore::OptionString$new("customRow4Char", customRow4Char, default = "")
+            private$..customRow4Val  <- jmvcore::OptionString$new("customRow4Val",  customRow4Val,  default = "")
             private$..customRow4Pct  <- jmvcore::OptionString$new("customRow4Pct",  customRow4Pct,  default = "")
             private$..customRow4Note <- jmvcore::OptionString$new("customRow4Note", customRow4Note, default = "")
-
-            private$..customRow5Var  <- jmvcore::OptionString$new("customRow5Var",  customRow5Var,  default = "")
-            private$..customRow5Cat  <- jmvcore::OptionString$new("customRow5Cat",  customRow5Cat,  default = "")
-            private$..customRow5N    <- jmvcore::OptionString$new("customRow5N",    customRow5N,    default = "")
+            private$..customRow5Char <- jmvcore::OptionString$new("customRow5Char", customRow5Char, default = "")
+            private$..customRow5Val  <- jmvcore::OptionString$new("customRow5Val",  customRow5Val,  default = "")
             private$..customRow5Pct  <- jmvcore::OptionString$new("customRow5Pct",  customRow5Pct,  default = "")
             private$..customRow5Note <- jmvcore::OptionString$new("customRow5Note", customRow5Note, default = "")
 
-            self$.addOption(private$..variables)
+            self$.addOption(private$..tableVariables)
+            self$.addOption(private$..paragraphVariables)
+            self$.addOption(private$..showTable)
+            self$.addOption(private$..showParagraph)
             self$.addOption(private$..tableTitle)
-            self$.addOption(private$..includeParagraph)
-            self$.addOption(private$..includeCustomInParagraph)
-            self$.addOption(private$..customRow1Var)
-            self$.addOption(private$..customRow1Cat)
-            self$.addOption(private$..customRow1N)
+            self$.addOption(private$..showOmitNote)
+            self$.addOption(private$..statMean)
+            self$.addOption(private$..statSD)
+            self$.addOption(private$..statMedian)
+            self$.addOption(private$..statIQR)
+            self$.addOption(private$..statMin)
+            self$.addOption(private$..statMax)
+            self$.addOption(private$..statRange)
+            self$.addOption(private$..statContMissing)
+            self$.addOption(private$..statN)
+            self$.addOption(private$..statPct)
+            self$.addOption(private$..statCatMissing)
+            self$.addOption(private$..customRow1Char)
+            self$.addOption(private$..customRow1Val)
             self$.addOption(private$..customRow1Pct)
             self$.addOption(private$..customRow1Note)
-            self$.addOption(private$..customRow2Var)
-            self$.addOption(private$..customRow2Cat)
-            self$.addOption(private$..customRow2N)
+            self$.addOption(private$..customRow2Char)
+            self$.addOption(private$..customRow2Val)
             self$.addOption(private$..customRow2Pct)
             self$.addOption(private$..customRow2Note)
-            self$.addOption(private$..customRow3Var)
-            self$.addOption(private$..customRow3Cat)
-            self$.addOption(private$..customRow3N)
+            self$.addOption(private$..customRow3Char)
+            self$.addOption(private$..customRow3Val)
             self$.addOption(private$..customRow3Pct)
             self$.addOption(private$..customRow3Note)
-            self$.addOption(private$..customRow4Var)
-            self$.addOption(private$..customRow4Cat)
-            self$.addOption(private$..customRow4N)
+            self$.addOption(private$..customRow4Char)
+            self$.addOption(private$..customRow4Val)
             self$.addOption(private$..customRow4Pct)
             self$.addOption(private$..customRow4Note)
-            self$.addOption(private$..customRow5Var)
-            self$.addOption(private$..customRow5Cat)
-            self$.addOption(private$..customRow5N)
+            self$.addOption(private$..customRow5Char)
+            self$.addOption(private$..customRow5Val)
             self$.addOption(private$..customRow5Pct)
             self$.addOption(private$..customRow5Note)
         }),
     active = list(
-        variables                = function() private$..variables$value,
-        tableTitle               = function() private$..tableTitle$value,
-        includeParagraph         = function() private$..includeParagraph$value,
-        includeCustomInParagraph = function() private$..includeCustomInParagraph$value,
-        customRow1Var  = function() private$..customRow1Var$value,
-        customRow1Cat  = function() private$..customRow1Cat$value,
-        customRow1N    = function() private$..customRow1N$value,
+        tableVariables     = function() private$..tableVariables$value,
+        paragraphVariables = function() private$..paragraphVariables$value,
+        showTable          = function() private$..showTable$value,
+        showParagraph      = function() private$..showParagraph$value,
+        tableTitle         = function() private$..tableTitle$value,
+        showOmitNote       = function() private$..showOmitNote$value,
+        statMean           = function() private$..statMean$value,
+        statSD             = function() private$..statSD$value,
+        statMedian         = function() private$..statMedian$value,
+        statIQR            = function() private$..statIQR$value,
+        statMin            = function() private$..statMin$value,
+        statMax            = function() private$..statMax$value,
+        statRange          = function() private$..statRange$value,
+        statContMissing    = function() private$..statContMissing$value,
+        statN              = function() private$..statN$value,
+        statPct            = function() private$..statPct$value,
+        statCatMissing     = function() private$..statCatMissing$value,
+        customRow1Char = function() private$..customRow1Char$value,
+        customRow1Val  = function() private$..customRow1Val$value,
         customRow1Pct  = function() private$..customRow1Pct$value,
         customRow1Note = function() private$..customRow1Note$value,
-        customRow2Var  = function() private$..customRow2Var$value,
-        customRow2Cat  = function() private$..customRow2Cat$value,
-        customRow2N    = function() private$..customRow2N$value,
+        customRow2Char = function() private$..customRow2Char$value,
+        customRow2Val  = function() private$..customRow2Val$value,
         customRow2Pct  = function() private$..customRow2Pct$value,
         customRow2Note = function() private$..customRow2Note$value,
-        customRow3Var  = function() private$..customRow3Var$value,
-        customRow3Cat  = function() private$..customRow3Cat$value,
-        customRow3N    = function() private$..customRow3N$value,
+        customRow3Char = function() private$..customRow3Char$value,
+        customRow3Val  = function() private$..customRow3Val$value,
         customRow3Pct  = function() private$..customRow3Pct$value,
         customRow3Note = function() private$..customRow3Note$value,
-        customRow4Var  = function() private$..customRow4Var$value,
-        customRow4Cat  = function() private$..customRow4Cat$value,
-        customRow4N    = function() private$..customRow4N$value,
+        customRow4Char = function() private$..customRow4Char$value,
+        customRow4Val  = function() private$..customRow4Val$value,
         customRow4Pct  = function() private$..customRow4Pct$value,
         customRow4Note = function() private$..customRow4Note$value,
-        customRow5Var  = function() private$..customRow5Var$value,
-        customRow5Cat  = function() private$..customRow5Cat$value,
-        customRow5N    = function() private$..customRow5N$value,
+        customRow5Char = function() private$..customRow5Char$value,
+        customRow5Val  = function() private$..customRow5Val$value,
         customRow5Pct  = function() private$..customRow5Pct$value,
         customRow5Note = function() private$..customRow5Note$value),
     private = list(
-        ..variables = NA,
-        ..tableTitle = NA, ..includeParagraph = NA, ..includeCustomInParagraph = NA,
-        ..customRow1Var = NA, ..customRow1Cat = NA, ..customRow1N = NA, ..customRow1Pct = NA, ..customRow1Note = NA,
-        ..customRow2Var = NA, ..customRow2Cat = NA, ..customRow2N = NA, ..customRow2Pct = NA, ..customRow2Note = NA,
-        ..customRow3Var = NA, ..customRow3Cat = NA, ..customRow3N = NA, ..customRow3Pct = NA, ..customRow3Note = NA,
-        ..customRow4Var = NA, ..customRow4Cat = NA, ..customRow4N = NA, ..customRow4Pct = NA, ..customRow4Note = NA,
-        ..customRow5Var = NA, ..customRow5Cat = NA, ..customRow5N = NA, ..customRow5Pct = NA, ..customRow5Note = NA)
+        ..tableVariables     = NA,
+        ..paragraphVariables = NA,
+        ..showTable          = NA,
+        ..showParagraph      = NA,
+        ..tableTitle         = NA,
+        ..showOmitNote       = NA,
+        ..statMean           = NA,
+        ..statSD             = NA,
+        ..statMedian         = NA,
+        ..statIQR            = NA,
+        ..statMin            = NA,
+        ..statMax            = NA,
+        ..statRange          = NA,
+        ..statContMissing    = NA,
+        ..statN              = NA,
+        ..statPct            = NA,
+        ..statCatMissing     = NA,
+        ..customRow1Char = NA, ..customRow1Val = NA, ..customRow1Pct = NA, ..customRow1Note = NA,
+        ..customRow2Char = NA, ..customRow2Val = NA, ..customRow2Pct = NA, ..customRow2Note = NA,
+        ..customRow3Char = NA, ..customRow3Val = NA, ..customRow3Pct = NA, ..customRow3Note = NA,
+        ..customRow4Char = NA, ..customRow4Val = NA, ..customRow4Pct = NA, ..customRow4Note = NA,
+        ..customRow5Char = NA, ..customRow5Val = NA, ..customRow5Pct = NA, ..customRow5Note = NA)
+)
+
+.edu_demographics_clear_with <- list(
+    "tableVariables",
+    "tableTitle",
+    "statMean", "statSD", "statMedian", "statIQR",
+    "statMin", "statMax", "statRange", "statContMissing",
+    "statN", "statPct", "statCatMissing",
+    "customRow1Char", "customRow1Val", "customRow1Pct", "customRow1Note",
+    "customRow2Char", "customRow2Val", "customRow2Pct", "customRow2Note",
+    "customRow3Char", "customRow3Val", "customRow3Pct", "customRow3Note",
+    "customRow4Char", "customRow4Val", "customRow4Pct", "customRow4Note",
+    "customRow5Char", "customRow5Val", "customRow5Pct", "customRow5Note"
 )
 
 eduDemographicsResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -137,6 +205,7 @@ eduDemographicsResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
     inherit = jmvcore::Group,
     active = list(
         demographics = function() private$.items[["demographics"]],
+        omitNote     = function() private$.items[["omitNote"]],
         paragraph    = function() private$.items[["paragraph"]]),
     private = list(),
     public = list(
@@ -145,30 +214,28 @@ eduDemographicsResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
                 options = options,
                 name    = "",
                 title   = "Demographic Table")
+
             self$add(jmvcore::Table$new(
                 options   = options,
                 name      = "demographics",
                 title     = "Demographic Characteristics of the Sample",
-                clearWith = list(
-                    "variables","tableTitle",
-                    "customRow1Var","customRow1Cat","customRow1N","customRow1Pct","customRow1Note",
-                    "customRow2Var","customRow2Cat","customRow2N","customRow2Pct","customRow2Note",
-                    "customRow3Var","customRow3Cat","customRow3N","customRow3Pct","customRow3Note",
-                    "customRow4Var","customRow4Cat","customRow4N","customRow4Pct","customRow4Note",
-                    "customRow5Var","customRow5Cat","customRow5N","customRow5Pct","customRow5Note"),
-                columns = list(
-                    list(name="variable", title="Variable",           type="text"),
-                    list(name="category", title="Category/Statistic", type="text"),
-                    list(name="n",        title="n",                  type="integer"),
-                    list(name="percent",  title="%",                  type="number"),
-                    list(name="mean",     title="M",                  type="number"),
-                    list(name="sd",       title="SD",                 type="number"),
-                    list(name="range",    title="Range / Note",       type="text"))))
+                visible   = "(showTable)",
+                clearWith = .edu_demographics_clear_with,
+                columns   = list(
+                    list(name = "characteristic", title = "Characteristic", type = "text"),
+                    list(name = "value",          title = "n (%) or M (SD)", type = "text"))))
+
+            self$add(jmvcore::Html$new(
+                options = options,
+                name    = "omitNote",
+                title   = "",
+                visible = "(showOmitNote)"))
+
             self$add(jmvcore::Html$new(
                 options = options,
                 name    = "paragraph",
                 title   = "APA-Style Descriptive Paragraph",
-                visible = "(includeParagraph)"))
+                visible = "(showParagraph)"))
         }))
 
 eduDemographicsBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -177,63 +244,103 @@ eduDemographicsBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
     public = list(
         initialize = function(options, data=NULL, datasetId="", analysisId="", revision=0) {
             super$initialize(
-                package   = "jReport",
-                name      = "eduDemographics",
-                version   = c(1,0,0),
-                options   = options,
-                results   = eduDemographicsResults$new(options=options),
-                data      = data,
-                datasetId = datasetId,
+                package    = "jReport",
+                name       = "eduDemographics",
+                version    = c(1,0,0),
+                options    = options,
+                results    = eduDemographicsResults$new(options=options),
+                data       = data,
+                datasetId  = datasetId,
                 analysisId = analysisId,
-                revision  = revision,
-                pause     = NULL,
+                revision   = revision,
+                pause      = NULL,
                 completeWhenFilled = FALSE)
         }),
     private = list(
         .run = function() stop("Not implemented")))
 
-#' Demographic Characteristics Table
+#' APA Demographic Characteristics Table
 #'
 #' @param data A data frame.
-#' @param variables Character vector of variable names.
+#' @param tableVariables Character vector of variable names for the table.
+#' @param paragraphVariables Character vector of variable names for the paragraph.
+#' @param showTable Logical; generate the APA table.
+#' @param showParagraph Logical; generate the APA paragraph.
 #' @param tableTitle Character; editable table title.
-#' @param includeParagraph Logical; include APA-style paragraph.
-#' @param includeCustomInParagraph Logical; include custom rows in the paragraph.
-#' @param ... Additional arguments (custom row fields passed via options).
+#' @param showOmitNote Logical; show note when variables are omitted.
+#' @param statMean Logical; show mean for continuous variables.
+#' @param statSD Logical; show SD for continuous variables.
+#' @param statMedian Logical; show median.
+#' @param statIQR Logical; show IQR.
+#' @param statMin Logical; show minimum.
+#' @param statMax Logical; show maximum.
+#' @param statRange Logical; show range (min-max).
+#' @param statContMissing Logical; show missing n for continuous variables.
+#' @param statN Logical; show n for categorical variables.
+#' @param statPct Logical; show percentages for categorical variables.
+#' @param statCatMissing Logical; show missing n for categorical variables.
+#' @param ... Custom row fields (customRow1Char, customRow1Val, etc.).
 #' @return A \code{jmvcore::Analysis} object.
 #' @export
 eduDemographics <- function(
         data,
-        variables = NULL,
-        tableTitle = "Table 1. Demographic Characteristics of the Sample",
-        includeParagraph = TRUE,
-        includeCustomInParagraph = FALSE,
-        customRow1Var = "", customRow1Cat = "", customRow1N = "", customRow1Pct = "", customRow1Note = "",
-        customRow2Var = "", customRow2Cat = "", customRow2N = "", customRow2Pct = "", customRow2Note = "",
-        customRow3Var = "", customRow3Cat = "", customRow3N = "", customRow3Pct = "", customRow3Note = "",
-        customRow4Var = "", customRow4Cat = "", customRow4N = "", customRow4Pct = "", customRow4Note = "",
-        customRow5Var = "", customRow5Cat = "", customRow5N = "", customRow5Pct = "", customRow5Note = "") {
+        tableVariables     = NULL,
+        paragraphVariables = NULL,
+        showTable          = TRUE,
+        showParagraph      = TRUE,
+        tableTitle         = "Demographic Characteristics of the Sample",
+        showOmitNote       = TRUE,
+        statMean           = TRUE,
+        statSD             = TRUE,
+        statMedian         = FALSE,
+        statIQR            = FALSE,
+        statMin            = FALSE,
+        statMax            = FALSE,
+        statRange          = FALSE,
+        statContMissing    = FALSE,
+        statN              = TRUE,
+        statPct            = TRUE,
+        statCatMissing     = FALSE,
+        customRow1Char = "", customRow1Val = "", customRow1Pct = "", customRow1Note = "",
+        customRow2Char = "", customRow2Val = "", customRow2Pct = "", customRow2Note = "",
+        customRow3Char = "", customRow3Val = "", customRow3Pct = "", customRow3Note = "",
+        customRow4Char = "", customRow4Val = "", customRow4Pct = "", customRow4Note = "",
+        customRow5Char = "", customRow5Val = "", customRow5Pct = "", customRow5Note = "") {
 
     if (missing(data))
         data <- jmvcore::marshalData(parent.frame())
 
-    if (is.null(variables)) variables <- character(0)
+    if (is.null(tableVariables))     tableVariables     <- character(0)
+    if (is.null(paragraphVariables)) paragraphVariables <- character(0)
 
     opts <- eduDemographicsOptions$new(
-        variables = variables,
-        tableTitle = tableTitle,
-        includeParagraph = includeParagraph,
-        includeCustomInParagraph = includeCustomInParagraph,
-        customRow1Var = customRow1Var, customRow1Cat = customRow1Cat,
-        customRow1N = customRow1N, customRow1Pct = customRow1Pct, customRow1Note = customRow1Note,
-        customRow2Var = customRow2Var, customRow2Cat = customRow2Cat,
-        customRow2N = customRow2N, customRow2Pct = customRow2Pct, customRow2Note = customRow2Note,
-        customRow3Var = customRow3Var, customRow3Cat = customRow3Cat,
-        customRow3N = customRow3N, customRow3Pct = customRow3Pct, customRow3Note = customRow3Note,
-        customRow4Var = customRow4Var, customRow4Cat = customRow4Cat,
-        customRow4N = customRow4N, customRow4Pct = customRow4Pct, customRow4Note = customRow4Note,
-        customRow5Var = customRow5Var, customRow5Cat = customRow5Cat,
-        customRow5N = customRow5N, customRow5Pct = customRow5Pct, customRow5Note = customRow5Note)
+        tableVariables     = tableVariables,
+        paragraphVariables = paragraphVariables,
+        showTable          = showTable,
+        showParagraph      = showParagraph,
+        tableTitle         = tableTitle,
+        showOmitNote       = showOmitNote,
+        statMean           = statMean,
+        statSD             = statSD,
+        statMedian         = statMedian,
+        statIQR            = statIQR,
+        statMin            = statMin,
+        statMax            = statMax,
+        statRange          = statRange,
+        statContMissing    = statContMissing,
+        statN              = statN,
+        statPct            = statPct,
+        statCatMissing     = statCatMissing,
+        customRow1Char = customRow1Char, customRow1Val = customRow1Val,
+        customRow1Pct  = customRow1Pct,  customRow1Note = customRow1Note,
+        customRow2Char = customRow2Char, customRow2Val = customRow2Val,
+        customRow2Pct  = customRow2Pct,  customRow2Note = customRow2Note,
+        customRow3Char = customRow3Char, customRow3Val = customRow3Val,
+        customRow3Pct  = customRow3Pct,  customRow3Note = customRow3Note,
+        customRow4Char = customRow4Char, customRow4Val = customRow4Val,
+        customRow4Pct  = customRow4Pct,  customRow4Note = customRow4Note,
+        customRow5Char = customRow5Char, customRow5Val = customRow5Val,
+        customRow5Pct  = customRow5Pct,  customRow5Note = customRow5Note)
 
     analysis <- eduDemographicsClass$new(options = opts, data = data)
     analysis$run()

@@ -99,4 +99,17 @@
         `author`="Russell V. Lenth", 
         `year`=2024, 
         `publisher`="CRAN", 
-        `url`="https://CRAN.R-project.org/package=emmeans"))
+        `url`="https://CRAN.R-project.org/package=emmeans"), 
+    `Cohen1988`=list(
+        `type`="book", 
+        `title`="Statistical power analysis for the behavioral sciences (2nd ed.)", 
+        `author`="Jacob Cohen", 
+        `year`=1988, 
+        `publisher`="Lawrence Erlbaum Associates"), 
+    `Cumming2014`=list(
+        `type`="article", 
+        `title`="The new statistics: Why and how", 
+        `author`="Geoff Cumming", 
+        `year`=2014, 
+        `publisher`="Psychological Science, 25(1), 7\u201329", 
+        `url`="https://doi.org/10.1177/0956797613504966"))

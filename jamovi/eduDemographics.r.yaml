@@ -58,3 +58,7 @@ items:
   title: APA-Style Descriptive Paragraph
   type: Html
   visible: (showParagraph)
+- name: bestPractices
+  title: Reporting Best Practices
+  type: Html
+  visible: (showBestPractices)

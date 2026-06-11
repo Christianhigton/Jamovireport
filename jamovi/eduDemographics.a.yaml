@@ -1,0 +1,136 @@
+---
+name: eduDemographics
+title: Demographic Table
+menuGroup: jReport
+version: '1.0.0'
+jas: '1.2'
+description:
+    main: >
+        Produce an APA-style demographic characteristics table directly
+        copyable into Word. Categorical variables show n and % per
+        category; continuous variables show M, SD, and range. Custom
+        rows can be added manually.
+    references:
+        - jReport
+        - RCore
+options:
+    - { name: data, type: Data }
+    - name: variables
+      title: Variables
+      type: Variables
+      suggested: [nominal, ordinal, continuous]
+      permitted: [factor, numeric]
+      default: null
+    - name: tableTitle
+      title: Table title
+      type: String
+      default: "Table 1. Demographic Characteristics of the Sample"
+    - name: includeParagraph
+      title: APA descriptive paragraph
+      type: Bool
+      default: true
+    - name: includeCustomInParagraph
+      title: Custom rows in APA paragraph
+      type: Bool
+      default: false
+    - name: customRow1Var
+      title: "Row 1: Variable"
+      type: String
+      default: ""
+    - name: customRow1Cat
+      title: "Row 1: Category or statistic"
+      type: String
+      default: ""
+    - name: customRow1N
+      title: "Row 1: n or value"
+      type: String
+      default: ""
+    - name: customRow1Pct
+      title: "Row 1: %"
+      type: String
+      default: ""
+    - name: customRow1Note
+      title: "Row 1: Note"
+      type: String
+      default: ""
+    - name: customRow2Var
+      title: "Row 2: Variable"
+      type: String
+      default: ""
+    - name: customRow2Cat
+      title: "Row 2: Category or statistic"
+      type: String
+      default: ""
+    - name: customRow2N
+      title: "Row 2: n or value"
+      type: String
+      default: ""
+    - name: customRow2Pct
+      title: "Row 2: %"
+      type: String
+      default: ""
+    - name: customRow2Note
+      title: "Row 2: Note"
+      type: String
+      default: ""
+    - name: customRow3Var
+      title: "Row 3: Variable"
+      type: String
+      default: ""
+    - name: customRow3Cat
+      title: "Row 3: Category or statistic"
+      type: String
+      default: ""
+    - name: customRow3N
+      title: "Row 3: n or value"
+      type: String
+      default: ""
+    - name: customRow3Pct
+      title: "Row 3: %"
+      type: String
+      default: ""
+    - name: customRow3Note
+      title: "Row 3: Note"
+      type: String
+      default: ""
+    - name: customRow4Var
+      title: "Row 4: Variable"
+      type: String
+      default: ""
+    - name: customRow4Cat
+      title: "Row 4: Category or statistic"
+      type: String
+      default: ""
+    - name: customRow4N
+      title: "Row 4: n or value"
+      type: String
+      default: ""
+    - name: customRow4Pct
+      title: "Row 4: %"
+      type: String
+      default: ""
+    - name: customRow4Note
+      title: "Row 4: Note"
+      type: String
+      default: ""
+    - name: customRow5Var
+      title: "Row 5: Variable"
+      type: String
+      default: ""
+    - name: customRow5Cat
+      title: "Row 5: Category or statistic"
+      type: String
+      default: ""
+    - name: customRow5N
+      title: "Row 5: n or value"
+      type: String
+      default: ""
+    - name: customRow5Pct
+      title: "Row 5: %"
+      type: String
+      default: ""
+    - name: customRow5Note
+      title: "Row 5: Note"
+      type: String
+      default: ""
+...

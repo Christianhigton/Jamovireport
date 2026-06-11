@@ -1,0 +1,58 @@
+---
+name: eduDemographics
+title: Demographic Table
+jus: '2.0'
+stage: 0
+compilerMode: tame
+children:
+  - type: VariableSupplier
+    stretchFactor: 1
+    persistentItems: false
+    children:
+      - type: TargetLayoutBox
+        label: Variables (categorical and/or continuous)
+        children:
+          - type: VariablesListBox
+            name: variables
+            isTarget: true
+  - type: CollapseBox
+    label: Table Options
+    collapsed: false
+    children:
+      - { type: TextBox, name: tableTitle }
+  - type: CollapseBox
+    label: Additional Custom Rows
+    collapsed: true
+    children:
+      - { type: TextBox, name: customRow1Var }
+      - { type: TextBox, name: customRow1Cat }
+      - { type: TextBox, name: customRow1N }
+      - { type: TextBox, name: customRow1Pct }
+      - { type: TextBox, name: customRow1Note }
+      - { type: TextBox, name: customRow2Var }
+      - { type: TextBox, name: customRow2Cat }
+      - { type: TextBox, name: customRow2N }
+      - { type: TextBox, name: customRow2Pct }
+      - { type: TextBox, name: customRow2Note }
+      - { type: TextBox, name: customRow3Var }
+      - { type: TextBox, name: customRow3Cat }
+      - { type: TextBox, name: customRow3N }
+      - { type: TextBox, name: customRow3Pct }
+      - { type: TextBox, name: customRow3Note }
+      - { type: TextBox, name: customRow4Var }
+      - { type: TextBox, name: customRow4Cat }
+      - { type: TextBox, name: customRow4N }
+      - { type: TextBox, name: customRow4Pct }
+      - { type: TextBox, name: customRow4Note }
+      - { type: TextBox, name: customRow5Var }
+      - { type: TextBox, name: customRow5Cat }
+      - { type: TextBox, name: customRow5N }
+      - { type: TextBox, name: customRow5Pct }
+      - { type: TextBox, name: customRow5Note }
+  - type: CollapseBox
+    label: Reporting
+    collapsed: true
+    children:
+      - { type: CheckBox, name: includeParagraph }
+      - { type: CheckBox, name: includeCustomInParagraph }
+...

@@ -155,6 +155,17 @@ analyses:
       Estimate and report internal consistency using McDonald's omega total and
       Cronbach's alpha, with item diagnostics and clear interpretation guidance.
     category: analyses
+  - title: Demographic Table
+    name: eduDemographics
+    ns: jReport
+    menuGroup: jReport
+    menuSubgroup: Descriptives
+    menuTitle: Demographic Table
+    description: >
+      Produce an APA-style demographic characteristics table directly copyable
+      into Word. Categorical variables show n and % per category; continuous
+      variables show M, SD, and range. Custom rows can be added manually.
+    category: analyses
   - title: Automatic Report for Independent Samples T-Test
     name: jrReportTTestIS
     ns: jReport

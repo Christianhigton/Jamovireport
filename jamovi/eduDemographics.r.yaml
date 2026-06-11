@@ -1,0 +1,64 @@
+name: eduDemographics
+title: Demographic Table
+jrs: '1.1'
+refs:
+- jReport
+- RCore
+items:
+- name: demographics
+  title: Demographic Characteristics of the Sample
+  type: Table
+  clearWith:
+  - variables
+  - tableTitle
+  - customRow1Var
+  - customRow1Cat
+  - customRow1N
+  - customRow1Pct
+  - customRow1Note
+  - customRow2Var
+  - customRow2Cat
+  - customRow2N
+  - customRow2Pct
+  - customRow2Note
+  - customRow3Var
+  - customRow3Cat
+  - customRow3N
+  - customRow3Pct
+  - customRow3Note
+  - customRow4Var
+  - customRow4Cat
+  - customRow4N
+  - customRow4Pct
+  - customRow4Note
+  - customRow5Var
+  - customRow5Cat
+  - customRow5N
+  - customRow5Pct
+  - customRow5Note
+  columns:
+  - name: variable
+    title: Variable
+    type: text
+  - name: category
+    title: Category / Statistic
+    type: text
+  - name: n
+    title: n
+    type: integer
+  - name: percent
+    title: '%'
+    type: number
+  - name: mean
+    title: M
+    type: number
+  - name: sd
+    title: SD
+    type: number
+  - name: range
+    title: Range / Note
+    type: text
+- name: paragraph
+  title: APA-Style Descriptive Paragraph
+  type: Html
+  visible: (includeParagraph)

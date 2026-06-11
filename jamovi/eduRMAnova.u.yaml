@@ -5,13 +5,12 @@ jus: '2.0'
 stage: 0
 compilerMode: tame
 children:
-  - type: VariableSupplier
+  - type: VariablesListBox
+    name: measures
+    label: Repeated Measurements (in Order)
+    isTarget: true
+    height: large
     suggested: [continuous]
-    persistentItems: false
-    children:
-      - type: TargetLayoutBox
-        label: Repeated Measurements (in Order)
-        children: [{ type: VariablesListBox, name: measures, isTarget: true }]
   - type: CollapseBox
     label: Analysis
     collapsed: false

@@ -5,16 +5,18 @@ jus: '2.0'
 stage: 0
 compilerMode: tame
 children:
-  - type: VariableSupplier
+  - type: VariablesListBox
+    name: outcome
+    label: Outcome
+    maxItemCount: 1
+    isTarget: true
     suggested: [continuous]
-    persistentItems: false
-    children:
-      - type: TargetLayoutBox
-        label: Outcome
-        children: [{ type: VariablesListBox, name: outcome, maxItemCount: 1, isTarget: true }]
-      - type: TargetLayoutBox
-        label: Numeric Predictors
-        children: [{ type: VariablesListBox, name: predictors, isTarget: true }]
+  - type: VariablesListBox
+    name: predictors
+    label: Numeric Predictors
+    isTarget: true
+    height: large
+    suggested: [continuous]
   - type: CollapseBox
     label: Analysis
     collapsed: false

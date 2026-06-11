@@ -5,19 +5,24 @@ jus: '2.0'
 stage: 0
 compilerMode: tame
 children:
-  - type: VariableSupplier
-    suggested: [continuous, nominal, ordinal]
-    persistentItems: false
-    children:
-      - type: TargetLayoutBox
-        label: Dependent Variables
-        children: [{ type: VariablesListBox, name: outcomes, isTarget: true }]
-      - type: TargetLayoutBox
-        label: Fixed Factors
-        children: [{ type: VariablesListBox, name: factors, isTarget: true }]
-      - type: TargetLayoutBox
-        label: Covariates
-        children: [{ type: VariablesListBox, name: covariates, isTarget: true }]
+  - type: VariablesListBox
+    name: outcomes
+    label: Dependent Variables
+    isTarget: true
+    height: large
+    suggested: [continuous]
+  - type: VariablesListBox
+    name: factors
+    label: Fixed Factors
+    isTarget: true
+    height: large
+    suggested: [nominal, ordinal]
+  - type: VariablesListBox
+    name: covariates
+    label: Covariates
+    isTarget: true
+    height: large
+    suggested: [continuous]
   - type: CollapseBox
     label: Reporting
     collapsed: true

@@ -5,15 +5,16 @@ jus: '2.0'
 stage: 0
 compilerMode: tame
 children:
-  - type: VariableSupplier
-    persistentItems: false
-    children:
-      - type: TargetLayoutBox
-        label: Categorical Variable
-        children: [{ type: VariablesListBox, name: variable, maxItemCount: 1, isTarget: true }]
-      - type: TargetLayoutBox
-        label: Counts (Optional)
-        children: [{ type: VariablesListBox, name: counts, maxItemCount: 1, isTarget: true }]
+  - type: VariablesListBox
+    name: variable
+    label: Categorical Variable
+    maxItemCount: 1
+    isTarget: true
+  - type: VariablesListBox
+    name: counts
+    label: Counts (Optional)
+    maxItemCount: 1
+    isTarget: true
   - type: CollapseBox
     label: Expected Distribution
     collapsed: false

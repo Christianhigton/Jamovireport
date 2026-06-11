@@ -12,6 +12,7 @@ eduDemographicsOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
             showParagraph      = TRUE,
             tableTitle         = "Demographic Characteristics of the Sample",
             showOmitNote       = TRUE,
+            showBestPractices  = TRUE,
             statMean           = TRUE,
             statSD             = TRUE,
             statMedian         = FALSE,
@@ -51,7 +52,8 @@ eduDemographicsOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
             private$..showParagraph   <- jmvcore::OptionBool$new("showParagraph", showParagraph, default = TRUE)
             private$..tableTitle      <- jmvcore::OptionString$new("tableTitle", tableTitle,
                                             default = "Demographic Characteristics of the Sample")
-            private$..showOmitNote    <- jmvcore::OptionBool$new("showOmitNote", showOmitNote, default = TRUE)
+            private$..showOmitNote    <- jmvcore::OptionBool$new("showOmitNote",    showOmitNote,    default = TRUE)
+            private$..showBestPractices <- jmvcore::OptionBool$new("showBestPractices", showBestPractices, default = TRUE)
 
             private$..statMean        <- jmvcore::OptionBool$new("statMean",        statMean,        default = TRUE)
             private$..statSD          <- jmvcore::OptionBool$new("statSD",          statSD,          default = TRUE)
@@ -92,6 +94,7 @@ eduDemographicsOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
             self$.addOption(private$..showParagraph)
             self$.addOption(private$..tableTitle)
             self$.addOption(private$..showOmitNote)
+            self$.addOption(private$..showBestPractices)
             self$.addOption(private$..statMean)
             self$.addOption(private$..statSD)
             self$.addOption(private$..statMedian)
@@ -131,6 +134,7 @@ eduDemographicsOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
         showParagraph      = function() private$..showParagraph$value,
         tableTitle         = function() private$..tableTitle$value,
         showOmitNote       = function() private$..showOmitNote$value,
+        showBestPractices  = function() private$..showBestPractices$value,
         statMean           = function() private$..statMean$value,
         statSD             = function() private$..statSD$value,
         statMedian         = function() private$..statMedian$value,
@@ -169,6 +173,7 @@ eduDemographicsOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
         ..showParagraph      = NA,
         ..tableTitle         = NA,
         ..showOmitNote       = NA,
+        ..showBestPractices  = NA,
         ..statMean           = NA,
         ..statSD             = NA,
         ..statMedian         = NA,
@@ -204,9 +209,10 @@ eduDemographicsResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
     "eduDemographicsResults",
     inherit = jmvcore::Group,
     active = list(
-        demographics = function() private$.items[["demographics"]],
-        omitNote     = function() private$.items[["omitNote"]],
-        paragraph    = function() private$.items[["paragraph"]]),
+        demographics  = function() private$.items[["demographics"]],
+        omitNote      = function() private$.items[["omitNote"]],
+        paragraph     = function() private$.items[["paragraph"]],
+        bestPractices = function() private$.items[["bestPractices"]]),
     private = list(),
     public = list(
         initialize = function(options) {
@@ -236,6 +242,12 @@ eduDemographicsResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
                 name    = "paragraph",
                 title   = "APA-Style Descriptive Paragraph",
                 visible = "(showParagraph)"))
+
+            self$add(jmvcore::Html$new(
+                options = options,
+                name    = "bestPractices",
+                title   = "Reporting Best Practices",
+                visible = "(showBestPractices)"))
         }))
 
 eduDemographicsBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -290,6 +302,7 @@ eduDemographics <- function(
         showParagraph      = TRUE,
         tableTitle         = "Demographic Characteristics of the Sample",
         showOmitNote       = TRUE,
+        showBestPractices  = TRUE,
         statMean           = TRUE,
         statSD             = TRUE,
         statMedian         = FALSE,
@@ -320,6 +333,7 @@ eduDemographics <- function(
         showParagraph      = showParagraph,
         tableTitle         = tableTitle,
         showOmitNote       = showOmitNote,
+        showBestPractices  = showBestPractices,
         statMean           = statMean,
         statSD             = statSD,
         statMedian         = statMedian,

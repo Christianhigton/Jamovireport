@@ -7,7 +7,7 @@ compilerMode: tame
 children:
   - type: VariableSupplier
     stretchFactor: 1
-    persistentItems: false
+    persistentItems: true
     children:
       - type: TargetLayoutBox
         label: Table Variables
@@ -76,4 +76,5 @@ children:
     collapsed: true
     children:
       - { type: CheckBox, name: showOmitNote }
+      - { type: CheckBox, name: showBestPractices }
 ...

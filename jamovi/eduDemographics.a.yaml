@@ -42,6 +42,10 @@ options:
       title: Omission Note
       type: Bool
       default: true
+    - name: showBestPractices
+      title: Best Practices Note
+      type: Bool
+      default: true
     - name: statMean
       title: Mean
       type: Bool

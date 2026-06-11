@@ -6,43 +6,92 @@ version: '1.0.0'
 jas: '1.2'
 description:
     main: >
-        Produce an APA-style demographic characteristics table directly
-        copyable into Word. Categorical variables show n and % per
-        category; continuous variables show M, SD, and range. Custom
-        rows can be added manually.
+        Generate an APA 7 demographic characteristics table and optional
+        descriptive paragraph. Supports categorical and continuous variables
+        with flexible statistics options and additional custom rows.
     references:
         - jReport
         - RCore
 options:
     - { name: data, type: Data }
-    - name: variables
-      title: Variables
+    - name: tableVariables
+      title: Table Variables
       type: Variables
       suggested: [nominal, ordinal, continuous]
       permitted: [factor, numeric]
       default: null
-    - name: tableTitle
-      title: Table title
-      type: String
-      default: "Table 1. Demographic Characteristics of the Sample"
-    - name: includeParagraph
-      title: APA descriptive paragraph
+    - name: paragraphVariables
+      title: Paragraph Variables
+      type: Variables
+      suggested: [nominal, ordinal, continuous]
+      permitted: [factor, numeric]
+      default: null
+    - name: showTable
+      title: APA Demographics Table
       type: Bool
       default: true
-    - name: includeCustomInParagraph
-      title: Custom rows in APA paragraph
+    - name: showParagraph
+      title: APA Paragraph
+      type: Bool
+      default: true
+    - name: tableTitle
+      title: Table Title
+      type: String
+      default: "Demographic Characteristics of the Sample"
+    - name: showOmitNote
+      title: Omission Note
+      type: Bool
+      default: true
+    - name: statMean
+      title: Mean
+      type: Bool
+      default: true
+    - name: statSD
+      title: SD
+      type: Bool
+      default: true
+    - name: statMedian
+      title: Median
       type: Bool
       default: false
-    - name: customRow1Var
-      title: "Row 1: Variable"
+    - name: statIQR
+      title: IQR
+      type: Bool
+      default: false
+    - name: statMin
+      title: Min
+      type: Bool
+      default: false
+    - name: statMax
+      title: Max
+      type: Bool
+      default: false
+    - name: statRange
+      title: Range
+      type: Bool
+      default: false
+    - name: statContMissing
+      title: Missing n
+      type: Bool
+      default: false
+    - name: statN
+      title: "n (count)"
+      type: Bool
+      default: true
+    - name: statPct
+      title: "% (percentage)"
+      type: Bool
+      default: true
+    - name: statCatMissing
+      title: Missing n
+      type: Bool
+      default: false
+    - name: customRow1Char
+      title: "Row 1: Characteristic"
       type: String
       default: ""
-    - name: customRow1Cat
-      title: "Row 1: Category or statistic"
-      type: String
-      default: ""
-    - name: customRow1N
-      title: "Row 1: n or value"
+    - name: customRow1Val
+      title: "Row 1: Value"
       type: String
       default: ""
     - name: customRow1Pct
@@ -53,16 +102,12 @@ options:
       title: "Row 1: Note"
       type: String
       default: ""
-    - name: customRow2Var
-      title: "Row 2: Variable"
+    - name: customRow2Char
+      title: "Row 2: Characteristic"
       type: String
       default: ""
-    - name: customRow2Cat
-      title: "Row 2: Category or statistic"
-      type: String
-      default: ""
-    - name: customRow2N
-      title: "Row 2: n or value"
+    - name: customRow2Val
+      title: "Row 2: Value"
       type: String
       default: ""
     - name: customRow2Pct
@@ -73,16 +118,12 @@ options:
       title: "Row 2: Note"
       type: String
       default: ""
-    - name: customRow3Var
-      title: "Row 3: Variable"
+    - name: customRow3Char
+      title: "Row 3: Characteristic"
       type: String
       default: ""
-    - name: customRow3Cat
-      title: "Row 3: Category or statistic"
-      type: String
-      default: ""
-    - name: customRow3N
-      title: "Row 3: n or value"
+    - name: customRow3Val
+      title: "Row 3: Value"
       type: String
       default: ""
     - name: customRow3Pct
@@ -93,16 +134,12 @@ options:
       title: "Row 3: Note"
       type: String
       default: ""
-    - name: customRow4Var
-      title: "Row 4: Variable"
+    - name: customRow4Char
+      title: "Row 4: Characteristic"
       type: String
       default: ""
-    - name: customRow4Cat
-      title: "Row 4: Category or statistic"
-      type: String
-      default: ""
-    - name: customRow4N
-      title: "Row 4: n or value"
+    - name: customRow4Val
+      title: "Row 4: Value"
       type: String
       default: ""
     - name: customRow4Pct
@@ -113,16 +150,12 @@ options:
       title: "Row 4: Note"
       type: String
       default: ""
-    - name: customRow5Var
-      title: "Row 5: Variable"
+    - name: customRow5Char
+      title: "Row 5: Characteristic"
       type: String
       default: ""
-    - name: customRow5Cat
-      title: "Row 5: Category or statistic"
-      type: String
-      default: ""
-    - name: customRow5N
-      title: "Row 5: n or value"
+    - name: customRow5Val
+      title: "Row 5: Value"
       type: String
       default: ""
     - name: customRow5Pct

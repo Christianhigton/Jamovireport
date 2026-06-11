@@ -10,49 +10,70 @@ children:
     persistentItems: false
     children:
       - type: TargetLayoutBox
-        label: Variables (categorical and/or continuous)
+        label: Table Variables
         children:
           - type: VariablesListBox
-            name: variables
+            name: tableVariables
+            isTarget: true
+      - type: TargetLayoutBox
+        label: Paragraph Variables
+        children:
+          - type: VariablesListBox
+            name: paragraphVariables
             isTarget: true
   - type: CollapseBox
-    label: Table Options
+    label: Output Options
     collapsed: false
     children:
+      - { type: CheckBox, name: showTable }
+      - { type: CheckBox, name: showParagraph }
       - { type: TextBox, name: tableTitle }
   - type: CollapseBox
-    label: Additional Custom Rows
+    label: Continuous Variable Statistics
+    collapsed: false
+    children:
+      - { type: CheckBox, name: statMean }
+      - { type: CheckBox, name: statSD }
+      - { type: CheckBox, name: statMedian }
+      - { type: CheckBox, name: statIQR }
+      - { type: CheckBox, name: statMin }
+      - { type: CheckBox, name: statMax }
+      - { type: CheckBox, name: statRange }
+      - { type: CheckBox, name: statContMissing }
+  - type: CollapseBox
+    label: Categorical Variable Statistics
+    collapsed: false
+    children:
+      - { type: CheckBox, name: statN }
+      - { type: CheckBox, name: statPct }
+      - { type: CheckBox, name: statCatMissing }
+  - type: CollapseBox
+    label: Additional Table Rows
     collapsed: true
     children:
-      - { type: TextBox, name: customRow1Var }
-      - { type: TextBox, name: customRow1Cat }
-      - { type: TextBox, name: customRow1N }
+      - { type: TextBox, name: customRow1Char }
+      - { type: TextBox, name: customRow1Val }
       - { type: TextBox, name: customRow1Pct }
       - { type: TextBox, name: customRow1Note }
-      - { type: TextBox, name: customRow2Var }
-      - { type: TextBox, name: customRow2Cat }
-      - { type: TextBox, name: customRow2N }
+      - { type: TextBox, name: customRow2Char }
+      - { type: TextBox, name: customRow2Val }
       - { type: TextBox, name: customRow2Pct }
       - { type: TextBox, name: customRow2Note }
-      - { type: TextBox, name: customRow3Var }
-      - { type: TextBox, name: customRow3Cat }
-      - { type: TextBox, name: customRow3N }
+      - { type: TextBox, name: customRow3Char }
+      - { type: TextBox, name: customRow3Val }
       - { type: TextBox, name: customRow3Pct }
       - { type: TextBox, name: customRow3Note }
-      - { type: TextBox, name: customRow4Var }
-      - { type: TextBox, name: customRow4Cat }
-      - { type: TextBox, name: customRow4N }
+      - { type: TextBox, name: customRow4Char }
+      - { type: TextBox, name: customRow4Val }
       - { type: TextBox, name: customRow4Pct }
       - { type: TextBox, name: customRow4Note }
-      - { type: TextBox, name: customRow5Var }
-      - { type: TextBox, name: customRow5Cat }
-      - { type: TextBox, name: customRow5N }
+      - { type: TextBox, name: customRow5Char }
+      - { type: TextBox, name: customRow5Val }
       - { type: TextBox, name: customRow5Pct }
       - { type: TextBox, name: customRow5Note }
   - type: CollapseBox
     label: Reporting
     collapsed: true
     children:
-      - { type: CheckBox, name: includeParagraph }
-      - { type: CheckBox, name: includeCustomInParagraph }
+      - { type: CheckBox, name: showOmitNote }
 ...

@@ -1,118 +1,269 @@
-#' Compute rows for a demographic characteristics table
-#'
-#' @param data A data frame.
-#' @param variables Character vector of variable names to summarise.
-#' @param custom_rows Optional list of custom row definitions (each a named list
-#'   with fields: variable, category, n, percent, note).
-#' @param include_custom_in_paragraph Logical; add custom rows to the APA paragraph.
-#' @return A list with `rows` (list of named lists), `total_n`, and `paragraph`.
-#' @export
-edu_demographics <- function(data,
-                              variables = character(),
-                              custom_rows = NULL,
-                              include_custom_in_paragraph = FALSE) {
-    if (!is.data.frame(data))
-        stop("`data` must be a data frame.")
 
-    rows       <- list()
-    total_n    <- nrow(data)
-    para_parts <- character()
+edu_demographics <- function(
+    data,
+    table_variables     = character(),
+    paragraph_variables = character(),
+    stat_mean           = TRUE,
+    stat_sd             = TRUE,
+    stat_median         = FALSE,
+    stat_iqr            = FALSE,
+    stat_min            = FALSE,
+    stat_max            = FALSE,
+    stat_range          = FALSE,
+    stat_cont_missing   = FALSE,
+    stat_n              = TRUE,
+    stat_pct            = TRUE,
+    stat_cat_missing    = FALSE,
+    custom_rows         = NULL
+) {
+    all_vars <- unique(c(table_variables, paragraph_variables))
+    total_n  <- nrow(data)
 
-    for (var in variables) {
-        if (!var %in% names(data)) next
-        col <- data[[var]]
+    table_rows  <- list()
+    para_pieces <- sprintf("The sample consisted of %d participants.", total_n)
+    table_omit  <- character(0)
+    para_omit   <- character(0)
 
-        if (is.factor(col) || is.character(col)) {
-            col     <- droplevels(as.factor(col))
-            n_valid <- sum(!is.na(col))
-            lvls    <- levels(col)
+    for (v in all_vars) {
+        col <- data[[v]]
+        if (is.null(col)) next
 
-            rows <- c(rows, list(.dm_row(
-                variable = var, category = "",
-                n = NA_integer_, percent = NA_real_,
-                mean = NA_real_, sd = NA_real_, range = ""
-            )))
+        is_table <- v %in% table_variables
+        is_para  <- v %in% paragraph_variables
 
-            level_strs <- character(length(lvls))
-            for (i in seq_along(lvls)) {
-                lv      <- lvls[[i]]
-                n_lv    <- sum(col == lv, na.rm = TRUE)
-                pct     <- if (n_valid > 0L) 100 * n_lv / n_valid else NA_real_
-                rows    <- c(rows, list(.dm_row(
-                    variable = "", category = as.character(lv),
-                    n = as.integer(n_lv), percent = pct,
-                    mean = NA_real_, sd = NA_real_, range = ""
-                )))
-                level_strs[[i]] <- sprintf("%s (n = %d, %.1f%%)", lv, n_lv, pct)
+        vname_attr <- attr(col, "jmv-desc")
+        vname <- if (!is.null(vname_attr) && nzchar(vname_attr)) vname_attr else v
+
+        if (all(is.na(col))) {
+            if (is_table) table_omit <- c(table_omit, vname)
+            if (is_para)  para_omit  <- c(para_omit, vname)
+            next
+        }
+
+        if (is.numeric(col) && !is.factor(col)) {
+            rows <- .dm_cont_rows(col, vname,
+                                   stat_mean, stat_sd, stat_median, stat_iqr,
+                                   stat_min, stat_max, stat_range, stat_cont_missing)
+            if (is_table) table_rows <- c(table_rows, rows)
+            if (is_para) {
+                s <- .dm_cont_sentence(col, vname,
+                                       stat_mean, stat_sd, stat_min, stat_max, stat_range)
+                if (!is.null(s)) para_pieces <- c(para_pieces, s)
             }
-            para_parts <- c(para_parts, sprintf(
-                "%s: %s.", var, paste(level_strs, collapse = "; ")
-            ))
-
-        } else if (is.numeric(col)) {
-            n_valid <- sum(!is.na(col))
-            m       <- mean(col, na.rm = TRUE)
-            s       <- stats::sd(col, na.rm = TRUE)
-            mn      <- min(col, na.rm = TRUE)
-            mx      <- max(col, na.rm = TRUE)
-            rng     <- paste0(sprintf("%.2f", mn), "–", sprintf("%.2f", mx))
-            rows <- c(rows, list(.dm_row(
-                variable = var, category = "",
-                n = as.integer(n_valid), percent = NA_real_,
-                mean = m, sd = s, range = rng
-            )))
-            para_parts <- c(para_parts, sprintf(
-                "%s: M = %.2f, SD = %.2f, Range = %s.", var, m, s, rng
-            ))
+        } else {
+            col_f <- if (is.factor(col)) col else as.factor(col)
+            rows  <- .dm_cat_rows(col_f, vname, stat_n, stat_pct, stat_cat_missing)
+            if (is_table) table_rows <- c(table_rows, rows)
+            if (is_para) {
+                s <- .dm_cat_sentence(col_f, vname, stat_n, stat_pct)
+                if (!is.null(s)) para_pieces <- c(para_pieces, s)
+            }
         }
     }
 
     if (!is.null(custom_rows)) {
         for (cr in custom_rows) {
-            var_val  <- trimws(if (is.null(cr$variable)) "" else cr$variable)
-            cat_val  <- trimws(if (is.null(cr$category)) "" else cr$category)
-            if (!nzchar(var_val) && !nzchar(cat_val)) next
+            char_val <- trimws(if (!is.null(cr$characteristic)) cr$characteristic else "")
+            val_val  <- trimws(if (!is.null(cr$value))          cr$value          else "")
+            if (!nzchar(char_val) && !nzchar(val_val)) next
 
-            n_val   <- suppressWarnings(as.numeric(if (is.null(cr$n))       "" else cr$n))
-            pct_val <- suppressWarnings(as.numeric(if (is.null(cr$percent)) "" else cr$percent))
-            note_val <- trimws(if (is.null(cr$note)) "" else cr$note)
+            pct_val  <- trimws(if (!is.null(cr$pct))  cr$pct  else "")
+            note_val <- trimws(if (!is.null(cr$note)) cr$note else "")
 
-            rows <- c(rows, list(.dm_row(
-                variable = var_val,
-                category = cat_val,
-                n        = if (is.finite(n_val))   as.integer(n_val) else NA_integer_,
-                percent  = if (is.finite(pct_val)) pct_val           else NA_real_,
-                mean     = NA_real_,
-                sd       = NA_real_,
-                range    = note_val
-            )))
+            cell <- val_val
+            if (nzchar(pct_val) && nzchar(cell))
+                cell <- paste0(cell, " (", pct_val, "%)")
+            else if (nzchar(pct_val))
+                cell <- paste0("(", pct_val, "%)")
+            if (nzchar(note_val))
+                cell <- if (nzchar(cell)) paste0(cell, "; ", note_val) else note_val
 
-            if (isTRUE(include_custom_in_paragraph)) {
-                parts_cr <- c(
-                    if (nzchar(var_val)) var_val else character(0),
-                    if (nzchar(cat_val)) cat_val else character(0)
-                )
-                note_str <- if (nzchar(note_val)) paste0(" [", note_val, "]") else ""
-                para_parts <- c(para_parts, paste0(
-                    paste(parts_cr, collapse = " — "), note_str, "."
-                ))
-            }
+            table_rows <- c(table_rows,
+                            list(list(characteristic = char_val, value = cell)))
         }
     }
 
-    paragraph <- if (length(para_parts) > 0L) {
-        paste(
-            sprintf("Descriptive statistics for the sample (N = %d) are presented below.", total_n),
-            paste(para_parts, collapse = " ")
-        )
-    } else {
-        sprintf("Descriptive statistics are provided for the sample (N = %d).", total_n)
-    }
-
-    list(rows = rows, total_n = total_n, paragraph = paragraph)
+    list(
+        table_rows  = table_rows,
+        paragraph   = paste(para_pieces, collapse = " "),
+        total_n     = total_n,
+        table_omit  = table_omit,
+        para_omit   = para_omit
+    )
 }
 
-.dm_row <- function(variable, category, n, percent, mean, sd, range) {
-    list(variable = variable, category = category,
-         n = n, percent = percent, mean = mean, sd = sd, range = range)
+.dm_cont_rows <- function(col, vname,
+                           stat_mean, stat_sd, stat_median, stat_iqr,
+                           stat_min, stat_max, stat_range, stat_cont_missing) {
+    x    <- col[!is.na(col)]
+    mn   <- mean(x)
+    sdev <- sd(x)
+    med  <- median(x)
+    q25  <- as.numeric(quantile(x, 0.25))
+    q75  <- as.numeric(quantile(x, 0.75))
+    lo   <- min(x)
+    hi   <- max(x)
+
+    parts <- character(0)
+
+    if (stat_mean && stat_sd) {
+        parts <- c(parts, sprintf("%.2f (%.2f)", mn, sdev))
+    } else if (stat_mean) {
+        parts <- c(parts, sprintf("M = %.2f", mn))
+    } else if (stat_sd) {
+        parts <- c(parts, sprintf("SD = %.2f", sdev))
+    }
+
+    if (stat_median && stat_iqr) {
+        parts <- c(parts, sprintf("Mdn = %.2f [%.2f, %.2f]", med, q25, q75))
+    } else if (stat_median) {
+        parts <- c(parts, sprintf("Mdn = %.2f", med))
+    } else if (stat_iqr) {
+        parts <- c(parts,
+                   paste0("IQR: ", sprintf("%.2f", q25), "–", sprintf("%.2f", q75)))
+    }
+
+    if (stat_range) {
+        parts <- c(parts,
+                   paste0("range ", sprintf("%.2f", lo), "–", sprintf("%.2f", hi)))
+    } else {
+        if (stat_min) parts <- c(parts, sprintf("min = %.2f", lo))
+        if (stat_max) parts <- c(parts, sprintf("max = %.2f", hi))
+    }
+
+    value <- if (length(parts) > 0L) paste(parts, collapse = ", ") else ""
+    rows  <- list(list(characteristic = vname, value = value))
+
+    if (stat_cont_missing) {
+        n_miss <- sum(is.na(col))
+        if (n_miss > 0L)
+            rows <- c(rows, list(list(
+                characteristic = paste0("  ", vname, " missing"),
+                value          = as.character(n_miss)
+            )))
+    }
+
+    rows
+}
+
+.dm_cat_rows <- function(col_f, vname, stat_n, stat_pct, stat_cat_missing) {
+    valid_n <- sum(!is.na(col_f))
+    rows    <- list(list(characteristic = vname, value = ""))
+    levs    <- levels(col_f)
+
+    for (lev in levs) {
+        n_lev   <- sum(col_f == lev, na.rm = TRUE)
+        pct_lev <- if (valid_n > 0L) 100 * n_lev / valid_n else NA_real_
+        val     <- .dm_n_pct_cell(n_lev, pct_lev, stat_n, stat_pct)
+        rows    <- c(rows, list(list(characteristic = paste0("  ", lev), value = val)))
+    }
+
+    if (stat_cat_missing) {
+        n_miss <- sum(is.na(col_f))
+        if (n_miss > 0L) {
+            pct_miss <- if ((valid_n + n_miss) > 0L)
+                100 * n_miss / (valid_n + n_miss) else NA_real_
+            val  <- .dm_n_pct_cell(n_miss, pct_miss, stat_n, stat_pct)
+            rows <- c(rows, list(list(characteristic = "  Missing", value = val)))
+        }
+    }
+
+    rows
+}
+
+.dm_n_pct_cell <- function(n, pct, stat_n, stat_pct) {
+    if (stat_n && stat_pct)  sprintf("%d (%.1f%%)", n, pct)
+    else if (stat_n)         as.character(n)
+    else if (stat_pct)       sprintf("%.1f%%", pct)
+    else                     ""
+}
+
+.dm_cont_sentence <- function(col, vname, stat_mean, stat_sd,
+                               stat_min, stat_max, stat_range) {
+    x    <- col[!is.na(col)]
+    mn   <- mean(x)
+    sdev <- sd(x)
+    lo   <- min(x)
+    hi   <- max(x)
+
+    show_range <- stat_range || stat_min || stat_max
+
+    if (show_range && (stat_mean || stat_sd)) {
+        if (stat_mean && stat_sd)
+            return(sprintf("%s ranged from %.2f to %.2f (M = %.2f, SD = %.2f).",
+                           vname, lo, hi, mn, sdev))
+        else if (stat_mean)
+            return(sprintf("%s ranged from %.2f to %.2f (M = %.2f).", vname, lo, hi, mn))
+        else
+            return(sprintf("%s ranged from %.2f to %.2f.", vname, lo, hi))
+    }
+
+    if (stat_mean && stat_sd) return(sprintf("%s had M = %.2f (SD = %.2f).", vname, mn, sdev))
+    if (stat_mean)            return(sprintf("%s had M = %.2f.", vname, mn))
+
+    NULL
+}
+
+.dm_cat_sentence <- function(col_f, vname, stat_n, stat_pct) {
+    valid_n <- sum(!is.na(col_f))
+    levs    <- levels(col_f)
+    if (valid_n == 0L || length(levs) == 0L) return(NULL)
+
+    counts <- vapply(levs, function(l) sum(col_f == l, na.rm = TRUE), integer(1))
+    pcts   <- 100 * counts / valid_n
+    ord    <- order(counts, decreasing = TRUE)
+    top    <- head(ord, 3L)
+
+    parts <- vapply(top, function(i) {
+        if (stat_n && stat_pct) sprintf("%s (n = %d, %.1f%%)", levs[i], counts[i], pcts[i])
+        else if (stat_n)        sprintf("%s (n = %d)", levs[i], counts[i])
+        else if (stat_pct)      sprintf("%s (%.1f%%)", levs[i], pcts[i])
+        else                    levs[i]
+    }, character(1))
+
+    remainder <- length(levs) - length(top)
+    if (remainder > 0L)
+        parts <- c(parts, sprintf("and %d other %s",
+                                  remainder, if (remainder == 1L) "category" else "categories"))
+
+    sprintf("In terms of %s, the distribution was: %s.",
+            vname, paste(parts, collapse = "; "))
+}
+
+.dm_custom_rows_from_options <- function(options) {
+    lapply(1:5, function(i) {
+        list(
+            characteristic = tryCatch(options[[paste0("customRow", i, "Char")]], error = function(e) ""),
+            value          = tryCatch(options[[paste0("customRow", i, "Val")]],  error = function(e) ""),
+            pct            = tryCatch(options[[paste0("customRow", i, "Pct")]],  error = function(e) ""),
+            note           = tryCatch(options[[paste0("customRow", i, "Note")]], error = function(e) "")
+        )
+    })
+}
+
+.dm_paragraph_html <- function(text) {
+    escaped <- gsub("&", "&amp;", text,    fixed = TRUE)
+    escaped <- gsub("<", "&lt;",  escaped, fixed = TRUE)
+    escaped <- gsub(">", "&gt;",  escaped, fixed = TRUE)
+    sprintf(
+        '<div style="font-family:sans-serif;font-size:0.9em;line-height:1.6;padding:8px 0"><p>%s</p></div>',
+        escaped
+    )
+}
+
+.dm_omit_note_html <- function(table_omit, para_omit) {
+    all_omit <- unique(c(table_omit, para_omit))
+    if (length(all_omit) == 0L) return("")
+    plural   <- length(all_omit) > 1L
+    var_list <- paste(all_omit, collapse = ", ")
+    msg <- sprintf(
+        "<em>Note.</em> The following selected variable%s contained no usable data and %s omitted: %s.",
+        if (plural) "s" else "",
+        if (plural) "were" else "was",
+        var_list
+    )
+    sprintf(
+        '<div style="font-family:sans-serif;font-size:0.85em;color:#555;padding:4px 0"><p>%s</p></div>',
+        msg
+    )
 }

@@ -9,5 +9,3 @@
 ^LICENSE\.md$
 ^jReport\.Rcheck$
 ^\.\.Rcheck$
-^AUDIT_FIXES_SUMMARY.md$
-^audit-fixes.patch$

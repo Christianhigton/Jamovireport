@@ -1,10 +1,12 @@
-name: eduCorrelation
+﻿name: eduCorrelation
 title: Guided Correlation
 jrs: '1.1'
 refs:
 - jReport
 - effectsize
 - ggplot2
+- Cohen1988
+- Cumming2014
 items:
 - name: overview
   title: 'jReport: Overview and Why This Test?'

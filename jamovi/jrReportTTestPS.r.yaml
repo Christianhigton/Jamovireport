@@ -1,6 +1,9 @@
-name: jrReportTTestPS
+﻿name: jrReportTTestPS
 title: Automatic Report for Paired Samples T-Test
 jrs: '1.1'
+refs:
+- Cohen1988
+- Cumming2014
 items:
 - name: jReportHeading
   title: 'jReport: Automatic Reporting'

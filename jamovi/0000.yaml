@@ -162,9 +162,9 @@ analyses:
     menuSubgroup: Descriptives
     menuTitle: Demographic Table
     description: >
-      Produce an APA-style demographic characteristics table directly copyable
-      into Word. Categorical variables show n and % per category; continuous
-      variables show M, SD, and range. Custom rows can be added manually.
+      Generate an APA 7 demographic characteristics table and optional
+      descriptive paragraph. Supports categorical and continuous variables with
+      flexible statistics options and additional custom rows.
     category: analyses
   - title: Automatic Report for Independent Samples T-Test
     name: jrReportTTestIS

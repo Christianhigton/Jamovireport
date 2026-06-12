@@ -1,9 +1,11 @@
-name: eduChiSquareIndependence
+﻿name: eduChiSquareIndependence
 title: Guided Chi-Square Test of Independence
 jrs: '1.1'
 refs:
 - jReport
 - effectsize
+- Cohen1988
+- Cumming2014
 items:
 - name: overview
   title: 'jReport: Overview and Why This Test?'

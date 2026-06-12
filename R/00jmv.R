@@ -41,21 +41,21 @@
     `effectsize`=list(
         `type`="software", 
         `title`="Effectsize: Estimation of Effect Size Indices and Standardized Parameters", 
-        `author`="Mattan S. Ben-Shachar, Daniel L\u00FCdecke, Dominique Makowski", 
+        `author`="Mattan S. Ben-Shachar, Daniel Ludecke, Dominique Makowski", 
         `year`=2020, 
         `publisher`="Journal of Open Source Software", 
         `url`="https://doi.org/10.21105/joss.02815"), 
     `parameters`=list(
         `type`="software", 
         `title`="Extracting, Computing and Exploring the Parameters of Statistical Models using R", 
-        `author`="Daniel L\u00FCdecke, Mattan S. Ben-Shachar, Indrajeet Patil, Philip Waggoner, Dominique Makowski", 
+        `author`="Daniel Ludecke, Mattan S. Ben-Shachar, Indrajeet Patil, Philip Waggoner, Dominique Makowski", 
         `year`=2020, 
         `publisher`="Journal of Open Source Software", 
         `url`="https://doi.org/10.21105/joss.02445"), 
     `performance`=list(
         `type`="software", 
         `title`="performance: An R Package for Assessment, Comparison and Testing of Statistical Models", 
-        `author`="Daniel L\u00FCdecke, Mattan S. Ben-Shachar, Indrajeet Patil, Philip Waggoner, Dominique Makowski", 
+        `author`="Daniel Ludecke, Mattan S. Ben-Shachar, Indrajeet Patil, Philip Waggoner, Dominique Makowski", 
         `year`=2021, 
         `publisher`="Journal of Open Source Software", 
         `url`="https://doi.org/10.21105/joss.03139"), 
@@ -99,4 +99,17 @@
         `author`="Russell V. Lenth", 
         `year`=2024, 
         `publisher`="CRAN", 
-        `url`="https://CRAN.R-project.org/package=emmeans"))
+        `url`="https://CRAN.R-project.org/package=emmeans"), 
+    `Cohen1988`=list(
+        `type`="book", 
+        `title`="Statistical power analysis for the behavioral sciences (2nd ed.)", 
+        `author`="Jacob Cohen", 
+        `year`=1988, 
+        `publisher`="Lawrence Erlbaum Associates"), 
+    `Cumming2014`=list(
+        `type`="article", 
+        `title`="The new statistics: Why and how", 
+        `author`="Geoff Cumming", 
+        `year`=2014, 
+        `publisher`="Psychological Science, 25(1), 7-29", 
+        `url`="https://doi.org/10.1177/0956797613504966"))

@@ -6,11 +6,14 @@ jrReportLinRegOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
     inherit = jmvcore::Options,
     public = list(
         initialize = function( ...) {
+
             super$initialize(
                 package="jReport",
                 name="jrReportLinReg",
                 requiresData=TRUE,
                 ...)
+
+
         }),
     active = list(),
     private = list()
@@ -20,9 +23,9 @@ jrReportLinRegResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
     "jrReportLinRegResults",
     inherit = jmvcore::Group,
     active = list(
+        jReportHeading = function() private$.items[["jReportHeading"]],
         jReportApaTable = function() private$.items[["jReportApaTable"]],
         jReportAssumptions = function() private$.items[["jReportAssumptions"]],
-        jReportHeading = function() private$.items[["jReportHeading"]],
         jReportCard = function() private$.items[["jReportCard"]]),
     private = list(),
     public=list(
@@ -30,59 +33,108 @@ jrReportLinRegResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
             super$initialize(
                 options=options,
                 name="",
-                title="Automatic Report for Linear Regression")
+                title="Automatic Report for Linear Regression",
+                refs=list(
+                    "Cohen1988",
+                    "Cumming2014"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="jReportHeading",
-                title="jReport: Automatic Reporting",
-                refs=list(                    "jReport",
-                    "jmvcore",
-                    "parameters",
-                    "performance",
-                    "effectsize")))
+                title="jReport: Automatic Reporting"))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="jReportApaTable",
                 title="APA Results Summary (jReport)",
-                refs=list(                    "jReport",
+                refs=list(
+                    "RCore",
+                    "jReport",
                     "jmvcore",
                     "parameters",
                     "performance",
                     "effectsize"),
-                columns=list(                    list(`name`="analysis",`title`="Analysis",`type`="text"),
-                    list(`name`="test",`title`="Test / Effect",`type`="text"),
-                    list(`name`="statistic",`title`="Statistic",`type`="number"),
-                    list(`name`="df1",`title`="df1",`type`="number"),
-                    list(`name`="df2",`title`="df2",`type`="text"),
-                    list(`name`="p",`title`="p",`type`="number",`format`="zto,pvalue"),
-                    list(`name`="effect",`title`="Effect Size",`type`="text"),
-                    list(`name`="ci",`title`="Effect 95% CI",`type`="text"))))
+                columns=list(
+                    list(
+                        `name`="analysis", 
+                        `title`="Analysis", 
+                        `type`="text"),
+                    list(
+                        `name`="test", 
+                        `title`="Test / Effect", 
+                        `type`="text"),
+                    list(
+                        `name`="statistic", 
+                        `title`="Statistic", 
+                        `type`="number"),
+                    list(
+                        `name`="df1", 
+                        `title`="df1", 
+                        `type`="number"),
+                    list(
+                        `name`="df2", 
+                        `title`="df2", 
+                        `type`="text"),
+                    list(
+                        `name`="p", 
+                        `title`="p", 
+                        `type`="number", 
+                        `format`="zto,pvalue"),
+                    list(
+                        `name`="effect", 
+                        `title`="Effect Size", 
+                        `type`="text"),
+                    list(
+                        `name`="ci", 
+                        `title`="Effect 95% CI", 
+                        `type`="text"))))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="jReportAssumptions",
                 title="Assumptions and Recommended Actions (jReport)",
-                refs=list(                    "jReport",
+                refs=list(
+                    "RCore",
+                    "jReport",
                     "jmvcore",
                     "parameters",
                     "performance",
                     "effectsize"),
-                columns=list(                    list(`name`="analysis",`title`="Analysis",`type`="text"),
-                    list(`name`="assumption",`title`="Assumption / Check",`type`="text"),
-                    list(`name`="tested",`title`="Tested?",`type`="text"),
-                    list(`name`="statistic",`title`="Statistic",`type`="number"),
-                    list(`name`="p",`title`="p",`type`="number",`format`="zto,pvalue"),
-                    list(`name`="met",`title`="Met?",`type`="text"),
-                    list(`name`="interpretation",`title`="What This Means",`type`="text"),
-                    list(`name`="action",`title`="Recommended Action",`type`="text"))))
+                columns=list(
+                    list(
+                        `name`="analysis", 
+                        `title`="Analysis", 
+                        `type`="text"),
+                    list(
+                        `name`="assumption", 
+                        `title`="Assumption / Check", 
+                        `type`="text"),
+                    list(
+                        `name`="tested", 
+                        `title`="Tested?", 
+                        `type`="text"),
+                    list(
+                        `name`="statistic", 
+                        `title`="Statistic", 
+                        `type`="number"),
+                    list(
+                        `name`="p", 
+                        `title`="p", 
+                        `type`="number", 
+                        `format`="zto,pvalue"),
+                    list(
+                        `name`="met", 
+                        `title`="Met?", 
+                        `type`="text"),
+                    list(
+                        `name`="interpretation", 
+                        `title`="What This Means", 
+                        `type`="text"),
+                    list(
+                        `name`="action", 
+                        `title`="Recommended Action", 
+                        `type`="text"))))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="jReportCard",
-                title="Automatic Report (jReport)",
-                refs=list(                    "jReport",
-                    "jmvcore",
-                    "parameters",
-                    "performance",
-                    "effectsize")))}))
+                title="Automatic Report (jReport)"))}))
 
 jrReportLinRegBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "jrReportLinRegBase",
@@ -102,12 +154,15 @@ jrReportLinRegBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                 pause = NULL,
                 completeWhenFilled = FALSE,
                 requiresMissings = FALSE,
-                weightsSupport = "auto")
+                weightsSupport = 'auto')
         }))
 
 #' Automatic Report for Linear Regression
 #'
+#' 
 #' @section References:
+#' RCore
+#'
 #' jReport
 #'
 #' jmvcore
@@ -121,21 +176,38 @@ jrReportLinRegBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
 #' @param data .
 #' @return A results object containing:
 #' \tabular{llllll}{
-#'   \code{results$jReportApaTable} \tab \tab \tab \tab \tab a result item \cr
-#'   \code{results$jReportAssumptions} \tab \tab \tab \tab \tab a result item \cr
-#'   \code{results$jReportHeading} \tab \tab \tab \tab \tab a result item \cr
-#'   \code{results$jReportCard} \tab \tab \tab \tab \tab a result item \cr
+#'   \code{results$jReportHeading} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$jReportApaTable} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$jReportAssumptions} \tab \tab \tab \tab \tab a table \cr
+#'   \code{results$jReportCard} \tab \tab \tab \tab \tab a html \cr
 #' }
 #'
+#' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
+#'
+#' \code{results$jReportApaTable$asDF}
+#'
+#' \code{as.data.frame(results$jReportApaTable)}
+#'
 #' @export
-jrReportLinReg <- function(data) {
+jrReportLinReg <- function(
+    data) {
+
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("jrReportLinReg requires jmvcore to be installed (restart may be required)")
+
     if (missing(data))
-        data <- jmvcore::marshalData(parent.frame())
+        data <- jmvcore::marshalData(
+            parent.frame())
+
+
     options <- jrReportLinRegOptions$new()
-    analysis <- jrReportLinRegClass$new(options = options, data = data)
+
+    analysis <- jrReportLinRegClass$new(
+        options = options,
+        data = data)
+
     analysis$run()
+
     analysis$results
 }
 

@@ -186,7 +186,9 @@ eduChiSquareIndependenceResults <- if (requireNamespace("jmvcore", quietly=TRUE)
                 title="Guided Chi-Square Test of Independence",
                 refs=list(
                     "jReport",
-                    "effectsize"))
+                    "effectsize",
+                    "Cohen1988",
+                    "Cumming2014"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="overview",

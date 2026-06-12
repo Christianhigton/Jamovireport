@@ -1,6 +1,9 @@
-name: jrReportLinReg
+﻿name: jrReportLinReg
 title: Automatic Report for Linear Regression
 jrs: '1.1'
+refs:
+- Cohen1988
+- Cumming2014
 items:
 - name: jReportHeading
   title: 'jReport: Automatic Reporting'

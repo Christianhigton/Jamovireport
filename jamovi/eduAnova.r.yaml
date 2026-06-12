@@ -1,4 +1,4 @@
-name: eduAnova
+﻿name: eduAnova
 title: Guided One-Way ANOVA
 jrs: '1.1'
 refs:
@@ -7,6 +7,8 @@ refs:
 - effectsize
 - emmeans
 - ggplot2
+- Cohen1988
+- Cumming2014
 items:
 - name: overview
   title: 'jReport: Overview and Why This Test?'

@@ -1,4 +1,4 @@
-name: eduLogistic
+﻿name: eduLogistic
 title: Guided Binomial Logistic Regression
 jrs: '1.1'
 refs:
@@ -6,6 +6,8 @@ refs:
 - parameters
 - performance
 - effectsize
+- Cohen1988
+- Cumming2014
 items:
 - name: overview
   title: 'jReport: Overview and Why This Test?'

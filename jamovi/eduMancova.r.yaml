@@ -1,10 +1,12 @@
-name: eduMancova
+﻿name: eduMancova
 title: Guided MANOVA / MANCOVA
 jrs: '1.1'
 refs:
 - jReport
 - car
 - effectsize
+- Cohen1988
+- Cumming2014
 items:
 - name: overview
   title: 'jReport: Overview and Why This Test?'

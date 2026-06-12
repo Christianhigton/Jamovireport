@@ -197,7 +197,9 @@ eduLogisticResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                     "jReport",
                     "parameters",
                     "performance",
-                    "effectsize"))
+                    "effectsize",
+                    "Cohen1988",
+                    "Cumming2014"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="overview",

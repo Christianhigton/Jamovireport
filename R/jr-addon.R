@@ -3,16 +3,17 @@
 .jr_addon_report_html <- function(results, options = NULL, title = "Guided report", note = "") {
     failures <- Filter(function(x) inherits(x, "try-error"), results)
     results <- Filter(function(x) inherits(x, "edu_analysis"), results)
+    wrap <- function(html) paste0("<div style='width:100%;box-sizing:border-box;display:block;'>", html, "</div>")
     if (length(results) == 0L && length(failures) > 0L) {
         message <- sub("^Error[^:]*:\\s*", "", as.character(failures[[1]]))
-        return(.jr_html_card(
+        return(wrap(.jr_html_card(
             "Automatic report", "Report could not be generated",
             paste("jReport received the analysis variables but encountered a calculation problem:", message),
             accent = "#b46c21"
-        ))
+        )))
     }
     if (length(results) == 0L)
-        return(.jr_html_card("Report add-on", title, "Select valid analysis variables to generate report text."))
+        return(wrap(.jr_html_card("Report add-on", title, "Select valid analysis variables to generate report text.")))
     include_effect_note <- is.null(options) ||
         isTRUE(tryCatch(options$reportEffect, error = function(e) TRUE))
     if (length(results) == 1L && identical(results[[1]]$analysis, "regression")) {

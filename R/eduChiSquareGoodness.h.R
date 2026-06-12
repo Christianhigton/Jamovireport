@@ -182,7 +182,9 @@ eduChiSquareGoodnessResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6
                 title="Guided Chi-Square Goodness-of-Fit",
                 refs=list(
                     "jReport",
-                    "effectsize"))
+                    "effectsize",
+                    "Cohen1988",
+                    "Cumming2014"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="overview",

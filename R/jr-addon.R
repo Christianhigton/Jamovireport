@@ -62,7 +62,7 @@
             posthoc_text, accent = "#4b66a2", background = "#f5f9fd"
         ))
     }
-    paste(sections, collapse = "")
+    paste0("<div style='width:100%;box-sizing:border-box;display:block;'>", paste(sections, collapse = ""), "</div>")
 }
 
 .jr_addon_heading_html <- function() {

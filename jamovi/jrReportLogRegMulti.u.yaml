@@ -1,0 +1,8 @@
+---
+name: jrReportLogRegMulti
+title: Automatic Report for Multinomial Logistic Regression
+jus: '2.0'
+stage: 0
+compilerMode: tame
+children: []
+...

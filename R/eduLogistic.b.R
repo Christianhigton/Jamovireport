@@ -13,7 +13,7 @@ eduLogisticClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class(
             )
             result <- .jr_apply_variable_descriptions(result, self$data)
             self$results$overview$setContent(.jr_jamovi_overview_html(result))
-            self$results$fit$addRow(rowKey = 1, values = as.list(result$statistics[1, ]))
+            self$results$fit$setRow(rowKey = "1", values = as.list(result$statistics[1, ]))
             coefficients <- result$parameters
             for (i in seq_len(nrow(coefficients))) {
                 self$results$coefficients$addRow(rowKey = i, values = list(
@@ -28,8 +28,8 @@ eduLogisticClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class(
                 ))
             }
             .jr_populate_diagnostics(self$results$diagnostics, result$diagnostics)
-            self$results$report$setContent(.jr_jamovi_report_html(result, self$options))
-            self$results$interpretation$setContent(.jr_jamovi_interpretation_html(result))
+            self$results$report$setContent(.jr_guided_report_sections_html(result, self$options))
+            self$results$interpretation$setContent("")
         }
     )
 )

@@ -244,6 +244,7 @@ eduTTestResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 options=options,
                 name="main",
                 title="Main Results and Effect Size",
+                rows=1,
                 clearWith=list(
                     "outcome",
                     "testType",

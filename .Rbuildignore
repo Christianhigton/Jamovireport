@@ -7,6 +7,5 @@
 ^.*\.tar\.gz$
 ^man/figures/jReport-logo-source\.png$
 ^LICENSE\.md$
-^Julie Pallant - SPSS Survival Manual_ A Step by Step Guide to Data Analysis Using IBM SPSS-Open University Press \(2016\)\.pdf$
 ^jReport\.Rcheck$
 ^\.\.Rcheck$

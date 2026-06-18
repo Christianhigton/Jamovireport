@@ -1,4 +1,4 @@
-name: eduLogistic
+﻿name: eduLogistic
 title: Guided Binomial Logistic Regression
 jrs: '1.1'
 refs:
@@ -22,6 +22,7 @@ items:
 - name: fit
   title: Main Results and Model Fit
   type: Table
+  rows: 1
   clearWith:
   - outcome
   - covariates

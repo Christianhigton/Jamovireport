@@ -1,4 +1,4 @@
-name: eduCorrelation
+﻿name: eduCorrelation
 title: Guided Correlation
 jrs: '1.1'
 refs:
@@ -20,6 +20,7 @@ items:
 - name: main
   title: Main Result
   type: Table
+  rows: 1
   clearWith:
   - x
   - yes

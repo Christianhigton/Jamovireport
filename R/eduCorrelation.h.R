@@ -223,6 +223,7 @@ eduCorrelationResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
                 options=options,
                 name="main",
                 title="Main Result",
+                rows=1,
                 clearWith=list(
                     "x",
                     "yes",

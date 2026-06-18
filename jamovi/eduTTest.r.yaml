@@ -1,4 +1,4 @@
-name: eduTTest
+﻿name: eduTTest
 title: Guided T-Test
 jrs: '1.1'
 refs:
@@ -22,6 +22,7 @@ items:
 - name: main
   title: Main Results and Effect Size
   type: Table
+  rows: 1
   clearWith:
   - outcome
   - testType

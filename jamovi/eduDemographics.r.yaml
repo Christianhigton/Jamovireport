@@ -1,0 +1,64 @@
+name: eduDemographics
+title: Demographic Table
+jrs: '1.1'
+refs:
+- jReport
+- RCore
+items:
+- name: demographics
+  title: Demographic Characteristics of the Sample
+  type: Table
+  visible: (showTable)
+  clearWith:
+  - tableVariables
+  - tableTitle
+  - statMean
+  - statSD
+  - statMedian
+  - statIQR
+  - statMin
+  - statMax
+  - statRange
+  - statContMissing
+  - statN
+  - statPct
+  - statCatMissing
+  - customRow1Char
+  - customRow1Val
+  - customRow1Pct
+  - customRow1Note
+  - customRow2Char
+  - customRow2Val
+  - customRow2Pct
+  - customRow2Note
+  - customRow3Char
+  - customRow3Val
+  - customRow3Pct
+  - customRow3Note
+  - customRow4Char
+  - customRow4Val
+  - customRow4Pct
+  - customRow4Note
+  - customRow5Char
+  - customRow5Val
+  - customRow5Pct
+  - customRow5Note
+  columns:
+  - name: characteristic
+    title: Characteristic
+    type: text
+  - name: value
+    title: "n (%) or M (SD)"
+    type: text
+- name: omitNote
+  title: ''
+  type: Html
+  visible: (showOmitNote)
+- name: paragraph
+  title: APA-Style Descriptive Paragraph
+  type: Html
+  visible: (showParagraph)
+- name: bestPractices
+  title: Reporting Best Practices
+  type: Html
+  visible: (showBestPractices)

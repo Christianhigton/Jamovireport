@@ -1,0 +1,173 @@
+---
+name: eduDemographics
+title: Demographic Table
+menuGroup: jReport
+version: '1.0.0'
+jas: '1.2'
+description:
+    main: >
+        Generate an APA 7 demographic characteristics table and optional
+        descriptive paragraph. Supports categorical and continuous variables
+        with flexible statistics options and additional custom rows.
+    references:
+        - jReport
+        - RCore
+options:
+    - { name: data, type: Data }
+    - name: tableVariables
+      title: Table Variables
+      type: Variables
+      suggested: [nominal, ordinal, continuous]
+      permitted: [factor, numeric]
+      default: null
+    - name: paragraphVariables
+      title: Paragraph Variables
+      type: Variables
+      suggested: [nominal, ordinal, continuous]
+      permitted: [factor, numeric]
+      default: null
+    - name: showTable
+      title: APA Demographics Table
+      type: Bool
+      default: true
+    - name: showParagraph
+      title: APA Paragraph
+      type: Bool
+      default: true
+    - name: tableTitle
+      title: Table Title
+      type: String
+      default: "Demographic Characteristics of the Sample"
+    - name: showOmitNote
+      title: Omission Note
+      type: Bool
+      default: true
+    - name: showBestPractices
+      title: Best Practices Note
+      type: Bool
+      default: true
+    - name: statMean
+      title: Mean
+      type: Bool
+      default: true
+    - name: statSD
+      title: SD
+      type: Bool
+      default: true
+    - name: statMedian
+      title: Median
+      type: Bool
+      default: false
+    - name: statIQR
+      title: IQR
+      type: Bool
+      default: false
+    - name: statMin
+      title: Min
+      type: Bool
+      default: false
+    - name: statMax
+      title: Max
+      type: Bool
+      default: false
+    - name: statRange
+      title: Range
+      type: Bool
+      default: false
+    - name: statContMissing
+      title: Missing n
+      type: Bool
+      default: false
+    - name: statN
+      title: "n (count)"
+      type: Bool
+      default: true
+    - name: statPct
+      title: "% (percentage)"
+      type: Bool
+      default: true
+    - name: statCatMissing
+      title: Missing n
+      type: Bool
+      default: false
+    - name: customRow1Char
+      title: "Row 1: Characteristic"
+      type: String
+      default: ""
+    - name: customRow1Val
+      title: "Row 1: Value"
+      type: String
+      default: ""
+    - name: customRow1Pct
+      title: "Row 1: %"
+      type: String
+      default: ""
+    - name: customRow1Note
+      title: "Row 1: Note"
+      type: String
+      default: ""
+    - name: customRow2Char
+      title: "Row 2: Characteristic"
+      type: String
+      default: ""
+    - name: customRow2Val
+      title: "Row 2: Value"
+      type: String
+      default: ""
+    - name: customRow2Pct
+      title: "Row 2: %"
+      type: String
+      default: ""
+    - name: customRow2Note
+      title: "Row 2: Note"
+      type: String
+      default: ""
+    - name: customRow3Char
+      title: "Row 3: Characteristic"
+      type: String
+      default: ""
+    - name: customRow3Val
+      title: "Row 3: Value"
+      type: String
+      default: ""
+    - name: customRow3Pct
+      title: "Row 3: %"
+      type: String
+      default: ""
+    - name: customRow3Note
+      title: "Row 3: Note"
+      type: String
+      default: ""
+    - name: customRow4Char
+      title: "Row 4: Characteristic"
+      type: String
+      default: ""
+    - name: customRow4Val
+      title: "Row 4: Value"
+      type: String
+      default: ""
+    - name: customRow4Pct
+      title: "Row 4: %"
+      type: String
+      default: ""
+    - name: customRow4Note
+      title: "Row 4: Note"
+      type: String
+      default: ""
+    - name: customRow5Char
+      title: "Row 5: Characteristic"
+      type: String
+      default: ""
+    - name: customRow5Val
+      title: "Row 5: Value"
+      type: String
+      default: ""
+    - name: customRow5Pct
+      title: "Row 5: %"
+      type: String
+      default: ""
+    - name: customRow5Note
+      title: "Row 5: Note"
+      type: String
+      default: ""
+...

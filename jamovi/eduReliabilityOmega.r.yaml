@@ -20,6 +20,7 @@ items:
 - name: main
   title: Reliability Estimate
   type: Table
+  rows: 1
   clearWith:
   - items
   - reverseItems

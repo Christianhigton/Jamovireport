@@ -202,6 +202,7 @@ eduChiSquareIndependenceResults <- if (requireNamespace("jmvcore", quietly=TRUE)
                 options=options,
                 name="fit",
                 title="Main Results and Effect Size",
+                rows=1,
                 clearWith=list(
                     "rowVariable",
                     "columnVariable",

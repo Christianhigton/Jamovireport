@@ -332,8 +332,12 @@ test_that("between-subjects ANOVA references appear in report and jamovi result 
     expect_true(grepl('"jReportCard"', hr_text, fixed = TRUE))
     expect_true(grepl('refs=list(', hr_text, fixed = TRUE))
 
-    # helpers.R adds display items to self$parent$results and injects refs into parent namespace
-    helper_text <- paste(readLines(file.path(root, "R", "jamovi-helpers.R"), warn = FALSE), collapse = "\n")
+    # Refactored helper files add display items to self$parent$results and inject refs into parent namespace
+    helper_files <- file.path(root, "R", c("jamovi-helpers.R", "jr-addon.R", "jr-refs.R"))
+    helper_text <- paste(
+        vapply(helper_files, function(path) paste(readLines(path, warn = FALSE), collapse = "\n"), character(1)),
+        collapse = "\n"
+    )
     expect_true(grepl('self$parent$results', helper_text, fixed = TRUE))
     expect_true(grepl('.jr_addon_inject_refs', helper_text, fixed = TRUE))
     expect_true(grepl('"jReportApaTable"', helper_text, fixed = TRUE))

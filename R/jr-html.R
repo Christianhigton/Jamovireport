@@ -249,6 +249,41 @@
     paste0("<div style='width:100%;box-sizing:border-box;display:block;'>", html, "</div>")
 }
 
+.jr_rm_ges_guidance <- function(result) {
+    if (!result$analysis %in% c("anova_rm", "anova_mixed"))
+        return("")
+    stats <- result$statistics
+    if (!is.data.frame(stats) || !"ges" %in% names(stats))
+        return("")
+    ges_vals <- stats$ges[is.finite(stats$ges)]
+    eta_vals <- stats$effect[is.finite(stats$effect)]
+    if (!length(ges_vals) || !length(eta_vals))
+        return("")
+    base <- paste(
+        "Generalised eta squared (ηG²) estimates the proportion of total variance",
+        "explained by an effect and allows comparison across different experimental designs.",
+        "Partial eta squared (ηp²) estimates the proportion of variance explained after",
+        "accounting for other sources of variance in the model and is therefore often larger."
+    )
+    max_ges <- max(ges_vals, na.rm = TRUE)
+    max_eta <- max(eta_vals, na.rm = TRUE)
+    discrepancy <- if (is.finite(max_ges) && is.finite(max_eta) && max_ges > 0 &&
+                       max_eta > 2 * max_ges) {
+        paste(
+            "The difference between ηG² and ηp² suggests that a substantial proportion of",
+            "variability is attributable to individual differences between participants.",
+            "This pattern is common in repeated measures designs where participant characteristics",
+            "account for a large amount of variance."
+        )
+    } else {
+        ""
+    }
+    if (nzchar(discrepancy))
+        paste(base, discrepancy, sep = "\n\n")
+    else
+        base
+}
+
 .jr_jamovi_interpretation_html <- function(result) {
     content <- result$interpretation
     accent <- "#278058"
@@ -256,6 +291,9 @@
         content <- paste(content, result$caution, sep = "\n\n")
         accent <- "#b46c21"
     }
+    rm_guidance <- .jr_rm_ges_guidance(result)
+    if (nzchar(rm_guidance))
+        content <- paste(content, rm_guidance, sep = "\n\n")
     html <- .jr_html_card("Interpretation", "What does this mean?", content, accent = accent)
     paste0("<div style='width:100%;box-sizing:border-box;display:block;'>", html, "</div>")
 }

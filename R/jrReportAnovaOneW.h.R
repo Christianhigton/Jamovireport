@@ -33,7 +33,10 @@ jrReportAnovaOneWResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R
             super$initialize(
                 options=options,
                 name="",
-                title="Automatic Report for One-Way ANOVA")
+                title="Automatic Report for One-Way ANOVA",
+                refs=list(
+                    "Cohen1988",
+                    "Cumming2014"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="jReportHeading",

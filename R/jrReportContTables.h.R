@@ -33,7 +33,10 @@ jrReportContTablesResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::
             super$initialize(
                 options=options,
                 name="",
-                title="Automatic Report for Contingency Tables")
+                title="Automatic Report for Contingency Tables",
+                refs=list(
+                    "Cohen1988",
+                    "Cumming2014"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="jReportHeading",

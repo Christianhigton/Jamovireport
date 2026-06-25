@@ -1,8 +1,8 @@
 # Smoke and structure tests for all guided analyses using the iris dataset.
-# iris provides a well-behaved 3-class nominal outcome (Species), four numeric
-# predictors, and enough observations to satisfy every analysis without
-# workarounds. Tests here focus on: no runtime error, correct result class,
-# expected column names in tables, and key phrases in edu_report() output.
+# iris provides a well-behaved fixture for most guided analyses. Logistic tests
+# use overlapping built-in datasets to avoid deterministic separation warnings.
+# Tests here focus on: no runtime error, correct result class, expected column
+# names in tables, and key phrases in edu_report() output.
 
 data(iris)
 
@@ -16,10 +16,14 @@ two_species <- function(exclude = "virginica") {
     d
 }
 
-iris_binary <- function() {
-    d <- iris
-    d$setosa <- factor(ifelse(d$Species == "setosa", "setosa", "other"))
+binary_logistic_fixture <- function() {
+    d <- mtcars
+    d$am <- factor(d$am, labels = c("automatic", "manual"))
     d
+}
+
+multinomial_fixture <- function() {
+    warpbreaks
 }
 
 iris_two_factor <- function() {
@@ -106,8 +110,8 @@ test_that("linear regression on iris predicts sepal length correctly", {
     expect_s3_class(edu_plot(result), "ggplot")
 })
 
-test_that("binomial logistic regression on iris setosa-vs-other runs correctly", {
-    result <- edu_logistic_regression(iris_binary(), setosa ~ Sepal.Length + Sepal.Width)
+test_that("binomial logistic regression on overlapping binary data runs correctly", {
+    result <- edu_logistic_regression(binary_logistic_fixture(), am ~ wt + hp)
 
     expect_s3_class(result, "edu_analysis")
     expect_equal(result$analysis, "logistic_regression")
@@ -117,9 +121,9 @@ test_that("binomial logistic regression on iris setosa-vs-other runs correctly",
     expect_match(edu_report(result), "OR =")
 })
 
-test_that("multinomial logistic regression on iris species runs without error", {
+test_that("multinomial logistic regression on overlapping three-class data runs without error", {
     result <- edu_multinomial_logistic(
-        iris, Species ~ Sepal.Length + Sepal.Width, ci = 0.95
+        multinomial_fixture(), tension ~ breaks + wool, ci = 0.95
     )
 
     expect_s3_class(result, "edu_analysis")
@@ -132,18 +136,17 @@ test_that("multinomial logistic regression on iris species runs without error", 
 })
 
 test_that("multinomial logistic regression produces one comparison per non-reference level", {
-    result <- edu_multinomial_logistic(iris, Species ~ Petal.Length + Petal.Width)
+    result <- edu_multinomial_logistic(multinomial_fixture(), tension ~ breaks + wool)
 
     categories <- unique(result$parameters$category)
-    # versicolor vs. setosa AND virginica vs. setosa
+    # medium vs. low AND high vs. low tension
     expect_equal(length(categories), 2L)
-    expect_true(any(grepl("versicolor", categories)))
-    expect_true(any(grepl("virginica", categories)))
+    expect_true(any(grepl("M", categories)))
+    expect_true(any(grepl("H", categories)))
 })
 
 test_that("multinomial logistic regression diagnostics include a convergence row", {
-    # Sepal dims have species overlap so the model runs without perfect-separation issues
-    result <- edu_multinomial_logistic(iris, Species ~ Sepal.Length + Sepal.Width)
+    result <- edu_multinomial_logistic(multinomial_fixture(), tension ~ breaks + wool)
 
     expect_true("Model convergence" %in% result$diagnostics$check)
     converged <- result$diagnostics[result$diagnostics$check == "Model convergence", "status"]
@@ -151,7 +154,7 @@ test_that("multinomial logistic regression diagnostics include a convergence row
 })
 
 test_that("multinomial logistic regression RRRs are positive", {
-    result <- edu_multinomial_logistic(iris, Species ~ Sepal.Length + Petal.Length)
+    result <- edu_multinomial_logistic(multinomial_fixture(), tension ~ breaks + wool)
 
     expect_true(all(result$parameters$RRR > 0))
 })
@@ -283,22 +286,23 @@ test_that("eduRegression entry point runs on iris petal predictors", {
     )
 })
 
-test_that("eduLogistic entry point runs on iris binary outcome", {
+test_that("eduLogistic entry point runs on overlapping binary outcome", {
     expect_no_error(
         eduLogistic(
-            iris_binary(),
-            outcome = "setosa",
-            covariates = c("Sepal.Length", "Sepal.Width")
+            binary_logistic_fixture(),
+            outcome = "am",
+            covariates = c("wt", "hp")
         )
     )
 })
 
-test_that("eduMultinomialLogistic entry point runs on iris species outcome", {
+test_that("eduMultinomialLogistic entry point runs on overlapping three-class outcome", {
     expect_no_error(
         eduMultinomialLogistic(
-            iris,
-            outcome = "Species",
-            covariates = c("Sepal.Length", "Sepal.Width")
+            multinomial_fixture(),
+            outcome = "tension",
+            covariates = "breaks",
+            factors = "wool"
         )
     )
 })

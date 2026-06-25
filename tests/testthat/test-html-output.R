@@ -52,8 +52,10 @@ data(iris)
 two_sp <- iris[iris$Species != "virginica", ]
 two_sp$Species <- droplevels(two_sp$Species)
 
-iris_binary <- iris
-iris_binary$setosa <- factor(ifelse(iris$Species == "setosa", "setosa", "other"))
+logistic_binary <- mtcars
+logistic_binary$am <- factor(logistic_binary$am, labels = c("automatic", "manual"))
+
+multinomial_data <- warpbreaks
 
 # ---------------------------------------------------------------------------
 # Per-analysis box tests
@@ -111,7 +113,7 @@ test_that("linear regression report HTML has all four sections with appropriate 
 })
 
 test_that("binomial logistic regression report HTML has all four sections", {
-    result <- edu_logistic_regression(iris_binary, setosa ~ Sepal.Length + Sepal.Width)
+    result <- edu_logistic_regression(logistic_binary, am ~ wt + hp)
     html   <- report_html(result)
 
     expect_true(section_present(html, "Suggested APA-style report wording"))
@@ -122,7 +124,7 @@ test_that("binomial logistic regression report HTML has all four sections", {
 })
 
 test_that("multinomial logistic regression report HTML has all four sections", {
-    result <- edu_multinomial_logistic(iris, Species ~ Sepal.Length + Sepal.Width)
+    result <- edu_multinomial_logistic(multinomial_data, tension ~ breaks + wool)
     html   <- report_html(result)
 
     expect_true(section_present(html, "Suggested APA-style report wording"))

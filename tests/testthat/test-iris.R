@@ -28,7 +28,7 @@ multinomial_fixture <- function() {
 
 iris_two_factor <- function() {
     d <- iris
-    d$petal_size <- factor(ifelse(d$Petal.Length > median(d$Petal.Length), "large", "small"))
+    d$sample_block <- factor(rep(c("A", "B"), length.out = nrow(d)))
     d
 }
 
@@ -68,13 +68,13 @@ test_that("one-way ANOVA on iris petal length across three species", {
     expect_s3_class(edu_plot(result), "ggplot")
 })
 
-test_that("between-subjects ANOVA on iris with two factors detects interaction term", {
-    result <- edu_anova_between(iris_two_factor(), "Sepal.Length", c("Species", "petal_size"))
+test_that("between-subjects ANOVA on iris with two crossed factors detects interaction term", {
+    result <- edu_anova_between(iris_two_factor(), "Sepal.Length", c("Species", "sample_block"))
 
     expect_s3_class(result, "edu_analysis")
     expect_equal(result$analysis, "anova_between")
     expect_true(any(grepl("Species", result$statistics$term)))
-    expect_true(any(grepl("petal_size", result$statistics$term)))
+    expect_true(any(grepl("sample_block", result$statistics$term)))
     expect_match(edu_report(result), "partial eta-squared")
     expect_s3_class(edu_plot(result), "ggplot")
 })
@@ -257,7 +257,7 @@ test_that("eduBetweenAnova entry point runs on two-factor iris dataset", {
     expect_no_error(
         eduBetweenAnova(
             iris_two_factor(),
-            outcome = "Sepal.Length", factors = c("Species", "petal_size"),
+            outcome = "Sepal.Length", factors = c("Species", "sample_block"),
             showPlot = FALSE
         )
     )
@@ -310,7 +310,7 @@ test_that("eduMultinomialLogistic entry point runs on overlapping three-class ou
 test_that("eduMultinomialLogistic entry point runs with factor predictor", {
     d <- iris_two_factor()
     expect_no_error(
-        eduMultinomialLogistic(d, outcome = "Species", factors = "petal_size")
+        eduMultinomialLogistic(d, outcome = "Species", factors = "sample_block")
     )
 })
 

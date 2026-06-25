@@ -136,8 +136,8 @@ test_that("multinomial logistic regression report HTML has all four sections", {
 
 test_that("between-subjects ANOVA report HTML has all four sections", {
     d <- iris
-    d$petal_size <- factor(ifelse(d$Petal.Length > median(d$Petal.Length), "large", "small"))
-    result <- edu_anova_between(d, "Sepal.Length", c("Species", "petal_size"))
+    d$sample_block <- factor(rep(c("A", "B"), length.out = nrow(d)))
+    result <- edu_anova_between(d, "Sepal.Length", c("Species", "sample_block"))
     html   <- jReport:::.jr_anova_between_report_sections_html(result)
 
     expect_true(section_present(html, "Suggested APA-style report wording"))

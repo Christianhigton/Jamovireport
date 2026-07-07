@@ -1,4 +1,4 @@
-﻿name: eduMultinomialLogistic
+name: eduMultinomialLogistic
 title: Guided Multinomial Logistic Regression
 jrs: '1.1'
 refs:
@@ -12,11 +12,6 @@ items:
 - name: overview
   title: 'jReport: Overview and Why This Test?'
   type: Html
-  refs:
-  - jReport
-  - parameters
-  - performance
-  - effectsize
 - name: fit
   title: Main Results and Model Fit
   type: Table
@@ -43,11 +38,6 @@ items:
   - name: r2
     title: McFadden R-squared
     type: number
-  refs:
-  - jReport
-  - parameters
-  - performance
-  - effectsize
 - name: coefficients
   title: Coefficients and Relative Risk Ratios
   type: Table
@@ -85,11 +75,6 @@ items:
   - name: upper
     title: RRR CI Upper
     type: number
-  refs:
-  - jReport
-  - parameters
-  - performance
-  - effectsize
 - name: diagnostics
   title: Diagnostic Checks and Guidance
   type: Table
@@ -121,24 +106,13 @@ items:
   - name: action
     title: Recommended Action
     type: text
-  refs:
-  - jReport
-  - parameters
-  - performance
-  - effectsize
 - name: report
   title: Reporting
   type: Html
-  refs:
-  - jReport
-  - parameters
-  - performance
-  - effectsize
 - name: interpretation
   title: Plain-Language Interpretation
   type: Html
-  refs:
-  - jReport
-  - parameters
-  - performance
-  - effectsize
+- name: methodsReferences
+  title: Methods and References
+  type: Html
+

@@ -1,4 +1,4 @@
-﻿name: eduChiSquareIndependence
+name: eduChiSquareIndependence
 title: Guided Chi-Square Test of Independence
 jrs: '1.1'
 refs:
@@ -10,11 +10,6 @@ items:
 - name: overview
   title: 'jReport: Overview and Why This Test?'
   type: Html
-  refs:
-  - jReport
-  - effectsize
-  - Cohen1988
-  - Cumming2014
 - name: fit
   title: Main Results and Effect Size
   type: Table
@@ -43,11 +38,6 @@ items:
   - name: n
     title: N
     type: number
-  refs:
-  - jReport
-  - effectsize
-  - Cohen1988
-  - Cumming2014
 - name: cells
   title: Observed, Expected, and Standardised Residual Counts
   type: Table
@@ -68,11 +58,6 @@ items:
   - name: standardised_residual
     title: Standardised Residual
     type: number
-  refs:
-  - jReport
-  - effectsize
-  - Cohen1988
-  - Cumming2014
 - name: diagnostics
   title: Assumption Checks and Guidance
   type: Table
@@ -103,24 +88,13 @@ items:
   - name: action
     title: Recommended Action
     type: text
-  refs:
-  - jReport
-  - effectsize
-  - Cohen1988
-  - Cumming2014
 - name: report
   title: Reporting
   type: Html
-  refs:
-  - jReport
-  - effectsize
-  - Cohen1988
-  - Cumming2014
 - name: interpretation
   title: Plain-Language Interpretation
   type: Html
-  refs:
-  - jReport
-  - effectsize
-  - Cohen1988
-  - Cumming2014
+- name: methodsReferences
+  title: Methods and References
+  type: Html
+

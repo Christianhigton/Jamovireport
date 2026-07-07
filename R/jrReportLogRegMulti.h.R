@@ -26,7 +26,9 @@ jrReportLogRegMultiResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6:
         jReportHeading = function() private$.items[["jReportHeading"]],
         jReportApaTable = function() private$.items[["jReportApaTable"]],
         jReportAssumptions = function() private$.items[["jReportAssumptions"]],
-        jReportCard = function() private$.items[["jReportCard"]]),
+        jReportCard = function() private$.items[["jReportCard"]],
+        jReportInterpretation = function() private$.items[["jReportInterpretation"]],
+        methodsReferences = function() private$.items[["methodsReferences"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -45,13 +47,6 @@ jrReportLogRegMultiResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6:
                 options=options,
                 name="jReportApaTable",
                 title="APA Results Summary (jReport)",
-                refs=list(
-                    "RCore",
-                    "jReport",
-                    "jmvcore",
-                    "parameters",
-                    "performance",
-                    "effectsize"),
                 columns=list(
                     list(
                         `name`="analysis", 
@@ -90,13 +85,6 @@ jrReportLogRegMultiResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6:
                 options=options,
                 name="jReportAssumptions",
                 title="Assumptions and Recommended Actions (jReport)",
-                refs=list(
-                    "RCore",
-                    "jReport",
-                    "jmvcore",
-                    "parameters",
-                    "performance",
-                    "effectsize"),
                 columns=list(
                     list(
                         `name`="analysis", 
@@ -134,7 +122,15 @@ jrReportLogRegMultiResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6:
             self$add(jmvcore::Html$new(
                 options=options,
                 name="jReportCard",
-                title="Automatic Report (jReport)"))}))
+                title="Automatic Report (jReport)"))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="jReportInterpretation",
+                title="Interpretation Guidance (jReport)"))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="methodsReferences",
+                title="Methods and References"))}))
 
 jrReportLogRegMultiBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "jrReportLogRegMultiBase",
@@ -180,6 +176,8 @@ jrReportLogRegMultiBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6
 #'   \code{results$jReportApaTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$jReportAssumptions} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$jReportCard} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$jReportInterpretation} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$methodsReferences} \tab \tab \tab \tab \tab a html \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:

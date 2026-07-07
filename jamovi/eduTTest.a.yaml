@@ -2,6 +2,8 @@
 name: eduTTest
 title: Guided T-Test
 menuGroup: jReport
+menuSubgroup: Group Comparisons
+menuTitle: T-Test
 version: '1.0.0'
 jas: '1.2'
 description:

@@ -2,6 +2,8 @@
 name: eduChiSquareIndependence
 title: Guided Chi-Square Test of Independence
 menuGroup: jReport
+menuSubgroup: Frequencies
+menuTitle: Chi-Square Independence
 version: '1.0.0'
 jas: '1.2'
 description:

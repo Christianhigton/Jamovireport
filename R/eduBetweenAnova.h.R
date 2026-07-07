@@ -182,7 +182,8 @@ eduBetweenAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
         diagnostics = function() private$.items[["diagnostics"]],
         report = function() private$.items[["report"]],
         interpretation = function() private$.items[["interpretation"]],
-        plot = function() private$.items[["plot"]]),
+        plot = function() private$.items[["plot"]],
+        methodsReferences = function() private$.items[["methodsReferences"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -202,16 +203,7 @@ eduBetweenAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
             self$add(jmvcore::Html$new(
                 options=options,
                 name="overview",
-                title="jReport: Overview and Why This Test?",
-                refs=list(
-                    "jReport",
-                    "afex",
-                    "car",
-                    "effectsize",
-                    "emmeans",
-                    "ggplot2",
-                    "Cohen1988",
-                    "Cumming2014")))
+                title="jReport: Overview and Why This Test?"))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="main",
@@ -253,16 +245,7 @@ eduBetweenAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
                     list(
                         `name`="ci_high", 
                         `title`="CI Upper", 
-                        `type`="number")),
-                refs=list(
-                    "jReport",
-                    "afex",
-                    "car",
-                    "effectsize",
-                    "emmeans",
-                    "ggplot2",
-                    "Cohen1988",
-                    "Cumming2014")))
+                        `type`="number"))))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="descriptives",
@@ -287,16 +270,7 @@ eduBetweenAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
                     list(
                         `name`="sd", 
                         `title`="SD", 
-                        `type`="number")),
-                refs=list(
-                    "jReport",
-                    "afex",
-                    "car",
-                    "effectsize",
-                    "emmeans",
-                    "ggplot2",
-                    "Cohen1988",
-                    "Cumming2014")))
+                        `type`="number"))))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="diagnostics",
@@ -334,42 +308,15 @@ eduBetweenAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
                     list(
                         `name`="action", 
                         `title`="Recommended Action", 
-                        `type`="text")),
-                refs=list(
-                    "jReport",
-                    "afex",
-                    "car",
-                    "effectsize",
-                    "emmeans",
-                    "ggplot2",
-                    "Cohen1988",
-                    "Cumming2014")))
+                        `type`="text"))))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="report",
-                title="Reporting",
-                refs=list(
-                    "jReport",
-                    "afex",
-                    "car",
-                    "effectsize",
-                    "emmeans",
-                    "ggplot2",
-                    "Cohen1988",
-                    "Cumming2014")))
+                title="Reporting"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="interpretation",
-                title="Plain-Language Interpretation",
-                refs=list(
-                    "jReport",
-                    "afex",
-                    "car",
-                    "effectsize",
-                    "emmeans",
-                    "ggplot2",
-                    "Cohen1988",
-                    "Cumming2014")))
+                title="Plain-Language Interpretation"))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",
@@ -381,16 +328,11 @@ eduBetweenAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
                     "ciWidth"),
                 width=520,
                 height=360,
-                renderFun=".plot",
-                refs=list(
-                    "jReport",
-                    "afex",
-                    "car",
-                    "effectsize",
-                    "emmeans",
-                    "ggplot2",
-                    "Cohen1988",
-                    "Cumming2014")))}))
+                renderFun=".plot"))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="methodsReferences",
+                title="Methods and References"))}))
 
 eduBetweenAnovaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "eduBetweenAnovaBase",
@@ -457,6 +399,7 @@ eduBetweenAnovaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
 #'   \code{results$report} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$interpretation} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$methodsReferences} \tab \tab \tab \tab \tab a html \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:

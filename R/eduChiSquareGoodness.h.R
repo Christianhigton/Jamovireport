@@ -172,7 +172,8 @@ eduChiSquareGoodnessResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6
         cells = function() private$.items[["cells"]],
         diagnostics = function() private$.items[["diagnostics"]],
         report = function() private$.items[["report"]],
-        interpretation = function() private$.items[["interpretation"]]),
+        interpretation = function() private$.items[["interpretation"]],
+        methodsReferences = function() private$.items[["methodsReferences"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -188,12 +189,7 @@ eduChiSquareGoodnessResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6
             self$add(jmvcore::Html$new(
                 options=options,
                 name="overview",
-                title="jReport: Overview and Why This Test?",
-                refs=list(
-                    "jReport",
-                    "effectsize",
-                    "Cohen1988",
-                    "Cumming2014")))
+                title="jReport: Overview and Why This Test?"))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="fit",
@@ -228,12 +224,7 @@ eduChiSquareGoodnessResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6
                     list(
                         `name`="n", 
                         `title`="N", 
-                        `type`="number")),
-                refs=list(
-                    "jReport",
-                    "effectsize",
-                    "Cohen1988",
-                    "Cumming2014")))
+                        `type`="number"))))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="cells",
@@ -258,12 +249,7 @@ eduChiSquareGoodnessResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6
                     list(
                         `name`="standardised_residual", 
                         `title`="Standardised Residual", 
-                        `type`="number")),
-                refs=list(
-                    "jReport",
-                    "effectsize",
-                    "Cohen1988",
-                    "Cumming2014")))
+                        `type`="number"))))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="diagnostics",
@@ -301,30 +287,19 @@ eduChiSquareGoodnessResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6
                     list(
                         `name`="action", 
                         `title`="Recommended Action", 
-                        `type`="text")),
-                refs=list(
-                    "jReport",
-                    "effectsize",
-                    "Cohen1988",
-                    "Cumming2014")))
+                        `type`="text"))))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="report",
-                title="Reporting",
-                refs=list(
-                    "jReport",
-                    "effectsize",
-                    "Cohen1988",
-                    "Cumming2014")))
+                title="Reporting"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="interpretation",
-                title="Plain-Language Interpretation",
-                refs=list(
-                    "jReport",
-                    "effectsize",
-                    "Cohen1988",
-                    "Cumming2014")))}))
+                title="Plain-Language Interpretation"))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="methodsReferences",
+                title="Methods and References"))}))
 
 eduChiSquareGoodnessBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "eduChiSquareGoodnessBase",
@@ -381,6 +356,7 @@ eduChiSquareGoodnessBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R
 #'   \code{results$diagnostics} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$report} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$interpretation} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$methodsReferences} \tab \tab \tab \tab \tab a html \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:

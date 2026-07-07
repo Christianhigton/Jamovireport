@@ -2,6 +2,8 @@
 name: eduDemographics
 title: Demographic Table
 menuGroup: jReport
+menuSubgroup: Descriptives
+menuTitle: Demographics
 version: '1.0.0'
 jas: '1.2'
 description:

@@ -39,6 +39,7 @@ eduDemographicsClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6::R6C
             self$results$omitNote$setContent(.dm_omit_note_html(dm$table_omit, dm$para_omit))
             self$results$paragraph$setContent(.dm_paragraph_html(dm$paragraph))
             self$results$bestPractices$setContent(.dm_best_practices_html())
+            self$results$methodsReferences$setContent(.jr_methods_references_html(keys = c("jReport", "RCore")))
         }
     )
 )

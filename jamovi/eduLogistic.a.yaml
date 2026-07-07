@@ -2,6 +2,8 @@
 name: eduLogistic
 title: Guided Binomial Logistic Regression
 menuGroup: jReport
+menuSubgroup: Regression
+menuTitle: Binomial Logistic
 version: '1.0.0'
 jas: '1.2'
 description:

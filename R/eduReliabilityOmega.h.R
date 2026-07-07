@@ -189,7 +189,8 @@ eduReliabilityOmegaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6:
         diagnostics = function() private$.items[["diagnostics"]],
         report = function() private$.items[["report"]],
         interpretation = function() private$.items[["interpretation"]],
-        plot = function() private$.items[["plot"]]),
+        plot = function() private$.items[["plot"]],
+        methodsReferences = function() private$.items[["methodsReferences"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -206,13 +207,7 @@ eduReliabilityOmegaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6:
             self$add(jmvcore::Html$new(
                 options=options,
                 name="overview",
-                title="jReport: Overview and Why Omega?",
-                refs=list(
-                    "jReport",
-                    "psych",
-                    "McDonald1999",
-                    "RevelleCondon2019",
-                    "ggplot2")))
+                title="jReport: Overview and Why Omega?"))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="main",
@@ -249,13 +244,7 @@ eduReliabilityOmegaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6:
                     list(
                         `name`="items", 
                         `title`="Items", 
-                        `type`="integer")),
-                refs=list(
-                    "jReport",
-                    "psych",
-                    "McDonald1999",
-                    "RevelleCondon2019",
-                    "ggplot2")))
+                        `type`="integer"))))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="items",
@@ -295,13 +284,7 @@ eduReliabilityOmegaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6:
                     list(
                         `name`="loading", 
                         `title`="Factor Loading", 
-                        `type`="number")),
-                refs=list(
-                    "jReport",
-                    "psych",
-                    "McDonald1999",
-                    "RevelleCondon2019",
-                    "ggplot2")))
+                        `type`="number"))))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="diagnostics",
@@ -342,33 +325,15 @@ eduReliabilityOmegaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6:
                     list(
                         `name`="action", 
                         `title`="Recommended Action", 
-                        `type`="text")),
-                refs=list(
-                    "jReport",
-                    "psych",
-                    "McDonald1999",
-                    "RevelleCondon2019",
-                    "ggplot2")))
+                        `type`="text"))))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="report",
-                title="Reporting",
-                refs=list(
-                    "jReport",
-                    "psych",
-                    "McDonald1999",
-                    "RevelleCondon2019",
-                    "ggplot2")))
+                title="Reporting"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="interpretation",
-                title="Plain-Language Interpretation",
-                refs=list(
-                    "jReport",
-                    "psych",
-                    "McDonald1999",
-                    "RevelleCondon2019",
-                    "ggplot2")))
+                title="Plain-Language Interpretation"))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",
@@ -383,13 +348,11 @@ eduReliabilityOmegaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6:
                     "ciWidth"),
                 width=520,
                 height=360,
-                renderFun=".plot",
-                refs=list(
-                    "jReport",
-                    "psych",
-                    "McDonald1999",
-                    "RevelleCondon2019",
-                    "ggplot2")))}))
+                renderFun=".plot"))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="methodsReferences",
+                title="Methods and References"))}))
 
 eduReliabilityOmegaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "eduReliabilityOmegaBase",
@@ -454,6 +417,7 @@ eduReliabilityOmegaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6
 #'   \code{results$report} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$interpretation} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$methodsReferences} \tab \tab \tab \tab \tab a html \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:

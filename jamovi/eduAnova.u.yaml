@@ -5,18 +5,26 @@ jus: '2.0'
 stage: 0
 compilerMode: tame
 children:
-  - type: VariablesListBox
-    name: outcome
-    label: Outcome
-    maxItemCount: 1
-    isTarget: true
-    suggested: [continuous]
-  - type: VariablesListBox
-    name: group
-    label: Grouping Variable
-    maxItemCount: 1
-    isTarget: true
-    suggested: [nominal, ordinal]
+  - type: VariableSupplier
+    stretchFactor: 1
+    persistentItems: false
+    children:
+      - type: TargetLayoutBox
+        label: Outcome
+        children:
+          - type: VariablesListBox
+            name: outcome
+            maxItemCount: 1
+            isTarget: true
+            suggested: [continuous]
+      - type: TargetLayoutBox
+        label: Grouping Variable
+        children:
+          - type: VariablesListBox
+            name: group
+            maxItemCount: 1
+            isTarget: true
+            suggested: [nominal, ordinal]
   - type: CollapseBox
     label: Analysis
     collapsed: false

@@ -11,12 +11,6 @@ items:
 - name: overview
   title: 'jReport: Overview and Why Omega?'
   type: Html
-  refs:
-  - jReport
-  - psych
-  - McDonald1999
-  - RevelleCondon2019
-  - ggplot2
 - name: main
   title: Reliability Estimate
   type: Table
@@ -47,12 +41,6 @@ items:
   - name: items
     title: Items
     type: integer
-  refs:
-  - jReport
-  - psych
-  - McDonald1999
-  - RevelleCondon2019
-  - ggplot2
 - name: items
   title: Item Quality Guidance
   type: Table
@@ -85,12 +73,6 @@ items:
   - name: loading
     title: Factor Loading
     type: number
-  refs:
-  - jReport
-  - psych
-  - McDonald1999
-  - RevelleCondon2019
-  - ggplot2
 - name: diagnostics
   title: Data and Interpretation Guidance
   type: Table
@@ -124,30 +106,12 @@ items:
   - name: action
     title: Recommended Action
     type: text
-  refs:
-  - jReport
-  - psych
-  - McDonald1999
-  - RevelleCondon2019
-  - ggplot2
 - name: report
   title: Reporting
   type: Html
-  refs:
-  - jReport
-  - psych
-  - McDonald1999
-  - RevelleCondon2019
-  - ggplot2
 - name: interpretation
   title: Plain-Language Interpretation
   type: Html
-  refs:
-  - jReport
-  - psych
-  - McDonald1999
-  - RevelleCondon2019
-  - ggplot2
 - name: plot
   title: Item Contribution Plot
   type: Image
@@ -162,9 +126,7 @@ items:
   width: 520
   height: 360
   renderFun: .plot
-  refs:
-  - jReport
-  - psych
-  - McDonald1999
-  - RevelleCondon2019
-  - ggplot2
+- name: methodsReferences
+  title: Methods and References
+  type: Html
+

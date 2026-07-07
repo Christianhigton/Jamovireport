@@ -1,4 +1,4 @@
-﻿name: eduRegression
+name: eduRegression
 title: Guided Linear Regression
 jrs: '1.1'
 refs:
@@ -13,14 +13,6 @@ items:
 - name: overview
   title: 'jReport: Overview and Why This Test?'
   type: Html
-  refs:
-  - jReport
-  - parameters
-  - performance
-  - effectsize
-  - ggplot2
-  - Cohen1988
-  - Cumming2014
 - name: fit
   title: Main Results and Model Fit
   type: Table
@@ -52,14 +44,6 @@ items:
   - name: adjusted_r2
     title: Adjusted R-squared
     type: number
-  refs:
-  - jReport
-  - parameters
-  - performance
-  - effectsize
-  - ggplot2
-  - Cohen1988
-  - Cumming2014
 - name: coefficients
   title: Coefficients and Effect Interpretation
   type: Table
@@ -93,14 +77,6 @@ items:
     title: p
     type: number
     format: zto,pvalue
-  refs:
-  - jReport
-  - parameters
-  - performance
-  - effectsize
-  - ggplot2
-  - Cohen1988
-  - Cumming2014
 - name: diagnostics
   title: Assumption Checks and Guidance
   type: Table
@@ -131,36 +107,12 @@ items:
   - name: action
     title: Recommended Action
     type: text
-  refs:
-  - jReport
-  - parameters
-  - performance
-  - effectsize
-  - ggplot2
-  - Cohen1988
-  - Cumming2014
 - name: report
   title: Reporting
   type: Html
-  refs:
-  - jReport
-  - parameters
-  - performance
-  - effectsize
-  - ggplot2
-  - Cohen1988
-  - Cumming2014
 - name: interpretation
   title: Plain-Language Interpretation
   type: Html
-  refs:
-  - jReport
-  - parameters
-  - performance
-  - effectsize
-  - ggplot2
-  - Cohen1988
-  - Cumming2014
 - name: plot
   title: Residual Visualisation
   type: Image
@@ -172,11 +124,7 @@ items:
   width: 520
   height: 360
   renderFun: .plot
-  refs:
-  - jReport
-  - parameters
-  - performance
-  - effectsize
-  - ggplot2
-  - Cohen1988
-  - Cumming2014
+- name: methodsReferences
+  title: Methods and References
+  type: Html
+

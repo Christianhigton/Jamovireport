@@ -1,4 +1,4 @@
-﻿name: jrReportMancova
+name: jrReportMancova
 title: Automatic Report for MANOVA/MANCOVA
 jrs: '1.1'
 refs:
@@ -11,14 +11,6 @@ items:
 - name: jReportApaTable
   title: APA Results Summary (jReport)
   type: Table
-  refs:
-  - RCore
-  - jReport
-  - jmvcore
-  - car
-  - effectsize
-  - Cohen1988
-  - Cumming2014
   columns:
   - name: analysis
     title: Analysis
@@ -48,14 +40,6 @@ items:
 - name: jReportAssumptions
   title: Assumptions and Recommended Actions (jReport)
   type: Table
-  refs:
-  - RCore
-  - jReport
-  - jmvcore
-  - car
-  - effectsize
-  - Cohen1988
-  - Cumming2014
   columns:
   - name: analysis
     title: Analysis
@@ -84,5 +68,13 @@ items:
     type: text
 - name: jReportCard
   title: Automatic Report (jReport)
+  type: Html
+
+- name: jReportInterpretation
+  title: Interpretation Guidance (jReport)
+  type: Html
+
+- name: methodsReferences
+  title: Methods and References
   type: Html
 

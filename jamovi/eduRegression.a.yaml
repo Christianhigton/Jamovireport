@@ -2,6 +2,8 @@
 name: eduRegression
 title: Guided Linear Regression
 menuGroup: jReport
+menuSubgroup: Regression
+menuTitle: Linear Regression
 version: '1.0.0'
 jas: '1.2'
 description:

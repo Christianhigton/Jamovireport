@@ -185,7 +185,8 @@ eduLogisticResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
         coefficients = function() private$.items[["coefficients"]],
         diagnostics = function() private$.items[["diagnostics"]],
         report = function() private$.items[["report"]],
-        interpretation = function() private$.items[["interpretation"]]),
+        interpretation = function() private$.items[["interpretation"]],
+        methodsReferences = function() private$.items[["methodsReferences"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -203,14 +204,7 @@ eduLogisticResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
             self$add(jmvcore::Html$new(
                 options=options,
                 name="overview",
-                title="jReport: Overview and Why This Test?",
-                refs=list(
-                    "jReport",
-                    "parameters",
-                    "performance",
-                    "effectsize",
-                    "Cohen1988",
-                    "Cumming2014")))
+                title="jReport: Overview and Why This Test?"))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="fit",
@@ -242,14 +236,7 @@ eduLogisticResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                     list(
                         `name`="r2", 
                         `title`="McFadden R-squared", 
-                        `type`="number")),
-                refs=list(
-                    "jReport",
-                    "parameters",
-                    "performance",
-                    "effectsize",
-                    "Cohen1988",
-                    "Cumming2014")))
+                        `type`="number"))))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="coefficients",
@@ -292,14 +279,7 @@ eduLogisticResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                     list(
                         `name`="upper", 
                         `title`="OR CI Upper", 
-                        `type`="number")),
-                refs=list(
-                    "jReport",
-                    "parameters",
-                    "performance",
-                    "effectsize",
-                    "Cohen1988",
-                    "Cumming2014")))
+                        `type`="number"))))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="diagnostics",
@@ -338,36 +318,19 @@ eduLogisticResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
                     list(
                         `name`="action", 
                         `title`="Recommended Action", 
-                        `type`="text")),
-                refs=list(
-                    "jReport",
-                    "parameters",
-                    "performance",
-                    "effectsize",
-                    "Cohen1988",
-                    "Cumming2014")))
+                        `type`="text"))))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="report",
-                title="Reporting",
-                refs=list(
-                    "jReport",
-                    "parameters",
-                    "performance",
-                    "effectsize",
-                    "Cohen1988",
-                    "Cumming2014")))
+                title="Reporting"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="interpretation",
-                title="Plain-Language Interpretation",
-                refs=list(
-                    "jReport",
-                    "parameters",
-                    "performance",
-                    "effectsize",
-                    "Cohen1988",
-                    "Cumming2014")))}))
+                title="Plain-Language Interpretation"))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="methodsReferences",
+                title="Methods and References"))}))
 
 eduLogisticBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "eduLogisticBase",
@@ -429,6 +392,7 @@ eduLogisticBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   \code{results$diagnostics} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$report} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$interpretation} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$methodsReferences} \tab \tab \tab \tab \tab a html \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:

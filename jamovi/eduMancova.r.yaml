@@ -1,4 +1,4 @@
-﻿name: eduMancova
+name: eduMancova
 title: Guided MANOVA / MANCOVA
 jrs: '1.1'
 refs:
@@ -11,12 +11,6 @@ items:
 - name: overview
   title: 'jReport: Overview and Why This Test?'
   type: Html
-  refs:
-  - jReport
-  - car
-  - effectsize
-  - Cohen1988
-  - Cumming2014
 - name: main
   title: Multivariate Tests
   type: Table
@@ -44,12 +38,6 @@ items:
   - name: effect
     title: Pillai's Trace
     type: number
-  refs:
-  - jReport
-  - car
-  - effectsize
-  - Cohen1988
-  - Cumming2014
 - name: descriptives
   title: Dependent-Variable Descriptives
   type: Table
@@ -70,12 +58,6 @@ items:
   - name: sd
     title: SD
     type: number
-  refs:
-  - jReport
-  - car
-  - effectsize
-  - Cohen1988
-  - Cumming2014
 - name: diagnostics
   title: Assumption Checks and Guidance
   type: Table
@@ -106,12 +88,6 @@ items:
   - name: action
     title: Recommended Action
     type: text
-  refs:
-  - jReport
-  - car
-  - effectsize
-  - Cohen1988
-  - Cumming2014
 - name: followups
   title: Follow-up Analyses
   type: Table
@@ -147,27 +123,13 @@ items:
   - name: effect
     title: Partial eta-squared
     type: number
-  refs:
-  - jReport
-  - car
-  - effectsize
-  - Cohen1988
-  - Cumming2014
 - name: report
   title: Reporting
   type: Html
-  refs:
-  - jReport
-  - car
-  - effectsize
-  - Cohen1988
-  - Cumming2014
 - name: interpretation
   title: Plain-Language Interpretation
   type: Html
-  refs:
-  - jReport
-  - car
-  - effectsize
-  - Cohen1988
-  - Cumming2014
+- name: methodsReferences
+  title: Methods and References
+  type: Html
+

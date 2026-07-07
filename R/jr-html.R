@@ -228,6 +228,107 @@
     entries[nzchar(entries)]
 }
 
+.jr_reference_definitions <- function() {
+    tryCatch(get(".jmvrefs", envir = asNamespace("jReport")), error = function(e) list())
+}
+
+.jr_reference_display_name <- function(key) {
+    switch(
+        key,
+        RCore = "R",
+        jmvcore = "jmvcore",
+        jReport = "jReport",
+        afex = "afex",
+        car = "car",
+        effectsize = "effectsize",
+        parameters = "parameters",
+        performance = "performance",
+        psych = "psych",
+        ggplot2 = "ggplot2",
+        BayesFactor = "BayesFactor",
+        emmeans = "emmeans",
+        McDonald1999 = "McDonald (1999)",
+        RevelleCondon2019 = "Revelle & Condon (2019)",
+        Cohen1988 = "Cohen (1988)",
+        Cumming2014 = "Cumming (2014)",
+        key
+    )
+}
+
+.jr_reference_role_text <- function(key) {
+    switch(
+        key,
+        RCore = "the statistical computing environment used to run the analysis.",
+        jmvcore = "the jamovi framework package used to build and display module results.",
+        jReport = "the module that generates the guided tables, interpretation, and report wording.",
+        afex = "supports ANOVA-style modelling and repeated-measures model handling.",
+        car = "supports regression, ANOVA, ANCOVA, MANOVA, and diagnostic calculations.",
+        effectsize = "computes effect-size estimates and confidence intervals.",
+        parameters = "extracts and formats model coefficients and related model parameters.",
+        performance = "supports model-fit and diagnostic checks such as collinearity and heteroscedasticity.",
+        psych = "estimates reliability coefficients and item-level reliability diagnostics.",
+        ggplot2 = "creates visual summaries shown in the output.",
+        BayesFactor = "computes Bayes factors for Bayesian t-test reporting.",
+        emmeans = "computes estimated marginal means and post hoc comparisons.",
+        McDonald1999 = "provides the psychometric basis for omega reliability.",
+        RevelleCondon2019 = "provides reliability-reporting guidance for omega and alpha.",
+        Cohen1988 = "provides conventional effect-size benchmark language.",
+        Cumming2014 = "supports cautious interpretation of effect sizes and confidence intervals.",
+        "is used by this analysis."
+    )
+}
+
+.jr_reference_is_software <- function(key) {
+    refs <- .jr_reference_definitions()
+    ref <- refs[[key]]
+    identical(ref$type %||% "", "software")
+}
+
+.jr_methods_reference_items_html <- function(keys) {
+    if (!length(keys))
+        return("<p style='margin:0;color:#536472;'>No additional references are used by this panel.</p>")
+    rows <- vapply(keys, function(key) {
+        sprintf(
+            "<li style='margin:0 0 8px 0; padding-left:2px;'><strong>%s.</strong> %s</li>",
+            .jr_html_escape(.jr_reference_display_name(key)),
+            .jr_html_escape(.jr_reference_role_text(key))
+        )
+    }, character(1))
+    paste0("<ul style='margin:0; padding-left:22px; line-height:1.45;'>", paste(rows, collapse = ""), "</ul>")
+}
+
+.jr_methods_references_html <- function(results = NULL, keys = NULL, include_effect_note = TRUE) {
+    if (is.null(keys))
+        keys <- unique(unlist(lapply(results, .jr_text_reference_keys, include_effect_note = include_effect_note)))
+    keys <- unique(keys[!is.na(keys) & nzchar(keys)])
+    software <- keys[vapply(keys, .jr_reference_is_software, logical(1))]
+    literature <- setdiff(keys, software)
+    body <- paste0(
+        .jr_report_section_card(
+            "R packages and software",
+            "These are tools used to compute, format, or display the results.",
+            accent = "#2f6fa3", background = "#f5f9fd",
+            content_html = .jr_methods_reference_items_html(software)
+        ),
+        .jr_report_section_card(
+            "Literature and reporting guidance",
+            "These are books or articles used for statistical interpretation and reporting guidance.",
+            accent = "#6d5a8a", background = "#faf8fc",
+            content_html = .jr_methods_reference_items_html(literature)
+        ),
+        .jr_report_section_card(
+            "How to use these references",
+            "",
+            paste(
+                "The tables above do not repeat numeric citation markers so the output stays readable.",
+                "Use this panel to see why each source appears in the analysis. Full bibliographic details are available in jamovi's References output."
+            ),
+            accent = "#278058", background = "#f6fbf8"
+        )
+    )
+    paste0("<div style='width:100%;box-sizing:border-box;display:block;'>", body, "</div>")
+}
+
 .jr_jamovi_overview_html <- function(result) {
     html <- .jr_html_card(
         "jReport", "Guided report controls are available here",

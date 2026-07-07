@@ -62,3 +62,7 @@ items:
   title: Reporting Best Practices
   type: Html
   visible: (showBestPractices)
+- name: methodsReferences
+  title: Methods and References
+  type: Html
+

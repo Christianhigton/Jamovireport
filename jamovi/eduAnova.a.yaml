@@ -2,6 +2,8 @@
 name: eduAnova
 title: Guided One-Way ANOVA
 menuGroup: jReport
+menuSubgroup: Group Comparisons
+menuTitle: One-Way ANOVA
 version: '1.0.0'
 jas: '1.2'
 description:

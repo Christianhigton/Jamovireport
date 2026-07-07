@@ -1,4 +1,4 @@
-﻿name: eduMixedAnova
+name: eduMixedAnova
 title: Guided Mixed ANOVA
 jrs: '1.1'
 refs:
@@ -12,13 +12,6 @@ items:
 - name: overview
   title: 'jReport: Overview and Why This Test?'
   type: Html
-  refs:
-  - jReport
-  - afex
-  - effectsize
-  - ggplot2
-  - Cohen1988
-  - Cumming2014
 - name: main
   title: Main Results and Effect Sizes
   type: Table
@@ -53,13 +46,6 @@ items:
   - name: ci_high
     title: CI Upper
     type: number
-  refs:
-  - jReport
-  - afex
-  - effectsize
-  - ggplot2
-  - Cohen1988
-  - Cumming2014
 - name: descriptives
   title: Group by Occasion Descriptives
   type: Table
@@ -81,13 +67,6 @@ items:
   - name: sd
     title: SD
     type: number
-  refs:
-  - jReport
-  - afex
-  - effectsize
-  - ggplot2
-  - Cohen1988
-  - Cumming2014
 - name: diagnostics
   title: Assumption Checks and Guidance
   type: Table
@@ -119,33 +98,12 @@ items:
   - name: action
     title: Recommended Action
     type: text
-  refs:
-  - jReport
-  - afex
-  - effectsize
-  - ggplot2
-  - Cohen1988
-  - Cumming2014
 - name: report
   title: Reporting
   type: Html
-  refs:
-  - jReport
-  - afex
-  - effectsize
-  - ggplot2
-  - Cohen1988
-  - Cumming2014
 - name: interpretation
   title: Plain-Language Interpretation
   type: Html
-  refs:
-  - jReport
-  - afex
-  - effectsize
-  - ggplot2
-  - Cohen1988
-  - Cumming2014
 - name: plot
   title: Visualisation
   type: Image
@@ -158,10 +116,7 @@ items:
   width: 520
   height: 360
   renderFun: .plot
-  refs:
-  - jReport
-  - afex
-  - effectsize
-  - ggplot2
-  - Cohen1988
-  - Cumming2014
+- name: methodsReferences
+  title: Methods and References
+  type: Html
+

@@ -344,7 +344,8 @@ eduDemographicsResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
         demographics = function() private$.items[["demographics"]],
         omitNote = function() private$.items[["omitNote"]],
         paragraph = function() private$.items[["paragraph"]],
-        bestPractices = function() private$.items[["bestPractices"]]),
+        bestPractices = function() private$.items[["bestPractices"]],
+        methodsReferences = function() private$.items[["methodsReferences"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -417,7 +418,11 @@ eduDemographicsResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
                 options=options,
                 name="bestPractices",
                 title="Reporting Best Practices",
-                visible="(showBestPractices)"))}))
+                visible="(showBestPractices)"))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="methodsReferences",
+                title="Methods and References"))}))
 
 eduDemographicsBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "eduDemographicsBase",
@@ -496,6 +501,7 @@ eduDemographicsBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
 #'   \code{results$omitNote} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$paragraph} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$bestPractices} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$methodsReferences} \tab \tab \tab \tab \tab a html \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:

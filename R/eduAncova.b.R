@@ -21,7 +21,8 @@ eduAncovaClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class(
             }
             .jr_populate_diagnostics(self$results$diagnostics, result$diagnostics, fixed = TRUE)
             self$results$report$setContent(.jr_guided_report_sections_html(result, self$options))
-            self$results$interpretation$setContent("")
+            self$results$interpretation$setContent(.jr_jamovi_interpretation_html(result))
+            self$results$methodsReferences$setContent(.jr_methods_references_html(result))
             self$results$plot$setState(result)
         },
         .plot = function(image, ggtheme, theme, ...) {
@@ -31,3 +32,4 @@ eduAncovaClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class(
         }
     )
 )
+

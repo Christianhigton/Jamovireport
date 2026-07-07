@@ -2,6 +2,8 @@
 name: eduBetweenAnova
 title: Guided Between-Subjects ANOVA
 menuGroup: jReport
+menuSubgroup: Group Comparisons
+menuTitle: Between-Subjects ANOVA
 version: '1.0.0'
 jas: '1.2'
 description:

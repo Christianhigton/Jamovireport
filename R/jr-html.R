@@ -47,7 +47,7 @@
 
 .jr_report_card <- function(eyebrow, title, subtitle = "", content = "",
                             accent = "#237f86", background = "#fbfcfd",
-                            content_html = NULL) {
+                            content_html = NULL, collapsed = FALSE) {
     subtitle_html <- ""
     if (nzchar(subtitle)) {
         subtitle_html <- sprintf(
@@ -56,6 +56,22 @@
         )
     }
     body <- if (is.null(content_html)) .jr_html_paragraphs(content) else content_html
+    if (isTRUE(collapsed)) {
+        return(sprintf(
+            paste0(
+                "<details style='width:100%%;box-sizing:border-box;border:1px solid #dfe6ea; border-left:5px solid %s;",
+                "border-radius:6px; padding:0; margin:4px 0 12px 0; background:%s;'>",
+                "<summary style='cursor:pointer; list-style-position:inside; padding:14px 16px;",
+                "font-size:17px; font-weight:700; color:#18242d;'>%s</summary>",
+                "<div style='padding:0 16px 14px 16px;'>",
+                "<div style='font-size:11px; font-weight:700; letter-spacing:0; color:#536472;",
+                "text-transform:uppercase; margin-bottom:6px;'>%s</div>",
+                "%s%s</div></details>"
+            ),
+            accent, background, .jr_html_escape(title), .jr_html_escape(eyebrow),
+            subtitle_html, body
+        ))
+    }
     sprintf(
         paste0(
             "<div style='width:100%%;box-sizing:border-box;border:1px solid #dfe6ea; border-left:5px solid %s;",
@@ -111,14 +127,16 @@
         cards <- paste0(cards, .jr_report_card(
             "Optional assumptions / diagnostic note", "Assumptions and diagnostics",
             "Include this only if relevant to your study.",
-            diagnostic_text, accent = "#2f6fa3", background = "#f5f9fd"
+            diagnostic_text, accent = "#2f6fa3", background = "#f5f9fd",
+            collapsed = TRUE
         ))
     }
     if (!is.null(guidance_text) && nzchar(guidance_text)) {
         cards <- paste0(cards, .jr_report_card(
-            "Interpretation guidance", "How to read this result",
-            "For understanding only - do not copy directly.",
-            guidance_text, accent = "#b46c21", background = "#fff9ef"
+        "Interpretation guidance", "How to read this result",
+        "For understanding only - do not copy directly.",
+        guidance_text, accent = "#b46c21", background = "#fff9ef",
+        collapsed = TRUE
         ))
     }
     checklist_html <- .jr_html_bullets(checklist_items %||% character())
@@ -134,7 +152,7 @@
         cards <- paste0(cards, .jr_report_card(
             "Check before reporting", "Verification checklist",
             "", accent = "#6d5a8a", background = "#faf8fc",
-            content_html = checklist_html
+            content_html = checklist_html, collapsed = TRUE
         ))
     }
     paste0("<div style='width:100%;box-sizing:border-box;display:block;'>", cards, "</div>")
@@ -142,7 +160,7 @@
 
 .jr_report_section_card <- function(title, subtitle = "", content = "",
                                     accent = "#237f86", background = "#fbfcfd",
-                                    content_html = NULL) {
+                                    content_html = NULL, collapsed = FALSE) {
     subtitle_html <- ""
     if (nzchar(subtitle)) {
         subtitle_html <- sprintf(
@@ -151,6 +169,18 @@
         )
     }
     body <- if (is.null(content_html)) .jr_html_paragraphs(content) else content_html
+    if (isTRUE(collapsed)) {
+        return(sprintf(
+            paste0(
+                "<details style='width:100%%;box-sizing:border-box;border:1px solid #dfe6ea; border-left:5px solid %s;",
+                "border-radius:6px; padding:0; margin:4px 0 12px 0; background:%s;'>",
+                "<summary style='cursor:pointer; list-style-position:inside; padding:14px 16px;",
+                "font-size:17px; font-weight:700; color:#18242d;'>%s</summary>",
+                "<div style='padding:0 16px 14px 16px;'>%s%s</div></details>"
+            ),
+            accent, background, .jr_html_escape(title), subtitle_html, body
+        ))
+    }
     sprintf(
         paste0(
             "<div style='width:100%%;box-sizing:border-box;border:1px solid #dfe6ea; border-left:5px solid %s;",
@@ -162,17 +192,40 @@
     )
 }
 
+.jr_report_wording_title <- function(style = "apa7") {
+    style <- as.character(style %||% "apa7")[1]
+    switch(
+        style,
+        plain = "Suggested plain-language report wording",
+        journal = "Suggested journal-style report wording",
+        dissertation = "Suggested dissertation-style report wording",
+        "Suggested APA-style report wording"
+    )
+}
+
+.jr_report_wording_subtitle <- function(style = "apa7") {
+    style <- as.character(style %||% "apa7")[1]
+    switch(
+        style,
+        plain = "This is suggested explanatory wording only. Check all values against your jamovi output and adapt the text for your own study before using it.",
+        journal = "This is suggested journal-style wording only. Check all values against your jamovi output and adapt the text for the target journal before using it.",
+        dissertation = "This is suggested dissertation-style wording only. Check all values against your jamovi output and adapt the text for your research question before using it.",
+        "This is suggested wording only. Check all values against your jamovi output and adapt the text for your own study before using it."
+    )
+}
+
 .jr_build_report_sections_html <- function(apa_wording = NULL,
                                            diagnostic_note = NULL,
                                            interpretation_guidance = NULL,
                                            checklist_items = NULL,
                                            checklist_note = "",
-                                           references = NULL) {
+                                           references = NULL,
+                                           report_style = "apa7") {
     sections <- character()
     if (!is.null(apa_wording) && nzchar(apa_wording)) {
         sections <- c(sections, .jr_report_section_card(
-            "Suggested APA-style report wording",
-            "This is suggested wording only. Check all values against your jamovi output and adapt the text for your own study before using it.",
+            .jr_report_wording_title(report_style),
+            .jr_report_wording_subtitle(report_style),
             apa_wording, accent = "#278058", background = "#f6fbf8"
         ))
     }
@@ -180,14 +233,16 @@
         sections <- c(sections, .jr_report_section_card(
             "Optional assumptions / diagnostic note",
             "Include this only if relevant to your study.",
-            diagnostic_note, accent = "#2f6fa3", background = "#f5f9fd"
+            diagnostic_note, accent = "#2f6fa3", background = "#f5f9fd",
+            collapsed = TRUE
         ))
     }
     if (!is.null(interpretation_guidance) && nzchar(interpretation_guidance)) {
         sections <- c(sections, .jr_report_section_card(
             "Interpretation guidance",
             "For understanding only - do not copy directly into your report.",
-            interpretation_guidance, accent = "#b46c21", background = "#fff9ef"
+            interpretation_guidance, accent = "#b46c21", background = "#fff9ef",
+            collapsed = TRUE
         ))
     }
     checklist_html <- .jr_html_bullets(checklist_items %||% character())
@@ -197,7 +252,7 @@
         sections <- c(sections, .jr_report_section_card(
             "Check before reporting",
             "", accent = "#6d5a8a", background = "#faf8fc",
-            content_html = checklist_html
+            content_html = checklist_html, collapsed = TRUE
         ))
     }
     paste0("<div style='width:100%;box-sizing:border-box;display:block;'>", paste(sections, collapse = ""), "</div>")
@@ -288,9 +343,18 @@
     if (!length(keys))
         return("<p style='margin:0;color:#536472;'>No additional references are used by this panel.</p>")
     rows <- vapply(keys, function(key) {
+        reference <- .jr_reference_entry_text(key)
+        if (!nzchar(reference))
+            reference <- .jr_reference_display_name(key)
         sprintf(
-            "<li style='margin:0 0 8px 0; padding-left:2px;'><strong>%s.</strong> %s</li>",
+            paste0(
+                "<li style='margin:0 0 10px 0; padding-left:2px;'>",
+                "<div><strong>%s.</strong> %s</div>",
+                "<div style='color:#536472; margin-top:3px;'>Used for: %s</div>",
+                "</li>"
+            ),
             .jr_html_escape(.jr_reference_display_name(key)),
+            .jr_html_escape(reference),
             .jr_html_escape(.jr_reference_role_text(key))
         )
     }, character(1))
@@ -298,6 +362,8 @@
 }
 
 .jr_methods_references_html <- function(results = NULL, keys = NULL, include_effect_note = TRUE) {
+    if (!is.null(results) && inherits(results, "edu_analysis"))
+        results <- list(results)
     if (is.null(keys))
         keys <- unique(unlist(lapply(results, .jr_text_reference_keys, include_effect_note = include_effect_note)))
     keys <- unique(keys[!is.na(keys) & nzchar(keys)])
@@ -308,13 +374,15 @@
             "R packages and software",
             "These are tools used to compute, format, or display the results.",
             accent = "#2f6fa3", background = "#f5f9fd",
-            content_html = .jr_methods_reference_items_html(software)
+            content_html = .jr_methods_reference_items_html(software),
+            collapsed = TRUE
         ),
         .jr_report_section_card(
             "Literature and reporting guidance",
             "These are books or articles used for statistical interpretation and reporting guidance.",
             accent = "#6d5a8a", background = "#faf8fc",
-            content_html = .jr_methods_reference_items_html(literature)
+            content_html = .jr_methods_reference_items_html(literature),
+            collapsed = TRUE
         ),
         .jr_report_section_card(
             "How to use these references",
@@ -323,7 +391,8 @@
                 "The tables above do not repeat numeric citation markers so the output stays readable.",
                 "Use this panel to see why each source appears in the analysis. Full bibliographic details are available in jamovi's References output."
             ),
-            accent = "#278058", background = "#f6fbf8"
+            accent = "#278058", background = "#f6fbf8",
+            collapsed = TRUE
         )
     )
     paste0("<div style='width:100%;box-sizing:border-box;display:block;'>", body, "</div>")

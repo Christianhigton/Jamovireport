@@ -35,10 +35,7 @@ jrReportLogRegMultiResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6:
             super$initialize(
                 options=options,
                 name="",
-                title="Automatic Report for Multinomial Logistic Regression",
-                refs=list(
-                    "Cohen1988",
-                    "Cumming2014"))
+                title="Automatic Report for Multinomial Logistic Regression")
             self$add(jmvcore::Html$new(
                 options=options,
                 name="jReportHeading",

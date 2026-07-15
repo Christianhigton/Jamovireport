@@ -1,13 +1,12 @@
-name: eduBetweenAnova
-title: Guided Between-Subjects ANOVA
+---
+name: eduTTestPaired
+title: Guided Paired Samples t-test
 jrs: '1.1'
 refs:
 - jReport
-- afex
-- car
 - effectsize
-- emmeans
 - ggplot2
+- BayesFactor
 - Cohen1988
 - Cumming2014
 items:
@@ -15,31 +14,29 @@ items:
   title: 'jReport: Overview and Why This Test?'
   type: Html
 - name: main
-  title: Main Results and Effect Sizes
+  title: Main Results and Effect Size
   type: Table
+  rows: 1
   clearWith:
   - outcome
-  - factors
+  - pairedOutcome
   - ciWidth
   columns:
-  - name: term
-    title: Effect
+  - name: test
+    title: Test
     type: text
   - name: statistic
-    title: F
+    title: Statistic
     type: number
-  - name: df1
-    title: df1
-    type: number
-  - name: df2
-    title: df2
+  - name: df
+    title: df
     type: number
   - name: p
     title: p
     type: number
     format: zto,pvalue
   - name: effect
-    title: Partial Eta-squared
+    title: Cohen's d
     type: number
   - name: ci_low
     title: CI Lower
@@ -48,15 +45,15 @@ items:
     title: CI Upper
     type: number
 - name: descriptives
-  title: Cell Descriptives
+  title: Descriptive Statistics
   type: Table
   clearWith:
   - outcome
-  - factors
+  - pairedOutcome
   - ciWidth
   columns:
   - name: label
-    title: Cell
+    title: Occasion
     type: text
   - name: n
     title: N
@@ -72,7 +69,7 @@ items:
   type: Table
   clearWith:
   - outcome
-  - factors
+  - pairedOutcome
   - ciWidth
   columns:
   - name: check
@@ -100,13 +97,6 @@ items:
 - name: report
   title: Reporting
   type: Html
-  refs:
-  - jReport
-  - afex
-  - car
-  - effectsize
-  - emmeans
-  - ggplot2
 - name: interpretation
   title: Plain-Language Interpretation
   type: Html
@@ -116,7 +106,7 @@ items:
   visible: (showPlot)
   clearWith:
   - outcome
-  - factors
+  - pairedOutcome
   - ciWidth
   width: 520
   height: 360
@@ -124,12 +114,4 @@ items:
 - name: methodsReferences
   title: Methods and References
   type: Html
-  refs:
-  - jReport
-  - afex
-  - car
-  - effectsize
-  - emmeans
-  - ggplot2
-  - Cohen1988
-  - Cumming2014
+...

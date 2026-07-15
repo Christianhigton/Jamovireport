@@ -5,18 +5,17 @@ jus: '2.0'
 stage: 0
 compilerMode: tame
 children:
-  - type: VariablesListBox
-    name: x
-    label: First Variable
-    maxItemCount: 1
-    isTarget: true
+  - type: VariableSupplier
+    stretchFactor: 1
     suggested: [continuous, ordinal]
-  - type: VariablesListBox
-    name: y
-    label: Second Variable
-    maxItemCount: 1
-    isTarget: true
-    suggested: [continuous, ordinal]
+    persistentItems: false
+    children:
+      - type: TargetLayoutBox
+        label: First Variable
+        children: [{ type: VariablesListBox, name: x, maxItemCount: 1, isTarget: true }]
+      - type: TargetLayoutBox
+        label: Second Variable
+        children: [{ type: VariablesListBox, name: y, maxItemCount: 1, isTarget: true }]
   - type: CollapseBox
     label: Analysis
     collapsed: false

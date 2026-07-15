@@ -32,9 +32,11 @@
         isTRUE(tryCatch(options$reportCautions, error = function(e) FALSE))
     posthoc_text <- .jr_addon_posthoc_text(results)
     sections <- vapply(results, function(result) {
+        report_style <- "apa7"
         apa_text <- if (is.null(options)) {
             result$report_blocks$apa %||% edu_report(result, style = "apa7", format = "paragraph")
         } else {
+            report_style <- .jr_jamovi_report_args(options)$style
             .jr_jamovi_text(result, options)
         }
         diagnostic_text <- result$report_blocks$assumptions %||% ""
@@ -53,14 +55,16 @@
             diagnostic_note = diagnostic_text,
             interpretation_guidance = guidance_text,
             checklist_items = checklist,
-            checklist_note = if (nzchar(note) && include_note) note else ""
+            checklist_note = if (nzchar(note) && include_note) note else "",
+            report_style = report_style
         )
     }, character(1))
     if (nzchar(posthoc_text)) {
         sections <- c(sections, .jr_report_section_card(
             "Post hoc interpretation",
             "Follow-up comparisons",
-            posthoc_text, accent = "#4b66a2", background = "#f5f9fd"
+            posthoc_text, accent = "#4b66a2", background = "#f5f9fd",
+            collapsed = TRUE
         ))
     }
     paste0("<div style='width:100%;box-sizing:border-box;display:block;'>", paste(sections, collapse = ""), "</div>")
@@ -113,14 +117,16 @@
         .jr_report_section_card(
             "Interpretation guidance",
             result$label %||% "jReport",
-            guidance, accent = "#b46c21", background = "#fff9ef"
+            guidance, accent = "#b46c21", background = "#fff9ef",
+            collapsed = TRUE
         )
     }, character(1))
     if (nzchar(note)) {
         cards <- c(cards, .jr_report_section_card(
             "Check before using",
             "",
-            note, accent = "#6d5a8a", background = "#faf8fc"
+            note, accent = "#6d5a8a", background = "#faf8fc",
+            collapsed = TRUE
         ))
     }
     paste0("<div style='width:100%;box-sizing:border-box;display:block;'>", paste(cards, collapse = ""), "</div>")

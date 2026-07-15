@@ -116,11 +116,13 @@
 
 
 .jr_guided_report_sections_html <- function(result, options) {
+    args <- .jr_jamovi_report_args(options)
     .jr_build_report_sections_html(
-        apa_wording             = .jr_jamovi_text(result, options),
+        apa_wording             = do.call(edu_report, c(list(x = result), args)),
         diagnostic_note         = result$caution %||% "",
         interpretation_guidance = result$interpretation %||% "",
-        checklist_items         = .jr_analysis_checklist(result$analysis %||% "")
+        checklist_items         = .jr_analysis_checklist(result$analysis %||% ""),
+        report_style            = args$style
     )
 }
 
@@ -365,21 +367,25 @@
 .jr_anova_between_report_sections_html <- function(result, options = NULL, note = "",
                                                    posthoc_text = "",
                                                    include_references = TRUE) {
-    include <- if (is.null(options)) {
-        .jr_addon_reporting_options()
+    args <- if (is.null(options)) {
+        .jr_jamovi_report_args(.jr_addon_reporting_options())
     } else {
-        .jr_jamovi_report_args(options)$include
+        .jr_jamovi_report_args(options)
     }
-    if (is.list(include))
-        include <- .jr_jamovi_report_args(include)$include
+    include <- args$include
     apa <- .jr_anova_between_apa_text(result, include, posthoc_text)
+    if (!identical(args$style, "apa7") || !identical(args$format, "paragraph") ||
+            !identical(args$tone, "student_friendly")) {
+        apa <- do.call(edu_report, c(list(x = result), args))
+    }
     .jr_build_report_sections_html(
         apa_wording = apa,
         diagnostic_note = .jr_anova_between_diagnostic_text(result, include),
         interpretation_guidance = .jr_anova_between_guidance_text(result, include, posthoc_text),
         checklist_items = .jr_anova_between_checklist_items(),
         checklist_note = note,
-        references = .jr_reference_entries(list(result), include_effect_note = "effect_size" %in% include)
+        references = .jr_reference_entries(list(result), include_effect_note = "effect_size" %in% include),
+        report_style = args$style
     )
 }
 

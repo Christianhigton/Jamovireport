@@ -38,6 +38,7 @@
         correlation = c("effectsize", "ggplot2"),
         regression = c("parameters", "performance", "effectsize", "ggplot2"),
         logistic_regression = c("parameters", "performance", "effectsize", "ggplot2"),
+        multinomial_logistic = c("parameters", "performance", "effectsize"),
         chisq_independence = c("effectsize", "ggplot2"),
         chisq_gof = c("effectsize", "ggplot2"),
         reliability_omega = c("psych", "McDonald1999", "RevelleCondon2019", "ggplot2"),

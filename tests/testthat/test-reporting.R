@@ -22,6 +22,38 @@ test_that("plain-language format exposes interpretation and cautions", {
     expect_match(text, "Diagnostics")
 })
 
+test_that("report style, format, and tone options produce distinct wording", {
+    result <- edu_t_test(ToothGrowth, "len", "supp")
+
+    apa <- edu_report(result, style = "apa7", format = "paragraph", tone = "student_friendly")
+    plain <- edu_report(result, style = "plain", format = "paragraph", tone = "student_friendly")
+    journal <- edu_report(result, style = "journal", format = "paragraph", tone = "student_friendly")
+    dissertation <- edu_report(result, style = "dissertation", format = "paragraph", tone = "student_friendly")
+
+    expect_false(identical(apa, plain))
+    expect_false(identical(apa, journal))
+    expect_false(identical(apa, dissertation))
+    expect_match(journal, "Journal style note", fixed = TRUE)
+    expect_match(dissertation, "Dissertation style note", fixed = TRUE)
+
+    copy_ready <- edu_report(result, style = "apa7", format = "copy_ready")
+    table_paragraph <- edu_report(result, style = "apa7", format = "table_paragraph")
+
+    expect_false(identical(apa, copy_ready))
+    expect_false(identical(apa, table_paragraph))
+    expect_match(table_paragraph, "Use the accompanying results table", fixed = TRUE)
+    expect_false(grepl("Interpretation note", copy_ready, fixed = TRUE))
+
+    tone_text <- vapply(
+        c("student_friendly", "concise", "detailed", "critical"),
+        function(tone) edu_report(result, style = "apa7", format = "paragraph", tone = tone),
+        character(1)
+    )
+    expect_equal(length(unique(tone_text)), 4L)
+    expect_match(tone_text[["detailed"]], "Reporting detail", fixed = TRUE)
+    expect_match(tone_text[["critical"]], "Critical reporting note", fixed = TRUE)
+})
+
 test_that("ANOVA post-hoc reporting can be excluded", {
     d <- ToothGrowth
     d$dose <- factor(d$dose)
@@ -192,7 +224,7 @@ test_that("add-on report options update the guided report card content", {
     report_with_effect <- .jr_addon_report_html(list(result), options = options_with_effect)
 
     expect_match(report_no_effect, "What this analysis asks")
-    expect_match(report_no_effect, "Suggested APA-style report wording")
+    expect_match(report_no_effect, "Suggested plain-language report wording")
     expect_match(report_with_effect, "Cohen")
 })
 
@@ -290,7 +322,7 @@ test_that("between-subjects ANOVA report uses separated guidance sections", {
     expect_false(grepl("For understanding only", wording_card, fixed = TRUE))
 })
 
-test_that("between-subjects ANOVA references appear in report and jamovi result refs", {
+test_that("between-subjects ANOVA references use guided refs and add-on callout", {
     skip_if_not_installed("yaml")
 
     root <- getwd()
@@ -313,33 +345,34 @@ test_that("between-subjects ANOVA references appear in report and jamovi result 
     expect_true(all(report_item$refs %in% ref_keys))
 
     addon_yaml <- yaml::read_yaml(file.path(module_dir, "jrReportAnova.r.yaml"))
-    addon_refs <- c("jReport", "jmvcore", "afex", "effectsize", "emmeans")
     for (name in c("jReportApaTable", "jReportAssumptions", "jReportPostHoc")) {
         item <- Filter(function(item) identical(item$name, name), addon_yaml$items)[[1]]
-        expect_true(all(addon_refs %in% item$refs))
-        expect_true(all(item$refs %in% ref_keys))
+        expect_null(item$refs)
     }
     html_items <- Filter(function(item) identical(item$type, "Html"), addon_yaml$items)
     html_names <- sapply(html_items, `[[`, "name")
     expect_true("jReportHeading" %in% html_names)
     expect_true("jReportCard" %in% html_names)
+    expect_true("methodsReferences" %in% html_names)
 
-    # Items are declared in h.R files (jReport namespace, for refs collection)
+    # Add-ons avoid numeric native-reference chips on each result item and use
+    # the formatted Methods and References callout instead.
     hr_text <- paste(readLines(file.path(root, "R", "jrReportAnova.h.R"), warn = FALSE), collapse = "\n")
     expect_true(grepl('"jReportApaTable"', hr_text, fixed = TRUE))
     expect_true(grepl('"jReportAssumptions"', hr_text, fixed = TRUE))
     expect_true(grepl('"jReportHeading"', hr_text, fixed = TRUE))
     expect_true(grepl('"jReportCard"', hr_text, fixed = TRUE))
-    expect_true(grepl('refs=list(', hr_text, fixed = TRUE))
+    expect_false(grepl('refs=list(', hr_text, fixed = TRUE))
 
-    # Refactored helper files add display items to self$parent$results and inject refs into parent namespace
+    # Refactored helper files add display items and populate the callout from
+    # the backend reference keys.
     helper_files <- file.path(root, "R", c("jamovi-helpers.R", "jr-addon.R", "jr-refs.R"))
     helper_text <- paste(
         vapply(helper_files, function(path) paste(readLines(path, warn = FALSE), collapse = "\n"), character(1)),
         collapse = "\n"
     )
     expect_true(grepl('self$parent$results', helper_text, fixed = TRUE))
-    expect_true(grepl('.jr_addon_inject_refs', helper_text, fixed = TRUE))
+    expect_true(grepl('.jr_methods_references_html(keys = ref_keys)', helper_text, fixed = TRUE))
     expect_true(grepl('"jReportApaTable"', helper_text, fixed = TRUE))
     expect_true(grepl('"jReportAssumptions"', helper_text, fixed = TRUE))
 

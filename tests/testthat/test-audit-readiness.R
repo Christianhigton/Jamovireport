@@ -111,6 +111,58 @@ test_that("guided UI reporting sections are collapsed and labels are polished", 
     expect_false(any(grepl("title: [a-z]", analysis_text)))
 })
 
+test_that("guided UI variable assignment boxes preserve target mappings", {
+    skip_if_not_installed("yaml")
+
+    collect_nodes <- function(node) {
+        if (!is.list(node))
+            return(list())
+        nodes <- list(node)
+        for (child_name in c("children", "controls")) {
+            children <- node[[child_name]]
+            if (is.list(children)) {
+                for (child in children)
+                    nodes <- c(nodes, collect_nodes(child))
+            }
+        }
+        nodes
+    }
+
+    root <- audit_root()
+    ui_files <- list.files(file.path(root, "jamovi"), pattern = "^edu.*\\.u\\.yaml$", full.names = TRUE)
+    for (ui_file in ui_files) {
+        analysis_file <- sub("\\.u\\.yaml$", ".a.yaml", ui_file)
+        if (!file.exists(analysis_file))
+            next
+
+        ui <- yaml::read_yaml(ui_file)
+        analysis <- yaml::read_yaml(analysis_file)
+        nodes <- collect_nodes(ui)
+        node_types <- vapply(nodes, function(node) node[["type"]] %||% "", character(1))
+        target_names <- vapply(nodes[node_types == "VariablesListBox"], function(node) {
+            if (!isTRUE(node[["isTarget"]]))
+                ""
+            else if (is.null(node[["name"]]))
+                ""
+            else
+                as.character(node[["name"]])
+        }, character(1))
+        target_names <- target_names[nzchar(target_names)]
+        variable_options <- vapply(analysis[["options"]], function(option) {
+            type <- if (is.null(option[["type"]])) "" else as.character(option[["type"]])
+            name <- if (is.null(option[["name"]])) "" else as.character(option[["name"]])
+            if (type %in% c("Variable", "Variables"))
+                name
+            else
+                ""
+        }, character(1))
+        variable_options <- setdiff(variable_options[nzchar(variable_options)], "data")
+
+        expect_true("VariableSupplier" %in% node_types, info = basename(ui_file))
+        expect_true(all(variable_options %in% target_names), info = basename(ui_file))
+    }
+})
+
 test_that("guided computational result elements declare clearWith", {
     skip_if_not_installed("yaml")
 
@@ -189,6 +241,7 @@ test_that("plot state is set unconditionally (no if-showPlot guard)", {
 test_that("single-row primary result tables use setRow not addRow", {
   files <- c(
     "R/eduTTest.b.R", "R/eduAnova.b.R", "R/eduCorrelation.b.R",
+    "R/eduTTestIndependent.b.R", "R/eduTTestPaired.b.R",
     "R/eduReliabilityOmega.b.R", "R/eduChiSquareGoodness.b.R",
     "R/eduChiSquareIndependence.b.R", "R/eduLogistic.b.R", "R/eduRegression.b.R"
   )
@@ -205,6 +258,7 @@ test_that("single-row primary result tables use setRow not addRow", {
 test_that("single-row r.yaml tables declare rows: 1", {
   yamls <- c(
     "jamovi/eduTTest.r.yaml", "jamovi/eduAnova.r.yaml",
+    "jamovi/eduTTestIndependent.r.yaml", "jamovi/eduTTestPaired.r.yaml",
     "jamovi/eduCorrelation.r.yaml", "jamovi/eduReliabilityOmega.r.yaml",
     "jamovi/eduChiSquareGoodness.r.yaml", "jamovi/eduChiSquareIndependence.r.yaml",
     "jamovi/eduLogistic.r.yaml", "jamovi/eduRegression.r.yaml"
@@ -252,6 +306,14 @@ test_that("core helper functions are available after refactor", {
     expect_true(exists(fn, envir = asNamespace("jReport"), mode = "function"),
                 info = paste("Missing helper:", fn))
   }
+})
+
+test_that("guided methods reference panel renders formatted references", {
+  html <- .jr_methods_references_html(keys = c("jReport", "Cohen1988", "Cumming2014"))
+  expect_true(grepl("jReport: Automated Statistical Reporting for R and jamovi", html, fixed = TRUE))
+  expect_true(grepl("Statistical power analysis for the behavioral sciences", html, fixed = TRUE))
+  expect_true(grepl("The new statistics: Why and how", html, fixed = TRUE))
+  expect_false(grepl("No additional references", html, fixed = TRUE))
 })
 
 test_that("analysis .b.R files are represented in manifest", {

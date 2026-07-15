@@ -268,6 +268,57 @@ test_that("checklist items are individually wrapped in <li> tags", {
     expect_true(grepl("Item three", html, fixed = TRUE))
 })
 
+test_that("explanation callouts collapse to title-only disclosure summaries", {
+    html <- jReport:::.jr_build_report_sections_html(
+        apa_wording = "A test was run, F(1, 98) = 4.5, p = .036.",
+        diagnostic_note = "Assumptions should be checked.",
+        interpretation_guidance = "Interpret this in context.",
+        checklist_items = c("Check A", "Check B")
+    )
+
+    expect_true(grepl("<details", html, fixed = TRUE))
+    expect_true(grepl("<summary", html, fixed = TRUE))
+    expect_true(grepl(">Optional assumptions / diagnostic note</summary>", html, fixed = TRUE))
+    expect_true(grepl(">Interpretation guidance</summary>", html, fixed = TRUE))
+    expect_true(grepl(">Check before reporting</summary>", html, fixed = TRUE))
+    expect_false(grepl(">Suggested APA-style report wording</summary>", html, fixed = TRUE))
+})
+
+test_that("guided report heading follows selected report style", {
+    result <- edu_t_test(ToothGrowth, "len", "supp")
+    base_options <- list(
+        reportFormat         = "paragraph",
+        reportTone           = "student_friendly",
+        reportDescriptives   = TRUE,
+        reportAssumptions    = TRUE,
+        reportStatistic      = TRUE,
+        reportDf             = TRUE,
+        reportP              = TRUE,
+        reportEffect         = TRUE,
+        reportCI             = TRUE,
+        reportInterpretation = TRUE,
+        reportCautions       = TRUE
+    )
+
+    plain <- jReport:::.jr_guided_report_sections_html(
+        result,
+        c(base_options, list(reportStyle = "plain"))
+    )
+    journal <- jReport:::.jr_guided_report_sections_html(
+        result,
+        c(base_options, list(reportStyle = "journal"))
+    )
+    dissertation <- jReport:::.jr_guided_report_sections_html(
+        result,
+        c(base_options, list(reportStyle = "dissertation"))
+    )
+
+    expect_true(section_present(plain, "Suggested plain-language report wording"))
+    expect_true(section_present(journal, "Suggested journal-style report wording"))
+    expect_true(section_present(dissertation, "Suggested dissertation-style report wording"))
+    expect_false(section_present(plain, "Suggested APA-style report wording"))
+})
+
 test_that("html_card escapes special characters in eyebrow and title", {
     html <- jReport:::.jr_html_card(
         eyebrow = "Section & notes",

@@ -1,9 +1,6 @@
 name: jrReportPropTestN
 title: Automatic Report for Proportion Test (N Outcomes)
 jrs: '1.1'
-refs:
-- Cohen1988
-- Cumming2014
 items:
 - name: jReportHeading
   title: 'jReport: Automatic Reporting'

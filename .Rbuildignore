@@ -1,5 +1,6 @@
 ^notes$
 ^\.github$
+^\.claude$
 ^jReport\.Rproj$
 ^\.Rproj\.user$
 ^build$
@@ -12,3 +13,4 @@
 ^LICENSE\.md$
 ^jReport\.Rcheck$
 ^\.\.Rcheck$
+^advise on resporting \.md$

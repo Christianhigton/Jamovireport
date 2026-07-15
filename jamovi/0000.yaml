@@ -18,10 +18,31 @@ analyses:
     menuGroup: jReport
     menuSubgroup: Group Comparisons
     menuTitle: T-Test
+    hidden: true
     description: >
       Compare two means while explaining test selection, assumptions, effect
       size, and reporting in accessible language.
     category: analyses
+  - title: Guided Independent Samples t-test
+    name: eduTTestIndependent
+    ns: jReport
+    category: analyses
+    menuGroup: jReport
+    menuSubgroup: Group Comparisons
+    menuTitle: Independent Samples t-test
+    description: >
+      Compare two independent group means while explaining assumptions, effect
+      size, and reporting in accessible language.
+  - title: Guided Paired Samples t-test
+    name: eduTTestPaired
+    ns: jReport
+    category: analyses
+    menuGroup: jReport
+    menuSubgroup: Group Comparisons
+    menuTitle: Paired Samples t-test
+    description: >
+      Compare two paired measurements while explaining assumptions, effect size,
+      and reporting in accessible language.
   - title: Guided One-Way ANOVA
     name: eduAnova
     ns: jReport

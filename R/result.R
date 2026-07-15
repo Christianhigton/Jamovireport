@@ -20,6 +20,42 @@ edu_reporting_options <- function(
     )
 }
 
+.jr_report_tone_note <- function(tone) {
+    switch(
+        tone,
+        detailed = paste(
+            "Reporting detail: Include the named test, test statistic, degrees of freedom, exact p value,",
+            "effect size, and confidence interval when these are available and relevant."
+        ),
+        critical = paste(
+            "Critical reporting note: Interpret this result alongside the study design, sample size,",
+            "assumption checks, missing data, outliers, multiplicity, and the practical size of the effect."
+        ),
+        ""
+    )
+}
+
+.jr_report_style_note <- function(style) {
+    switch(
+        style,
+        journal = paste(
+            "Journal style note: Keep the report concise and place additional assumption checks,",
+            "sensitivity analyses, or exploratory details in the surrounding manuscript text when needed."
+        ),
+        dissertation = paste(
+            "Dissertation style note: Link this statistical result back to the research question,",
+            "hypothesis, assumptions, and any planned follow-up decisions."
+        ),
+        ""
+    )
+}
+
+.jr_nonempty_text <- function(...) {
+    text <- unlist(list(...), use.names = FALSE)
+    text <- text[!is.na(text)]
+    text[nzchar(text)]
+}
+
 .new_edu_analysis <- function(analysis, label, question, requirements, main,
                               descriptives, effects, diagnostics, interpretation,
                               caution, plot_data, report_blocks, statistics,
@@ -79,15 +115,40 @@ edu_report <- function(
         note <- .jr_effect_interpretation_note(x$analysis)
     }
 
-    if (options$style == "plain") {
+    if (options$format == "copy_ready") {
+        selected <- if (options$style == "plain") blocks$plain else blocks$apa
+    } else if (options$format == "short") {
+        if (options$style == "plain") {
+            selected <- c(sprintf("What this analysis asks: %s", x$question), blocks$plain)
+        } else {
+            selected <- blocks$apa
+        }
+    } else if (options$style == "plain") {
         opening <- sprintf("What this analysis asks: %s", x$question)
         selected <- c(opening, blocks$plain)
         if ("assumptions" %in% options$include)
             selected <- c(selected, blocks$assumptions)
         if ("cautions" %in% options$include && nzchar(x$caution))
             selected <- c(selected, x$caution)
-    } else if (options$format == "short") {
-        selected <- blocks$apa
+    } else if (options$style == "journal") {
+        selected <- c(
+            if ("descriptives" %in% options$include) blocks$descriptives else "",
+            blocks$apa
+        )
+        if (options$tone != "concise")
+            selected <- c(selected, .jr_report_style_note(options$style))
+    } else if (options$style == "dissertation") {
+        selected <- c(blocks$rationale)
+        if ("descriptives" %in% options$include)
+            selected <- c(selected, blocks$descriptives)
+        selected <- c(selected, blocks$apa)
+        if ("assumptions" %in% options$include)
+            selected <- c(selected, blocks$assumptions)
+        if ("interpretation" %in% options$include)
+            selected <- c(selected, blocks$plain)
+        if ("cautions" %in% options$include && nzchar(x$caution))
+            selected <- c(selected, x$caution)
+        selected <- c(selected, .jr_report_style_note(options$style))
     } else {
         selected <- c(blocks$rationale)
         if ("descriptives" %in% options$include)
@@ -101,12 +162,29 @@ edu_report <- function(
             selected <- c(selected, x$caution)
     }
 
-    selected <- selected[nzchar(selected)]
-    if (nzchar(note)) {
+    if (options$tone == "concise" && options$format %in% c("paragraph", "table_paragraph", "bullets")) {
+        selected <- if (options$style == "plain") {
+            c(sprintf("What this analysis asks: %s", x$question), blocks$plain)
+        } else {
+            blocks$apa
+        }
+    } else if (options$format %in% c("paragraph", "table_paragraph", "bullets")) {
+        selected <- c(selected, .jr_report_tone_note(options$tone))
+    }
+
+    if (options$format == "table_paragraph") {
+        selected <- c(
+            "Use the accompanying results table for the exact values, then report the result in text as follows:",
+            selected
+        )
+    }
+
+    selected <- .jr_nonempty_text(selected)
+    if (nzchar(note) && options$format != "copy_ready") {
         note <- paste0("*", note, "*")
         selected <- c(selected, note)
     }
-    if (!is.null(blocks$note) && nzchar(blocks$note))
+    if (options$format != "copy_ready" && !is.null(blocks$note) && nzchar(blocks$note))
         selected <- c(selected, paste0("*", blocks$note, "*"))
     if (options$format == "bullets")
         return(paste0("- ", selected, collapse = "\n"))

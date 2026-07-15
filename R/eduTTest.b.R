@@ -1,4 +1,23 @@
 #' @importFrom jmvcore .
+.jr_populate_guided_ttest <- function(self, result) {
+    result <- .jr_apply_variable_descriptions(result, self$data)
+    self$results$overview$setContent(.jr_jamovi_overview_html(result))
+    self$results$main$setRow(rowKey = "1", values = as.list(result$statistics[1, ]))
+
+    desc <- result$descriptives
+    label <- if ("group" %in% names(desc)) desc$group else desc$condition
+    for (i in seq_len(nrow(desc))) {
+        self$results$descriptives$addRow(rowKey = i, values = list(
+            label = label[i], n = desc$n[i], mean = desc$mean[i], sd = desc$sd[i]
+        ))
+    }
+    .jr_populate_diagnostics(self$results$diagnostics, result$diagnostics)
+    self$results$report$setContent(.jr_guided_report_sections_html(result, self$options))
+    self$results$interpretation$setContent(.jr_jamovi_interpretation_html(result))
+    self$results$methodsReferences$setContent(.jr_methods_references_html(result))
+    self$results$plot$setState(result)
+}
+
 eduTTestClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class(
     "eduTTestClass",
     inherit = eduTTestBase,
@@ -20,22 +39,7 @@ eduTTestClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class(
                 var_equal = self$options$varEqual,
                 ci = self$options$ciWidth / 100
             ))
-            result <- .jr_apply_variable_descriptions(result, self$data)
-            self$results$overview$setContent(.jr_jamovi_overview_html(result))
-            self$results$main$setRow(rowKey = "1", values = as.list(result$statistics[1, ]))
-
-            desc <- result$descriptives
-            label <- if ("group" %in% names(desc)) desc$group else desc$condition
-            for (i in seq_len(nrow(desc))) {
-                self$results$descriptives$addRow(rowKey = i, values = list(
-                    label = label[i], n = desc$n[i], mean = desc$mean[i], sd = desc$sd[i]
-                ))
-            }
-            .jr_populate_diagnostics(self$results$diagnostics, result$diagnostics)
-            self$results$report$setContent(.jr_guided_report_sections_html(result, self$options))
-            self$results$interpretation$setContent(.jr_jamovi_interpretation_html(result))
-            self$results$methodsReferences$setContent(.jr_methods_references_html(result))
-            self$results$plot$setState(result)
+            .jr_populate_guided_ttest(self, result)
         },
         .plot = function(image, ggtheme, theme, ...) {
             if (is.null(image$state))
@@ -44,4 +48,3 @@ eduTTestClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class(
         }
     )
 )
-

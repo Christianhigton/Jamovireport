@@ -1,28 +1,35 @@
 ---
-name: eduLogistic
-title: Guided Binomial Logistic Regression
+name: eduTTestPaired
+title: Guided Paired Samples t-test
 jus: '2.0'
 stage: 0
 compilerMode: tame
 children:
   - type: VariableSupplier
     stretchFactor: 1
+    suggested: [continuous]
     persistentItems: false
     children:
       - type: TargetLayoutBox
-        label: Binary Outcome
-        children: [{ type: VariablesListBox, name: outcome, maxItemCount: 1, isTarget: true }]
+        label: First Measurement
+        children:
+          - type: VariablesListBox
+            name: outcome
+            maxItemCount: 1
+            isTarget: true
       - type: TargetLayoutBox
-        label: Numeric Predictors
-        children: [{ type: VariablesListBox, name: covariates, isTarget: true }]
-      - type: TargetLayoutBox
-        label: Categorical Predictors
-        children: [{ type: VariablesListBox, name: factors, isTarget: true }]
+        label: Second Measurement
+        children:
+          - type: VariablesListBox
+            name: pairedOutcome
+            maxItemCount: 1
+            isTarget: true
   - type: CollapseBox
     label: Analysis
     collapsed: false
     children:
       - { type: TextBox, name: ciWidth, format: number }
+      - { type: CheckBox, name: showPlot }
   - type: CollapseBox
     label: Reporting
     collapsed: true

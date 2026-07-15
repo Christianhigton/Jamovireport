@@ -35,10 +35,7 @@ jrReportAncovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
             super$initialize(
                 options=options,
                 name="",
-                title="Automatic Report for ANCOVA",
-                refs=list(
-                    "Cohen1988",
-                    "Cumming2014"))
+                title="Automatic Report for ANCOVA")
             self$add(jmvcore::Html$new(
                 options=options,
                 name="jReportHeading",

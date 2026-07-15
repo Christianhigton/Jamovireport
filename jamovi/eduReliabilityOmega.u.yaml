@@ -5,17 +5,18 @@ jus: '2.0'
 stage: 0
 compilerMode: tame
 children:
-  - type: VariableSupplier
-    stretchFactor: 1
+  - type: VariablesListBox
+    name: items
+    label: Scale Items
+    isTarget: true
+    height: large
     suggested: [continuous, ordinal]
-    persistentItems: false
-    children:
-      - type: TargetLayoutBox
-        label: Scale Items
-        children: [{ type: VariablesListBox, name: items, isTarget: true }]
-      - type: TargetLayoutBox
-        label: Reverse-Keyed Items
-        children: [{ type: VariablesListBox, name: reverseItems, isTarget: true }]
+  - type: VariablesListBox
+    name: reverseItems
+    label: Reverse-Keyed Items
+    isTarget: true
+    height: normal
+    suggested: [continuous, ordinal]
   - type: CollapseBox
     label: Reliability Analysis
     collapsed: false

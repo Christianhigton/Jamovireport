@@ -3,16 +3,17 @@
 .jr_addon_report_html <- function(results, options = NULL, title = "Guided report", note = "") {
     failures <- Filter(function(x) inherits(x, "try-error"), results)
     results <- Filter(function(x) inherits(x, "edu_analysis"), results)
+    wrap <- function(html) paste0("<div style='width:100%;box-sizing:border-box;display:block;'>", html, "</div>")
     if (length(results) == 0L && length(failures) > 0L) {
         message <- sub("^Error[^:]*:\\s*", "", as.character(failures[[1]]))
-        return(.jr_html_card(
+        return(wrap(.jr_html_card(
             "Automatic report", "Report could not be generated",
             paste("jReport received the analysis variables but encountered a calculation problem:", message),
             accent = "#b46c21"
-        ))
+        )))
     }
     if (length(results) == 0L)
-        return(.jr_html_card("Report add-on", title, "Select valid analysis variables to generate report text."))
+        return(wrap(.jr_html_card("Report add-on", title, "Select valid analysis variables to generate report text.")))
     include_effect_note <- is.null(options) ||
         isTRUE(tryCatch(options$reportEffect, error = function(e) TRUE))
     if (length(results) == 1L && identical(results[[1]]$analysis, "regression")) {
@@ -62,7 +63,7 @@
             posthoc_text, accent = "#4b66a2", background = "#f5f9fd"
         ))
     }
-    paste(sections, collapse = "")
+    paste0("<div style='width:100%;box-sizing:border-box;display:block;'>", paste(sections, collapse = ""), "</div>")
 }
 
 .jr_addon_heading_html <- function() {
@@ -83,6 +84,46 @@
         reportDf = TRUE, reportP = TRUE, reportEffect = TRUE,
         reportCI = TRUE, reportInterpretation = TRUE, reportCautions = TRUE
     )
+}
+
+.jr_addon_interpretation_html <- function(results, note = "") {
+    results <- Filter(function(x) inherits(x, "edu_analysis"), results)
+    if (length(results) == 0L)
+        return(.jr_html_card(
+            "Interpretation guidance", "jReport",
+            "Select valid analysis variables to generate interpretation guidance.",
+            accent = "#b46c21"
+        ))
+    posthoc_text <- .jr_addon_posthoc_text(results)
+    cards <- vapply(results, function(result) {
+        guidance <- paste(
+            .jr_nonempty_unique(c(
+                result$report_blocks$rationale %||% "",
+                result$report_blocks$descriptives %||% "",
+                result$interpretation %||% "",
+                if (identical(result$analysis, "regression")) .jr_regression_guidance_text(result) else "",
+                if (identical(result$analysis, "anova_between"))
+                    .jr_anova_between_guidance_text(result, .jr_jamovi_report_args(.jr_addon_reporting_options())$include, posthoc_text)
+                else ""
+            )),
+            collapse = "\n\n"
+        )
+        if (!nzchar(guidance))
+            guidance <- "No separate interpretation guidance was generated for this result."
+        .jr_report_section_card(
+            "Interpretation guidance",
+            result$label %||% "jReport",
+            guidance, accent = "#b46c21", background = "#fff9ef"
+        )
+    }, character(1))
+    if (nzchar(note)) {
+        cards <- c(cards, .jr_report_section_card(
+            "Check before using",
+            "",
+            note, accent = "#6d5a8a", background = "#faf8fc"
+        ))
+    }
+    paste0("<div style='width:100%;box-sizing:border-box;display:block;'>", paste(cards, collapse = ""), "</div>")
 }
 
 .jr_parent_ci <- function(parent) {
@@ -376,7 +417,7 @@
                                     cells = FALSE, followups = FALSE, refs = character()) {
     .jr_addon_add_result_if_missing(self, "jReportApaTable", jmvcore::Table$new(
         options = self$options, name = "jReportApaTable",
-        title = "APA Results Summary (jReport)", refs = refs,
+        title = "APA Results Summary (jReport)",
         columns = list(
             list(name = "analysis", title = "Analysis", type = "text"),
             list(name = "test", title = "Test / Effect", type = "text"),
@@ -390,7 +431,7 @@
     ))
     .jr_addon_add_result_if_missing(self, "jReportAssumptions", jmvcore::Table$new(
         options = self$options, name = "jReportAssumptions",
-        title = "Assumptions and Recommended Actions (jReport)", refs = refs,
+        title = "Assumptions and Recommended Actions (jReport)",
         columns = list(
             list(name = "analysis", title = "Analysis", type = "text"),
             list(name = "assumption", title = "Assumption / Check", type = "text"),
@@ -405,7 +446,7 @@
     if (isTRUE(posthoc))
         .jr_addon_add_result_if_missing(self, "jReportPostHoc", jmvcore::Table$new(
             options = self$options, name = "jReportPostHoc",
-            title = "APA Post Hoc Comparisons (jReport)", visible = FALSE, refs = refs,
+            title = "APA Post Hoc Comparisons (jReport)", visible = FALSE,
             columns = list(
                 list(name = "analysis", title = "Analysis", type = "text"),
                 list(name = "term", title = "Factor / Term", type = "text"),
@@ -422,7 +463,7 @@
     if (isTRUE(coefficients))
         .jr_addon_add_result_if_missing(self, "jReportCoefficients", jmvcore::Table$new(
             options = self$options, name = "jReportCoefficients",
-            title = "Odds Ratios and Coefficients (jReport)", visible = FALSE, refs = refs,
+            title = "Odds Ratios and Coefficients (jReport)", visible = FALSE,
             columns = list(
                 list(name = "predictor", title = "Predictor", type = "text"),
                 list(name = "estimate", title = "B", type = "number"),
@@ -436,7 +477,7 @@
     if (isTRUE(cells))
         .jr_addon_add_result_if_missing(self, "jReportCells", jmvcore::Table$new(
             options = self$options, name = "jReportCells",
-            title = "Observed and Expected Counts (jReport)", visible = FALSE, refs = refs,
+            title = "Observed and Expected Counts (jReport)", visible = FALSE,
             columns = list(
                 list(name = "analysis", title = "Analysis", type = "text"),
                 list(name = "category", title = "Cell / Category", type = "text"),
@@ -448,7 +489,7 @@
     if (isTRUE(followups))
         .jr_addon_add_result_if_missing(self, "jReportFollowUps", jmvcore::Table$new(
             options = self$options, name = "jReportFollowUps",
-            title = "MANOVA/MANCOVA Follow-up Analyses (jReport)", visible = FALSE, refs = refs,
+            title = "MANOVA/MANCOVA Follow-up Analyses (jReport)", visible = FALSE,
             columns = list(
                 list(name = "analysis", title = "Analysis", type = "text"),
                 list(name = "term", title = "Effect", type = "text"),
@@ -478,8 +519,7 @@
     .jr_addon_add_result_if_missing(
         self, "jReportHeading",
         jmvcore::Html$new(options = self$options, name = "jReportHeading",
-            title = "jReport: Automatic Reporting", content = .jr_addon_heading_html(),
-            refs = refs)
+            title = "jReport: Automatic Reporting", content = .jr_addon_heading_html())
     )
     .jr_addon_insert_tables(
         self, posthoc = posthoc, coefficients = coefficients,
@@ -488,8 +528,19 @@
     .jr_addon_add_result_if_missing(
         self, "jReportCard",
         jmvcore::Html$new(options = self$options, name = "jReportCard",
-            title = "Automatic Report (jReport)", content = placeholder,
-            refs = refs)
+            title = "Automatic Report (jReport)", content = placeholder)
+    )
+    .jr_addon_add_result_if_missing(
+        self, "jReportInterpretation",
+        jmvcore::Html$new(options = self$options, name = "jReportInterpretation",
+            title = "Interpretation Guidance (jReport)",
+            content = .jr_addon_interpretation_html(list()))
+    )
+    .jr_addon_add_result_if_missing(
+        self, "methodsReferences",
+        jmvcore::Html$new(options = self$options, name = "methodsReferences",
+            title = "Methods and References",
+            content = .jr_methods_references_html(keys = refs))
     )
 }
 
@@ -510,10 +561,14 @@
     report_html <- .jr_addon_report_html(results, options = .jr_addon_reporting_options(), note = note)
     ref_keys <- unique(unlist(lapply(results, .jr_text_reference_keys, include_effect_note = TRUE)))
     card <- .jr_addon_get(self$parent$results, "jReportCard")
-    if (!is.null(card)) {
+    if (!is.null(card))
         card$setContent(report_html)
-        if (length(ref_keys) > 0L) card$setRefs(ref_keys)
-    }
+    interpretation <- .jr_addon_get(self$parent$results, "jReportInterpretation")
+    if (!is.null(interpretation))
+        interpretation$setContent(.jr_addon_interpretation_html(results, note = note))
+    methods <- .jr_addon_get(self$parent$results, "methodsReferences")
+    if (!is.null(methods))
+        methods$setContent(.jr_methods_references_html(keys = ref_keys))
 }
 
 .jr_addon_message <- function(self, message) {
@@ -521,4 +576,10 @@
     card <- .jr_addon_get(self$parent$results, "jReportCard")
     if (!is.null(card))
         card$setContent(.jr_html_card("Automatic report", "jReport", message, accent = "#b46c21"))
+    interpretation <- .jr_addon_get(self$parent$results, "jReportInterpretation")
+    if (!is.null(interpretation))
+        interpretation$setContent(.jr_html_card("Interpretation guidance", "jReport", message, accent = "#b46c21"))
+    methods <- .jr_addon_get(self$parent$results, "methodsReferences")
+    if (!is.null(methods))
+        methods$setContent(.jr_methods_references_html(keys = "jReport"))
 }

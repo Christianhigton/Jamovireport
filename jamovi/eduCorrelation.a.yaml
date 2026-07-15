@@ -2,6 +2,8 @@
 name: eduCorrelation
 title: Guided Correlation
 menuGroup: jReport
+menuSubgroup: Association
+menuTitle: Correlation
 version: '1.0.0'
 jas: '1.2'
 description:

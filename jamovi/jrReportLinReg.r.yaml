@@ -1,6 +1,9 @@
 name: jrReportLinReg
 title: Automatic Report for Linear Regression
 jrs: '1.1'
+refs:
+- Cohen1988
+- Cumming2014
 items:
 - name: jReportHeading
   title: 'jReport: Automatic Reporting'
@@ -8,13 +11,6 @@ items:
 - name: jReportApaTable
   title: APA Results Summary (jReport)
   type: Table
-  refs:
-  - RCore
-  - jReport
-  - jmvcore
-  - parameters
-  - performance
-  - effectsize
   columns:
   - name: analysis
     title: Analysis
@@ -44,13 +40,6 @@ items:
 - name: jReportAssumptions
   title: Assumptions and Recommended Actions (jReport)
   type: Table
-  refs:
-  - RCore
-  - jReport
-  - jmvcore
-  - parameters
-  - performance
-  - effectsize
   columns:
   - name: analysis
     title: Analysis
@@ -79,5 +68,13 @@ items:
     type: text
 - name: jReportCard
   title: Automatic Report (jReport)
+  type: Html
+
+- name: jReportInterpretation
+  title: Interpretation Guidance (jReport)
+  type: Html
+
+- name: methodsReferences
+  title: Methods and References
   type: Html
 

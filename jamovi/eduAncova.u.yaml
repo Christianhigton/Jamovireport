@@ -7,18 +7,32 @@ compilerMode: tame
 children:
   - type: VariableSupplier
     stretchFactor: 1
-    suggested: [continuous, nominal, ordinal]
     persistentItems: false
     children:
       - type: TargetLayoutBox
         label: Outcome
-        children: [{ type: VariablesListBox, name: outcome, maxItemCount: 1, isTarget: true }]
+        children:
+          - type: VariablesListBox
+            name: outcome
+            maxItemCount: 1
+            isTarget: true
+            suggested: [continuous]
       - type: TargetLayoutBox
         label: Fixed Factors
-        children: [{ type: VariablesListBox, name: factors, isTarget: true }]
+        children:
+          - type: VariablesListBox
+            name: factors
+            isTarget: true
+            height: large
+            suggested: [nominal, ordinal]
       - type: TargetLayoutBox
         label: Covariates
-        children: [{ type: VariablesListBox, name: covariates, isTarget: true }]
+        children:
+          - type: VariablesListBox
+            name: covariates
+            isTarget: true
+            height: large
+            suggested: [continuous]
   - type: CollapseBox
     label: Analysis
     collapsed: false

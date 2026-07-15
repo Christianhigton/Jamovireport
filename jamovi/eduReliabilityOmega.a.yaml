@@ -2,6 +2,8 @@
 name: eduReliabilityOmega
 title: "Guided Reliability: Omega and Alpha"
 menuGroup: jReport
+menuSubgroup: Psychometrics
+menuTitle: Reliability
 version: '1.0.0'
 jas: '1.2'
 description:

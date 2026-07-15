@@ -19,16 +19,33 @@
 }
 
 .jr_effect_sentences <- function(statistics, ci = .95) {
+    has_ges <- "ges" %in% names(statistics) && any(is.finite(statistics$ges))
     order <- order(grepl(":", statistics$term), decreasing = TRUE)
     paste(vapply(order, function(i) {
+        ges_i <- if (has_ges) statistics$ges[i] else NA_real_
+        effect_phrase <- if (is.finite(ges_i)) {
+            sprintf(
+                "ηG² = %s, ηp² = %s, %s%% CI %s",
+                .jr_num(ges_i, 2L, TRUE),
+                .jr_num(statistics$effect[i], 2L, TRUE),
+                .jr_num(ci * 100, 0L),
+                .jr_ci(statistics$ci_low[i], statistics$ci_high[i], 2L, TRUE)
+            )
+        } else {
+            sprintf(
+                "ηp² = %s, %s%% CI %s",
+                .jr_num(statistics$effect[i], 2L, TRUE),
+                .jr_num(ci * 100, 0L),
+                .jr_ci(statistics$ci_low[i], statistics$ci_high[i], 2L, TRUE)
+            )
+        }
         sprintf(
-            "%s %s, F(%s, %s) = %s, p %s, ηp² = %s, %s%% CI %s.",
+            "%s %s, F(%s, %s) = %s, p %s, %s.",
             statistics$term[i],
             if (statistics$p[i] < .05) "was statistically significant" else "was not statistically significant",
             .jr_num(statistics$df1[i], 2L), .jr_num(statistics$df2[i], 2L),
             .jr_num(statistics$statistic[i]), .jr_p(statistics$p[i]),
-            .jr_num(statistics$effect[i], 2L, TRUE), .jr_num(ci * 100, 0L),
-            .jr_ci(statistics$ci_low[i], statistics$ci_high[i], 2L, TRUE)
+            effect_phrase
         )
     }, character(1)), collapse = " ")
 }
@@ -278,10 +295,29 @@ edu_ancova <- function(data, outcome, factors, covariates, ci = .95) {
 .jr_afex_statistics <- function(fit, ci = .95) {
     table <- as.data.frame(fit$anova_table)
     effects <- effectsize::F_to_eta2(table$F, table[["num Df"]], table[["den Df"]], ci = ci)
+    ges <- tryCatch({
+        g <- suppressMessages(
+            as.data.frame(effectsize::eta_squared(fit, generalized = TRUE, ci = ci))
+        )
+        col <- if ("Eta2_generalized" %in% names(g)) "Eta2_generalized"
+               else if ("Eta2" %in% names(g)) "Eta2"
+               else NA_character_
+        if (is.na(col)) {
+            rep(NA_real_, nrow(table))
+        } else {
+            terms <- rownames(table)
+            param_col <- if ("Parameter" %in% names(g)) g$Parameter
+                         else if ("Group" %in% names(g)) g$Group
+                         else rownames(g)
+            vals <- g[[col]][match(terms, param_col)]
+            if (all(is.na(vals))) rep(NA_real_, nrow(table)) else vals
+        }
+    }, error = function(e) rep(NA_real_, nrow(table)))
     data.frame(
         term = rownames(table), statistic = table$F,
         df1 = table[["num Df"]], df2 = table[["den Df"]],
         p = table[["Pr(>F)"]], effect = table$pes,
+        ges = ges,
         ci_low = effects$CI_low, ci_high = effects$CI_high, stringsAsFactors = FALSE
     )
 }

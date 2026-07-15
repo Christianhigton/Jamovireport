@@ -6,7 +6,8 @@ jrReportCorrMatrixClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Cl
         .init = function() {
             .jr_addon_insert_card(
                 self,
-                refs = c("RCore", "jReport", "jmvcore", "effectsize")
+                refs = c("RCore", "jReport", "jmvcore", "effectsize",
+                         "Cohen1988", "Cumming2014")
             )
         },
         .run = function() {

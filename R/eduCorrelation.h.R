@@ -195,7 +195,8 @@ eduCorrelationResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
         diagnostics = function() private$.items[["diagnostics"]],
         report = function() private$.items[["report"]],
         interpretation = function() private$.items[["interpretation"]],
-        plot = function() private$.items[["plot"]]),
+        plot = function() private$.items[["plot"]],
+        methodsReferences = function() private$.items[["methodsReferences"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -206,15 +207,13 @@ eduCorrelationResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
                 refs=list(
                     "jReport",
                     "effectsize",
-                    "ggplot2"))
+                    "ggplot2",
+                    "Cohen1988",
+                    "Cumming2014"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="overview",
-                title="jReport: Overview and Why This Test?",
-                refs=list(
-                    "jReport",
-                    "effectsize",
-                    "ggplot2")))
+                title="jReport: Overview and Why This Test?"))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="main",
@@ -250,11 +249,7 @@ eduCorrelationResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
                     list(
                         `name`="ci_high", 
                         `title`="CI Upper", 
-                        `type`="number")),
-                refs=list(
-                    "jReport",
-                    "effectsize",
-                    "ggplot2")))
+                        `type`="number"))))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="descriptives",
@@ -280,11 +275,7 @@ eduCorrelationResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
                     list(
                         `name`="sd", 
                         `title`="SD", 
-                        `type`="number")),
-                refs=list(
-                    "jReport",
-                    "effectsize",
-                    "ggplot2")))
+                        `type`="number"))))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="diagnostics",
@@ -323,27 +314,15 @@ eduCorrelationResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
                     list(
                         `name`="action", 
                         `title`="Recommended Action", 
-                        `type`="text")),
-                refs=list(
-                    "jReport",
-                    "effectsize",
-                    "ggplot2")))
+                        `type`="text"))))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="report",
-                title="Reporting",
-                refs=list(
-                    "jReport",
-                    "effectsize",
-                    "ggplot2")))
+                title="Reporting"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="interpretation",
-                title="Plain-Language Interpretation",
-                refs=list(
-                    "jReport",
-                    "effectsize",
-                    "ggplot2")))
+                title="Plain-Language Interpretation"))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",
@@ -356,11 +335,11 @@ eduCorrelationResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
                     "ciWidth"),
                 width=520,
                 height=360,
-                renderFun=".plot",
-                refs=list(
-                    "jReport",
-                    "effectsize",
-                    "ggplot2")))}))
+                renderFun=".plot"))
+            self$add(jmvcore::Html$new(
+                options=options,
+                name="methodsReferences",
+                title="Methods and References"))}))
 
 eduCorrelationBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "eduCorrelationBase",
@@ -422,6 +401,7 @@ eduCorrelationBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class
 #'   \code{results$report} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$interpretation} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$methodsReferences} \tab \tab \tab \tab \tab a html \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:

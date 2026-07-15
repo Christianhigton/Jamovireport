@@ -34,7 +34,7 @@
 .jr_html_card <- function(eyebrow, title, content, accent = "#237f86") {
     sprintf(
         paste0(
-            "<div style='border:1px solid #dfe6ea; border-left:5px solid %s;",
+            "<div style='width:100%%;box-sizing:border-box;border:1px solid #dfe6ea; border-left:5px solid %s;",
             "border-radius:6px; padding:14px 16px; margin:4px 0 10px 0; background:#fbfcfd;'>",
             "<div style='font-size:11px; font-weight:600; letter-spacing:.08em; color:#536472;",
             "text-transform:uppercase; margin-bottom:6px;'>%s</div>",
@@ -58,7 +58,7 @@
     body <- if (is.null(content_html)) .jr_html_paragraphs(content) else content_html
     sprintf(
         paste0(
-            "<div style='border:1px solid #dfe6ea; border-left:5px solid %s;",
+            "<div style='width:100%%;box-sizing:border-box;border:1px solid #dfe6ea; border-left:5px solid %s;",
             "border-radius:6px; padding:14px 16px; margin:4px 0 12px 0; background:%s;'>",
             "<div style='font-size:11px; font-weight:700; letter-spacing:0; color:#536472;",
             "text-transform:uppercase; margin-bottom:6px;'>%s</div>",
@@ -137,7 +137,7 @@
             content_html = checklist_html
         ))
     }
-    cards
+    paste0("<div style='width:100%;box-sizing:border-box;display:block;'>", cards, "</div>")
 }
 
 .jr_report_section_card <- function(title, subtitle = "", content = "",
@@ -153,7 +153,7 @@
     body <- if (is.null(content_html)) .jr_html_paragraphs(content) else content_html
     sprintf(
         paste0(
-            "<div style='border:1px solid #dfe6ea; border-left:5px solid %s;",
+            "<div style='width:100%%;box-sizing:border-box;border:1px solid #dfe6ea; border-left:5px solid %s;",
             "border-radius:6px; padding:14px 16px; margin:4px 0 12px 0; background:%s;'>",
             "<div style='font-size:17px; font-weight:700; color:#18242d; margin-bottom:8px;'>%s</div>",
             "%s%s</div>"
@@ -200,7 +200,7 @@
             content_html = checklist_html
         ))
     }
-    paste(sections, collapse = "")
+    paste0("<div style='width:100%;box-sizing:border-box;display:block;'>", paste(sections, collapse = ""), "</div>")
 }
 
 .jr_references_html <- function(results, include_effect_note = TRUE) {
@@ -228,8 +228,109 @@
     entries[nzchar(entries)]
 }
 
+.jr_reference_definitions <- function() {
+    tryCatch(get(".jmvrefs", envir = asNamespace("jReport")), error = function(e) list())
+}
+
+.jr_reference_display_name <- function(key) {
+    switch(
+        key,
+        RCore = "R",
+        jmvcore = "jmvcore",
+        jReport = "jReport",
+        afex = "afex",
+        car = "car",
+        effectsize = "effectsize",
+        parameters = "parameters",
+        performance = "performance",
+        psych = "psych",
+        ggplot2 = "ggplot2",
+        BayesFactor = "BayesFactor",
+        emmeans = "emmeans",
+        McDonald1999 = "McDonald (1999)",
+        RevelleCondon2019 = "Revelle & Condon (2019)",
+        Cohen1988 = "Cohen (1988)",
+        Cumming2014 = "Cumming (2014)",
+        key
+    )
+}
+
+.jr_reference_role_text <- function(key) {
+    switch(
+        key,
+        RCore = "the statistical computing environment used to run the analysis.",
+        jmvcore = "the jamovi framework package used to build and display module results.",
+        jReport = "the module that generates the guided tables, interpretation, and report wording.",
+        afex = "supports ANOVA-style modelling and repeated-measures model handling.",
+        car = "supports regression, ANOVA, ANCOVA, MANOVA, and diagnostic calculations.",
+        effectsize = "computes effect-size estimates and confidence intervals.",
+        parameters = "extracts and formats model coefficients and related model parameters.",
+        performance = "supports model-fit and diagnostic checks such as collinearity and heteroscedasticity.",
+        psych = "estimates reliability coefficients and item-level reliability diagnostics.",
+        ggplot2 = "creates visual summaries shown in the output.",
+        BayesFactor = "computes Bayes factors for Bayesian t-test reporting.",
+        emmeans = "computes estimated marginal means and post hoc comparisons.",
+        McDonald1999 = "provides the psychometric basis for omega reliability.",
+        RevelleCondon2019 = "provides reliability-reporting guidance for omega and alpha.",
+        Cohen1988 = "provides conventional effect-size benchmark language.",
+        Cumming2014 = "supports cautious interpretation of effect sizes and confidence intervals.",
+        "is used by this analysis."
+    )
+}
+
+.jr_reference_is_software <- function(key) {
+    refs <- .jr_reference_definitions()
+    ref <- refs[[key]]
+    identical(ref$type %||% "", "software")
+}
+
+.jr_methods_reference_items_html <- function(keys) {
+    if (!length(keys))
+        return("<p style='margin:0;color:#536472;'>No additional references are used by this panel.</p>")
+    rows <- vapply(keys, function(key) {
+        sprintf(
+            "<li style='margin:0 0 8px 0; padding-left:2px;'><strong>%s.</strong> %s</li>",
+            .jr_html_escape(.jr_reference_display_name(key)),
+            .jr_html_escape(.jr_reference_role_text(key))
+        )
+    }, character(1))
+    paste0("<ul style='margin:0; padding-left:22px; line-height:1.45;'>", paste(rows, collapse = ""), "</ul>")
+}
+
+.jr_methods_references_html <- function(results = NULL, keys = NULL, include_effect_note = TRUE) {
+    if (is.null(keys))
+        keys <- unique(unlist(lapply(results, .jr_text_reference_keys, include_effect_note = include_effect_note)))
+    keys <- unique(keys[!is.na(keys) & nzchar(keys)])
+    software <- keys[vapply(keys, .jr_reference_is_software, logical(1))]
+    literature <- setdiff(keys, software)
+    body <- paste0(
+        .jr_report_section_card(
+            "R packages and software",
+            "These are tools used to compute, format, or display the results.",
+            accent = "#2f6fa3", background = "#f5f9fd",
+            content_html = .jr_methods_reference_items_html(software)
+        ),
+        .jr_report_section_card(
+            "Literature and reporting guidance",
+            "These are books or articles used for statistical interpretation and reporting guidance.",
+            accent = "#6d5a8a", background = "#faf8fc",
+            content_html = .jr_methods_reference_items_html(literature)
+        ),
+        .jr_report_section_card(
+            "How to use these references",
+            "",
+            paste(
+                "The tables above do not repeat numeric citation markers so the output stays readable.",
+                "Use this panel to see why each source appears in the analysis. Full bibliographic details are available in jamovi's References output."
+            ),
+            accent = "#278058", background = "#f6fbf8"
+        )
+    )
+    paste0("<div style='width:100%;box-sizing:border-box;display:block;'>", body, "</div>")
+}
+
 .jr_jamovi_overview_html <- function(result) {
-    .jr_html_card(
+    html <- .jr_html_card(
         "jReport", "Guided report controls are available here",
         paste(
             "This output was generated by jReport. Use the Reporting controls in this jReport panel to choose style, format, tone, and included content.",
@@ -238,13 +339,50 @@
             sep = "\n\n"
         )
     )
+    paste0("<div style='width:100%;box-sizing:border-box;display:block;'>", html, "</div>")
 }
 
 .jr_jamovi_report_html <- function(result, options) {
-    .jr_html_card(
+    html <- .jr_html_card(
         "Copy-ready reporting", "Report text",
         .jr_jamovi_text(result, options), accent = "#4b66a2"
     )
+    paste0("<div style='width:100%;box-sizing:border-box;display:block;'>", html, "</div>")
+}
+
+.jr_rm_ges_guidance <- function(result) {
+    if (!result$analysis %in% c("anova_rm", "anova_mixed"))
+        return("")
+    stats <- result$statistics
+    if (!is.data.frame(stats) || !"ges" %in% names(stats))
+        return("")
+    ges_vals <- stats$ges[is.finite(stats$ges)]
+    eta_vals <- stats$effect[is.finite(stats$effect)]
+    if (!length(ges_vals) || !length(eta_vals))
+        return("")
+    base <- paste(
+        "Generalised eta squared (ηG²) estimates the proportion of total variance",
+        "explained by an effect and allows comparison across different experimental designs.",
+        "Partial eta squared (ηp²) estimates the proportion of variance explained after",
+        "accounting for other sources of variance in the model and is therefore often larger."
+    )
+    max_ges <- max(ges_vals, na.rm = TRUE)
+    max_eta <- max(eta_vals, na.rm = TRUE)
+    discrepancy <- if (is.finite(max_ges) && is.finite(max_eta) && max_ges > 0 &&
+                       max_eta > 2 * max_ges) {
+        paste(
+            "The difference between ηG² and ηp² suggests that a substantial proportion of",
+            "variability is attributable to individual differences between participants.",
+            "This pattern is common in repeated measures designs where participant characteristics",
+            "account for a large amount of variance."
+        )
+    } else {
+        ""
+    }
+    if (nzchar(discrepancy))
+        paste(base, discrepancy, sep = "\n\n")
+    else
+        base
 }
 
 .jr_jamovi_interpretation_html <- function(result) {
@@ -254,5 +392,9 @@
         content <- paste(content, result$caution, sep = "\n\n")
         accent <- "#b46c21"
     }
-    .jr_html_card("Interpretation", "What does this mean?", content, accent = accent)
+    rm_guidance <- .jr_rm_ges_guidance(result)
+    if (nzchar(rm_guidance))
+        content <- paste(content, rm_guidance, sep = "\n\n")
+    html <- .jr_html_card("Interpretation", "What does this mean?", content, accent = accent)
+    paste0("<div style='width:100%;box-sizing:border-box;display:block;'>", html, "</div>")
 }

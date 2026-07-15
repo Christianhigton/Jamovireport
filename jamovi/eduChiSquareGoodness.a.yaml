@@ -2,6 +2,8 @@
 name: eduChiSquareGoodness
 title: Guided Chi-Square Goodness-of-Fit
 menuGroup: jReport
+menuSubgroup: Frequencies
+menuTitle: Chi-Square Goodness-of-Fit
 version: '1.0.0'
 jas: '1.2'
 description:

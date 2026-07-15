@@ -2,6 +2,8 @@
 name: eduAncova
 title: Guided ANCOVA
 menuGroup: jReport
+menuSubgroup: Group Comparisons
+menuTitle: ANCOVA
 version: '1.0.0'
 jas: '1.2'
 description:

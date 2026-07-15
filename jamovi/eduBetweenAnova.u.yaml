@@ -5,17 +5,18 @@ jus: '2.0'
 stage: 0
 compilerMode: tame
 children:
-  - type: VariableSupplier
-    stretchFactor: 1
-    suggested: [continuous, nominal, ordinal]
-    persistentItems: false
-    children:
-      - type: TargetLayoutBox
-        label: Outcome
-        children: [{ type: VariablesListBox, name: outcome, maxItemCount: 1, isTarget: true }]
-      - type: TargetLayoutBox
-        label: Between-Subjects Factors
-        children: [{ type: VariablesListBox, name: factors, isTarget: true }]
+  - type: VariablesListBox
+    name: outcome
+    label: Outcome
+    maxItemCount: 1
+    isTarget: true
+    suggested: [continuous]
+  - type: VariablesListBox
+    name: factors
+    label: Between-Subjects Factors
+    isTarget: true
+    height: large
+    suggested: [nominal, ordinal]
   - type: CollapseBox
     label: Analysis
     collapsed: false

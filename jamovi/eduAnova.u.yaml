@@ -7,15 +7,24 @@ compilerMode: tame
 children:
   - type: VariableSupplier
     stretchFactor: 1
-    suggested: [continuous, nominal, ordinal]
     persistentItems: false
     children:
       - type: TargetLayoutBox
         label: Outcome
-        children: [{ type: VariablesListBox, name: outcome, maxItemCount: 1, isTarget: true }]
+        children:
+          - type: VariablesListBox
+            name: outcome
+            maxItemCount: 1
+            isTarget: true
+            suggested: [continuous]
       - type: TargetLayoutBox
         label: Grouping Variable
-        children: [{ type: VariablesListBox, name: group, maxItemCount: 1, isTarget: true }]
+        children:
+          - type: VariablesListBox
+            name: group
+            maxItemCount: 1
+            isTarget: true
+            suggested: [nominal, ordinal]
   - type: CollapseBox
     label: Analysis
     collapsed: false

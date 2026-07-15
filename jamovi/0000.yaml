@@ -17,7 +17,7 @@ analyses:
     ns: jReport
     menuGroup: jReport
     menuSubgroup: Group Comparisons
-    menuTitle: Guided T-Test
+    menuTitle: T-Test
     description: >
       Compare two means while explaining test selection, assumptions, effect
       size, and reporting in accessible language.
@@ -27,7 +27,7 @@ analyses:
     ns: jReport
     menuGroup: jReport
     menuSubgroup: Group Comparisons
-    menuTitle: Guided One-Way ANOVA
+    menuTitle: One-Way ANOVA
     description: >
       Compare means across three or more independent groups with effect sizes,
       assumption guidance, and report-ready explanation.
@@ -37,7 +37,7 @@ analyses:
     ns: jReport
     menuGroup: jReport
     menuSubgroup: Association
-    menuTitle: Guided Correlation
+    menuTitle: Correlation
     description: >
       Explain the direction, strength, assumptions, and reporting of an
       association between two numeric variables.
@@ -47,7 +47,7 @@ analyses:
     ns: jReport
     menuGroup: jReport
     menuSubgroup: Frequencies
-    menuTitle: Guided Chi-Square Test of Independence
+    menuTitle: Chi-Square Independence
     description: >
       Assess whether two categorical variables are associated, with expected
       count checks, Cramer's V, and report-ready explanation.
@@ -57,7 +57,7 @@ analyses:
     ns: jReport
     menuGroup: jReport
     menuSubgroup: Frequencies
-    menuTitle: Guided Chi-Square Goodness-of-Fit
+    menuTitle: Chi-Square Goodness-of-Fit
     description: >
       Compare observed categorical frequencies with an expected distribution,
       with assumption guidance and report-ready explanation.
@@ -67,7 +67,7 @@ analyses:
     ns: jReport
     menuGroup: jReport
     menuSubgroup: Regression
-    menuTitle: Guided Linear Regression
+    menuTitle: Linear Regression
     description: >
       Model a numeric outcome using one or more numeric predictors with model
       fit, coefficients, diagnostic guidance, and interpretable reporting.
@@ -77,7 +77,7 @@ analyses:
     ns: jReport
     menuGroup: jReport
     menuSubgroup: Regression
-    menuTitle: Guided Binomial Logistic Regression
+    menuTitle: Binomial Logistic
     description: >
       Model a binary outcome using numeric or categorical predictors with odds
       ratios, model-fit explanation, and reporting guidance.
@@ -87,7 +87,7 @@ analyses:
     ns: jReport
     menuGroup: jReport
     menuSubgroup: Regression
-    menuTitle: Guided Multinomial Logistic Regression
+    menuTitle: Multinomial Logistic
     description: >
       Model a nominal outcome with 3 or more categories using numeric or
       categorical predictors with relative risk ratios, model-fit explanation,
@@ -98,7 +98,7 @@ analyses:
     ns: jReport
     menuGroup: jReport
     menuSubgroup: Group Comparisons
-    menuTitle: Guided Between-Subjects ANOVA
+    menuTitle: Between-Subjects ANOVA
     description: >
       Examine mean differences across one or more independent categorical
       factors, prioritising interaction interpretation when appropriate.
@@ -108,7 +108,7 @@ analyses:
     ns: jReport
     menuGroup: jReport
     menuSubgroup: Repeated Measures
-    menuTitle: Guided Repeated-Measures ANOVA
+    menuTitle: Repeated-Measures ANOVA
     description: >
       Compare repeated measurements from the same participants and explain
       sphericity and Greenhouse-Geisser-corrected inference.
@@ -118,7 +118,7 @@ analyses:
     ns: jReport
     menuGroup: jReport
     menuSubgroup: Repeated Measures
-    menuTitle: Guided Mixed ANOVA
+    menuTitle: Mixed ANOVA
     description: >
       Examine repeated change, between-group differences, and their interaction
       with sphericity-aware reporting.
@@ -128,7 +128,7 @@ analyses:
     ns: jReport
     menuGroup: jReport
     menuSubgroup: Group Comparisons
-    menuTitle: Guided ANCOVA
+    menuTitle: ANCOVA
     description: >
       Compare adjusted group means while explicitly checking whether
       covariate-outcome slopes are comparable across groups.
@@ -138,7 +138,7 @@ analyses:
     ns: jReport
     menuGroup: jReport
     menuSubgroup: Group Comparisons
-    menuTitle: Guided MANOVA / MANCOVA
+    menuTitle: MANOVA / MANCOVA
     description: >
       Test whether two or more dependent variables jointly vary across
       categorical factors and optional numeric covariates. Significant Pillai
@@ -150,7 +150,7 @@ analyses:
     ns: jReport
     menuGroup: jReport
     menuSubgroup: Psychometrics
-    menuTitle: 'Guided Reliability: Omega and Alpha'
+    menuTitle: Reliability
     description: >
       Estimate and report internal consistency using McDonald's omega total and
       Cronbach's alpha, with item diagnostics and clear interpretation guidance.
@@ -160,11 +160,11 @@ analyses:
     ns: jReport
     menuGroup: jReport
     menuSubgroup: Descriptives
-    menuTitle: Demographic Table
+    menuTitle: Demographics
     description: >
-      Produce an APA-style demographic characteristics table directly copyable
-      into Word. Categorical variables show n and % per category; continuous
-      variables show M, SD, and range. Custom rows can be added manually.
+      Generate an APA 7 demographic characteristics table and optional
+      descriptive paragraph. Supports categorical and continuous variables with
+      flexible statistics options and additional custom rows.
     category: analyses
   - title: Automatic Report for Independent Samples T-Test
     name: jrReportTTestIS
@@ -172,6 +172,7 @@ analyses:
     menuGroup: Report Add-ons
     menuTitle: Automatic Report for Independent Samples T-Test
     addonFor: jmv::ttestIS
+    hidden: true
     category: analyses
   - title: Automatic Report for Paired Samples T-Test
     name: jrReportTTestPS
@@ -179,6 +180,7 @@ analyses:
     menuGroup: Report Add-ons
     menuTitle: Automatic Report for Paired Samples T-Test
     addonFor: jmv::ttestPS
+    hidden: true
     category: analyses
   - title: Automatic Report for One-Way ANOVA
     name: jrReportAnovaOneW
@@ -186,6 +188,7 @@ analyses:
     menuGroup: Report Add-ons
     menuTitle: Automatic Report for One-Way ANOVA
     addonFor: jmv::anovaOneW
+    hidden: true
     category: analyses
   - title: Automatic Report for ANOVA
     name: jrReportAnova
@@ -193,6 +196,7 @@ analyses:
     menuGroup: Report Add-ons
     menuTitle: Automatic Report for ANOVA
     addonFor: jmv::anova
+    hidden: true
     category: analyses
   - title: Automatic Report for ANCOVA
     name: jrReportAncova
@@ -200,6 +204,7 @@ analyses:
     menuGroup: Report Add-ons
     menuTitle: Automatic Report for ANCOVA
     addonFor: jmv::ancova
+    hidden: true
     category: analyses
   - title: Automatic Report for MANOVA / MANCOVA
     name: jrReportMancova
@@ -207,6 +212,7 @@ analyses:
     menuGroup: Report Add-ons
     menuTitle: Automatic Report for MANOVA / MANCOVA
     addonFor: jmv::mancova
+    hidden: true
     category: analyses
   - title: Automatic Report for Linear Regression
     name: jrReportLinReg
@@ -214,6 +220,7 @@ analyses:
     menuGroup: Report Add-ons
     menuTitle: Automatic Report for Linear Regression
     addonFor: jmv::linReg
+    hidden: true
     category: analyses
   - title: Automatic Report for Binomial Logistic Regression
     name: jrReportLogRegBin
@@ -221,6 +228,7 @@ analyses:
     menuGroup: Report Add-ons
     menuTitle: Automatic Report for Binomial Logistic Regression
     addonFor: jmv::logRegBin
+    hidden: true
     category: analyses
   - title: Automatic Report for Multinomial Logistic Regression
     name: jrReportLogRegMulti
@@ -228,6 +236,7 @@ analyses:
     menuGroup: Report Add-ons
     menuTitle: Automatic Report for Multinomial Logistic Regression
     addonFor: jmv::logRegMulti
+    hidden: true
     category: analyses
   - title: Automatic Report for Correlation Matrix
     name: jrReportCorrMatrix
@@ -235,6 +244,7 @@ analyses:
     menuGroup: Report Add-ons
     menuTitle: Automatic Report for Correlation Matrix
     addonFor: jmv::corrMatrix
+    hidden: true
     category: analyses
   - title: Automatic Report for Chi-Square Independence
     name: jrReportContTables
@@ -242,6 +252,7 @@ analyses:
     menuGroup: Report Add-ons
     menuTitle: Automatic Report for Chi-Square Independence
     addonFor: jmv::contTables
+    hidden: true
     category: analyses
   - title: Automatic Report for Chi-Square Goodness-of-Fit
     name: jrReportPropTestN
@@ -249,6 +260,7 @@ analyses:
     menuGroup: Report Add-ons
     menuTitle: Automatic Report for Chi-Square Goodness-of-Fit
     addonFor: jmv::propTestN
+    hidden: true
     category: analyses
   - title: Automatic Report for Repeated Measures ANOVA
     name: jrReportAnovaRM
@@ -256,6 +268,7 @@ analyses:
     menuGroup: Report Add-ons
     menuTitle: Automatic Report for Repeated Measures ANOVA
     addonFor: jmv::anovaRM
+    hidden: true
     category: analyses
   - title: Automatic Reliability Report
     name: jrReportReliability
@@ -263,6 +276,7 @@ analyses:
     menuGroup: Report Add-ons
     menuTitle: Automatic Reliability Report
     addonFor: jmv::reliability
+    hidden: true
     category: analyses
 usesNative: true
 minApp: 1.8.0

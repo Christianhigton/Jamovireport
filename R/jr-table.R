@@ -12,8 +12,7 @@
         return(paste("Not enough observations to fit this model. Try fewer factors or covariates.", paste0("(", original, ")")))
     paste0(
         "The analysis could not be completed. ",
-        "Check that the selected variables have enough complete cases, appropriate measurement levels, and no singular or perfectly collinear model terms.",
-        " (", original, ")"
+        "Check that the selected variables have enough complete cases, appropriate measurement levels, and no singular or perfectly collinear model terms."
     )
 }
 

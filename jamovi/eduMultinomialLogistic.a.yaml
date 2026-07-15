@@ -2,6 +2,8 @@
 name: eduMultinomialLogistic
 title: Guided Multinomial Logistic Regression
 menuGroup: jReport
+menuSubgroup: Regression
+menuTitle: Multinomial Logistic
 version: '1.0.0'
 jas: '1.2'
 description:

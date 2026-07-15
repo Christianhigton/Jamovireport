@@ -5,17 +5,18 @@ jus: '2.0'
 stage: 0
 compilerMode: tame
 children:
-  - type: VariableSupplier
-    stretchFactor: 1
-    suggested: [continuous, nominal, ordinal]
-    persistentItems: false
-    children:
-      - type: TargetLayoutBox
-        label: Repeated Measurements (in Order)
-        children: [{ type: VariablesListBox, name: measures, isTarget: true }]
-      - type: TargetLayoutBox
-        label: Between-Subjects Group
-        children: [{ type: VariablesListBox, name: group, maxItemCount: 1, isTarget: true }]
+  - type: VariablesListBox
+    name: measures
+    label: Repeated Measurements (in Order)
+    isTarget: true
+    height: large
+    suggested: [continuous]
+  - type: VariablesListBox
+    name: group
+    label: Between-Subjects Group
+    maxItemCount: 1
+    isTarget: true
+    suggested: [nominal, ordinal]
   - type: CollapseBox
     label: Analysis
     collapsed: false

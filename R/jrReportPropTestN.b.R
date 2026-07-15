@@ -6,7 +6,8 @@ jrReportPropTestNClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Cla
         .init = function() {
             .jr_addon_insert_card(
                 self, cells = TRUE,
-                refs = c("RCore", "jReport", "jmvcore", "effectsize")
+                refs = c("RCore", "jReport", "jmvcore", "effectsize",
+                         "Cohen1988", "Cumming2014")
             )
         },
         .run = function() {

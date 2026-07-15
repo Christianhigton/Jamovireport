@@ -6,7 +6,8 @@ jrReportAnovaOneWClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Cla
         .init = function() {
             .jr_addon_insert_card(
                 self, posthoc = TRUE,
-                refs = c("RCore", "jReport", "jmvcore", "effectsize", "emmeans")
+                refs = c("RCore", "jReport", "jmvcore", "effectsize", "emmeans",
+                         "Cohen1988", "Cumming2014")
             )
         },
         .run = function() {

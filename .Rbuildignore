@@ -5,6 +5,9 @@
 ^build$
 ^.*\.jmo$
 ^.*\.tar\.gz$
+^AUDIT_FIXES_SUMMARY\.md$
+^audit-fixes\.patch$
+^audit-fixes.patch$
 ^man/figures/jReport-logo-source\.png$
 ^LICENSE\.md$
 ^jReport\.Rcheck$

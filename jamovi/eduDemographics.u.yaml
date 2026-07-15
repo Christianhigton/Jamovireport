@@ -27,7 +27,10 @@ children:
     children:
       - { type: CheckBox, name: showTable }
       - { type: CheckBox, name: showParagraph }
-      - { type: TextBox, name: tableTitle }
+      - type: TextBox
+        name: tableTitle
+        format: string
+        stretchFactor: 1
   - type: CollapseBox
     label: Continuous Variable Statistics
     collapsed: false
@@ -51,26 +54,26 @@ children:
     label: Additional Table Rows
     collapsed: true
     children:
-      - { type: TextBox, name: customRow1Char }
-      - { type: TextBox, name: customRow1Val }
-      - { type: TextBox, name: customRow1Pct }
-      - { type: TextBox, name: customRow1Note }
-      - { type: TextBox, name: customRow2Char }
-      - { type: TextBox, name: customRow2Val }
-      - { type: TextBox, name: customRow2Pct }
-      - { type: TextBox, name: customRow2Note }
-      - { type: TextBox, name: customRow3Char }
-      - { type: TextBox, name: customRow3Val }
-      - { type: TextBox, name: customRow3Pct }
-      - { type: TextBox, name: customRow3Note }
-      - { type: TextBox, name: customRow4Char }
-      - { type: TextBox, name: customRow4Val }
-      - { type: TextBox, name: customRow4Pct }
-      - { type: TextBox, name: customRow4Note }
-      - { type: TextBox, name: customRow5Char }
-      - { type: TextBox, name: customRow5Val }
-      - { type: TextBox, name: customRow5Pct }
-      - { type: TextBox, name: customRow5Note }
+      - { type: TextBox, name: customRow1Char, format: string }
+      - { type: TextBox, name: customRow1Val, format: string }
+      - { type: TextBox, name: customRow1Pct, format: string }
+      - { type: TextBox, name: customRow1Note, format: string }
+      - { type: TextBox, name: customRow2Char, format: string }
+      - { type: TextBox, name: customRow2Val, format: string }
+      - { type: TextBox, name: customRow2Pct, format: string }
+      - { type: TextBox, name: customRow2Note, format: string }
+      - { type: TextBox, name: customRow3Char, format: string }
+      - { type: TextBox, name: customRow3Val, format: string }
+      - { type: TextBox, name: customRow3Pct, format: string }
+      - { type: TextBox, name: customRow3Note, format: string }
+      - { type: TextBox, name: customRow4Char, format: string }
+      - { type: TextBox, name: customRow4Val, format: string }
+      - { type: TextBox, name: customRow4Pct, format: string }
+      - { type: TextBox, name: customRow4Note, format: string }
+      - { type: TextBox, name: customRow5Char, format: string }
+      - { type: TextBox, name: customRow5Val, format: string }
+      - { type: TextBox, name: customRow5Pct, format: string }
+      - { type: TextBox, name: customRow5Note, format: string }
   - type: CollapseBox
     label: Reporting
     collapsed: true

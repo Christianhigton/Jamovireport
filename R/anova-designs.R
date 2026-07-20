@@ -25,7 +25,7 @@
         ges_i <- if (has_ges) statistics$ges[i] else NA_real_
         effect_phrase <- if (is.finite(ges_i)) {
             sprintf(
-                "ηG² = %s, ηp² = %s, %s%% CI %s",
+                "\u03B7G\u00B2 = %s, \u03B7p\u00B2 = %s, %s%% CI %s",
                 .jr_num(ges_i, 2L, TRUE),
                 .jr_num(statistics$effect[i], 2L, TRUE),
                 .jr_num(ci * 100, 0L),
@@ -33,7 +33,7 @@
             )
         } else {
             sprintf(
-                "ηp² = %s, %s%% CI %s",
+                "\u03B7p\u00B2 = %s, %s%% CI %s",
                 .jr_num(statistics$effect[i], 2L, TRUE),
                 .jr_num(ci * 100, 0L),
                 .jr_ci(statistics$ci_low[i], statistics$ci_high[i], 2L, TRUE)
@@ -122,7 +122,7 @@ edu_anova_between <- function(data, outcome, factors, ci = .95) {
         statistics = statistics, call = match.call()
     )
     result$model <- model
-    result
+    .jr_finalize_edu_analysis(result)
 }
 
 #' Guided analysis of covariance
@@ -239,7 +239,7 @@ edu_ancova <- function(data, outcome, factors, covariates, ci = .95) {
     )
     result$model <- model
     result$slope_model <- slope_model
-    result
+    .jr_finalize_edu_analysis(result)
 }
 
 .jr_within_long <- function(data, measures, levels, group = NULL) {
@@ -378,7 +378,7 @@ edu_anova_rm <- function(data, measures, levels = measures, ci = .95) {
         statistics = statistics, call = match.call()
     )
     result$model <- fit
-    result
+    .jr_finalize_edu_analysis(result)
 }
 
 #' Guided mixed ANOVA
@@ -429,5 +429,5 @@ edu_anova_mixed <- function(data, measures, group, levels = measures, ci = .95) 
         statistics = statistics, call = match.call()
     )
     result$model <- fit
-    result
+    .jr_finalize_edu_analysis(result)
 }

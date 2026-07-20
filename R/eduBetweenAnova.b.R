@@ -19,7 +19,7 @@ eduBetweenAnovaClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class
                 self$results$descriptives$addRow(rowKey = i, values = list(label = d$group, n = d$n, mean = d$mean, sd = d$sd))
             }
             .jr_populate_diagnostics(self$results$diagnostics, result$diagnostics, fixed = TRUE)
-            self$results$report$setContent(.jr_anova_between_report_sections_html(result, self$options))
+            .jr_guided_reporting_output(self, result)
             self$results$interpretation$setContent(.jr_jamovi_interpretation_html(result))
             self$results$methodsReferences$setContent(.jr_methods_references_html(result))
             self$results$plot$setState(result)
@@ -31,4 +31,3 @@ eduBetweenAnovaClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class
         }
     )
 )
-

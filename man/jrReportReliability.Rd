@@ -2,7 +2,7 @@
 % Please edit documentation in R/jrReportReliability.h.R
 \name{jrReportReliability}
 \alias{jrReportReliability}
-\title{Automatic Omega Report for Reliability Analysis}
+\title{Automatic Reliability Report}
 \usage{
 jrReportReliability(data)
 }
@@ -12,8 +12,34 @@ jrReportReliability(data)
 \value{
 A results object containing:
 \tabular{llllll}{
+\code{results$jReportHeading} \tab \tab \tab \tab \tab a html \cr
+\code{results$jReportApaTable} \tab \tab \tab \tab \tab a table \cr
+\code{results$jReportAssumptions} \tab \tab \tab \tab \tab a table \cr
+\code{results$jReportCard} \tab \tab \tab \tab \tab a html \cr
+\code{results$jReportInterpretation} \tab \tab \tab \tab \tab a html \cr
+\code{results$methodsReferences} \tab \tab \tab \tab \tab a html \cr
 }
+
+Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
+
+\code{results$jReportApaTable$asDF}
+
+\code{as.data.frame(results$jReportApaTable)}
 }
 \description{
-Automatic Omega Report for Reliability Analysis
+Automatic Reliability Report
+}
+\section{References}{
+
+RCore
+
+jReport
+
+jmvcore
+
+psych
+
+McDonald1999
+
+RevelleCondon2019
 }

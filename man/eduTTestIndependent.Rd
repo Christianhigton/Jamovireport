@@ -13,6 +13,8 @@ eduTTestIndependent(
   reportStyle = "apa7",
   reportFormat = "paragraph",
   reportTone = "student_friendly",
+  reportTable = FALSE,
+  reportTableDetail = "compact",
   reportDescriptives = TRUE,
   reportAssumptions = TRUE,
   reportStatistic = TRUE,
@@ -32,6 +34,7 @@ eduTTestIndependent(
 \item{ciWidth}{Confidence level as a percentage.}
 \item{showPlot}{Whether to show the visualisation.}
 \item{reportStyle, reportFormat, reportTone}{Reporting style controls.}
+\item{reportTable, reportTableDetail}{Whether to show an APA results table and its detail level.}
 \item{reportDescriptives, reportAssumptions, reportStatistic, reportDf, reportP, reportEffect, reportCI, reportInterpretation, reportCautions}{Reporting content controls.}
 }
 \value{

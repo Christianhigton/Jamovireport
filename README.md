@@ -81,17 +81,21 @@ The jamovi module exposes supported analyses under **jReport**, including
 between-subjects ANOVA, repeated-measures ANOVA, mixed ANOVA, ANCOVA, and
 omega-based reliability analysis. Guided analyses now show overview,
 interpretation, and copy-ready report text as separate formatted result cards.
-Each includes a consistent **Reporting** section with style, format, tone, and
-included-content controls. Reports update when options change because they are
-rendered from the same structured result object used by the R API.
+Each includes a consistent **Reporting** section with independent style,
+format, detail-level, included-content, and APA results-table controls. Compact
+and detailed tables use schemas appropriate to the selected analysis, and
+**Table plus paragraph** always displays a table with a short non-duplicative
+narrative. Reports update when options change because narratives and tables are
+rendered from the same validated result model used by the R API.
 
 Simplified report-style output is available only for supported analyses and
 will appear when those analyses are run from their respective jamovi analysis
 menus. Assumption tables state whether each assumption was tested, the statistic
 and p value where available, whether the assumption appears to have been met,
 and guidance for interpreting violations or checks that require design review.
-Effect sizes include conventional benchmark language plus a caution that those
-benchmarks are rough interpretive aids rather than strict cut-offs.
+Effect sizes are named and reported without automatically assigning generic
+small, medium, or large labels. Practical importance remains a substantive
+judgement tied to the study context and uncertainty in the estimate.
 Where jamovi variables include a description, jReport uses that
 description in report text, assumption tables, headings, and interpretation
 notes. Blank descriptions or descriptions identical to the raw variable name

@@ -1,4 +1,14 @@
-
+#' Create a demographic summary table and paragraph
+#'
+#' @param data A data frame.
+#' @param table_variables Variables to include in the table.
+#' @param paragraph_variables Variables to describe in prose.
+#' @param stat_mean,stat_sd,stat_median,stat_iqr Logical switches for continuous summaries.
+#' @param stat_min,stat_max,stat_range,stat_cont_missing Additional continuous summaries.
+#' @param stat_n,stat_pct,stat_cat_missing Logical switches for categorical summaries.
+#' @param custom_rows Optional custom table rows.
+#' @return A list containing demographic table rows, prose, and omission notes.
+#' @export
 edu_demographics <- function(
     data,
     table_variables     = character(),
@@ -97,10 +107,10 @@ edu_demographics <- function(
                            stat_min, stat_max, stat_range, stat_cont_missing) {
     x    <- col[!is.na(col)]
     mn   <- mean(x)
-    sdev <- sd(x)
-    med  <- median(x)
-    q25  <- as.numeric(quantile(x, 0.25))
-    q75  <- as.numeric(quantile(x, 0.75))
+    sdev <- stats::sd(x)
+    med  <- stats::median(x)
+    q25  <- as.numeric(stats::quantile(x, 0.25))
+    q75  <- as.numeric(stats::quantile(x, 0.75))
     lo   <- min(x)
     hi   <- max(x)
 
@@ -120,12 +130,12 @@ edu_demographics <- function(
         parts <- c(parts, sprintf("Mdn = %.2f", med))
     } else if (stat_iqr) {
         parts <- c(parts,
-                   paste0("IQR: ", sprintf("%.2f", q25), "–", sprintf("%.2f", q75)))
+                   paste0("IQR: ", sprintf("%.2f", q25), "\u2013", sprintf("%.2f", q75)))
     }
 
     if (stat_range) {
         parts <- c(parts,
-                   paste0("range ", sprintf("%.2f", lo), "–", sprintf("%.2f", hi)))
+                   paste0("range ", sprintf("%.2f", lo), "\u2013", sprintf("%.2f", hi)))
     } else {
         if (stat_min) parts <- c(parts, sprintf("min = %.2f", lo))
         if (stat_max) parts <- c(parts, sprintf("max = %.2f", hi))
@@ -182,7 +192,7 @@ edu_demographics <- function(
                                stat_min, stat_max, stat_range) {
     x    <- col[!is.na(col)]
     mn   <- mean(x)
-    sdev <- sd(x)
+    sdev <- stats::sd(x)
     lo   <- min(x)
     hi   <- max(x)
 
@@ -212,7 +222,7 @@ edu_demographics <- function(
     counts <- vapply(levs, function(l) sum(col_f == l, na.rm = TRUE), integer(1))
     pcts   <- 100 * counts / valid_n
     ord    <- order(counts, decreasing = TRUE)
-    top    <- head(ord, 3L)
+    top    <- utils::head(ord, 3L)
 
     parts <- vapply(top, function(i) {
         if (stat_n && stat_pct) sprintf("%s (n = %d, %.1f%%)", levs[i], counts[i], pcts[i])

@@ -17,7 +17,7 @@
 }
 
 .jr_p <- function(p) {
-    if (is.na(p))
+    if (length(p) != 1L || !is.finite(p) || p < 0 || p > 1)
         return("not available")
     if (p < .001)
         return("< .001")
@@ -25,7 +25,7 @@
 }
 
 .jr_num <- function(x, digits = 2L, omit_zero = FALSE) {
-    if (length(x) == 0L || is.na(x))
+    if (length(x) != 1L || !is.finite(x))
         return("NA")
     value <- formatC(as.numeric(x), format = "f", digits = digits)
     if (omit_zero) {
@@ -40,7 +40,7 @@
 }
 
 .jr_or <- function(value) {
-    if (is.na(value))
+    if (length(value) != 1L || !is.finite(value))
         return("NA")
     if (value > 0 && value < .001)
         return("< 0.001")

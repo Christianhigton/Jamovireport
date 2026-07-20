@@ -14,6 +14,8 @@ eduAncovaOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             reportStyle = "apa7",
             reportFormat = "paragraph",
             reportTone = "student_friendly",
+            reportTable = FALSE,
+            reportTableDetail = "compact",
             reportDescriptives = TRUE,
             reportAssumptions = TRUE,
             reportStatistic = TRUE,
@@ -90,6 +92,17 @@ eduAncovaOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "detailed",
                     "critical"),
                 default="student_friendly")
+            private$..reportTable <- jmvcore::OptionBool$new(
+                "reportTable",
+                reportTable,
+                default=FALSE)
+            private$..reportTableDetail <- jmvcore::OptionList$new(
+                "reportTableDetail",
+                reportTableDetail,
+                options=list(
+                    "compact",
+                    "detailed"),
+                default="compact")
             private$..reportDescriptives <- jmvcore::OptionBool$new(
                 "reportDescriptives",
                 reportDescriptives,
@@ -135,6 +148,8 @@ eduAncovaOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..reportStyle)
             self$.addOption(private$..reportFormat)
             self$.addOption(private$..reportTone)
+            self$.addOption(private$..reportTable)
+            self$.addOption(private$..reportTableDetail)
             self$.addOption(private$..reportDescriptives)
             self$.addOption(private$..reportAssumptions)
             self$.addOption(private$..reportStatistic)
@@ -154,6 +169,8 @@ eduAncovaOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         reportStyle = function() private$..reportStyle$value,
         reportFormat = function() private$..reportFormat$value,
         reportTone = function() private$..reportTone$value,
+        reportTable = function() private$..reportTable$value,
+        reportTableDetail = function() private$..reportTableDetail$value,
         reportDescriptives = function() private$..reportDescriptives$value,
         reportAssumptions = function() private$..reportAssumptions$value,
         reportStatistic = function() private$..reportStatistic$value,
@@ -172,6 +189,8 @@ eduAncovaOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..reportStyle = NA,
         ..reportFormat = NA,
         ..reportTone = NA,
+        ..reportTable = NA,
+        ..reportTableDetail = NA,
         ..reportDescriptives = NA,
         ..reportAssumptions = NA,
         ..reportStatistic = NA,
@@ -192,6 +211,7 @@ eduAncovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         descriptives = function() private$.items[["descriptives"]],
         diagnostics = function() private$.items[["diagnostics"]],
         report = function() private$.items[["report"]],
+        apaTable = function() private$.items[["apaTable"]],
         interpretation = function() private$.items[["interpretation"]],
         plot = function() private$.items[["plot"]],
         methodsReferences = function() private$.items[["methodsReferences"]]),
@@ -328,6 +348,15 @@ eduAncovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 title="Reporting"))
             self$add(jmvcore::Html$new(
                 options=options,
+                name="apaTable",
+                title="APA Results Table",
+                visible="(reportTable)",
+                clearWith=list(
+                    "reportFormat",
+                    "reportTable",
+                    "reportTableDetail")))
+            self$add(jmvcore::Html$new(
+                options=options,
                 name="interpretation",
                 title="Plain-Language Interpretation"))
             self$add(jmvcore::Image$new(
@@ -394,6 +423,8 @@ eduAncovaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param reportStyle .
 #' @param reportFormat .
 #' @param reportTone .
+#' @param reportTable .
+#' @param reportTableDetail .
 #' @param reportDescriptives .
 #' @param reportAssumptions .
 #' @param reportStatistic .
@@ -410,6 +441,7 @@ eduAncovaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   \code{results$descriptives} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$diagnostics} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$report} \tab \tab \tab \tab \tab a html \cr
+#'   \code{results$apaTable} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$interpretation} \tab \tab \tab \tab \tab a html \cr
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$methodsReferences} \tab \tab \tab \tab \tab a html \cr
@@ -432,6 +464,8 @@ eduAncova <- function(
     reportStyle = "apa7",
     reportFormat = "paragraph",
     reportTone = "student_friendly",
+    reportTable = FALSE,
+    reportTableDetail = "compact",
     reportDescriptives = TRUE,
     reportAssumptions = TRUE,
     reportStatistic = TRUE,
@@ -466,6 +500,8 @@ eduAncova <- function(
         reportStyle = reportStyle,
         reportFormat = reportFormat,
         reportTone = reportTone,
+        reportTable = reportTable,
+        reportTableDetail = reportTableDetail,
         reportDescriptives = reportDescriptives,
         reportAssumptions = reportAssumptions,
         reportStatistic = reportStatistic,

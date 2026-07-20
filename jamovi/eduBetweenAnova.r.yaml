@@ -107,6 +107,14 @@ items:
   - effectsize
   - emmeans
   - ggplot2
+- name: apaTable
+  title: APA Results Table
+  type: Html
+  visible: (reportTable)
+  clearWith:
+  - reportFormat
+  - reportTable
+  - reportTableDetail
 - name: interpretation
   title: Plain-Language Interpretation
   type: Html

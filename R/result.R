@@ -65,7 +65,7 @@ edu_reporting_options <- function(
         .jr_default_assumptions(analysis),
         diagnostics
     ))
-    structure(
+    result <- structure(
         list(
             analysis = analysis,
             label = label,
@@ -84,6 +84,7 @@ edu_reporting_options <- function(
         ),
         class = "edu_analysis"
     )
+    .jr_finalize_edu_analysis(result)
 }
 
 #' Generate explanatory and reporting text
@@ -105,87 +106,67 @@ edu_report <- function(
     if (!inherits(x, "edu_analysis"))
         .jr_stop("`x` must be an educational analysis result.")
     options <- edu_reporting_options(style, format, include, tone)
-    blocks <- x$report_blocks
-    blocks$apa <- .jr_apply_inclusions(blocks$apa, x$analysis, options$include)
-    note <- ""
-    if ("effect_size" %in% options$include) {
-        effect_text <- .jr_effect_benchmark_text(x)
-        if (nzchar(effect_text))
-            blocks$apa <- paste(blocks$apa, effect_text, sep = " ")
-        note <- .jr_effect_interpretation_note(x$analysis)
-    }
-
-    if (options$format == "copy_ready") {
-        selected <- if (options$style == "plain") blocks$plain else blocks$apa
-    } else if (options$format == "short") {
-        if (options$style == "plain") {
-            selected <- c(sprintf("What this analysis asks: %s", x$question), blocks$plain)
-        } else {
-            selected <- blocks$apa
-        }
-    } else if (options$style == "plain") {
-        opening <- sprintf("What this analysis asks: %s", x$question)
-        selected <- c(opening, blocks$plain)
-        if ("assumptions" %in% options$include)
-            selected <- c(selected, blocks$assumptions)
-        if ("cautions" %in% options$include && nzchar(x$caution))
-            selected <- c(selected, x$caution)
-    } else if (options$style == "journal") {
-        selected <- c(
-            if ("descriptives" %in% options$include) blocks$descriptives else "",
-            blocks$apa
-        )
-        if (options$tone != "concise")
-            selected <- c(selected, .jr_report_style_note(options$style))
-    } else if (options$style == "dissertation") {
-        selected <- c(blocks$rationale)
-        if ("descriptives" %in% options$include)
-            selected <- c(selected, blocks$descriptives)
-        selected <- c(selected, blocks$apa)
-        if ("assumptions" %in% options$include)
-            selected <- c(selected, blocks$assumptions)
-        if ("interpretation" %in% options$include)
-            selected <- c(selected, blocks$plain)
-        if ("cautions" %in% options$include && nzchar(x$caution))
-            selected <- c(selected, x$caution)
-        selected <- c(selected, .jr_report_style_note(options$style))
-    } else {
-        selected <- c(blocks$rationale)
-        if ("descriptives" %in% options$include)
-            selected <- c(selected, blocks$descriptives)
-        selected <- c(selected, blocks$apa)
-        if ("assumptions" %in% options$include)
-            selected <- c(selected, blocks$assumptions)
-        if ("interpretation" %in% options$include)
-            selected <- c(selected, blocks$plain)
-        if ("cautions" %in% options$include && nzchar(x$caution))
-            selected <- c(selected, x$caution)
-    }
-
-    if (options$tone == "concise" && options$format %in% c("paragraph", "table_paragraph", "bullets")) {
-        selected <- if (options$style == "plain") {
-            c(sprintf("What this analysis asks: %s", x$question), blocks$plain)
-        } else {
-            blocks$apa
-        }
-    } else if (options$format %in% c("paragraph", "table_paragraph", "bullets")) {
-        selected <- c(selected, .jr_report_tone_note(options$tone))
-    }
+    model <- .jr_report_model(x)
+    units <- model$narrativeUnits
+    claim <- .jr_apply_inclusions(units$inferential, model$analysisType, options$include)
 
     if (options$format == "table_paragraph") {
+        p_values <- model$p[is.finite(model$p)]
+        evidence <- if (length(p_values) && any(p_values < .05)) {
+            "The analysis provided evidence for at least one tested effect."
+        } else if (length(p_values)) {
+            "The analysis did not provide clear evidence for the tested effects in this sample."
+        } else {
+            "The numerical results are summarized in the accompanying table."
+        }
         selected <- c(
-            "Use the accompanying results table for the exact values, then report the result in text as follows:",
-            selected
+            evidence,
+            sprintf("The APA table reports the exact %s estimates without repeating every value here.", model$label)
         )
+    } else {
+        selected <- switch(
+            options$style,
+            plain = c(sprintf("What this analysis asks: %s", units$question), claim),
+            journal = c(claim),
+            dissertation = c(units$rationale, claim),
+            c(claim)
+        )
+
+        if (options$tone %in% c("student_friendly", "detailed", "critical") &&
+                !identical(options$style, "journal") &&
+                !identical(options$format, "copy_ready") &&
+                "interpretation" %in% options$include) {
+            selected <- c(selected, units$explanation)
+        }
+        if (options$tone %in% c("detailed", "critical") &&
+                "descriptives" %in% options$include) {
+            selected <- c(units$descriptives, selected)
+        }
+        if (options$tone %in% c("detailed", "critical") &&
+                "assumptions" %in% options$include) {
+            selected <- c(selected, units$assumptions)
+        }
     }
 
-    selected <- .jr_nonempty_text(selected)
-    if (nzchar(note) && options$format != "copy_ready") {
-        note <- paste0("*", note, "*")
-        selected <- c(selected, note)
+    warnings <- model$warnings
+    if (nrow(warnings)) {
+        show <- warnings$severity == "severe" |
+            (options$tone %in% c("detailed", "critical") && "cautions" %in% options$include)
+        selected <- c(selected, unique(warnings$message[show]))
     }
-    if (options$format != "copy_ready" && !is.null(blocks$note) && nzchar(blocks$note))
-        selected <- c(selected, paste0("*", blocks$note, "*"))
+    if (options$tone == "critical" && "cautions" %in% options$include)
+        selected <- c(selected, units$caution)
+    if (options$tone %in% c("detailed", "critical") && options$format != "copy_ready" && nzchar(units$note))
+        selected <- c(selected, paste0("*", units$note, "*"))
+
+    selected <- .jr_nonempty_text(selected)
+    if (options$format == "short") {
+        severe <- if (nrow(warnings)) unique(warnings$message[warnings$severity == "severe"]) else character()
+        selected <- unique(c(
+            utils::head(selected, if (options$style == "apa7") 1L else 2L),
+            severe
+        ))
+    }
     if (options$format == "bullets")
         return(paste0("- ", selected, collapse = "\n"))
     paste(selected, collapse = "\n\n")

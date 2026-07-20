@@ -27,6 +27,8 @@ children:
       - { type: ComboBox, name: reportStyle }
       - { type: ComboBox, name: reportFormat }
       - { type: ComboBox, name: reportTone }
+      - { type: CheckBox, name: reportTable }
+      - { type: ComboBox, name: reportTableDetail, enable: (reportTable) }
       - { type: CheckBox, name: reportDescriptives }
       - { type: CheckBox, name: reportAssumptions }
       - { type: CheckBox, name: reportStatistic }

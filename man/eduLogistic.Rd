@@ -13,6 +13,8 @@ eduLogistic(
   reportStyle = "apa7",
   reportFormat = "paragraph",
   reportTone = "student_friendly",
+  reportTable = FALSE,
+  reportTableDetail = "compact",
   reportDescriptives = TRUE,
   reportAssumptions = TRUE,
   reportStatistic = TRUE,
@@ -41,6 +43,10 @@ eduLogistic(
 
 \item{reportTone}{.}
 
+\item{reportTable}{.}
+
+\item{reportTableDetail}{.}
+
 \item{reportDescriptives}{.}
 
 \item{reportAssumptions}{.}
@@ -67,7 +73,9 @@ A results object containing:
 \code{results$coefficients} \tab \tab \tab \tab \tab a table \cr
 \code{results$diagnostics} \tab \tab \tab \tab \tab a table \cr
 \code{results$report} \tab \tab \tab \tab \tab a html \cr
+\code{results$apaTable} \tab \tab \tab \tab \tab a html \cr
 \code{results$interpretation} \tab \tab \tab \tab \tab a html \cr
+\code{results$methodsReferences} \tab \tab \tab \tab \tab a html \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
@@ -79,4 +87,14 @@ Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.f
 \description{
 Model a binary outcome using numeric or categorical predictors with odds
 ratios, model-fit explanation, and reporting guidance.
+}
+\section{References}{
+
+jReport
+
+parameters
+
+performance
+
+effectsize
 }

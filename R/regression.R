@@ -68,5 +68,5 @@ edu_lm <- function(data, formula, ci = 0.95) {
     )
     result$model <- model
     result$parameters <- params
-    result
+    .jr_finalize_edu_analysis(result)
 }

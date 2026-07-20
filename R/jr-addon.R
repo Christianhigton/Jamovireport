@@ -207,7 +207,7 @@
 .jr_addon_effect_label <- function(result, row) {
     statistic <- result$statistics[row, , drop = FALSE]
     benchmark <- function(label, value) {
-        sprintf("%s (%s)", label, .jr_effect_magnitude(result$analysis, value))
+        label
     }
     if (identical(result$analysis, "ttest"))
         return(benchmark(sprintf("Cohen's d = %s", .jr_num(statistic$effect, 2L, TRUE)), statistic$effect))

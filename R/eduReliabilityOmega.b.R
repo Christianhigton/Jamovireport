@@ -17,11 +17,13 @@ eduReliabilityOmegaClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6C
             ))
             result <- .jr_apply_variable_descriptions(result, self$data)
             self$results$overview$setContent(.jr_jamovi_overview_html(result))
-            self$results$main$setRow(rowKey = "1", values = as.list(result$statistics[1, ]))
+            self$results$main$deleteRows()
+            for (i in seq_len(nrow(result$statistics)))
+                self$results$main$addRow(rowKey = i, values = as.list(result$statistics[i, ]))
             for (i in seq_len(nrow(result$descriptives)))
                 self$results$items$addRow(rowKey = i, values = as.list(result$descriptives[i, ]))
             .jr_populate_diagnostics(self$results$diagnostics, result$diagnostics, fixed = TRUE)
-            self$results$report$setContent(.jr_guided_report_sections_html(result, self$options))
+            .jr_guided_reporting_output(self, result)
             self$results$interpretation$setContent(.jr_jamovi_interpretation_html(result))
             self$results$methodsReferences$setContent(.jr_methods_references_html(result))
             self$results$plot$setState(result)
@@ -33,4 +35,3 @@ eduReliabilityOmegaClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6C
         }
     )
 )
-

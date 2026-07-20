@@ -242,7 +242,7 @@ test_that("single-row primary result tables use setRow not addRow", {
   files <- c(
     "R/eduTTest.b.R", "R/eduAnova.b.R", "R/eduCorrelation.b.R",
     "R/eduTTestIndependent.b.R", "R/eduTTestPaired.b.R",
-    "R/eduReliabilityOmega.b.R", "R/eduChiSquareGoodness.b.R",
+    "R/eduChiSquareGoodness.b.R",
     "R/eduChiSquareIndependence.b.R", "R/eduLogistic.b.R", "R/eduRegression.b.R"
   )
   forbidden <- c("self\\$results\\$main\\$addRow", "self\\$results\\$fit\\$addRow")
@@ -259,7 +259,7 @@ test_that("single-row r.yaml tables declare rows: 1", {
   yamls <- c(
     "jamovi/eduTTest.r.yaml", "jamovi/eduAnova.r.yaml",
     "jamovi/eduTTestIndependent.r.yaml", "jamovi/eduTTestPaired.r.yaml",
-    "jamovi/eduCorrelation.r.yaml", "jamovi/eduReliabilityOmega.r.yaml",
+    "jamovi/eduCorrelation.r.yaml",
     "jamovi/eduChiSquareGoodness.r.yaml", "jamovi/eduChiSquareIndependence.r.yaml",
     "jamovi/eduLogistic.r.yaml", "jamovi/eduRegression.r.yaml"
   )

@@ -30,7 +30,7 @@ report_html <- function(result) {
     jReport:::.jr_guided_report_sections_html(result, list(
         reportStyle          = "apa7",
         reportFormat         = "paragraph",
-        reportTone           = "student_friendly",
+        reportTone           = "detailed",
         reportDescriptives   = TRUE,
         reportAssumptions    = TRUE,
         reportStatistic      = TRUE,

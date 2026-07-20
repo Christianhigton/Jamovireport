@@ -47,7 +47,7 @@ eduDemographicsClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6::R6C
 .dm_best_practices_html <- function() {
     '<div style="font-family:sans-serif;font-size:0.88em;line-height:1.6;
         border-top:2px solid #ccc;padding:10px 0 4px">
-<p style="margin:0 0 6px"><strong>APA 7 Demographic Table — Reporting Best Practices</strong></p>
+<p style="margin:0 0 6px"><strong>APA 7 Demographic Table \u2014 Reporting Best Practices</strong></p>
 
 <p style="margin:0 0 5px"><strong>Table format.</strong>
 This table follows APA 7 conventions. After pasting into Word: (1) italicise the table title,
@@ -71,7 +71,7 @@ strategy (e.g., listwise deletion, multiple imputation) in the Method section.</
 
 <p style="margin:0 0 5px"><strong>Paragraph.</strong>
 Begin the paragraph with the total sample size, then describe each variable. Keep the tone
-descriptive — save significance testing for the Results section. Edit the auto-generated
+descriptive \u2014 save significance testing for the Results section. Edit the auto-generated
 paragraph above to match your specific phrasing before submitting.</p>
 
 <p style="margin:0"><strong>Table citation.</strong>

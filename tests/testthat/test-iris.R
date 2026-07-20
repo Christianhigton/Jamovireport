@@ -64,7 +64,7 @@ test_that("one-way ANOVA on iris petal length across three species", {
     expect_true(result$statistics$p < .001)
     expect_true(nrow(result$descriptives) == 3L)
     expect_false(is.null(result$posthoc))
-    expect_match(edu_report(result), "eta-squared")
+    expect_match(edu_report(result), "η²", fixed = TRUE)
     expect_s3_class(edu_plot(result), "ggplot")
 })
 
@@ -75,7 +75,7 @@ test_that("between-subjects ANOVA on iris with two crossed factors detects inter
     expect_equal(result$analysis, "anova_between")
     expect_true(any(grepl("Species", result$statistics$term)))
     expect_true(any(grepl("sample_block", result$statistics$term)))
-    expect_match(edu_report(result), "partial eta-squared")
+    expect_match(edu_report(result), "ηp²", fixed = TRUE)
     expect_s3_class(edu_plot(result), "ggplot")
 })
 

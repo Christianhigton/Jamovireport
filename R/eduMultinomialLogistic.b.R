@@ -29,10 +29,9 @@ eduMultinomialLogisticClass <- if (requireNamespace("jmvcore", quietly = TRUE)) 
                 ))
             }
             .jr_populate_diagnostics(self$results$diagnostics, result$diagnostics)
-            self$results$report$setContent(.jr_guided_report_sections_html(result, self$options))
+            .jr_guided_reporting_output(self, result)
             self$results$interpretation$setContent(.jr_jamovi_interpretation_html(result))
             self$results$methodsReferences$setContent(.jr_methods_references_html(result))
         }
     )
 )
-

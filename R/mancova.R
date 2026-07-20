@@ -209,5 +209,5 @@ edu_manova <- function(data, outcomes, factors = character(), covariates = chara
     )
     result$model <- model
     result$followups <- followups
-    result
+    .jr_finalize_edu_analysis(result)
 }

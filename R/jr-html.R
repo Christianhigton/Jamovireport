@@ -430,9 +430,9 @@
     if (!length(ges_vals) || !length(eta_vals))
         return("")
     base <- paste(
-        "Generalised eta squared (ηG²) estimates the proportion of total variance",
+        "Generalised eta squared (\u03B7G\u00B2) estimates the proportion of total variance",
         "explained by an effect and allows comparison across different experimental designs.",
-        "Partial eta squared (ηp²) estimates the proportion of variance explained after",
+        "Partial eta squared (\u03B7p\u00B2) estimates the proportion of variance explained after",
         "accounting for other sources of variance in the model and is therefore often larger."
     )
     max_ges <- max(ges_vals, na.rm = TRUE)
@@ -440,7 +440,7 @@
     discrepancy <- if (is.finite(max_ges) && is.finite(max_eta) && max_ges > 0 &&
                        max_eta > 2 * max_ges) {
         paste(
-            "The difference between ηG² and ηp² suggests that a substantial proportion of",
+            "The difference between \u03B7G\u00B2 and \u03B7p\u00B2 suggests that a substantial proportion of",
             "variability is attributable to individual differences between participants.",
             "This pattern is common in repeated measures designs where participant characteristics",
             "account for a large amount of variance."

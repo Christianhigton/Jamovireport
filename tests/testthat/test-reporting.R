@@ -13,13 +13,13 @@ test_that("report inclusion options alter copy-ready statistical text", {
     expect_false(grepl("M =", minimal, fixed = TRUE))
 })
 
-test_that("plain-language format exposes interpretation and cautions", {
+test_that("plain-language format exposes interpretation without unrequested diagnostics", {
     result <- edu_lm(mtcars, mpg ~ wt + hp)
     text <- edu_report(result, style = "plain", format = "paragraph")
 
     expect_match(text, "What this analysis asks")
     expect_match(text, "predictors accounted for")
-    expect_match(text, "Diagnostics")
+    expect_false(grepl("Diagnostics", text, fixed = TRUE))
 })
 
 test_that("report style, format, and tone options produce distinct wording", {
@@ -33,15 +33,16 @@ test_that("report style, format, and tone options produce distinct wording", {
     expect_false(identical(apa, plain))
     expect_false(identical(apa, journal))
     expect_false(identical(apa, dissertation))
-    expect_match(journal, "Journal style note", fixed = TRUE)
-    expect_match(dissertation, "Dissertation style note", fixed = TRUE)
+    expect_false(grepl("What this analysis asks", journal, fixed = TRUE))
+    expect_match(dissertation, result$report_model$narrativeUnits$rationale, fixed = TRUE)
 
     copy_ready <- edu_report(result, style = "apa7", format = "copy_ready")
     table_paragraph <- edu_report(result, style = "apa7", format = "table_paragraph")
 
     expect_false(identical(apa, copy_ready))
     expect_false(identical(apa, table_paragraph))
-    expect_match(table_paragraph, "Use the accompanying results table", fixed = TRUE)
+    expect_match(table_paragraph, "APA table", fixed = TRUE)
+    expect_false(grepl("Use the accompanying results table", table_paragraph, fixed = TRUE))
     expect_false(grepl("Interpretation note", copy_ready, fixed = TRUE))
 
     tone_text <- vapply(
@@ -50,8 +51,8 @@ test_that("report style, format, and tone options produce distinct wording", {
         character(1)
     )
     expect_equal(length(unique(tone_text)), 4L)
-    expect_match(tone_text[["detailed"]], "Reporting detail", fixed = TRUE)
-    expect_match(tone_text[["critical"]], "Critical reporting note", fixed = TRUE)
+    expect_match(tone_text[["detailed"]], "Diagnostics", fixed = TRUE)
+    expect_match(tone_text[["critical"]], "Caution", fixed = TRUE)
 })
 
 test_that("ANOVA post-hoc reporting can be excluded", {
@@ -81,16 +82,15 @@ test_that("factorial ANOVA effect sizes can be omitted from reporting", {
     expect_false(grepl("Interpretation note", text, fixed = TRUE))
 })
 
-test_that("reported effect sizes include benchmarks and interpretation note", {
+test_that("reported effect sizes do not add generic benchmark prose", {
     result <- edu_t_test(ToothGrowth, "len", "supp")
     text <- edu_report(result, format = "short")
     rows <- .jr_addon_apa_rows(list(result))
 
-    expect_match(text, "Effect-size benchmark")
-    expect_match(text, "Interpretation note")
-    expect_match(text, "\n\n\\*Interpretation note:")
-    expect_match(text, "Cohen, 1988; Cumming, 2014", fixed = TRUE)
-    expect_match(rows$effect[1], "large|medium|small|below small")
+    expect_match(text, "Cohen's d", fixed = TRUE)
+    expect_false(grepl("Effect-size benchmark", text, fixed = TRUE))
+    expect_false(grepl("Interpretation note", text, fixed = TRUE))
+    expect_false(grepl("large|medium|small|below small", rows$effect[1]))
 })
 
 test_that("omega estimates and intervals follow reporting inclusion controls", {
@@ -143,8 +143,8 @@ test_that("jReport content is rendered as structured HTML cards", {
     expect_match(overview, "Reporting controls")
     expect_match(report, "Copy-ready reporting")
     expect_match(report, "Welch independent-samples t-test")
-    expect_match(report, "border-left:4px solid #4b66a2", fixed = TRUE)
-    expect_match(report, "Interpretation note:")
+    expect_match(report, "border-left:5px solid #4b66a2", fixed = TRUE)
+    expect_false(grepl("Interpretation note:", report, fixed = TRUE))
     expect_match(interpretation, "What does this mean")
 })
 
@@ -307,7 +307,7 @@ test_that("between-subjects ANOVA report uses separated guidance sections", {
     expect_match(report, "Assumption checks did not indicate substantial violations")
     expect_match(report, "Residual normality \\(Shapiro-Wilk\\)")
     expect_match(report, "A between-subjects ANOVA compares mean")
-    expect_match(report, "Effect-size benchmark")
+    expect_false(grepl("Effect-size benchmark", report, fixed = TRUE))
     expect_match(report, "The correct dependent variable is reported.")
     expect_match(report, "Correction methods are named correctly.")
     expect_false(grepl("Copy-ready report text", report, fixed = TRUE))

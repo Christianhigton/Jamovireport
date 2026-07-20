@@ -38,7 +38,7 @@ interval for omega.}
 An \code{edu_analysis} object.
 }
 \description{
-Estimates internal consistency using McDonald's omega total rather than
-coefficient alpha. Item diagnostics are supplied to discourage relying on a
-single coefficient without inspecting item behaviour.
+Estimates internal consistency using McDonald's omega total and Cronbach's
+alpha. Item diagnostics are supplied to discourage relying on a single
+coefficient without inspecting item behaviour.
 }

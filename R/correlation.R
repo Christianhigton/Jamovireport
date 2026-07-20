@@ -14,7 +14,7 @@ edu_correlation <- function(data, x, y, method = c("pearson", "spearman", "kenda
     .jr_numeric(d[[y]], y)
     test <- suppressWarnings(stats::cor.test(d[[x]], d[[y]], method = method, conf.level = ci, exact = FALSE))
     coefficient <- unname(test$estimate)
-    coefficient_name <- switch(method, pearson = "r", spearman = "ρ", kendall = "τ")
+    coefficient_name <- switch(method, pearson = "r", spearman = "\u03C1", kendall = "\u03C4")
     n <- nrow(d)
     sig_label <- if (test$p.value < .05) "statistically significant" else "not statistically significant"
     direction <- if (coefficient >= 0) "positive" else "negative"

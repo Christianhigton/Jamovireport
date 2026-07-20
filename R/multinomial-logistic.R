@@ -65,7 +65,7 @@ edu_multinomial_logistic <- function(data, formula, ci = 0.95) {
     mcfadden <- as.numeric(1 - stats::logLik(model) / stats::logLik(null_model))
 
     apa <- sprintf(
-        "A multinomial logistic regression predicting %s (%s) from %s was %s, χ²(%s) = %s, p %s, McFadden’s R² = %s.",
+        "A multinomial logistic regression predicting %s (%s) from %s was %s, \u03C7\u00B2(%s) = %s, p %s, McFadden\u2019s R\u00B2 = %s.",
         outcome_var, paste(all_levels, collapse = ", "),
         paste(terms_labels, collapse = ", "),
         if (p_value < .05) "statistically significant" else "not statistically significant",
@@ -135,7 +135,7 @@ edu_multinomial_logistic <- function(data, formula, ci = 0.95) {
     result$parameters <- parameters
     result$reference  <- reference
     result$outcome_levels <- outcome_levels
-    result
+    .jr_finalize_edu_analysis(result)
 }
 
 .jr_multinomial_diagnostics <- function(model, data, outcome, converged) {

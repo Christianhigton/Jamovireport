@@ -12,8 +12,32 @@ jrReportTTestPS(data)
 \value{
 A results object containing:
 \tabular{llllll}{
+\code{results$jReportHeading} \tab \tab \tab \tab \tab a html \cr
+\code{results$jReportApaTable} \tab \tab \tab \tab \tab a table \cr
+\code{results$jReportAssumptions} \tab \tab \tab \tab \tab a table \cr
+\code{results$jReportCard} \tab \tab \tab \tab \tab a html \cr
+\code{results$jReportInterpretation} \tab \tab \tab \tab \tab a html \cr
+\code{results$methodsReferences} \tab \tab \tab \tab \tab a html \cr
 }
+
+Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
+
+\code{results$jReportApaTable$asDF}
+
+\code{as.data.frame(results$jReportApaTable)}
 }
 \description{
 Automatic Report for Paired Samples T-Test
+}
+\section{References}{
+
+RCore
+
+jReport
+
+jmvcore
+
+effectsize
+
+BayesFactor
 }

@@ -64,7 +64,7 @@ test_that("one-way ANOVA reports effect size and follow-up comparisons", {
 
     expect_equal(result$analysis, "anova_oneway")
     expect_true(result$statistics$p < .001)
-    expect_match(edu_report(result), "eta-squared")
+    expect_match(edu_report(result), "η²", fixed = TRUE)
     expect_false(is.null(result$posthoc))
 })
 
@@ -75,7 +75,7 @@ test_that("between-subjects ANOVA reports factorial effects and interactions", {
 
     expect_equal(result$analysis, "anova_between")
     expect_true("dose:supp" %in% result$statistics$term)
-    expect_match(edu_report(result), "partial eta-squared")
+    expect_match(edu_report(result), "ηp²", fixed = TRUE)
     expect_s3_class(edu_plot(result), "ggplot")
 })
 
@@ -86,7 +86,7 @@ test_that("ANCOVA identifies the regression-slope assumption", {
 
     expect_equal(result$analysis, "ancova")
     expect_true("Homogeneity of regression slopes" %in% result$diagnostics$check)
-    expect_match(edu_report(result), "homogeneity of regression slopes assumption", ignore.case = TRUE)
+    expect_match(edu_report(result, format = "paragraph", tone = "detailed"), "homogeneity of regression slopes assumption", ignore.case = TRUE)
 })
 
 test_that("MANOVA and MANCOVA report multivariate Pillai tests", {
@@ -206,7 +206,7 @@ test_that("reliability analysis reports omega with item-quality guidance", {
         scale, names(scale), reverse_items = "A1",
         bootstrap = TRUE, boot_iterations = 20
     )
-    text <- edu_report(result)
+    text <- edu_report(result, format = "paragraph", tone = "detailed")
 
     expect_equal(result$analysis, "reliability_omega")
     expect_match(text, "McDonald's omega total")

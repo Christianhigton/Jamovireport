@@ -12,6 +12,8 @@ eduMancova(
   reportStyle = "apa7",
   reportFormat = "paragraph",
   reportTone = "student_friendly",
+  reportTable = FALSE,
+  reportTableDetail = "compact",
   reportDescriptives = TRUE,
   reportAssumptions = TRUE,
   reportStatistic = TRUE,
@@ -38,6 +40,10 @@ eduMancova(
 
 \item{reportTone}{.}
 
+\item{reportTable}{.}
+
+\item{reportTableDetail}{.}
+
 \item{reportDescriptives}{.}
 
 \item{reportAssumptions}{.}
@@ -63,8 +69,11 @@ A results object containing:
 \code{results$main} \tab \tab \tab \tab \tab a table \cr
 \code{results$descriptives} \tab \tab \tab \tab \tab a table \cr
 \code{results$diagnostics} \tab \tab \tab \tab \tab a table \cr
+\code{results$followups} \tab \tab \tab \tab \tab a table \cr
 \code{results$report} \tab \tab \tab \tab \tab a html \cr
+\code{results$apaTable} \tab \tab \tab \tab \tab a html \cr
 \code{results$interpretation} \tab \tab \tab \tab \tab a html \cr
+\code{results$methodsReferences} \tab \tab \tab \tab \tab a html \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
@@ -75,5 +84,15 @@ Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.f
 }
 \description{
 Test whether two or more dependent variables jointly vary across
-categorical factors and optional numeric covariates.
+categorical factors and optional numeric covariates. Significant Pillai
+omnibus effects are followed by Holm-adjusted univariate ANOVA/ANCOVA
+summaries for each dependent variable.
+}
+\section{References}{
+
+jReport
+
+car
+
+effectsize
 }

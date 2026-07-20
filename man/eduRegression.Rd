@@ -13,6 +13,8 @@ eduRegression(
   reportStyle = "apa7",
   reportFormat = "paragraph",
   reportTone = "student_friendly",
+  reportTable = FALSE,
+  reportTableDetail = "compact",
   reportDescriptives = TRUE,
   reportAssumptions = TRUE,
   reportStatistic = TRUE,
@@ -41,6 +43,10 @@ eduRegression(
 
 \item{reportTone}{.}
 
+\item{reportTable}{.}
+
+\item{reportTableDetail}{.}
+
 \item{reportDescriptives}{.}
 
 \item{reportAssumptions}{.}
@@ -67,8 +73,10 @@ A results object containing:
 \code{results$coefficients} \tab \tab \tab \tab \tab a table \cr
 \code{results$diagnostics} \tab \tab \tab \tab \tab a table \cr
 \code{results$report} \tab \tab \tab \tab \tab a html \cr
+\code{results$apaTable} \tab \tab \tab \tab \tab a html \cr
 \code{results$interpretation} \tab \tab \tab \tab \tab a html \cr
 \code{results$plot} \tab \tab \tab \tab \tab an image \cr
+\code{results$methodsReferences} \tab \tab \tab \tab \tab a html \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
@@ -80,4 +88,16 @@ Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.f
 \description{
 Model a numeric outcome using one or more numeric predictors with model
 fit, coefficients, diagnostic guidance, and interpretable reporting.
+}
+\section{References}{
+
+jReport
+
+parameters
+
+performance
+
+effectsize
+
+ggplot2
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/eduReliabilityOmega.h.R
 \name{eduReliabilityOmega}
 \alias{eduReliabilityOmega}
-\title{Guided Reliability: McDonald's Omega}
+\title{Guided Reliability: Omega and Alpha}
 \usage{
 eduReliabilityOmega(
   data,
@@ -16,6 +16,8 @@ eduReliabilityOmega(
   reportStyle = "apa7",
   reportFormat = "paragraph",
   reportTone = "student_friendly",
+  reportTable = FALSE,
+  reportTableDetail = "compact",
   reportDescriptives = TRUE,
   reportAssumptions = TRUE,
   reportEffect = TRUE,
@@ -47,6 +49,10 @@ eduReliabilityOmega(
 
 \item{reportTone}{.}
 
+\item{reportTable}{.}
+
+\item{reportTableDetail}{.}
+
 \item{reportDescriptives}{.}
 
 \item{reportAssumptions}{.}
@@ -67,8 +73,10 @@ A results object containing:
 \code{results$items} \tab \tab \tab \tab \tab a table \cr
 \code{results$diagnostics} \tab \tab \tab \tab \tab a table \cr
 \code{results$report} \tab \tab \tab \tab \tab a html \cr
+\code{results$apaTable} \tab \tab \tab \tab \tab a html \cr
 \code{results$interpretation} \tab \tab \tab \tab \tab a html \cr
 \code{results$plot} \tab \tab \tab \tab \tab an image \cr
+\code{results$methodsReferences} \tab \tab \tab \tab \tab a html \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
@@ -78,6 +86,18 @@ Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.f
 \code{as.data.frame(results$main)}
 }
 \description{
-Estimate and report internal consistency using McDonald's omega total, with
-item diagnostics and clear interpretation guidance.
+Estimate and report internal consistency using McDonald's omega total and
+Cronbach's alpha, with item diagnostics and clear interpretation guidance.
+}
+\section{References}{
+
+jReport
+
+psych
+
+McDonald1999
+
+RevelleCondon2019
+
+ggplot2
 }

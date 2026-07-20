@@ -91,7 +91,7 @@
         result[[field]] <- table
     }
     result$variable_labels <- labels
-    result
+    .jr_finalize_edu_analysis(result)
 }
 
 .jr_expected_ratio_values <- function(ratios) {
@@ -117,13 +117,43 @@
 
 .jr_guided_report_sections_html <- function(result, options) {
     args <- .jr_jamovi_report_args(options)
+    model <- .jr_report_model(result)
+    warnings <- model$warnings
+    diagnostic_note <- ""
+    if (args$tone %in% c("detailed", "critical") && "assumptions" %in% args$include)
+        diagnostic_note <- model$narrativeUnits$assumptions
+    if (nrow(warnings)) {
+        show <- warnings$severity == "severe" | args$tone %in% c("detailed", "critical")
+        diagnostic_note <- paste(
+            .jr_nonempty_text(diagnostic_note, unique(warnings$message[show])),
+            collapse = "\n\n"
+        )
+    }
+    guidance <- if (identical(args$tone, "concise")) "" else result$interpretation %||% ""
     .jr_build_report_sections_html(
         apa_wording             = do.call(edu_report, c(list(x = result), args)),
-        diagnostic_note         = result$caution %||% "",
-        interpretation_guidance = result$interpretation %||% "",
+        diagnostic_note         = diagnostic_note,
+        interpretation_guidance = guidance,
         checklist_items         = .jr_analysis_checklist(result$analysis %||% ""),
         report_style            = args$style
     )
+}
+
+.jr_guided_reporting_output <- function(self, result, report_html = NULL) {
+    if (is.null(report_html))
+        report_html <- .jr_guided_report_sections_html(result, self$options)
+    self$results$report$setContent(report_html)
+
+    requested <- tryCatch(isTRUE(self$options$reportTable), error = function(e) FALSE)
+    format <- tryCatch(as.character(self$options$reportFormat), error = function(e) "paragraph")
+    show_table <- requested || identical(format, "table_paragraph")
+    detail <- tryCatch(as.character(self$options$reportTableDetail), error = function(e) "compact")
+    if (!detail %in% c("compact", "detailed"))
+        detail <- "compact"
+
+    self$results$apaTable$setVisible(show_table)
+    self$results$apaTable$setContent(if (show_table) .jr_apa_table_html(result, detail) else "")
+    invisible(NULL)
 }
 
 .jr_nonempty_unique <- function(items) {
@@ -163,8 +193,6 @@
                 "Interpret the named correction method with the post hoc output, because Tukey, Bonferroni, Holm, and Games-Howell control error rates in different ways."
             )
         else "",
-        if ("effect_size" %in% include) .jr_effect_benchmark_text(result) else "",
-        if ("effect_size" %in% include) .jr_effect_interpretation_note(result$analysis) else "",
         paste(
             "A significant omnibus effect indicates evidence that at least one group mean differs, but it does not by itself identify which groups differ.",
             "A non-significant omnibus effect means the analysis did not provide clear evidence of group mean differences in this sample.",
@@ -492,7 +520,7 @@
         anova_oneway = c(
             "Outcome variable is numeric and grouping variable has the correct levels.",
             "F statistic, df, and p value match jamovi output.",
-            "Effect size (η²) matches jamovi output.",
+            "Effect size (\u03B7\u00B2) matches jamovi output.",
             "Post hoc comparisons (if run) match jamovi output.",
             "Assumption checks (normality, homogeneity of variance) have been reviewed.",
             "Interpretation matches the research question."
@@ -500,7 +528,7 @@
         ancova = c(
             "Outcome, grouping factor, and covariate(s) are correctly specified.",
             "F statistics, df, and p values match jamovi output.",
-            "Effect sizes (ηp²) match jamovi output.",
+            "Effect sizes (\u03B7p\u00B2) match jamovi output.",
             "Covariate(s) are measured before the intervention or are not affected by group.",
             "Assumption checks have been reviewed.",
             "Interpretation matches the research question."
@@ -508,7 +536,7 @@
         anova_rm = c(
             "Within-subjects factor levels and outcome columns are correctly mapped.",
             "F statistic, df (with Greenhouse-Geisser correction if applied), and p value match jamovi output.",
-            "Effect size (ηp²) matches jamovi output.",
+            "Effect size (\u03B7p\u00B2) matches jamovi output.",
             "Sphericity assumption and correction have been noted if applicable.",
             "Post hoc comparisons (if run) match jamovi output.",
             "Interpretation matches the research question."
@@ -516,7 +544,7 @@
         anova_mixed = c(
             "Between-subjects and within-subjects factors are correctly specified.",
             "F statistics, df, and p values for all effects match jamovi output.",
-            "Effect sizes (ηp²) match jamovi output.",
+            "Effect sizes (\u03B7p\u00B2) match jamovi output.",
             "Sphericity and homogeneity of variance assumptions have been reviewed.",
             "Interpretation of interaction (if significant) takes precedence.",
             "Interpretation matches the research question."
@@ -545,7 +573,7 @@
             "Outcome variable is binary with the correct reference category.",
             "Predictors are the intended covariates and factors.",
             "Chi-square model fit statistic and p value match jamovi output.",
-            "McFadden's R² matches jamovi output.",
+            "McFadden's R\u00B2 matches jamovi output.",
             "Odds ratios and confidence intervals match the coefficient table.",
             "Assumption checks (linearity of log-odds, multicollinearity) have been reviewed.",
             "Interpretation matches the research question."
@@ -568,7 +596,7 @@
             "Reference category is correctly identified.",
             "Predictors are the intended covariates and factors.",
             "Chi-square model fit statistic, df, and p value match jamovi output.",
-            "McFadden's R² matches jamovi output.",
+            "McFadden's R\u00B2 matches jamovi output.",
             "Relative risk ratios and confidence intervals match the coefficient table.",
             "Assumption checks (convergence, sample size per category) have been reviewed.",
             "Interpretation matches the research question."

@@ -126,10 +126,17 @@ items:
 - name: report
   title: Reporting
   type: Html
+- name: apaTable
+  title: APA Results Table
+  type: Html
+  visible: (reportTable)
+  clearWith:
+  - reportFormat
+  - reportTable
+  - reportTableDetail
 - name: interpretation
   title: Plain-Language Interpretation
   type: Html
 - name: methodsReferences
   title: Methods and References
   type: Html
-

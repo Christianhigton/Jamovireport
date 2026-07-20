@@ -28,7 +28,7 @@ edu_chisq_independence <- function(data, row, column, counts = NULL) {
     diagnostics <- .jr_chisq_expected_diagnostic(test$expected, identical(dim(observed), c(2L, 2L)))
     relation <- if (test$p.value < .05) "a statistically significant association" else "no statistically significant association"
     apa <- sprintf(
-        "A chi-square test of independence found %s between %s and %s, χ²(%s, N = %s) = %s, p %s, Cramer's V = %s.",
+        "A chi-square test of independence found %s between %s and %s, \u03C7\u00B2(%s, N = %s) = %s, p %s, Cramer's V = %s.",
         relation, row, column, .jr_num(test$parameter, 0L), .jr_num(n, 0L),
         .jr_num(test$statistic), .jr_p(test$p.value), .jr_num(cramer_v, 2L, TRUE)
     )
@@ -63,7 +63,7 @@ edu_chisq_independence <- function(data, row, column, counts = NULL) {
     )
     result$cells <- cells
     result$observed <- observed
-    result
+    .jr_finalize_edu_analysis(result)
 }
 
 #' Guided chi-square goodness-of-fit test
@@ -112,7 +112,7 @@ edu_chisq_gof <- function(data, variable, counts = NULL, expected = NULL) {
     distribution <- if (test$p.value < .05) "differed significantly from" else "did not differ significantly from"
     expectation_label <- if (length(unique(proportions)) == 1L) "an equal distribution" else "the specified expected distribution"
     apa <- sprintf(
-        "A chi-square goodness-of-fit test indicated that frequencies for %s %s %s, χ²(%s, N = %s) = %s, p %s, Cohen's w = %s.",
+        "A chi-square goodness-of-fit test indicated that frequencies for %s %s %s, \u03C7\u00B2(%s, N = %s) = %s, p %s, Cohen's w = %s.",
         variable, distribution, expectation_label, .jr_num(test$parameter, 0L),
         .jr_num(n, 0L), .jr_num(test$statistic), .jr_p(test$p.value),
         .jr_num(cohen_w, 2L, TRUE)
@@ -148,7 +148,7 @@ edu_chisq_gof <- function(data, variable, counts = NULL, expected = NULL) {
     )
     result$cells <- cells
     result$expected_proportions <- proportions
-    result
+    .jr_finalize_edu_analysis(result)
 }
 
 .jr_chisq_cells <- function(observed, expected, residuals) {

@@ -48,14 +48,14 @@ options:
       title: Report format
       type: List
       options:
-        - { name: short, title: Short APA sentence }
+        - { name: short, title: Short results sentence }
         - { name: paragraph, title: Full results paragraph }
         - { name: bullets, title: Bullet-point interpretation }
         - { name: table_paragraph, title: Table plus paragraph }
         - { name: copy_ready, title: Copy-ready report block }
       default: paragraph
     - name: reportTone
-      title: Tone of explanation
+      title: Detail level
       type: List
       options:
         - { name: concise, title: Concise }
@@ -63,6 +63,14 @@ options:
         - { name: detailed, title: Detailed }
         - { name: critical, title: Critical / publication-focused }
       default: student_friendly
+    - { name: reportTable, title: Generate APA results table, type: Bool, default: false }
+    - name: reportTableDetail
+      title: Table detail
+      type: List
+      options:
+        - { name: compact, title: APA compact }
+        - { name: detailed, title: APA detailed }
+      default: compact
     - { name: reportDescriptives, title: Model fit and coefficients, type: Bool, default: true }
     - { name: reportAssumptions, title: Diagnostic checks, type: Bool, default: true }
     - { name: reportStatistic, title: Test statistic, type: Bool, default: true }

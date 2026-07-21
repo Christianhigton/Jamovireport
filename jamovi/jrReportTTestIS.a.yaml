@@ -13,6 +13,10 @@ description:
         - BayesFactor
 options:
     - { name: data, type: Data }
+    - name: jreportEnabled
+      title: Generate jReport output
+      type: Bool
+      default: false
     - name: pAdjustment
       title: Multiple-comparison adjustment
       type: List

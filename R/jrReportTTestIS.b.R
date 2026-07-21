@@ -1,4 +1,18 @@
 #' @importFrom jmvcore .
+.jr_ttest_is_output_names <- c(
+    "jReportHeading", "jReportApaTable", "jReportAssumptions",
+    "jReportCard", "jReportInterpretation", "methodsReferences"
+)
+
+.jr_ttest_is_hide_outputs <- function(self) {
+    for (name in .jr_ttest_is_output_names) {
+        item <- .jr_addon_get(self$parent$results, name)
+        if (!is.null(item))
+            item$setVisible(FALSE)
+    }
+    invisible(NULL)
+}
+
 jrReportTTestISClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class(
     "jrReportTTestISClass",
     inherit = jrReportTTestISBase,
@@ -9,67 +23,21 @@ jrReportTTestISClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class
                 refs = c("RCore", "jReport", "jmvcore", "effectsize", "BayesFactor",
                          "Cohen1988", "Cumming2014")
             )
+            .jr_ttest_is_hide_outputs(self)
         },
         .run = function() {
-            group <- self$parent$options$group
-            outcomes <- self$parent$options$vars
-            if (is.null(group) || length(outcomes) == 0L)
+            .jr_ttest_is_hide_outputs(self)
+            if (!isTRUE(self$options$jreportEnabled))
                 return()
-            results <- list()
-            if (isTRUE(self$parent$options$students)) {
-                results <- c(results, lapply(outcomes, function(outcome) {
-                    .jr_tag_ttest_attempt(try(
-                        edu_t_test(
-                            self$data, outcome, group = group,
-                            var_equal = TRUE, ci = .jr_parent_ci(self$parent)
-                        ),
-                        silent = TRUE
-                    ), paste(outcome, "Student t-test"))
-                }))
+            card <- .jr_addon_get(self$parent$results, "jReportCard")
+            if (!is.null(card)) {
+                card$setVisible(TRUE)
+                card$setContent(.jr_html_card(
+                    "jReport experiment",
+                    "jReport: Reporting and explanation",
+                    "jReport add-on proof-of-concept is active."
+                ))
             }
-            if (isTRUE(self$parent$options$welchs)) {
-                results <- c(results, lapply(outcomes, function(outcome) {
-                    .jr_tag_ttest_attempt(try(
-                        edu_t_test(
-                            self$data, outcome, group = group,
-                            var_equal = FALSE, ci = .jr_parent_ci(self$parent)
-                        ),
-                        silent = TRUE
-                    ), paste(outcome, "Welch t-test"))
-                }))
-            }
-            if (isTRUE(self$parent$options$mann)) {
-                results <- c(results, lapply(outcomes, function(outcome) {
-                    try(
-                        edu_mann_whitney(
-                            self$data, outcome, group = group,
-                            ci = .jr_parent_ci(self$parent)
-                        ),
-                        silent = TRUE
-                    )
-                }))
-            }
-            if (isTRUE(self$parent$options$bf)) {
-                results <- c(results, lapply(outcomes, function(outcome) {
-                    try(
-                        edu_bayes_t_test(
-                            self$data, outcome, group = group,
-                            prior_width = self$parent$options$bfPrior
-                        ),
-                        silent = TRUE
-                    )
-                }))
-            }
-            if (!any(vapply(results, inherits, logical(1), what = "edu_analysis"))) {
-                .jr_addon_message(self, "Select Student's, Welch's, Mann-Whitney U, or Bayes factor to generate report text.")
-                return()
-            }
-            adjustment <- tryCatch(self$options$pAdjustment, error = function(e) "holm")
-            .jr_addon_set_card(
-                self, results,
-                adjustment = adjustment,
-                alpha = 1 - .jr_parent_ci(self$parent)
-            )
         }
     )
 )

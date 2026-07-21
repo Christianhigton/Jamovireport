@@ -6,6 +6,7 @@ jrReportTTestISOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
     inherit = jmvcore::Options,
     public = list(
         initialize = function(
+            jreportEnabled = FALSE,
             pAdjustment = "holm", ...) {
 
             super$initialize(
@@ -14,6 +15,10 @@ jrReportTTestISOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
                 requiresData=TRUE,
                 ...)
 
+            private$..jreportEnabled <- jmvcore::OptionBool$new(
+                "jreportEnabled",
+                jreportEnabled,
+                default=FALSE)
             private$..pAdjustment <- jmvcore::OptionList$new(
                 "pAdjustment",
                 pAdjustment,
@@ -23,11 +28,14 @@ jrReportTTestISOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
                     "none"),
                 default="holm")
 
+            self$.addOption(private$..jreportEnabled)
             self$.addOption(private$..pAdjustment)
         }),
     active = list(
+        jreportEnabled = function() private$..jreportEnabled$value,
         pAdjustment = function() private$..pAdjustment$value),
     private = list(
+        ..jreportEnabled = NA,
         ..pAdjustment = NA)
 )
 
@@ -188,6 +196,7 @@ jrReportTTestISBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
 #' BayesFactor
 #'
 #' @param data .
+#' @param jreportEnabled .
 #' @param pAdjustment When several related t-tests address the same overall
 #'   research question, adjustment controls the increased familywise Type I
 #'   error risk. Holm is recommended for most confirmatory analyses and is
@@ -211,6 +220,7 @@ jrReportTTestISBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
 #' @export
 jrReportTTestIS <- function(
     data,
+    jreportEnabled = FALSE,
     pAdjustment = "holm") {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
@@ -222,6 +232,7 @@ jrReportTTestIS <- function(
 
 
     options <- jrReportTTestISOptions$new(
+        jreportEnabled = jreportEnabled,
         pAdjustment = pAdjustment)
 
     analysis <- jrReportTTestISClass$new(
@@ -232,4 +243,3 @@ jrReportTTestIS <- function(
 
     analysis$results
 }
-

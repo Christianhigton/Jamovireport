@@ -5,8 +5,13 @@ jus: '2.0'
 stage: 0
 compilerMode: tame
 children:
-  - type: LayoutBox
-    margin: large
+  - type: CollapseBox
+    label: 'jReport: Reporting and explanation'
+    collapsed: true
     children:
-      - { type: ComboBox, name: pAdjustment }
+      - type: LayoutBox
+        margin: large
+        children:
+          - { type: CheckBox, name: jreportEnabled }
+          - { type: ComboBox, name: pAdjustment, enable: (jreportEnabled) }
 ...

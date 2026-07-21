@@ -1,4 +1,19 @@
-
+#' Summarise demographic characteristics
+#'
+#' Produces table rows and narrative text for selected continuous and
+#' categorical demographic variables.
+#'
+#' @param data A data frame.
+#' @param table_variables Character vector of variables to include in the table.
+#' @param paragraph_variables Character vector of variables to include in the narrative.
+#' @param stat_mean,stat_sd,stat_median,stat_iqr Logical values selecting continuous summaries.
+#' @param stat_min,stat_max,stat_range Logical values selecting range summaries.
+#' @param stat_cont_missing Logical; include continuous-variable missing counts.
+#' @param stat_n,stat_pct Logical values selecting categorical counts and percentages.
+#' @param stat_cat_missing Logical; include categorical-variable missing counts.
+#' @param custom_rows Optional list of additional table rows.
+#' @return A list containing table rows, narrative text, sample size, and omitted variables.
+#' @export
 edu_demographics <- function(
     data,
     table_variables     = character(),
@@ -97,10 +112,10 @@ edu_demographics <- function(
                            stat_min, stat_max, stat_range, stat_cont_missing) {
     x    <- col[!is.na(col)]
     mn   <- mean(x)
-    sdev <- sd(x)
-    med  <- median(x)
-    q25  <- as.numeric(quantile(x, 0.25))
-    q75  <- as.numeric(quantile(x, 0.75))
+    sdev <- stats::sd(x)
+    med  <- stats::median(x)
+    q25  <- as.numeric(stats::quantile(x, 0.25))
+    q75  <- as.numeric(stats::quantile(x, 0.75))
     lo   <- min(x)
     hi   <- max(x)
 
@@ -120,12 +135,12 @@ edu_demographics <- function(
         parts <- c(parts, sprintf("Mdn = %.2f", med))
     } else if (stat_iqr) {
         parts <- c(parts,
-                   paste0("IQR: ", sprintf("%.2f", q25), "–", sprintf("%.2f", q75)))
+                   paste0("IQR: ", sprintf("%.2f", q25), "\u2013", sprintf("%.2f", q75)))
     }
 
     if (stat_range) {
         parts <- c(parts,
-                   paste0("range ", sprintf("%.2f", lo), "–", sprintf("%.2f", hi)))
+                   paste0("range ", sprintf("%.2f", lo), "\u2013", sprintf("%.2f", hi)))
     } else {
         if (stat_min) parts <- c(parts, sprintf("min = %.2f", lo))
         if (stat_max) parts <- c(parts, sprintf("max = %.2f", hi))
@@ -182,7 +197,7 @@ edu_demographics <- function(
                                stat_min, stat_max, stat_range) {
     x    <- col[!is.na(col)]
     mn   <- mean(x)
-    sdev <- sd(x)
+    sdev <- stats::sd(x)
     lo   <- min(x)
     hi   <- max(x)
 
@@ -212,7 +227,7 @@ edu_demographics <- function(
     counts <- vapply(levs, function(l) sum(col_f == l, na.rm = TRUE), integer(1))
     pcts   <- 100 * counts / valid_n
     ord    <- order(counts, decreasing = TRUE)
-    top    <- head(ord, 3L)
+    top    <- utils::head(ord, 3L)
 
     parts <- vapply(top, function(i) {
         if (stat_n && stat_pct) sprintf("%s (n = %d, %.1f%%)", levs[i], counts[i], pcts[i])
@@ -242,12 +257,9 @@ edu_demographics <- function(
 }
 
 .dm_paragraph_html <- function(text) {
-    escaped <- gsub("&", "&amp;", text,    fixed = TRUE)
-    escaped <- gsub("<", "&lt;",  escaped, fixed = TRUE)
-    escaped <- gsub(">", "&gt;",  escaped, fixed = TRUE)
     sprintf(
         '<div style="font-family:sans-serif;font-size:0.9em;line-height:1.6;padding:8px 0"><p>%s</p></div>',
-        escaped
+        .jr_html_escape(text)
     )
 }
 
@@ -255,7 +267,7 @@ edu_demographics <- function(
     all_omit <- unique(c(table_omit, para_omit))
     if (length(all_omit) == 0L) return("")
     plural   <- length(all_omit) > 1L
-    var_list <- paste(all_omit, collapse = ", ")
+    var_list <- .jr_html_escape(paste(all_omit, collapse = ", "))
     msg <- sprintf(
         "<em>Note.</em> The following selected variable%s contained no usable data and %s omitted: %s.",
         if (plural) "s" else "",

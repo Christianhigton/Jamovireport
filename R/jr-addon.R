@@ -140,17 +140,18 @@
 }
 
 .jr_parent_model_formula <- function(outcome, fallback_terms, blocks = NULL) {
-    model_terms <- character()
+    model_terms <- list()
     if (!is.null(blocks)) {
         model_terms <- unlist(lapply(blocks, function(block) {
             if (is.null(block) || length(block) == 0L)
-                return(character())
-            vapply(block, function(term) paste(term, collapse = ":"), character(1))
-        }), use.names = FALSE)
+                return(list())
+            lapply(block, as.character)
+        }), recursive = FALSE)
     }
     if (length(model_terms) == 0L)
         model_terms <- fallback_terms
-    stats::reformulate(unique(model_terms), response = outcome)
+    unique_keys <- vapply(model_terms, paste, collapse = "\r", character(1))
+    .jr_formula(outcome, model_terms[!duplicated(unique_keys)])
 }
 
 .jr_apply_reference_levels <- function(data, references) {
@@ -513,10 +514,6 @@
 .jr_addon_insert_card <- function(self, posthoc = FALSE, coefficients = FALSE, cells = FALSE,
                                   followups = FALSE, refs = character()) {
     .jr_addon_enable_library()
-    # Inject jReport ref definitions into the parent module's namespace so refs
-    # appear in jamovi's native References panel after the parent's asProtoBuf() runs.
-    if (!is.null(self$parent))
-        .jr_addon_inject_refs(self$parent$package)
 
     placeholder <- .jr_html_card(
         "Automatic report", "jReport",

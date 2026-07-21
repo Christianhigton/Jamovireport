@@ -1,6 +1,5 @@
 .jr_multivariate_formula <- function(outcomes, factors, covariates) {
-    response <- sprintf("cbind(%s)", paste(outcomes, collapse = ", "))
-    stats::reformulate(c(factors, covariates), response = response)
+    .jr_formula(outcomes, c(factors, covariates))
 }
 
 .jr_pillai_statistics <- function(model) {
@@ -20,11 +19,7 @@
 }
 
 .jr_manova_univariate_formula <- function(outcome, factors, covariates) {
-    terms <- c(
-        if (length(factors) > 0L) paste(factors, collapse = " * ") else character(),
-        covariates
-    )
-    stats::reformulate(terms, response = outcome)
+    .jr_formula(outcome, rhs = covariates, factorial = factors)
 }
 
 .jr_manova_followups <- function(data, outcomes, factors, covariates, statistics, ci = .95) {

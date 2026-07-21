@@ -25,7 +25,7 @@
         ges_i <- if (has_ges) statistics$ges[i] else NA_real_
         effect_phrase <- if (is.finite(ges_i)) {
             sprintf(
-                "ηG² = %s, ηp² = %s, %s%% CI %s",
+                "\u03b7G\u00b2 = %s, \u03b7p\u00b2 = %s, %s%% CI %s",
                 .jr_num(ges_i, 2L, TRUE),
                 .jr_num(statistics$effect[i], 2L, TRUE),
                 .jr_num(ci * 100, 0L),
@@ -33,7 +33,7 @@
             )
         } else {
             sprintf(
-                "ηp² = %s, %s%% CI %s",
+                "\u03b7p\u00b2 = %s, %s%% CI %s",
                 .jr_num(statistics$effect[i], 2L, TRUE),
                 .jr_num(ci * 100, 0L),
                 .jr_ci(statistics$ci_low[i], statistics$ci_high[i], 2L, TRUE)
@@ -63,9 +63,7 @@
 }
 
 .jr_factor_formula <- function(outcome, factors, covariates = character()) {
-    between <- paste(factors, collapse = " * ")
-    rhs <- paste(c(between, covariates), collapse = " + ")
-    stats::as.formula(sprintf("%s ~ %s", outcome, rhs))
+    .jr_formula(outcome, rhs = covariates, factorial = factors)
 }
 
 #' Guided between-subjects factorial ANOVA
@@ -170,13 +168,18 @@ edu_ancova <- function(data, outcome, factors, covariates, ci = .95) {
         }
     )
     statistics <- .jr_term_effects(anova_table, stats::df.residual(model), ci)
-    slope_terms <- paste(
-        sprintf("(%s):%s", paste(factors, collapse = " * "), covariates),
-        collapse = " + "
+    factorial_expression <- .jr_formula_term(factors, operator = "*")
+    slope_expressions <- lapply(covariates, function(covariate) {
+        call(":", factorial_expression, .jr_formula_symbol(covariate))
+    })
+    base_expressions <- c(
+        list(factorial_expression),
+        lapply(covariates, .jr_formula_symbol)
     )
-    slope_formula <- stats::as.formula(paste(
-        paste(deparse(formula), collapse = ""), "+", slope_terms
-    ))
+    slope_formula <- .jr_formula_from_expressions(
+        outcome,
+        c(base_expressions, slope_expressions)
+    )
     slope_model <- tryCatch(
         stats::lm(slope_formula, data = d),
         error = function(e) NULL

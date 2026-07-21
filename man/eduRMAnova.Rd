@@ -69,6 +69,7 @@ A results object containing:
 \code{results$report} \tab \tab \tab \tab \tab a html \cr
 \code{results$interpretation} \tab \tab \tab \tab \tab a html \cr
 \code{results$plot} \tab \tab \tab \tab \tab an image \cr
+\code{results$methodsReferences} \tab \tab \tab \tab \tab a html \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
@@ -80,4 +81,14 @@ Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.f
 \description{
 Compare repeated measurements from the same participants and explain
 sphericity and Greenhouse-Geisser-corrected inference.
+}
+\section{References}{
+
+jReport
+
+afex
+
+effectsize
+
+ggplot2
 }

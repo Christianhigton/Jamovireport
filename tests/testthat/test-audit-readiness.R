@@ -298,7 +298,7 @@ test_that("core helper functions are available after refactor", {
   fns <- c(
     ".jr_html_card", ".jr_html_escape", ".jr_html_paragraphs", ".jr_html_bullets",
     ".jr_addon_insert_card", ".jr_addon_set_card", ".jr_addon_set_tables",
-    ".jr_reference_entry_text", ".jr_text_reference_keys", ".jr_addon_inject_refs",
+    ".jr_reference_entry_text", ".jr_text_reference_keys",
     ".jr_populate_diagnostics", ".jr_prefill_diagnostic_rows",
     ".jr_guided_error_message", ".jr_guided_computation"
   )
@@ -306,6 +306,7 @@ test_that("core helper functions are available after refactor", {
     expect_true(exists(fn, envir = asNamespace("jReport"), mode = "function"),
                 info = paste("Missing helper:", fn))
   }
+  expect_false(exists(".jr_addon_inject_refs", envir = asNamespace("jReport"), inherits = FALSE))
 })
 
 test_that("guided methods reference panel renders formatted references", {

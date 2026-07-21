@@ -53,8 +53,46 @@
     sprintf("[%s, %s]", .jr_or(low), .jr_or(high))
 }
 
-.jr_formula <- function(lhs, rhs) {
-    stats::reformulate(rhs, response = lhs)
+.jr_formula_symbol <- function(name) {
+    name <- as.character(name)
+    if (length(name) != 1L || is.na(name) || !nzchar(name))
+        .jr_stop("Formula variable names must be non-empty scalar strings.")
+    as.name(name)
+}
+
+.jr_formula_term <- function(names, operator = ":") {
+    symbols <- lapply(as.character(names), .jr_formula_symbol)
+    if (length(symbols) == 0L)
+        return(NULL)
+    if (length(symbols) == 1L)
+        return(symbols[[1]])
+    Reduce(function(left, right) call(operator, left, right), symbols)
+}
+
+.jr_formula_from_expressions <- function(lhs, expressions = list(), env = parent.frame()) {
+    lhs <- as.character(lhs)
+    response <- if (length(lhs) == 1L) {
+        .jr_formula_symbol(lhs)
+    } else {
+        as.call(c(list(as.name("cbind")), lapply(lhs, .jr_formula_symbol)))
+    }
+    expressions <- Filter(Negate(is.null), expressions)
+    rhs <- if (length(expressions) == 0L) {
+        1
+    } else if (length(expressions) == 1L) {
+        expressions[[1]]
+    } else {
+        Reduce(function(left, right) call("+", left, right), expressions)
+    }
+    stats::as.formula(call("~", response, rhs), env = env)
+}
+
+.jr_formula <- function(lhs, rhs = character(), factorial = character(), env = parent.frame()) {
+    terms <- if (is.list(rhs)) rhs else as.list(as.character(rhs))
+    expressions <- lapply(terms, .jr_formula_term)
+    if (length(factorial) > 0L)
+        expressions <- c(list(.jr_formula_term(factorial, operator = "*")), expressions)
+    .jr_formula_from_expressions(lhs, expressions, env = env)
 }
 
 .jr_shapiro <- function(values, label = "Normality") {
@@ -66,6 +104,15 @@
             status = "Not assessed",
             interpretation = "A Shapiro-Wilk test is only reported for samples of 3 to 5000 complete observations.",
             action = "Inspect a Q-Q plot and consider the design and sample size.",
+            stringsAsFactors = FALSE
+        ))
+    }
+    if (length(unique(values)) < 2L) {
+        return(data.frame(
+            check = label, statistic = NA_real_, p = NA_real_,
+            status = "Not assessed",
+            interpretation = "Shapiro-Wilk normality cannot be assessed because all complete values are identical.",
+            action = "Review the constant values and interpret the primary analysis alongside the study design and other diagnostics.",
             stringsAsFactors = FALSE
         ))
     }

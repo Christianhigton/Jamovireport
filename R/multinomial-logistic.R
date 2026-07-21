@@ -56,7 +56,7 @@ edu_multinomial_logistic <- function(data, formula, ci = 0.95) {
     })
     parameters <- do.call(rbind, params_list)
 
-    null_formula <- stats::as.formula(paste(outcome_var, "~ 1"))
+    null_formula <- .jr_formula(outcome_var)
     environment(null_formula) <- environment()
     null_model <- nnet::multinom(null_formula, data = d, trace = FALSE)
     lr_stat  <- as.numeric(2 * (stats::logLik(model) - stats::logLik(null_model)))
@@ -65,7 +65,7 @@ edu_multinomial_logistic <- function(data, formula, ci = 0.95) {
     mcfadden <- as.numeric(1 - stats::logLik(model) / stats::logLik(null_model))
 
     apa <- sprintf(
-        "A multinomial logistic regression predicting %s (%s) from %s was %s, χ²(%s) = %s, p %s, McFadden’s R² = %s.",
+        "A multinomial logistic regression predicting %s (%s) from %s was %s, \u03c7\u00b2(%s) = %s, p %s, McFadden\u2019s R\u00b2 = %s.",
         outcome_var, paste(all_levels, collapse = ", "),
         paste(terms_labels, collapse = ", "),
         if (p_value < .05) "statistically significant" else "not statistically significant",

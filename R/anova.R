@@ -66,7 +66,7 @@ edu_anova_oneway <- function(data, outcome, group,
     eta_high <- effect$CI_high[1]
     sig_phrase <- if (p_value < .05) "indicated statistically significant" else "did not indicate statistically significant"
     apa <- sprintf(
-        "A %s %s group differences in %s, F(%s, %s) = %s, p %s, η² = %s, %s%% CI %s.%s",
+        "A %s %s group differences in %s, F(%s, %s) = %s, p %s, \u03b7\u00b2 = %s, %s%% CI %s.%s",
         test_name, sig_phrase,
         outcome, .jr_num(df1, 2L), .jr_num(df2, 2L), .jr_num(f_stat),
         .jr_p(p_value), .jr_num(eta, 2L, TRUE), .jr_num(ci * 100, 0L),

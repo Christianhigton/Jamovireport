@@ -72,6 +72,7 @@ A results object containing:
 \code{results$report} \tab \tab \tab \tab \tab a html \cr
 \code{results$interpretation} \tab \tab \tab \tab \tab a html \cr
 \code{results$plot} \tab \tab \tab \tab \tab an image \cr
+\code{results$methodsReferences} \tab \tab \tab \tab \tab a html \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
@@ -83,4 +84,12 @@ Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.f
 \description{
 Explain the direction, strength, assumptions, and reporting of an
 association between two numeric variables.
+}
+\section{References}{
+
+jReport
+
+effectsize
+
+ggplot2
 }

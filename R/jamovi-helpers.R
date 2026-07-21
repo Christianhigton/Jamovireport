@@ -59,6 +59,25 @@
 .jr_replace_variable_names <- function(text, labels) {
     if (!is.character(text) || !length(labels))
         return(text)
+    replace_literal <- function(value, pattern, replacement) {
+        if (is.na(value))
+            return(value)
+        matches <- gregexpr(pattern, value, perl = TRUE)[[1]]
+        if (length(matches) == 1L && matches[1] < 0L)
+            return(value)
+        lengths <- attr(matches, "match.length")
+        pieces <- character()
+        cursor <- 1L
+        for (i in seq_along(matches)) {
+            pieces <- c(
+                pieces,
+                substr(value, cursor, matches[i] - 1L),
+                replacement
+            )
+            cursor <- matches[i] + lengths[i]
+        }
+        paste0(c(pieces, substr(value, cursor, nchar(value))), collapse = "")
+    }
     variables <- names(labels)[labels != names(labels) & nzchar(labels)]
     variables <- variables[order(nchar(variables), decreasing = TRUE)]
     for (variable in variables) {
@@ -66,7 +85,14 @@
             "(?<![[:alnum:]_.])", .jr_regex_escape(variable),
             "(?![[:alnum:]_.])"
         )
-        text <- gsub(pattern, labels[[variable]], text, perl = TRUE)
+        text <- vapply(
+            text,
+            replace_literal,
+            pattern = pattern,
+            replacement = labels[[variable]],
+            FUN.VALUE = character(1),
+            USE.NAMES = FALSE
+        )
     }
     text
 }
@@ -492,7 +518,7 @@
         anova_oneway = c(
             "Outcome variable is numeric and grouping variable has the correct levels.",
             "F statistic, df, and p value match jamovi output.",
-            "Effect size (η²) matches jamovi output.",
+            "Effect size (\u03b7\u00b2) matches jamovi output.",
             "Post hoc comparisons (if run) match jamovi output.",
             "Assumption checks (normality, homogeneity of variance) have been reviewed.",
             "Interpretation matches the research question."
@@ -500,7 +526,7 @@
         ancova = c(
             "Outcome, grouping factor, and covariate(s) are correctly specified.",
             "F statistics, df, and p values match jamovi output.",
-            "Effect sizes (ηp²) match jamovi output.",
+            "Effect sizes (\u03b7p\u00b2) match jamovi output.",
             "Covariate(s) are measured before the intervention or are not affected by group.",
             "Assumption checks have been reviewed.",
             "Interpretation matches the research question."
@@ -508,7 +534,7 @@
         anova_rm = c(
             "Within-subjects factor levels and outcome columns are correctly mapped.",
             "F statistic, df (with Greenhouse-Geisser correction if applied), and p value match jamovi output.",
-            "Effect size (ηp²) matches jamovi output.",
+            "Effect size (\u03b7p\u00b2) matches jamovi output.",
             "Sphericity assumption and correction have been noted if applicable.",
             "Post hoc comparisons (if run) match jamovi output.",
             "Interpretation matches the research question."
@@ -516,7 +542,7 @@
         anova_mixed = c(
             "Between-subjects and within-subjects factors are correctly specified.",
             "F statistics, df, and p values for all effects match jamovi output.",
-            "Effect sizes (ηp²) match jamovi output.",
+            "Effect sizes (\u03b7p\u00b2) match jamovi output.",
             "Sphericity and homogeneity of variance assumptions have been reviewed.",
             "Interpretation of interaction (if significant) takes precedence.",
             "Interpretation matches the research question."
@@ -545,7 +571,7 @@
             "Outcome variable is binary with the correct reference category.",
             "Predictors are the intended covariates and factors.",
             "Chi-square model fit statistic and p value match jamovi output.",
-            "McFadden's R² matches jamovi output.",
+            "McFadden's R\u00b2 matches jamovi output.",
             "Odds ratios and confidence intervals match the coefficient table.",
             "Assumption checks (linearity of log-odds, multicollinearity) have been reviewed.",
             "Interpretation matches the research question."
@@ -568,7 +594,7 @@
             "Reference category is correctly identified.",
             "Predictors are the intended covariates and factors.",
             "Chi-square model fit statistic, df, and p value match jamovi output.",
-            "McFadden's R² matches jamovi output.",
+            "McFadden's R\u00b2 matches jamovi output.",
             "Relative risk ratios and confidence intervals match the coefficient table.",
             "Assumption checks (convergence, sample size per category) have been reviewed.",
             "Interpretation matches the research question."

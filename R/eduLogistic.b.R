@@ -7,7 +7,7 @@ eduLogisticClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class(
             predictors <- unique(c(self$options$covariates, self$options$factors))
             if (is.null(self$options$outcome) || length(predictors) == 0L)
                 return()
-            formula <- stats::reformulate(predictors, response = self$options$outcome)
+            formula <- .jr_formula(self$options$outcome, predictors)
             result <- .jr_guided_computation(
                 edu_logistic_regression(self$data, formula, ci = self$options$ciWidth / 100)
             )
@@ -34,4 +34,3 @@ eduLogisticClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class(
         }
     )
 )
-

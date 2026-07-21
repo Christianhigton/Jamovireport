@@ -69,6 +69,7 @@ A results object containing:
 \code{results$report} \tab \tab \tab \tab \tab a html \cr
 \code{results$interpretation} \tab \tab \tab \tab \tab a html \cr
 \code{results$plot} \tab \tab \tab \tab \tab an image \cr
+\code{results$methodsReferences} \tab \tab \tab \tab \tab a html \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
@@ -80,4 +81,18 @@ Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.f
 \description{
 Examine mean differences across one or more independent categorical
 factors, prioritising interaction interpretation when appropriate.
+}
+\section{References}{
+
+jReport
+
+afex
+
+car
+
+effectsize
+
+emmeans
+
+ggplot2
 }

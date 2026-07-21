@@ -15,7 +15,7 @@ jrReportLinRegClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class(
             predictors <- unique(c(self$parent$options$covs, self$parent$options$factors))
             if (is.null(outcome) || length(predictors) == 0L)
                 return()
-            model_formula <- stats::reformulate(predictors, response = outcome)
+            model_formula <- .jr_formula(outcome, predictors)
             result <- try(edu_lm(self$data, model_formula, ci = .jr_parent_ci(self$parent)), silent = TRUE)
             if (inherits(result, "try-error")) {
                 .jr_addon_message(self, .jr_guided_error_message(attr(result, "condition")))

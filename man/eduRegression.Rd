@@ -69,6 +69,7 @@ A results object containing:
 \code{results$report} \tab \tab \tab \tab \tab a html \cr
 \code{results$interpretation} \tab \tab \tab \tab \tab a html \cr
 \code{results$plot} \tab \tab \tab \tab \tab an image \cr
+\code{results$methodsReferences} \tab \tab \tab \tab \tab a html \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
@@ -80,4 +81,16 @@ Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.f
 \description{
 Model a numeric outcome using one or more numeric predictors with model
 fit, coefficients, diagnostic guidance, and interpretable reporting.
+}
+\section{References}{
+
+jReport
+
+parameters
+
+performance
+
+effectsize
+
+ggplot2
 }

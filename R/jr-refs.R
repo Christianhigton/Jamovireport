@@ -49,29 +49,3 @@
         keys <- c(keys, "Cohen1988", "Cumming2014")
     unique(keys)
 }
-
-.jr_addon_inject_refs <- function(parent_pkg) {
-    if (is.null(parent_pkg) || !nzchar(parent_pkg)) return(invisible(NULL))
-    jr_ns <- tryCatch(getNamespace("jReport"), error = function(e) NULL)
-    if (is.null(jr_ns) || !(".jmvrefs" %in% names(jr_ns))) return(invisible(NULL))
-    jr_refs <- jr_ns[[".jmvrefs"]]
-
-    parent_ns <- tryCatch(getNamespace(parent_pkg), error = function(e) NULL)
-    if (is.null(parent_ns) || !(".jmvrefs" %in% names(parent_ns))) return(invisible(NULL))
-
-    parent_refs <- parent_ns[[".jmvrefs"]]
-    new_keys <- setdiff(names(jr_refs), names(parent_refs))
-    if (length(new_keys) == 0L) return(invisible(NULL))
-
-    for (key in new_keys)
-        parent_refs[[key]] <- jr_refs[[key]]
-
-    tryCatch({
-        if (bindingIsLocked(".jmvrefs", parent_ns))
-            unlockBinding(".jmvrefs", parent_ns)
-        parent_ns[[".jmvrefs"]] <- parent_refs
-        lockBinding(".jmvrefs", parent_ns)
-    }, error = function(e) invisible(NULL))
-
-    invisible(NULL)
-}

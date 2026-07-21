@@ -65,6 +65,7 @@ A results object containing:
 \code{results$diagnostics} \tab \tab \tab \tab \tab a table \cr
 \code{results$report} \tab \tab \tab \tab \tab a html \cr
 \code{results$interpretation} \tab \tab \tab \tab \tab a html \cr
+\code{results$methodsReferences} \tab \tab \tab \tab \tab a html \cr
 }
 
 Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
@@ -76,4 +77,10 @@ Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.f
 \description{
 Compare observed categorical frequencies with an expected distribution,
 with assumption guidance and report-ready explanation.
+}
+\section{References}{
+
+jReport
+
+effectsize
 }

@@ -29,14 +29,40 @@ jrReportTTestISClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class
             .jr_ttest_is_hide_outputs(self)
             if (!isTRUE(self$options$jreportEnabled))
                 return()
+            adapted <- tryCatch(
+                .jr_core_ttest_adapter(
+                    self$parent$options, self$parent$results, self$data,
+                    allow_fallback = TRUE
+                ),
+                error = function(error) structure(list(
+                    analysis = "independentSamplesTTest", analyses = list(),
+                    warnings = paste("The core t-test output could not be read:", conditionMessage(error)),
+                    hostSchema = "jmv::ttestIS"
+                ), class = c("jr_core_ttest_adapter", "list"))
+            )
+            rendered <- tryCatch(
+                .jr_core_ttest_render(adapted, self$options),
+                error = function(error) list(
+                    report = .jr_html_card(
+                        "jReport add-on", "Reporting output could not be generated",
+                        paste(
+                            "The core analysis is unchanged.",
+                            "jReport encountered a reporting error:", conditionMessage(error)
+                        ),
+                        accent = "#b46c21"
+                    ),
+                    references = ""
+                )
+            )
             card <- .jr_addon_get(self$parent$results, "jReportCard")
             if (!is.null(card)) {
                 card$setVisible(TRUE)
-                card$setContent(.jr_html_card(
-                    "jReport experiment",
-                    "jReport: Reporting and explanation",
-                    "jReport add-on proof-of-concept is active."
-                ))
+                card$setContent(rendered$report)
+            }
+            references <- .jr_addon_get(self$parent$results, "methodsReferences")
+            if (!is.null(references) && nzchar(rendered$references)) {
+                references$setVisible(TRUE)
+                references$setContent(rendered$references)
             }
         }
     )

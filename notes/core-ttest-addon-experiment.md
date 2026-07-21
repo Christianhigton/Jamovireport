@@ -61,3 +61,26 @@ combo box. It recalculates the selected tests from the host-selected data using
 jReport functions; it does not read statistics from the host result tree.
 Whether a richer collapsed configuration section and stable host-result adapter
 are supported remains to be established by the experiment.
+
+## Host-result extraction decision
+
+The add-on lifecycle exposes the host through the public `parent` binding. Host
+options can be read from `parent$options`, and named host results can be
+retrieved from `parent$results`. The core `ttest`, `desc`, and `assum` result
+items expose data-frame representations, so their values can be reused without
+re-running the primary t-test.
+
+The remaining compatibility risk is the core table schema: column keys such as
+`stat[stud]` and `stat[welc]` are owned by `jmv` and could change between host
+versions. These mappings will therefore live only in a defensive adapter. A
+missing table or column must produce a warning object rather than an error in
+the host analysis.
+
+The core result table only contains optional mean-difference intervals, effect
+sizes, descriptives, and assumption tests when the corresponding core controls
+are enabled. To keep jReport useful without changing core options, the adapter
+may supplement only unavailable fields from the host-selected data. Such values
+are marked as repeated calculations, use the host's selected Student/Welch test,
+confidence level, hypothesis direction, and missing-data mode, and never
+overwrite a finite host value. This isolated fallback is covered by numerical
+comparison tests against `jmv::ttestIS`.

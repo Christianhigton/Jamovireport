@@ -4,5 +4,12 @@ title: Automatic Report for Correlation Matrix
 jus: '2.0'
 stage: 0
 compilerMode: tame
-children: []
+children:
+  - type: Label
+    label: 'Important: Apply one correction only when the selected correlations form a meaningful family of related hypotheses addressing the same overall research question. Do not combine unrelated correlations merely because they are calculated at the same time.'
+    children:
+      - { type: ComboBox, name: pAdjustment }
+  - type: Label
+    label: '"Related" refers to the research aims and hypothesis structure; it does not mean that all selected variables must be statistically correlated. Apply the adjustment across one planned family of correlation tests.'
+    children: []
 ...

@@ -15,6 +15,18 @@ items:
   - name: test
     title: Test / Effect
     type: text
+  - name: variable1
+    title: Variable 1
+    type: text
+    visible: false
+  - name: variable2
+    title: Variable 2
+    type: text
+    visible: false
+  - name: method
+    title: Correlation method
+    type: text
+    visible: false
   - name: statistic
     title: Statistic
     type: number
@@ -28,12 +40,25 @@ items:
     title: p
     type: number
     format: zto,pvalue
+  - name: p_adjusted
+    title: Adjusted p
+    type: number
+    format: zto,pvalue
+    visible: false
+  - name: adjustment_result
+    title: Result after adjustment
+    type: text
+    visible: false
   - name: effect
     title: Effect Size
     type: text
   - name: ci
     title: Effect 95% CI
     type: text
+  - name: 'n'
+    title: N
+    type: integer
+    visible: false
 - name: jReportAssumptions
   title: Assumptions and Recommended Actions (jReport)
   type: Table
@@ -74,4 +99,3 @@ items:
 - name: methodsReferences
   title: Methods and References
   type: Html
-

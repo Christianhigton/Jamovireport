@@ -92,11 +92,161 @@
     paste(general, method, qualification, sep = "\n\n")
 }
 
+.jr_correlation_adjustment_summary <- function(info) {
+    if (info$n_valid < 2L)
+        return(info$note)
+    family_sentence <- sprintf(
+        "The %d correlations were treated as one comparison family for the purpose of p-value adjustment.",
+        info$n_valid
+    )
+    introduction <- switch(
+        info$method,
+        holm = sprintf(
+            "A series of %d correlations was examined. The Holm procedure was applied to control the familywise Type I error rate. Both unadjusted and Holm-adjusted p-values are reported.",
+            info$n_valid
+        ),
+        bonferroni = sprintf(
+            "A series of %d correlations was examined. A Bonferroni adjustment was applied to control the familywise Type I error rate. Both unadjusted and Bonferroni-adjusted p-values are reported.",
+            info$n_valid
+        ),
+        bh = sprintf(
+            "A series of %d correlations was examined. P-values were adjusted using the Benjamini-Hochberg procedure to control the false discovery rate. Both unadjusted and adjusted p-values are reported.",
+            info$n_valid
+        ),
+        none = sprintf(
+            "A series of %d correlations was examined. The p-values were not adjusted for multiple comparisons; therefore, the risk of false-positive findings across the set of tests may be increased.",
+            info$n_valid
+        )
+    )
+    if (identical(info$method, "none")) introduction else
+        paste(introduction, family_sentence, sep = "\n\n")
+}
+
+.jr_correlation_adjustment_guidance <- function(info) {
+    if (info$n_valid < 2L)
+        return(info$note)
+    general <- paste(
+        "Testing several correlations increases the probability of obtaining at least one false-positive result. A multiple-comparison adjustment may be appropriate when the correlations form a planned family of hypotheses addressing the same overall research question.",
+        "Important: The correlations should form a meaningful family of related tests. They should not be grouped merely because they appear in the same table or were calculated at the same time. Correlations addressing different research questions may require separate correction families.",
+        "The variables do not have to be statistically correlated with one another to form a hypothesis family. The family is defined by the research aims, theoretical rationale, and planned analysis structure.",
+        sep = "\n\n"
+    )
+    method <- switch(
+        info$method,
+        holm = "The Holm procedure controls the familywise Type I error rate using a sequential adjustment. It is generally less conservative than the standard Bonferroni procedure. Interpret statistical significance using the Holm-adjusted p-values.",
+        bonferroni = "The Bonferroni procedure controls the familywise Type I error rate by accounting for the number of tests. It is straightforward and widely recognised but can be conservative, particularly when many correlations are tested. Interpret statistical significance using the Bonferroni-adjusted p-values.",
+        bh = "The Benjamini-Hochberg procedure controls the expected proportion of false discoveries among results declared statistically significant. It is less conservative than familywise error procedures and may be appropriate for exploratory analyses involving many correlations. Interpret significance using the adjusted p-values and identify the procedure as false discovery rate control.",
+        none = "These p-values have not been adjusted for multiple testing. When the correlations represent one family of related hypotheses, the probability of obtaining at least one false-positive result may be greater than the nominal alpha level."
+    )
+    purpose <- paste(
+        "Holm is generally suitable for a planned or confirmatory family of correlations. Benjamini-Hochberg may be more suitable for a large exploratory correlation set where limiting the expected proportion of false discoveries is more important than controlling the probability of any false-positive result.",
+        "Whether adjustment is appropriate depends on the study design, preregistration, confirmatory or exploratory purpose, number of tests, theoretical relationship between the hypotheses, and how the test family was defined.",
+        sep = "\n\n"
+    )
+    before_only <- any(info$decision == "Significant before adjustment only", na.rm = TRUE)
+    changed <- if (before_only) {
+        "A correlation that is statistically significant before adjustment but not after adjustment should not be reported as statistically significant after correction. It may be described as an unadjusted association that did not remain significant after controlling for multiple comparisons."
+    } else {
+        ""
+    }
+    paste(.jr_nonempty_unique(c(general, method, changed, purpose)), collapse = "\n\n")
+}
+
+.jr_adjustment_summary <- function(info) {
+    if (identical(info$family %||% "", "correlation"))
+        .jr_correlation_adjustment_summary(info)
+    else
+        .jr_ttest_adjustment_summary(info)
+}
+
+.jr_adjustment_guidance <- function(info) {
+    if (identical(info$family %||% "", "correlation"))
+        .jr_correlation_adjustment_guidance(info)
+    else
+        .jr_ttest_adjustment_guidance(info)
+}
+
+.jr_addon_call_variables <- function(result, name) {
+    value <- tryCatch(result$call[[name]], error = function(e) NULL)
+    if (is.null(value) || identical(value, quote(NULL)))
+        return(character())
+    variables <- if (is.character(value)) {
+        value
+    } else if (is.call(value) && identical(as.character(value[[1]]), "c")) {
+        unlist(lapply(as.list(value)[-1], function(item) {
+            if (is.character(item)) item else all.vars(item)
+        }), use.names = FALSE)
+    } else {
+        all.vars(value)
+    }
+    variables <- trimws(as.character(variables))
+    unique(variables[!is.na(variables) & nzchar(variables)])
+}
+
+.jr_addon_display_variables <- function(result, variables) {
+    labels <- result$variable_labels %||% character()
+    vapply(variables, function(variable) {
+        display <- unname(labels[variable])
+        if (length(display) == 1L && !is.na(display) && nzchar(trimws(display)))
+            trimws(display)
+        else
+            variable
+    }, character(1), USE.NAMES = FALSE)
+}
+
+.jr_addon_result_title <- function(result) {
+    if (!inherits(result, "edu_analysis"))
+        return("Analysis")
+    if (identical(result$analysis, "correlation")) {
+        metadata <- .jr_correlation_metadata(result)
+        if (!is.null(metadata)) {
+            method <- switch(
+                metadata$method,
+                pearson = "Pearson",
+                spearman = "Spearman",
+                kendall = "Kendall"
+            )
+            variables <- .jr_addon_display_variables(
+                result, c(metadata$variable1, metadata$variable2)
+            )
+            return(sprintf("%s: %s with %s", method, variables[1], variables[2]))
+        }
+    }
+    outcome <- .jr_addon_call_variables(result, "outcome")
+    paired <- .jr_addon_call_variables(result, "paired_outcome")
+    group <- .jr_addon_call_variables(result, "group")
+    if (!length(group))
+        group <- .jr_addon_call_variables(result, "factors")
+    outcome <- .jr_addon_display_variables(result, outcome)
+    paired <- .jr_addon_display_variables(result, paired)
+    group <- .jr_addon_display_variables(result, group)
+    test <- if (is.data.frame(result$statistics) && nrow(result$statistics) > 0L &&
+            "test" %in% names(result$statistics)) {
+        trimws(as.character(result$statistics$test[1]))
+    } else {
+        ""
+    }
+    prefix <- result$label %||% "Analysis"
+    if (identical(result$analysis, "ttest") && nzchar(test))
+        prefix <- test
+    if (identical(result$analysis, "anova_oneway") && nzchar(test))
+        prefix <- tools::toTitleCase(test)
+    if (length(outcome) && length(paired))
+        return(sprintf("%s: %s with %s", prefix, outcome[1], paired[1]))
+    if (length(outcome) && length(group))
+        return(sprintf(
+            "%s: %s by %s", prefix, outcome[1], paste(group, collapse = ", ")
+        ))
+    prefix
+}
+
 .jr_addon_report_html <- function(results, options = NULL, title = "Guided report", note = "",
                                   adjustment = "none", alpha = .05) {
-    adjustment_info <- .jr_ttest_adjustment_info(results, adjustment, alpha)
+    adjustment_info <- .jr_addon_adjustment_info(results, adjustment, alpha)
     failures <- Filter(function(x) inherits(x, "try-error"), results)
-    results <- .jr_ttest_adjusted_reporting_results(results, adjustment_info)
+    results <- .jr_adjusted_reporting_results(results, adjustment_info)
+    if (identical(adjustment_info$family %||% "", "correlation"))
+        results <- .jr_correlation_unique_results(results, adjustment_info)
     results <- Filter(function(x) inherits(x, "edu_analysis"), results)
     wrap <- function(html) paste0("<div style='width:100%;box-sizing:border-box;display:block;'>", html, "</div>")
     if (length(results) == 0L && length(failures) > 0L) {
@@ -126,6 +276,7 @@
     include_note <- is.null(options) ||
         isTRUE(tryCatch(options$reportCautions, error = function(e) FALSE))
     posthoc_text <- .jr_addon_posthoc_text(results)
+    show_analysis_labels <- length(results) > 1L
     sections <- vapply(results, function(result) {
         report_style <- "apa7"
         apa_text <- if (is.null(options)) {
@@ -143,7 +294,9 @@
             diagnostic_note = diagnostic_text,
             checklist_items = checklist,
             checklist_note = if (nzchar(note) && include_note) note else "",
-            report_style = report_style
+            report_style = report_style,
+            analysis_label = if (show_analysis_labels)
+                .jr_addon_result_title(result) else ""
         )
     }, character(1))
     if (nzchar(posthoc_text)) {
@@ -154,12 +307,15 @@
             collapsed = TRUE
         ))
     }
-    adjustment_summary <- .jr_ttest_adjustment_summary(adjustment_info)
+    adjustment_summary <- .jr_adjustment_summary(adjustment_info)
     if (nzchar(adjustment_summary)) {
         sections <- c(.jr_report_section_card(
             "Multiple-comparison adjustment",
             if (adjustment_info$n_valid >= 2L)
-                sprintf("%d valid t-tests", adjustment_info$n_valid)
+                if (identical(adjustment_info$family %||% "", "correlation"))
+                    sprintf("%d unique, valid correlation tests", adjustment_info$n_valid)
+                else
+                    sprintf("%d valid t-tests", adjustment_info$n_valid)
             else "",
             adjustment_summary, accent = "#4b66a2", background = "#f5f9fd"
         ), sections)
@@ -188,7 +344,10 @@
 }
 
 .jr_addon_interpretation_html <- function(results, note = "", adjustment = "none", alpha = .05) {
-    adjustment_info <- .jr_ttest_adjustment_info(results, adjustment, alpha)
+    adjustment_info <- .jr_addon_adjustment_info(results, adjustment, alpha)
+    results <- .jr_adjusted_reporting_results(results, adjustment_info)
+    if (identical(adjustment_info$family %||% "", "correlation"))
+        results <- .jr_correlation_unique_results(results, adjustment_info)
     results <- Filter(function(x) inherits(x, "edu_analysis"), results)
     if (length(results) == 0L)
         return(.jr_html_card(
@@ -197,6 +356,7 @@
             accent = "#b46c21"
         ))
     posthoc_text <- .jr_addon_posthoc_text(results)
+    show_analysis_labels <- length(results) > 1L
     cards <- vapply(results, function(result) {
         guidance <- paste(
             .jr_nonempty_unique(c(
@@ -212,9 +372,11 @@
         )
         if (!nzchar(guidance))
             guidance <- "No separate interpretation guidance was generated for this result."
+        analysis_label <- if (show_analysis_labels)
+            .jr_addon_result_title(result) else ""
         .jr_report_section_card(
-            "Interpretation guidance",
-            result$label %||% "jReport",
+            .jr_report_section_title("Interpretation guidance", analysis_label),
+            if (show_analysis_labels) "" else result$label %||% "jReport",
             guidance, accent = "#b46c21", background = "#fff9ef",
             collapsed = TRUE
         )
@@ -227,7 +389,7 @@
             collapsed = TRUE
         ))
     }
-    adjustment_guidance <- .jr_ttest_adjustment_guidance(adjustment_info)
+    adjustment_guidance <- .jr_adjustment_guidance(adjustment_info)
     if (nzchar(adjustment_guidance)) {
         cards <- c(.jr_report_section_card(
             "Multiple comparisons and the family of tests",
@@ -463,7 +625,358 @@
     )
 }
 
+.jr_is_correlation_family <- function(results) {
+    if (length(results) == 0L)
+        return(FALSE)
+    is_correlation <- vapply(results, function(result) {
+        (inherits(result, "edu_analysis") && identical(result$analysis, "correlation")) ||
+            (inherits(result, "try-error") &&
+                identical(attr(result, "jr_test_family"), "correlation"))
+    }, logical(1))
+    any(is_correlation) && all(is_correlation)
+}
+
+.jr_correlation_adjustment_method <- function(method = "holm") {
+    method <- tolower(as.character(method %||% "holm")[1])
+    if (identical(method, "fdr"))
+        method <- "bh"
+    if (!method %in% c("holm", "bonferroni", "bh", "none"))
+        method <- "holm"
+    method
+}
+
+.jr_correlation_metadata <- function(result) {
+    if (inherits(result, "try-error") &&
+            identical(attr(result, "jr_test_family"), "correlation")) {
+        variables <- as.character(attr(result, "jr_correlation_variables") %||% character())
+        method <- tolower(as.character(attr(result, "jr_correlation_method") %||% "")[1])
+    } else if (inherits(result, "edu_analysis") &&
+            identical(result$analysis, "correlation")) {
+        variables <- as.character(attr(result, "jr_correlation_variables") %||% character())
+        if (length(variables) < 2L && is.data.frame(result$plot_data) &&
+                all(c("x_name", "y_name") %in% names(result$plot_data))) {
+            variables <- c(
+                as.character(result$plot_data$x_name[1]),
+                as.character(result$plot_data$y_name[1])
+            )
+        }
+        method <- tolower(as.character(
+            attr(result, "jr_correlation_method") %||%
+                result$statistics$test[1] %||% ""
+        )[1])
+    } else {
+        return(NULL)
+    }
+    variables <- variables[!is.na(variables) & nzchar(variables)]
+    if (length(variables) < 2L || !method %in% c("pearson", "spearman", "kendall"))
+        return(NULL)
+    variables <- variables[seq_len(2L)]
+    canonical <- sort(enc2utf8(variables), method = "radix")
+    list(
+        variable1 = variables[1], variable2 = variables[2], method = method,
+        test_id = paste(c("correlation", method, canonical), collapse = "::"),
+        diagonal = identical(variables[1], variables[2])
+    )
+}
+
+.jr_tag_correlation_attempt <- function(value, method, variables) {
+    attr(value, "jr_test_family") <- "correlation"
+    attr(value, "jr_correlation_method") <- tolower(as.character(method)[1])
+    attr(value, "jr_correlation_variables") <- as.character(variables)[seq_len(2L)]
+    value
+}
+
+.jr_correlation_adjustment_info <- function(results, method = "holm", alpha = .05) {
+    method <- .jr_correlation_adjustment_method(method)
+    records <- list()
+    record_ids <- character()
+    for (result_index in seq_along(results)) {
+        result <- results[[result_index]]
+        metadata <- .jr_correlation_metadata(result)
+        if (is.null(metadata) || isTRUE(metadata$diagonal))
+            next
+        statistic <- if (inherits(result, "edu_analysis") &&
+                is.data.frame(result$statistics) && nrow(result$statistics) > 0L) {
+            result$statistics[1, , drop = FALSE]
+        } else {
+            NULL
+        }
+        coefficient <- if (is.null(statistic)) NA_real_ else
+            suppressWarnings(as.numeric(statistic$statistic %||% NA_real_)[1])
+        p <- if (is.null(statistic)) NA_real_ else
+            suppressWarnings(as.numeric(statistic$p %||% NA_real_)[1])
+        n <- if (!is.null(statistic) && "n" %in% names(statistic)) {
+            suppressWarnings(as.numeric(statistic$n)[1])
+        } else if (inherits(result, "edu_analysis") &&
+                is.data.frame(result$descriptives) && "n" %in% names(result$descriptives)) {
+            suppressWarnings(min(as.numeric(result$descriptives$n), na.rm = TRUE))
+        } else {
+            NA_real_
+        }
+        valid <- is.finite(coefficient) && is.finite(p) && p >= 0 && p <= 1 &&
+            is.finite(n) && n >= 3L
+        candidate <- data.frame(
+            test_id = metadata$test_id,
+            result_index = result_index,
+            statistic_index = 1L,
+            variable1 = metadata$variable1,
+            variable2 = metadata$variable2,
+            method = metadata$method,
+            statistic = coefficient,
+            p = p,
+            n = n,
+            valid = valid,
+            stringsAsFactors = FALSE
+        )
+        duplicate_index <- match(metadata$test_id, record_ids)
+        if (is.na(duplicate_index)) {
+            records[[length(records) + 1L]] <- candidate
+            record_ids <- c(record_ids, metadata$test_id)
+        } else if (!isTRUE(records[[duplicate_index]]$valid) && isTRUE(valid)) {
+            records[[duplicate_index]] <- candidate
+        }
+    }
+    records <- if (length(records)) do.call(rbind, records) else data.frame(
+        test_id = character(), result_index = integer(), statistic_index = integer(),
+        variable1 = character(), variable2 = character(), method = character(),
+        statistic = numeric(), p = numeric(), n = numeric(), valid = logical(),
+        stringsAsFactors = FALSE
+    )
+    valid <- records$valid
+    n_valid <- sum(valid)
+    active <- n_valid >= 2L && method != "none"
+    adjusted <- stats::setNames(rep(NA_real_, nrow(records)), records$test_id)
+    if (n_valid > 0L) {
+        adjusted[records$test_id[valid]] <- if (active) {
+            stats::p.adjust(
+                records$p[valid],
+                method = if (identical(method, "bh")) "BH" else method
+            )
+        } else {
+            records$p[valid]
+        }
+    }
+    decision <- stats::setNames(rep("Test could not be calculated", nrow(records)), records$test_id)
+    if (n_valid > 0L) {
+        raw_significant <- records$p[valid] < alpha
+        adjusted_significant <- adjusted[records$test_id[valid]] < alpha
+        decision[records$test_id[valid]] <- ifelse(
+            adjusted_significant,
+            "Significant after adjustment",
+            ifelse(raw_significant,
+                "Significant before adjustment only",
+                "Not significant after adjustment")
+        )
+    }
+    label <- switch(
+        method,
+        holm = "Holm",
+        bonferroni = "Bonferroni",
+        bh = "Benjamini-Hochberg",
+        none = "None"
+    )
+    heading <- if (active) {
+        if (identical(method, "bh")) "BH-adjusted p" else paste0(label, "-adjusted p")
+    } else {
+        "Adjusted p"
+    }
+    note <- if (n_valid >= 2L) {
+        switch(
+            method,
+            holm = sprintf(
+                "P-values were adjusted using the Holm procedure to control the familywise Type I error rate across the %d unique, valid correlation tests.",
+                n_valid
+            ),
+            bonferroni = sprintf(
+                "P-values were adjusted using the Bonferroni procedure to control the familywise Type I error rate across the %d unique, valid correlation tests.",
+                n_valid
+            ),
+            bh = sprintf(
+                "P-values were adjusted using the Benjamini-Hochberg procedure to control the false discovery rate across the %d unique, valid correlation tests.",
+                n_valid
+            ),
+            none = sprintf(
+                "P-values are unadjusted across the %d unique, valid correlation tests. Conducting multiple correlation tests increases the probability of obtaining false-positive findings.",
+                n_valid
+            )
+        )
+    } else if (nrow(records) >= 2L && n_valid == 1L) {
+        "Only one valid correlation test was available; therefore, no multiple-comparison adjustment was required."
+    } else if (nrow(records) > 0L && n_valid == 0L) {
+        "None of the requested correlations could be calculated. Review the selected variables, sample sizes, missing data, and variable variation."
+    } else {
+        ""
+    }
+    list(
+        family = "correlation", method = method, label = label, records = records,
+        n_valid = n_valid, active = active, adjusted = adjusted,
+        decision = decision, heading = heading, note = note, alpha = alpha
+    )
+}
+
+.jr_addon_adjustment_info <- function(results, method = "holm", alpha = .05) {
+    if (.jr_is_correlation_family(results))
+        .jr_correlation_adjustment_info(results, method, alpha)
+    else
+        .jr_ttest_adjustment_info(results, method, alpha)
+}
+
+.jr_adjustment_reference_keys <- function(info) {
+    if (!isTRUE(info$active))
+        return(character())
+    if (identical(info$family %||% "", "correlation")) {
+        return(switch(
+            info$method,
+            holm = c("Holm1979", "Vickerstaff2019"),
+            bonferroni = "Vickerstaff2019",
+            bh = "BenjaminiHochberg1995",
+            character()
+        ))
+    }
+    c(if (identical(info$method, "holm")) "Holm1979", "Vickerstaff2019")
+}
+
+.jr_correlation_unique_results <- function(results, info) {
+    if (!identical(info$family %||% "", "correlation") || nrow(info$records) == 0L)
+        return(results)
+    indices <- info$records$result_index[info$records$valid]
+    results[indices]
+}
+
+.jr_correlation_adjusted_reporting_results <- function(results, info) {
+    if (!isTRUE(info$active))
+        return(results)
+    adjusted_results <- results
+    for (i in seq_len(nrow(info$records))) {
+        record <- info$records[i, , drop = FALSE]
+        if (!isTRUE(record$valid))
+            next
+        result <- adjusted_results[[record$result_index]]
+        if (!inherits(result, "edu_analysis"))
+            next
+        coefficient <- record$statistic
+        adjusted_p <- unname(info$adjusted[record$test_id])
+        decision <- unname(info$decision[record$test_id])
+        statistic <- result$statistics[1, , drop = FALSE]
+        method_title <- switch(
+            record$method,
+            pearson = "Pearson",
+            spearman = "Spearman",
+            kendall = "Kendall"
+        )
+        symbol <- switch(record$method, pearson = "r", spearman = "\u03c1", kendall = "\u03c4")
+        statistic_text <- if (identical(record$method, "pearson")) {
+            sprintf("%s(%d) = %s", symbol, as.integer(record$n - 2L), .jr_num(coefficient, 2L, TRUE))
+        } else {
+            sprintf("%s = %s", symbol, .jr_num(coefficient, 2L, TRUE))
+        }
+        ci_text <- if (is.finite(statistic$ci_low) && is.finite(statistic$ci_high)) {
+            sprintf(", 95%% CI %s", .jr_ci(statistic$ci_low, statistic$ci_high, 2L, TRUE))
+        } else {
+            ""
+        }
+        adjusted_label <- if (identical(info$method, "bh")) "BH" else info$label
+        direction <- if (coefficient >= 0) "positively" else "negatively"
+        apa <- switch(
+            decision,
+            `Significant after adjustment` = sprintf(
+                "%s was significantly %s correlated with %s, %s %s, unadjusted p %s, %s-adjusted p %s%s, n = %d.",
+                record$variable1, direction, record$variable2, method_title,
+                statistic_text, .jr_p(record$p), adjusted_label,
+                .jr_p(adjusted_p), ci_text, as.integer(record$n)
+            ),
+            `Significant before adjustment only` = sprintf(
+                "%s was %s correlated with %s, %s %s, unadjusted p %s%s, n = %d; however, the association did not remain statistically significant following %s adjustment, adjusted p %s.",
+                record$variable1, direction, record$variable2, method_title,
+                statistic_text, .jr_p(record$p), ci_text, as.integer(record$n),
+                info$label, .jr_p(adjusted_p)
+            ),
+            sprintf(
+                "%s was not significantly correlated with %s after %s adjustment, %s %s, unadjusted p %s, %s-adjusted p %s%s, n = %d.",
+                record$variable1, record$variable2, info$label, method_title,
+                statistic_text, .jr_p(record$p), adjusted_label,
+                .jr_p(adjusted_p), ci_text, as.integer(record$n)
+            )
+        )
+        interpretation <- switch(
+            decision,
+            `Significant after adjustment` = sprintf(
+                "The association remained statistically significant after %s adjustment.", info$label
+            ),
+            `Significant before adjustment only` = sprintf(
+                "The unadjusted association did not remain statistically significant after %s adjustment and should not be reported as significant after correction.", info$label
+            ),
+            sprintf(
+                "After %s adjustment, the sample did not provide clear evidence that this association differs from zero.", info$label
+            )
+        )
+        result$report_blocks$apa <- apa
+        result$report_blocks$plain <- interpretation
+        result$report_blocks$descriptives <- interpretation
+        result$interpretation <- interpretation
+        adjusted_results[[record$result_index]] <- result
+    }
+    adjusted_results
+}
+
+.jr_adjusted_reporting_results <- function(results, info) {
+    if (identical(info$family %||% "", "correlation"))
+        .jr_correlation_adjusted_reporting_results(results, info)
+    else
+        .jr_ttest_adjusted_reporting_results(results, info)
+}
+
+.jr_correlation_apa_rows <- function(results, adjustment = "none", alpha = .05) {
+    info <- .jr_correlation_adjustment_info(results, adjustment, alpha)
+    if (nrow(info$records) == 0L) {
+        rows <- data.frame()
+        attr(rows, "adjustment") <- info
+        return(rows)
+    }
+    rows <- lapply(seq_len(nrow(info$records)), function(i) {
+        record <- info$records[i, , drop = FALSE]
+        result <- results[[record$result_index]]
+        valid_result <- isTRUE(record$valid) && inherits(result, "edu_analysis")
+        statistic <- if (valid_result) result$statistics[1, , drop = FALSE] else NULL
+        method_title <- switch(
+            record$method,
+            pearson = "Pearson",
+            spearman = "Spearman",
+            kendall = "Kendall"
+        )
+        lower <- if (!is.null(statistic) && "ci_low" %in% names(statistic))
+            as.numeric(statistic$ci_low) else NA_real_
+        upper <- if (!is.null(statistic) && "ci_high" %in% names(statistic))
+            as.numeric(statistic$ci_high) else NA_real_
+        data.frame(
+            test_id = record$test_id,
+            analysis = "Correlation",
+            test = sprintf("%s: %s with %s", method_title, record$variable1, record$variable2),
+            variable1 = record$variable1,
+            variable2 = record$variable2,
+            method = method_title,
+            statistic = if (valid_result) record$statistic else NA_real_,
+            df1 = if (valid_result && identical(record$method, "pearson"))
+                record$n - 2L else NA_real_,
+            df2 = "",
+            p = if (valid_result) record$p else NA_real_,
+            p_adjusted = unname(info$adjusted[record$test_id]),
+            adjustment_result = unname(info$decision[record$test_id]),
+            effect = if (valid_result) .jr_addon_effect_label(result, 1L) else "",
+            ci = if (is.finite(lower) && is.finite(upper))
+                .jr_ci(lower, upper, 2L, TRUE) else "",
+            n = if (valid_result) as.integer(record$n) else NA_integer_,
+            stringsAsFactors = FALSE
+        )
+    })
+    rows <- do.call(rbind, rows)
+    attr(rows, "adjustment") <- info
+    rows
+}
+
 .jr_addon_apa_rows <- function(results, adjustment = "none", alpha = .05) {
+    if (.jr_is_correlation_family(results))
+        return(.jr_correlation_apa_rows(results, adjustment, alpha))
     adjustment_info <- .jr_ttest_adjustment_info(results, adjustment, alpha)
     indexed_results <- lapply(
         seq_along(results), function(i) list(result = results[[i]], index = i)
@@ -570,13 +1083,15 @@
 }
 
 .jr_addon_assumption_rows <- function(results) {
+    show_analysis_labels <- length(results) > 1L
     results <- Filter(function(x) inherits(x, "edu_analysis"), results)
     if (length(results) == 0L)
         return(data.frame())
     rows <- lapply(results, function(result) {
         diagnostics <- .jr_normalize_diagnostics(result$diagnostics)
         data.frame(
-            analysis = result$label,
+            analysis = if (show_analysis_labels)
+                .jr_addon_result_title(result) else result$label,
             assumption = diagnostics$check,
             tested = diagnostics$tested,
             statistic = diagnostics$statistic,
@@ -637,7 +1152,7 @@
 .jr_addon_set_tables <- function(self, results, adjustment = "none", alpha = .05) {
     apa_rows        <- .jr_addon_apa_rows(results, adjustment = adjustment, alpha = alpha)
     adjustment_info <- attr(apa_rows, "adjustment") %||%
-        .jr_ttest_adjustment_info(results, adjustment, alpha)
+        .jr_addon_adjustment_info(results, adjustment, alpha)
     assumption_rows <- .jr_addon_assumption_rows(results)
     optional_rows <- list(
         jReportPostHoc      = .jr_addon_posthoc_rows(results),
@@ -647,6 +1162,16 @@
     )
     tbl <- .jr_addon_get(self$parent$results, "jReportApaTable")
     if (!is.null(tbl)) {
+        correlation_multiple <- identical(adjustment_info$family %||% "", "correlation") &&
+            adjustment_info$n_valid >= 2L
+        for (column_name in c("variable1", "variable2", "method", "n")) {
+            column <- tryCatch(tbl$getColumn(column_name), error = function(e) NULL)
+            if (!is.null(column))
+                column$setVisible(correlation_multiple)
+        }
+        raw_p_column <- tryCatch(tbl$getColumn("p"), error = function(e) NULL)
+        if (!is.null(raw_p_column))
+            raw_p_column$setTitle(if (isTRUE(adjustment_info$active)) "Unadjusted p" else "p")
         adjusted_column <- tryCatch(tbl$getColumn("p_adjusted"), error = function(e) NULL)
         decision_column <- tryCatch(tbl$getColumn("adjustment_result"), error = function(e) NULL)
         if (!is.null(adjusted_column)) {
@@ -660,7 +1185,12 @@
         .jr_addon_fill_table(tbl, display_rows)
     }
     tbl <- .jr_addon_get(self$parent$results, "jReportAssumptions")
-    if (!is.null(tbl)) .jr_addon_fill_table(tbl, assumption_rows)
+    if (!is.null(tbl)) {
+        applies_to <- tryCatch(tbl$getColumn("analysis"), error = function(e) NULL)
+        if (!is.null(applies_to))
+            applies_to$setTitle(if (length(results) > 1L) "Applies to" else "Analysis")
+        .jr_addon_fill_table(tbl, assumption_rows)
+    }
     for (nm in names(optional_rows)) {
         tbl <- .jr_addon_get(self$parent$results, nm)
         if (!is.null(tbl)) .jr_addon_fill_table(tbl, optional_rows[[nm]], optional = TRUE)
@@ -803,6 +1333,25 @@
 }
 
 .jr_addon_set_card <- function(self, results, note = "", adjustment = "none", alpha = .05) {
+    initial_adjustment_info <- .jr_addon_adjustment_info(results, adjustment, alpha)
+    if (identical(initial_adjustment_info$family %||% "", "correlation") &&
+            initial_adjustment_info$n_valid == 0L) {
+        .jr_addon_set_tables(self, results, adjustment = adjustment, alpha = alpha)
+        message <- initial_adjustment_info$note %||% ""
+        if (!nzchar(message)) {
+            message <- paste(
+                "None of the requested correlations could be calculated.",
+                "Review the selected variables, sample sizes, missing data, and variable variation."
+            )
+        }
+        card <- .jr_addon_get(self$parent$results, "jReportCard")
+        if (!is.null(card))
+            card$setContent(.jr_html_card("Automatic report", "Correlation results unavailable", message, accent = "#b46c21"))
+        interpretation <- .jr_addon_get(self$parent$results, "jReportInterpretation")
+        if (!is.null(interpretation))
+            interpretation$setContent(.jr_html_card("Interpretation guidance", "Correlation results unavailable", message, accent = "#b46c21"))
+        return(invisible(NULL))
+    }
     if (!any(vapply(results, inherits, logical(1), what = "edu_analysis"))) {
         .jr_addon_message(self, paste(
             "The analysis could not be completed.",
@@ -834,14 +1383,8 @@
         interpretation$setContent(.jr_addon_interpretation_html(
             results, note = note, adjustment = adjustment, alpha = alpha
         ))
-    adjustment_info <- .jr_ttest_adjustment_info(results, adjustment, alpha)
-    if (isTRUE(adjustment_info$active)) {
-        ref_keys <- c(
-            ref_keys,
-            if (identical(adjustment_info$method, "holm")) "Holm1979",
-            "Vickerstaff2019"
-        )
-    }
+    adjustment_info <- .jr_addon_adjustment_info(results, adjustment, alpha)
+    ref_keys <- c(ref_keys, .jr_adjustment_reference_keys(adjustment_info))
     ref_keys <- unique(ref_keys)
     methods <- .jr_addon_get(self$parent$results, "methodsReferences")
     if (!is.null(methods))

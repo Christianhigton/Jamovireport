@@ -252,24 +252,36 @@
     )
 }
 
+.jr_report_section_title <- function(title, analysis_label = "") {
+    analysis_label <- trimws(as.character(analysis_label %||% "")[1])
+    if (!nzchar(analysis_label))
+        return(title)
+    paste(title, analysis_label, sep = " \u2014 ")
+}
+
 .jr_build_report_sections_html <- function(apa_wording = NULL,
                                            diagnostic_note = NULL,
                                            interpretation_guidance = NULL,
                                            checklist_items = NULL,
                                            checklist_note = "",
                                            references = NULL,
-                                           report_style = "apa7") {
+                                           report_style = "apa7",
+                                           analysis_label = "") {
     sections <- character()
     if (!is.null(apa_wording) && nzchar(apa_wording)) {
         sections <- c(sections, .jr_report_section_card(
-            .jr_report_wording_title(report_style),
+            .jr_report_section_title(
+                .jr_report_wording_title(report_style), analysis_label
+            ),
             .jr_report_wording_subtitle(report_style),
             apa_wording, accent = "#278058", background = "#f6fbf8"
         ))
     }
     if (!is.null(diagnostic_note) && nzchar(diagnostic_note)) {
         sections <- c(sections, .jr_report_section_card(
-            "Optional assumptions / diagnostic note",
+            .jr_report_section_title(
+                "Optional assumptions / diagnostic note", analysis_label
+            ),
             "Include this only if relevant to your study.",
             diagnostic_note, accent = "#2f6fa3", background = "#f5f9fd",
             collapsed = TRUE
@@ -277,7 +289,7 @@
     }
     if (!is.null(interpretation_guidance) && nzchar(interpretation_guidance)) {
         sections <- c(sections, .jr_report_section_card(
-            "Interpretation guidance",
+            .jr_report_section_title("Interpretation guidance", analysis_label),
             "For understanding only - do not copy directly into your report.",
             interpretation_guidance, accent = "#b46c21", background = "#fff9ef",
             collapsed = TRUE
@@ -288,7 +300,7 @@
         checklist_html <- paste0(checklist_html, .jr_html_paragraphs(checklist_note))
     if (nzchar(checklist_html)) {
         sections <- c(sections, .jr_report_section_card(
-            "Check before reporting",
+            .jr_report_section_title("Check before reporting", analysis_label),
             "", accent = "#6d5a8a", background = "#faf8fc",
             content_html = checklist_html, collapsed = TRUE
         ))
@@ -346,6 +358,7 @@
         Cumming2014 = "Cumming (2014)",
         Holm1979 = "Holm (1979)",
         Vickerstaff2019 = "Vickerstaff et al. (2019)",
+        BenjaminiHochberg1995 = "Benjamini & Hochberg (1995)",
         key
     )
 }
@@ -371,6 +384,7 @@
         Cumming2014 = "supports cautious interpretation of effect sizes and confidence intervals.",
         Holm1979 = "introduces the sequential Holm procedure for controlling the familywise Type I error rate.",
         Vickerstaff2019 = "provides guidance on multiple-comparison adjustment for families of outcomes.",
+        BenjaminiHochberg1995 = "introduces the false discovery rate and its sequential p-value adjustment procedure.",
         "is used by this analysis."
     )
 }

@@ -39,12 +39,49 @@ edu_correlation <- function(data, x, y, method = c("pearson", "spearman", "kenda
         else
             "The sample does not provide clear evidence that the association differs from zero."
     )
-    diagnostics <- data.frame(
-        check = if (method == "pearson") "Linearity and influential observations" else "Monotonic relationship and influential observations",
-        statistic = NA_real_, p = NA_real_, status = "Not assessed",
-        interpretation = "The form of the association should be examined visually.",
-        action = "Inspect the scatterplot before interpreting the coefficient.",
-        stringsAsFactors = FALSE
+    diagnostics <- switch(
+        method,
+        pearson = rbind(
+            .jr_assumption_row(
+                "Linearity",
+                interpretation = "Pearson's correlation summarises the strength of a linear association.",
+                action = "Inspect the scatterplot for a reasonably straight-line pattern; a strong curved pattern can make Pearson's r misleading."
+            ),
+            .jr_assumption_row(
+                "Influential observations",
+                interpretation = "A small number of unusual observations can substantially change Pearson's correlation.",
+                action = "Inspect the scatterplot for outliers, clusters, and high-leverage observations, and consider a justified sensitivity analysis."
+            ),
+            .jr_assumption_row(
+                "Approximate bivariate normality",
+                interpretation = "Pearson's correlation assumes that the two variables have an approximately bivariate normal joint distribution, particularly for the accuracy of p-values and confidence intervals. Testing each variable separately for normality does not fully assess this assumption.",
+                action = "Inspect the scatterplot for an approximately elliptical distribution and check for substantial skew, heavy tails, clusters, or influential observations. For serious violations, consider Spearman's rank correlation, Kendall's tau, or bootstrapped confidence intervals."
+            )
+        ),
+        spearman = rbind(
+            .jr_assumption_row(
+                "Monotonic relationship",
+                interpretation = "Spearman's correlation describes an association that consistently increases or decreases, without requiring linearity.",
+                action = "Inspect the scatterplot for a broadly monotonic pattern before interpreting the coefficient."
+            ),
+            .jr_assumption_row(
+                "Influential observations and tied ranks",
+                interpretation = "Unusual observations and many tied values can affect a rank correlation and its sampling distribution.",
+                action = "Inspect the data for influential observations and report substantial ties where they affect interpretation."
+            )
+        ),
+        kendall = rbind(
+            .jr_assumption_row(
+                "Monotonic association",
+                interpretation = "Kendall's tau describes whether pairs of observations are ordered consistently in the same or opposite direction.",
+                action = "Inspect the scatterplot and confirm that a monotonic summary is appropriate for the research question."
+            ),
+            .jr_assumption_row(
+                "Tied observations",
+                interpretation = "Tied values affect the number of concordant and discordant pairs used by Kendall's tau.",
+                action = "Review and report substantial ties where they are relevant to interpretation."
+            )
+        )
     )
     stats <- data.frame(test = method, statistic = coefficient, df = unname(test$parameter %||% NA_real_),
                         p = test$p.value,
@@ -65,7 +102,9 @@ edu_correlation <- function(data, x, y, method = c("pearson", "spearman", "kenda
         report_blocks = list(
             rationale = sprintf("%s correlation estimates the direction and strength of association between %s and %s.", tools::toTitleCase(method), x, y),
             descriptives = plain, apa = apa,
-            assumptions = .jr_diagnostic_text(diagnostics), plain = plain
+            assumptions = .jr_diagnostic_text(rbind(
+                .jr_default_assumptions("correlation"), diagnostics
+            )), plain = plain
         ),
         statistics = stats, call = match.call()
     )

@@ -4,10 +4,18 @@
 \alias{jrReportCorrMatrix}
 \title{Automatic Report for Correlation Matrix}
 \usage{
-jrReportCorrMatrix(data)
+jrReportCorrMatrix(data, pAdjustment = "holm")
 }
 \arguments{
 \item{data}{.}
+
+\item{pAdjustment}{When several correlations address the same overall
+research question, adjusting the p-values can control the increased risk of
+false-positive findings. Holm is recommended for most confirmatory analyses
+because it controls the familywise Type I error rate and is generally less
+conservative than Bonferroni. Benjamini-Hochberg controls the expected
+false discovery rate and may be useful for large exploratory correlation
+sets. Apply the adjustment across one planned family of correlation tests.}
 }
 \value{
 A results object containing:

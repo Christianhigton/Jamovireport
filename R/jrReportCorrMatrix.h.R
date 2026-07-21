@@ -5,7 +5,8 @@ jrReportCorrMatrixOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::
     "jrReportCorrMatrixOptions",
     inherit = jmvcore::Options,
     public = list(
-        initialize = function( ...) {
+        initialize = function(
+            pAdjustment = "holm", ...) {
 
             super$initialize(
                 package="jReport",
@@ -13,10 +14,22 @@ jrReportCorrMatrixOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::
                 requiresData=TRUE,
                 ...)
 
+            private$..pAdjustment <- jmvcore::OptionList$new(
+                "pAdjustment",
+                pAdjustment,
+                options=list(
+                    "holm",
+                    "bonferroni",
+                    "bh",
+                    "none"),
+                default="holm")
 
+            self$.addOption(private$..pAdjustment)
         }),
-    active = list(),
-    private = list()
+    active = list(
+        pAdjustment = function() private$..pAdjustment$value),
+    private = list(
+        ..pAdjustment = NA)
 )
 
 jrReportCorrMatrixResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -54,6 +67,21 @@ jrReportCorrMatrixResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::
                         `title`="Test / Effect", 
                         `type`="text"),
                     list(
+                        `name`="variable1", 
+                        `title`="Variable 1", 
+                        `type`="text", 
+                        `visible`=FALSE),
+                    list(
+                        `name`="variable2", 
+                        `title`="Variable 2", 
+                        `type`="text", 
+                        `visible`=FALSE),
+                    list(
+                        `name`="method", 
+                        `title`="Correlation method", 
+                        `type`="text", 
+                        `visible`=FALSE),
+                    list(
                         `name`="statistic", 
                         `title`="Statistic", 
                         `type`="number"),
@@ -71,13 +99,29 @@ jrReportCorrMatrixResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::
                         `type`="number", 
                         `format`="zto,pvalue"),
                     list(
+                        `name`="p_adjusted", 
+                        `title`="Adjusted p", 
+                        `type`="number", 
+                        `format`="zto,pvalue", 
+                        `visible`=FALSE),
+                    list(
+                        `name`="adjustment_result", 
+                        `title`="Result after adjustment", 
+                        `type`="text", 
+                        `visible`=FALSE),
+                    list(
                         `name`="effect", 
                         `title`="Effect Size", 
                         `type`="text"),
                     list(
                         `name`="ci", 
                         `title`="Effect 95% CI", 
-                        `type`="text"))))
+                        `type`="text"),
+                    list(
+                        `name`="n", 
+                        `title`="N", 
+                        `type`="integer", 
+                        `visible`=FALSE))))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="jReportAssumptions",
@@ -163,6 +207,13 @@ jrReportCorrMatrixBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
 #' effectsize
 #'
 #' @param data .
+#' @param pAdjustment When several correlations address the same overall
+#'   research question, adjusting the p-values can control the increased risk of
+#'   false-positive findings. Holm is recommended for most confirmatory analyses
+#'   because it controls the familywise Type I error rate and is generally less
+#'   conservative than Bonferroni. Benjamini-Hochberg controls the expected
+#'   false discovery rate and may be useful for large exploratory correlation
+#'   sets. Apply the adjustment across one planned family of correlation tests.
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$jReportHeading} \tab \tab \tab \tab \tab a html \cr
@@ -181,7 +232,8 @@ jrReportCorrMatrixBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
 #'
 #' @export
 jrReportCorrMatrix <- function(
-    data) {
+    data,
+    pAdjustment = "holm") {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("jrReportCorrMatrix requires jmvcore to be installed (restart may be required)")
@@ -191,7 +243,8 @@ jrReportCorrMatrix <- function(
             parent.frame())
 
 
-    options <- jrReportCorrMatrixOptions$new()
+    options <- jrReportCorrMatrixOptions$new(
+        pAdjustment = pAdjustment)
 
     analysis <- jrReportCorrMatrixClass$new(
         options = options,

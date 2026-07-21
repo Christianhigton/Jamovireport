@@ -46,6 +46,78 @@ test_that("main and add-on analysis renderers expose copy controls", {
     expect_match(interpretation_html, "Interpretation guidance", fixed = TRUE)
 })
 
+test_that("multiple add-on results identify the analysis in tables and card titles", {
+    results <- list(
+        edu_correlation(mtcars, "mpg", "wt", method = "pearson"),
+        edu_correlation(mtcars, "mpg", "hp", method = "spearman")
+    )
+
+    assumptions <- .jr_addon_assumption_rows(results)
+    report <- .jr_addon_report_html(
+        results, options = .jr_addon_reporting_options()
+    )
+    interpretation <- .jr_addon_interpretation_html(results)
+
+    expect_setequal(
+        unique(assumptions$analysis),
+        c("Pearson: mpg with wt", "Spearman: mpg with hp")
+    )
+    for (label in c("Pearson: mpg with wt", "Spearman: mpg with hp")) {
+        expect_match(
+            report,
+            paste("Optional assumptions / diagnostic note \u2014", label),
+            fixed = TRUE
+        )
+        expect_match(
+            report, paste("Check before reporting \u2014", label), fixed = TRUE
+        )
+        expect_match(
+            interpretation,
+            paste("Interpretation guidance \u2014", label),
+            fixed = TRUE
+        )
+    }
+})
+
+test_that("single add-on results retain compact generic section titles", {
+    result <- edu_correlation(mtcars, "mpg", "wt", method = "pearson")
+    report <- .jr_addon_report_html(
+        list(result), options = .jr_addon_reporting_options()
+    )
+    assumptions <- .jr_addon_assumption_rows(list(result))
+
+    expect_equal(unique(assumptions$analysis), "Correlation")
+    expect_match(report, "Optional assumptions / diagnostic note", fixed = TRUE)
+    expect_false(grepl(
+        "Optional assumptions / diagnostic note \u2014 Pearson: mpg with wt",
+        report, fixed = TRUE
+    ))
+})
+
+test_that("multi-result labels distinguish t-test outcomes and ANOVA methods", {
+    t_data <- ToothGrowth
+    t_data$double_len <- 2 * t_data$len
+    t_results <- list(
+        edu_t_test(t_data, "len", "supp"),
+        edu_t_test(t_data, "double_len", "supp")
+    )
+    a_data <- ToothGrowth
+    a_data$dose <- factor(a_data$dose)
+    a_results <- list(
+        edu_anova_oneway(a_data, "len", "dose", method = "standard"),
+        edu_anova_oneway(a_data, "len", "dose", method = "welch")
+    )
+
+    expect_equal(
+        vapply(t_results, .jr_addon_result_title, character(1)),
+        c("Welch's t: len by supp", "Welch's t: double_len by supp")
+    )
+    expect_equal(
+        vapply(a_results, .jr_addon_result_title, character(1)),
+        c("One-Way ANOVA: len by dose", "Welch One-Way ANOVA: len by dose")
+    )
+})
+
 test_that("report cards use compact vertical spacing", {
     html <- .jr_build_report_sections_html(
         apa_wording = "Report wording.",

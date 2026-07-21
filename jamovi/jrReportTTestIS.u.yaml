@@ -13,5 +13,20 @@ children:
         margin: large
         children:
           - { type: CheckBox, name: jreportEnabled }
-          - { type: ComboBox, name: pAdjustment, enable: (jreportEnabled) }
+          - { type: ComboBox, name: reportStyle, enable: (jreportEnabled) }
+          - { type: ComboBox, name: explanationTone, enable: (jreportEnabled) }
+          - type: Label
+            label: 'Include in output'
+            children:
+              - { type: CheckBox, name: showSuggestedWording, enable: (jreportEnabled) }
+              - { type: CheckBox, name: showInterpretation, enable: (jreportEnabled) }
+              - { type: CheckBox, name: showEffectSizeGuidance, enable: (jreportEnabled) }
+              - { type: CheckBox, name: showAssumptionGuidance, enable: (jreportEnabled) }
+              - { type: CheckBox, name: showPracticalMeaning, enable: (jreportEnabled) }
+              - { type: CheckBox, name: showCheckBeforeReporting, enable: (jreportEnabled) }
+              - { type: CheckBox, name: showReferences, enable: (jreportEnabled) }
+          - type: Label
+            label: 'When reporting several related outcomes'
+            children:
+              - { type: ComboBox, name: pAdjustment, enable: (jreportEnabled) }
 ...

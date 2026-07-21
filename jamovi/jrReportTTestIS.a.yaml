@@ -17,6 +17,31 @@ options:
       title: Generate jReport output
       type: Bool
       default: false
+    - name: reportStyle
+      title: Reporting style
+      type: List
+      options:
+        - { name: apaConcise, title: APA 7 — concise }
+        - { name: apaDetailed, title: APA 7 — detailed }
+        - { name: plainLanguage, title: Plain-language summary }
+        - { name: teaching, title: Teaching and explanation }
+      default: apaConcise
+    - name: explanationTone
+      title: Explanation tone
+      type: List
+      options:
+        - { name: academic, title: Academic }
+        - { name: professional, title: Professional and accessible }
+        - { name: studentFriendly, title: Student-friendly }
+        - { name: plainEnglish, title: Plain English }
+      default: professional
+    - { name: showSuggestedWording, title: Suggested APA wording, type: Bool, default: true }
+    - { name: showInterpretation, title: Statistical interpretation, type: Bool, default: true }
+    - { name: showEffectSizeGuidance, title: Effect-size interpretation, type: Bool, default: true }
+    - { name: showAssumptionGuidance, title: Assumption guidance, type: Bool, default: true }
+    - { name: showPracticalMeaning, title: Practical meaning, type: Bool, default: true }
+    - { name: showCheckBeforeReporting, title: Check before reporting, type: Bool, default: true }
+    - { name: showReferences, title: References, type: Bool, default: true }
     - name: pAdjustment
       title: Multiple-comparison adjustment
       type: List

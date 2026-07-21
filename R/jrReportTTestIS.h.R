@@ -7,6 +7,15 @@ jrReportTTestISOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
     public = list(
         initialize = function(
             jreportEnabled = FALSE,
+            reportStyle = "apaConcise",
+            explanationTone = "professional",
+            showSuggestedWording = TRUE,
+            showInterpretation = TRUE,
+            showEffectSizeGuidance = TRUE,
+            showAssumptionGuidance = TRUE,
+            showPracticalMeaning = TRUE,
+            showCheckBeforeReporting = TRUE,
+            showReferences = TRUE,
             pAdjustment = "holm", ...) {
 
             super$initialize(
@@ -19,6 +28,52 @@ jrReportTTestISOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
                 "jreportEnabled",
                 jreportEnabled,
                 default=FALSE)
+            private$..reportStyle <- jmvcore::OptionList$new(
+                "reportStyle",
+                reportStyle,
+                options=list(
+                    "apaConcise",
+                    "apaDetailed",
+                    "plainLanguage",
+                    "teaching"),
+                default="apaConcise")
+            private$..explanationTone <- jmvcore::OptionList$new(
+                "explanationTone",
+                explanationTone,
+                options=list(
+                    "academic",
+                    "professional",
+                    "studentFriendly",
+                    "plainEnglish"),
+                default="professional")
+            private$..showSuggestedWording <- jmvcore::OptionBool$new(
+                "showSuggestedWording",
+                showSuggestedWording,
+                default=TRUE)
+            private$..showInterpretation <- jmvcore::OptionBool$new(
+                "showInterpretation",
+                showInterpretation,
+                default=TRUE)
+            private$..showEffectSizeGuidance <- jmvcore::OptionBool$new(
+                "showEffectSizeGuidance",
+                showEffectSizeGuidance,
+                default=TRUE)
+            private$..showAssumptionGuidance <- jmvcore::OptionBool$new(
+                "showAssumptionGuidance",
+                showAssumptionGuidance,
+                default=TRUE)
+            private$..showPracticalMeaning <- jmvcore::OptionBool$new(
+                "showPracticalMeaning",
+                showPracticalMeaning,
+                default=TRUE)
+            private$..showCheckBeforeReporting <- jmvcore::OptionBool$new(
+                "showCheckBeforeReporting",
+                showCheckBeforeReporting,
+                default=TRUE)
+            private$..showReferences <- jmvcore::OptionBool$new(
+                "showReferences",
+                showReferences,
+                default=TRUE)
             private$..pAdjustment <- jmvcore::OptionList$new(
                 "pAdjustment",
                 pAdjustment,
@@ -29,13 +84,40 @@ jrReportTTestISOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
                 default="holm")
 
             self$.addOption(private$..jreportEnabled)
+            self$.addOption(private$..reportStyle)
+            self$.addOption(private$..explanationTone)
+            self$.addOption(private$..showSuggestedWording)
+            self$.addOption(private$..showInterpretation)
+            self$.addOption(private$..showEffectSizeGuidance)
+            self$.addOption(private$..showAssumptionGuidance)
+            self$.addOption(private$..showPracticalMeaning)
+            self$.addOption(private$..showCheckBeforeReporting)
+            self$.addOption(private$..showReferences)
             self$.addOption(private$..pAdjustment)
         }),
     active = list(
         jreportEnabled = function() private$..jreportEnabled$value,
+        reportStyle = function() private$..reportStyle$value,
+        explanationTone = function() private$..explanationTone$value,
+        showSuggestedWording = function() private$..showSuggestedWording$value,
+        showInterpretation = function() private$..showInterpretation$value,
+        showEffectSizeGuidance = function() private$..showEffectSizeGuidance$value,
+        showAssumptionGuidance = function() private$..showAssumptionGuidance$value,
+        showPracticalMeaning = function() private$..showPracticalMeaning$value,
+        showCheckBeforeReporting = function() private$..showCheckBeforeReporting$value,
+        showReferences = function() private$..showReferences$value,
         pAdjustment = function() private$..pAdjustment$value),
     private = list(
         ..jreportEnabled = NA,
+        ..reportStyle = NA,
+        ..explanationTone = NA,
+        ..showSuggestedWording = NA,
+        ..showInterpretation = NA,
+        ..showEffectSizeGuidance = NA,
+        ..showAssumptionGuidance = NA,
+        ..showPracticalMeaning = NA,
+        ..showCheckBeforeReporting = NA,
+        ..showReferences = NA,
         ..pAdjustment = NA)
 )
 
@@ -197,6 +279,15 @@ jrReportTTestISBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
 #'
 #' @param data .
 #' @param jreportEnabled .
+#' @param reportStyle .
+#' @param explanationTone .
+#' @param showSuggestedWording .
+#' @param showInterpretation .
+#' @param showEffectSizeGuidance .
+#' @param showAssumptionGuidance .
+#' @param showPracticalMeaning .
+#' @param showCheckBeforeReporting .
+#' @param showReferences .
 #' @param pAdjustment When several related t-tests address the same overall
 #'   research question, adjustment controls the increased familywise Type I
 #'   error risk. Holm is recommended for most confirmatory analyses and is
@@ -221,6 +312,15 @@ jrReportTTestISBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
 jrReportTTestIS <- function(
     data,
     jreportEnabled = FALSE,
+    reportStyle = "apaConcise",
+    explanationTone = "professional",
+    showSuggestedWording = TRUE,
+    showInterpretation = TRUE,
+    showEffectSizeGuidance = TRUE,
+    showAssumptionGuidance = TRUE,
+    showPracticalMeaning = TRUE,
+    showCheckBeforeReporting = TRUE,
+    showReferences = TRUE,
     pAdjustment = "holm") {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
@@ -233,6 +333,15 @@ jrReportTTestIS <- function(
 
     options <- jrReportTTestISOptions$new(
         jreportEnabled = jreportEnabled,
+        reportStyle = reportStyle,
+        explanationTone = explanationTone,
+        showSuggestedWording = showSuggestedWording,
+        showInterpretation = showInterpretation,
+        showEffectSizeGuidance = showEffectSizeGuidance,
+        showAssumptionGuidance = showAssumptionGuidance,
+        showPracticalMeaning = showPracticalMeaning,
+        showCheckBeforeReporting = showCheckBeforeReporting,
+        showReferences = showReferences,
         pAdjustment = pAdjustment)
 
     analysis <- jrReportTTestISClass$new(

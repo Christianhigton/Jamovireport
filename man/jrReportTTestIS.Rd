@@ -4,10 +4,43 @@
 \alias{jrReportTTestIS}
 \title{Automatic Report for Independent Samples T-Test}
 \usage{
-jrReportTTestIS(data, pAdjustment = "holm")
+jrReportTTestIS(
+  data,
+  jreportEnabled = FALSE,
+  reportStyle = "apaConcise",
+  explanationTone = "professional",
+  showSuggestedWording = TRUE,
+  showInterpretation = TRUE,
+  showEffectSizeGuidance = TRUE,
+  showAssumptionGuidance = TRUE,
+  showPracticalMeaning = TRUE,
+  showCheckBeforeReporting = TRUE,
+  showReferences = TRUE,
+  pAdjustment = "holm"
+)
 }
 \arguments{
 \item{data}{.}
+
+\item{jreportEnabled}{.}
+
+\item{reportStyle}{.}
+
+\item{explanationTone}{.}
+
+\item{showSuggestedWording}{.}
+
+\item{showInterpretation}{.}
+
+\item{showEffectSizeGuidance}{.}
+
+\item{showAssumptionGuidance}{.}
+
+\item{showPracticalMeaning}{.}
+
+\item{showCheckBeforeReporting}{.}
+
+\item{showReferences}{.}
 
 \item{pAdjustment}{When several related t-tests address the same overall
 research question, adjustment controls the increased familywise Type I error

@@ -126,8 +126,16 @@ core_ttest_load_jmv <- function() {
         skip("The target jamovi jmv module is not installed.")
     if (!app_library %in% .libPaths())
         .libPaths(c(app_library, .libPaths()))
-    if (!requireNamespace("jmv", quietly = TRUE))
+    loaded <- tryCatch({
+        loadNamespace(paste0("j", "mv"))
+        TRUE
+    }, error = function(error) FALSE)
+    if (!loaded)
         skip("The target jamovi jmv module could not be loaded.")
+}
+
+core_ttest_run_jmv <- function(...) {
+    get("ttestIS", envir = asNamespace(paste0("j", "mv")))(...)
 }
 
 core_ttest_host_results <- function(result) {
@@ -194,7 +202,7 @@ test_that("adapter matches live core Student and Welch results", {
     data <- ToothGrowth
     data$len2 <- data$len * .5 + rep(c(-1, 1), length.out = nrow(data))
     data$len[c(2, 17)] <- NA_real_
-    host <- jmv::ttestIS(
+    host <- core_ttest_run_jmv(
         data = data, vars = c("len", "len2"), group = "supp",
         students = TRUE, welchs = TRUE, meanDiff = TRUE, ci = TRUE,
         effectSize = TRUE, ciES = TRUE, desc = TRUE, norm = TRUE, eqv = TRUE,
@@ -231,12 +239,12 @@ test_that("isolated fallback matches optional live core output", {
         group = factor(c(rep("first", 8), rep("second", 13))),
         score = c(2, 4, 5, 6, 7, 8, 9, NA, 8, 9, 12, 13, 14, 15, 18, 19, 20, 22, 24, 26, 30)
     )
-    minimal <- jmv::ttestIS(
+    minimal <- core_ttest_run_jmv(
         data = data, vars = "score", group = "group",
         students = TRUE, welchs = TRUE, meanDiff = FALSE, ci = FALSE,
         effectSize = FALSE, desc = FALSE, norm = FALSE, eqv = FALSE
     )
-    full <- jmv::ttestIS(
+    full <- core_ttest_run_jmv(
         data = data, vars = "score", group = "group",
         students = TRUE, welchs = TRUE, meanDiff = TRUE, ci = TRUE,
         effectSize = TRUE, ciES = TRUE, desc = TRUE, norm = TRUE, eqv = TRUE

@@ -84,3 +84,58 @@ are marked as repeated calculations, use the host's selected Student/Welch test,
 confidence level, hypothesis direction, and missing-data mode, and never
 overwrite a finite host value. This isolated fallback is covered by numerical
 comparison tests against `jmv::ttestIS`.
+
+## Experiment outcome
+
+The add-on binding, UI controls, host-result adapter, and renderer all work in a
+live in-process `jmv::ttestIS` host. The add-on is registered with
+`addonFor: jmv::ttestIS` and `hidden: true`; installed module metadata therefore
+attaches it to the core analysis without adding another ribbon item. The built
+UI contains a collapsed `jReport: Reporting and explanation` panel. With the
+master option disabled, all jReport result items remain hidden. With it enabled,
+the configured reporting boxes and references appear while the core t-test
+table remains numerically unchanged.
+
+The proof-of-concept reached a saved-state stop condition. In jamovi 2.7.24,
+the server constructs add-ons as nested analysis objects and sends their options
+to the engine, but `Analysis.serialize()` writes only the host analysis options
+to the analysis payload stored in an `.omv`. When the host is reconstructed,
+the add-on is created again from module defaults. The audit script
+`scripts/check_core_ttest_addon_saved_state.py` confirms that selections such as
+`jreportEnabled = true` and `reportStyle = teaching` are absent from the saved
+host payload and return to `false` and `apaConcise` after reconstruction.
+
+This payload audit is strong architectural evidence, but a desktop `.omv` was
+not manually saved and reopened. Saved-file compatibility is therefore **not
+claimed**. Persisting add-on UI selections would require a supported jamovi
+mechanism beyond the present `addonFor` option model, or a brittle custom state
+workaround. The latter is outside this experiment's safety constraints.
+
+## Validation record
+
+- Focused proof-of-concept suite: 207 expectations passed.
+- Full test suite after implementation: 1,380 passed, 0 failed, 0 warnings,
+  and 1 existing optional `BayesFactor` skip.
+- jamovi compiler build: succeeded for target 2.7.24; the existing `po2json`
+  Node deprecation warning remained.
+- `R CMD check`: 0 errors, 0 warnings, and 4 environmental/project-layout
+  notes (unavailable suggested packages, installed size, clock verification,
+  and existing non-standard top-level project files).
+- Final experimental package: `jReport_1.0.0_core-ttest-poc-final_macos.jmo`;
+  SHA-256 `6142a8f92dbf806bfe923ed09253ee024389f459b2a47d36eb2f7fae4c88b142`.
+- Installed-package metadata and generated UI were inspected successfully.
+  The previous local module was backed up at
+  `/private/tmp/jReport-poc-install.F37Jkd/jReport-before-experiment` before the
+  experimental files were copied into the jamovi module directory.
+
+## Manual verification status
+
+- [x] Core `ttestIS` runs with the add-on attached in the target `jmv` package.
+- [x] Core statistics are unchanged with the add-on attached.
+- [x] Installed metadata declares the add-on hidden and targets `jmv::ttestIS`.
+- [x] Generated installed UI declares the requested panel collapsed by default.
+- [x] Master and individual reporting controls change live host output.
+- [x] Multiple outcomes/tests are identified in every reporting-box title.
+- [ ] Desktop GUI screenshot and pointer-driven interaction were not captured.
+- [ ] A desktop `.omv` was not reopened; the payload audit instead identified
+  that add-on selections are not serialised and would reset to defaults.

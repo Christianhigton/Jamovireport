@@ -36,7 +36,7 @@ test_that("core t-test proof-of-concept has an opt-in master control", {
     expect_false(enabled$default)
 })
 
-test_that("core t-test proof-of-concept UI is collapsed by default", {
+test_that("generated add-on UI declares the intended collapsed panel", {
     root <- core_ttest_source_root()
     ui <- yaml::read_yaml(file.path(root, "jamovi", "jrReportTTestIS.u.yaml"))
     section <- ui$children[[1]]

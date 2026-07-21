@@ -87,14 +87,23 @@ comparison tests against `jmv::ttestIS`.
 
 ## Experiment outcome
 
-The add-on binding, UI controls, host-result adapter, and renderer all work in a
-live in-process `jmv::ttestIS` host. The add-on is registered with
-`addonFor: jmv::ttestIS` and `hidden: true`; installed module metadata therefore
-attaches it to the core analysis without adding another ribbon item. The built
-UI contains a collapsed `jReport: Reporting and explanation` panel. With the
-master option disabled, all jReport result items remain hidden. With it enabled,
-the configured reporting boxes and references appear while the core t-test
-table remains numerically unchanged.
+The add-on binding, host-result adapter, and renderer work in a live in-process
+`jmv::ttestIS` host. The add-on is registered with `addonFor: jmv::ttestIS` and
+`hidden: true`, so it can attach engine-side results without adding another
+ribbon item. With the master option disabled, all jReport result items remain
+hidden. With it enabled programmatically, the configured reporting boxes and
+references appear while the core t-test table remains numerically unchanged.
+
+The desktop UI test failed. Although the jReport add-on's generated UI contains
+a collapsed `jReport: Reporting and explanation` control tree, jamovi 2.7.24
+does not merge an add-on's UI into the host analysis panel. The installed
+`moretests` reference confirms this boundary: its analyses use
+`addonFor: jmv::ttestIS`, but their generated add-on UI contains no controls.
+The add-on mechanism is used to append engine results, not to extend the core
+options interface. A screenshot captured after a clean installation, full
+restart, and creation of a new Independent Samples T-Test showed only the core
+controls. This triggers the experiment's explicit stop condition that controls
+cannot be inserted into the host options interface.
 
 The proof-of-concept reached a saved-state stop condition. In jamovi 2.7.24,
 the server constructs add-ons as nested analysis objects and sends their options
@@ -133,9 +142,20 @@ workaround. The latter is outside this experiment's safety constraints.
 - [x] Core `ttestIS` runs with the add-on attached in the target `jmv` package.
 - [x] Core statistics are unchanged with the add-on attached.
 - [x] Installed metadata declares the add-on hidden and targets `jmv::ttestIS`.
-- [x] Generated installed UI declares the requested panel collapsed by default.
+- [x] Generated add-on UI declares the requested panel collapsed by default.
 - [x] Master and individual reporting controls change live host output.
 - [x] Multiple outcomes/tests are identified in every reporting-box title.
-- [ ] Desktop GUI screenshot and pointer-driven interaction were not captured.
+- [x] Desktop GUI was restarted and a new core t-test was opened.
+- [ ] The jReport section did not appear: jamovi did not merge the add-on UI.
 - [ ] A desktop `.omv` was not reopened; the payload audit instead identified
   that add-on selections are not serialised and would reset to defaults.
+
+## Final feasibility verdict
+
+**Not currently feasible** using the supported external-module `addonFor`
+mechanism. Engine-side output injection works, but the required host-panel
+controls do not appear and their values would not persist in the saved host
+analysis. Implementing the requested interface would require modifying or
+patching the installed core `jmv` UI, which is explicitly outside this
+experiment's scope. Retain the standalone jReport analyses and do not expand
+this pattern to additional core analyses.

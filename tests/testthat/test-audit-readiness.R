@@ -315,6 +315,8 @@ test_that("guided methods reference panel renders formatted references", {
   expect_true(grepl("Statistical power analysis for the behavioral sciences", html, fixed = TRUE))
   expect_true(grepl("The new statistics: Why and how", html, fixed = TRUE))
   expect_false(grepl("No additional references", html, fixed = TRUE))
+  expect_false(grepl("How to use these references", html, fixed = TRUE))
+  expect_false(grepl("The tables above do not repeat numeric citation markers", html, fixed = TRUE))
 })
 
 test_that("analysis .b.R files are represented in manifest", {

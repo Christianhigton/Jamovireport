@@ -5,7 +5,8 @@ jrReportTTestISOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
     "jrReportTTestISOptions",
     inherit = jmvcore::Options,
     public = list(
-        initialize = function( ...) {
+        initialize = function(
+            pAdjustment = "holm", ...) {
 
             super$initialize(
                 package="jReport",
@@ -13,10 +14,21 @@ jrReportTTestISOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
                 requiresData=TRUE,
                 ...)
 
+            private$..pAdjustment <- jmvcore::OptionList$new(
+                "pAdjustment",
+                pAdjustment,
+                options=list(
+                    "holm",
+                    "bonferroni",
+                    "none"),
+                default="holm")
 
+            self$.addOption(private$..pAdjustment)
         }),
-    active = list(),
-    private = list()
+    active = list(
+        pAdjustment = function() private$..pAdjustment$value),
+    private = list(
+        ..pAdjustment = NA)
 )
 
 jrReportTTestISResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -70,6 +82,17 @@ jrReportTTestISResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
                         `title`="p", 
                         `type`="number", 
                         `format`="zto,pvalue"),
+                    list(
+                        `name`="p_adjusted",
+                        `title`="Adjusted p",
+                        `type`="number",
+                        `format`="zto,pvalue",
+                        `visible`=FALSE),
+                    list(
+                        `name`="adjustment_result",
+                        `title`="Result after adjustment",
+                        `type`="text",
+                        `visible`=FALSE),
                     list(
                         `name`="effect", 
                         `title`="Effect Size", 
@@ -165,6 +188,10 @@ jrReportTTestISBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
 #' BayesFactor
 #'
 #' @param data .
+#' @param pAdjustment When several related t-tests address the same overall
+#'   research question, adjustment controls the increased familywise Type I
+#'   error risk. Holm is recommended for most confirmatory analyses and is
+#'   generally less conservative than Bonferroni.
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$jReportHeading} \tab \tab \tab \tab \tab a html \cr
@@ -183,7 +210,8 @@ jrReportTTestISBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
 #'
 #' @export
 jrReportTTestIS <- function(
-    data) {
+    data,
+    pAdjustment = "holm") {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("jrReportTTestIS requires jmvcore to be installed (restart may be required)")
@@ -193,7 +221,8 @@ jrReportTTestIS <- function(
             parent.frame())
 
 
-    options <- jrReportTTestISOptions$new()
+    options <- jrReportTTestISOptions$new(
+        pAdjustment = pAdjustment)
 
     analysis <- jrReportTTestISClass$new(
         options = options,

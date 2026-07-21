@@ -45,8 +45,7 @@ eduDemographicsClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6::R6C
 )
 
 .dm_best_practices_html <- function() {
-    '<div style="font-family:sans-serif;font-size:0.88em;line-height:1.6;
-        border-top:2px solid #ccc;padding:10px 0 4px">
+    body <- '
 <p style="margin:0 0 6px"><strong>APA 7 Demographic Table \u2014 Reporting Best Practices</strong></p>
 
 <p style="margin:0 0 5px"><strong>Table format.</strong>
@@ -77,5 +76,11 @@ paragraph above to match your specific phrasing before submitting.</p>
 <p style="margin:0"><strong>Table citation.</strong>
 Reference the table in-text as "Table&nbsp;1" (or whichever number applies) the first time you
 mention it: e.g., "Demographic characteristics of the sample are presented in Table&nbsp;1."</p>
-</div>'
+'
+    paste0(
+        '<div data-jr-copy-section="true" style="font-family:sans-serif;font-size:0.88em;line-height:1.6;',
+        'border-top:2px solid #ccc;padding:10px 0 4px">',
+        .jr_copyable_body_html(body),
+        '</div>'
+    )
 }

@@ -31,17 +31,53 @@
     paste0(rendered, collapse = "")
 }
 
+.jr_copy_button_html <- function(label = "Copy text") {
+    script <- paste0(
+        "(function(b){",
+        "var s=b.closest('[data-jr-copy-section]');",
+        "var e=s?s.querySelector('[data-jr-copy-content]'):null;",
+        "var t=e?(e.innerText||e.textContent||''):'';",
+        "var done=function(ok){var old=b.textContent;b.textContent=ok?'Copied':'Copy failed';",
+        "b.setAttribute('aria-live','polite');setTimeout(function(){b.textContent=old;},1500);};",
+        "var legacy=function(){var a=document.createElement('textarea');a.value=t;",
+        "a.setAttribute('readonly','');a.style.position='fixed';a.style.opacity='0';",
+        "document.body.appendChild(a);a.select();var ok=false;",
+        "try{ok=document.execCommand('copy');}catch(err){}document.body.removeChild(a);done(ok);};",
+        "if(navigator.clipboard&&navigator.clipboard.writeText){",
+        "navigator.clipboard.writeText(t).then(function(){done(true);}).catch(legacy);",
+        "}else{legacy();}})(this);return false;"
+    )
+    sprintf(
+        paste0(
+            "<button type='button' aria-label='%s' onclick=\"%s\" ",
+            "style='float:right;margin:0 0 8px 12px;padding:5px 10px;border:1px solid #aebbc4;",
+            "border-radius:4px;background:#fff;color:#263944;font-size:12px;font-weight:600;",
+            "cursor:pointer;'>%s</button>"
+        ),
+        .jr_html_escape(label), script, .jr_html_escape(label)
+    )
+}
+
+.jr_copyable_body_html <- function(body, label = "Copy text") {
+    paste0(
+        .jr_copy_button_html(label),
+        "<div data-jr-copy-content='true'>", body, "</div>",
+        "<div style='clear:both;'></div>"
+    )
+}
+
 .jr_html_card <- function(eyebrow, title, content, accent = "#237f86") {
     sprintf(
         paste0(
-            "<div style='width:100%%;box-sizing:border-box;border:1px solid #dfe6ea; border-left:5px solid %s;",
-            "border-radius:6px; padding:14px 16px; margin:4px 0 10px 0; background:#fbfcfd;'>",
+            "<div data-jr-copy-section='true' style='width:100%%;box-sizing:border-box;border:1px solid #dfe6ea; border-left:5px solid %s;",
+            "border-radius:6px; padding:14px 16px; margin:2px 0 6px 0; background:#fbfcfd;'>",
             "<div style='font-size:11px; font-weight:600; letter-spacing:.08em; color:#536472;",
             "text-transform:uppercase; margin-bottom:6px;'>%s</div>",
             "<div style='font-size:16px; font-weight:600; color:#18242d; margin-bottom:10px;'>%s</div>",
             "%s</div>"
         ),
-        accent, .jr_html_escape(eyebrow), .jr_html_escape(title), .jr_html_paragraphs(content)
+        accent, .jr_html_escape(eyebrow), .jr_html_escape(title),
+        .jr_copyable_body_html(.jr_html_paragraphs(content))
     )
 }
 
@@ -59,8 +95,8 @@
     if (isTRUE(collapsed)) {
         return(sprintf(
             paste0(
-                "<details style='width:100%%;box-sizing:border-box;border:1px solid #dfe6ea; border-left:5px solid %s;",
-                "border-radius:6px; padding:0; margin:4px 0 12px 0; background:%s;'>",
+                "<details data-jr-copy-section='true' style='width:100%%;box-sizing:border-box;border:1px solid #dfe6ea; border-left:5px solid %s;",
+                "border-radius:6px; padding:0; margin:2px 0 6px 0; background:%s;'>",
                 "<summary style='cursor:pointer; list-style-position:inside; padding:14px 16px;",
                 "font-size:17px; font-weight:700; color:#18242d;'>%s</summary>",
                 "<div style='padding:0 16px 14px 16px;'>",
@@ -69,20 +105,20 @@
                 "%s%s</div></details>"
             ),
             accent, background, .jr_html_escape(title), .jr_html_escape(eyebrow),
-            subtitle_html, body
+            subtitle_html, .jr_copyable_body_html(body)
         ))
     }
     sprintf(
         paste0(
-            "<div style='width:100%%;box-sizing:border-box;border:1px solid #dfe6ea; border-left:5px solid %s;",
-            "border-radius:6px; padding:14px 16px; margin:4px 0 12px 0; background:%s;'>",
+            "<div data-jr-copy-section='true' style='width:100%%;box-sizing:border-box;border:1px solid #dfe6ea; border-left:5px solid %s;",
+            "border-radius:6px; padding:14px 16px; margin:2px 0 6px 0; background:%s;'>",
             "<div style='font-size:11px; font-weight:700; letter-spacing:0; color:#536472;",
             "text-transform:uppercase; margin-bottom:6px;'>%s</div>",
             "<div style='font-size:17px; font-weight:700; color:#18242d; margin-bottom:8px;'>%s</div>",
             "%s%s</div>"
         ),
         accent, background, .jr_html_escape(eyebrow), .jr_html_escape(title),
-        subtitle_html, body
+        subtitle_html, .jr_copyable_body_html(body)
     )
 }
 
@@ -172,23 +208,25 @@
     if (isTRUE(collapsed)) {
         return(sprintf(
             paste0(
-                "<details style='width:100%%;box-sizing:border-box;border:1px solid #dfe6ea; border-left:5px solid %s;",
-                "border-radius:6px; padding:0; margin:4px 0 12px 0; background:%s;'>",
+                "<details data-jr-copy-section='true' style='width:100%%;box-sizing:border-box;border:1px solid #dfe6ea; border-left:5px solid %s;",
+                "border-radius:6px; padding:0; margin:2px 0 6px 0; background:%s;'>",
                 "<summary style='cursor:pointer; list-style-position:inside; padding:14px 16px;",
                 "font-size:17px; font-weight:700; color:#18242d;'>%s</summary>",
                 "<div style='padding:0 16px 14px 16px;'>%s%s</div></details>"
             ),
-            accent, background, .jr_html_escape(title), subtitle_html, body
+            accent, background, .jr_html_escape(title), subtitle_html,
+            .jr_copyable_body_html(body)
         ))
     }
     sprintf(
         paste0(
-            "<div style='width:100%%;box-sizing:border-box;border:1px solid #dfe6ea; border-left:5px solid %s;",
-            "border-radius:6px; padding:14px 16px; margin:4px 0 12px 0; background:%s;'>",
+            "<div data-jr-copy-section='true' style='width:100%%;box-sizing:border-box;border:1px solid #dfe6ea; border-left:5px solid %s;",
+            "border-radius:6px; padding:14px 16px; margin:2px 0 6px 0; background:%s;'>",
             "<div style='font-size:17px; font-weight:700; color:#18242d; margin-bottom:8px;'>%s</div>",
             "%s%s</div>"
         ),
-        accent, background, .jr_html_escape(title), subtitle_html, body
+        accent, background, .jr_html_escape(title), subtitle_html,
+        .jr_copyable_body_html(body)
     )
 }
 
@@ -306,6 +344,8 @@
         RevelleCondon2019 = "Revelle & Condon (2019)",
         Cohen1988 = "Cohen (1988)",
         Cumming2014 = "Cumming (2014)",
+        Holm1979 = "Holm (1979)",
+        Vickerstaff2019 = "Vickerstaff et al. (2019)",
         key
     )
 }
@@ -329,6 +369,8 @@
         RevelleCondon2019 = "provides reliability-reporting guidance for omega and alpha.",
         Cohen1988 = "provides conventional effect-size benchmark language.",
         Cumming2014 = "supports cautious interpretation of effect sizes and confidence intervals.",
+        Holm1979 = "introduces the sequential Holm procedure for controlling the familywise Type I error rate.",
+        Vickerstaff2019 = "provides guidance on multiple-comparison adjustment for families of outcomes.",
         "is used by this analysis."
     )
 }
@@ -382,16 +424,6 @@
             "These are books or articles used for statistical interpretation and reporting guidance.",
             accent = "#6d5a8a", background = "#faf8fc",
             content_html = .jr_methods_reference_items_html(literature),
-            collapsed = TRUE
-        ),
-        .jr_report_section_card(
-            "How to use these references",
-            "",
-            paste(
-                "The tables above do not repeat numeric citation markers so the output stays readable.",
-                "Use this panel to see why each source appears in the analysis. Full bibliographic details are available in jamovi's References output."
-            ),
-            accent = "#278058", background = "#f6fbf8",
             collapsed = TRUE
         )
     )

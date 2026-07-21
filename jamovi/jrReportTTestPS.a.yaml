@@ -13,4 +13,17 @@ description:
         - BayesFactor
 options:
     - { name: data, type: Data }
+    - name: pAdjustment
+      title: Multiple-comparison adjustment
+      type: List
+      options:
+        - { name: holm, title: Holm (recommended) }
+        - { name: bonferroni, title: Bonferroni }
+        - { name: none, title: None }
+      default: holm
+      description: >
+          When several related t-tests address the same overall research question,
+          adjustment controls the increased familywise Type I error risk. Holm is
+          recommended for most confirmatory analyses and is generally less
+          conservative than Bonferroni.
 ...

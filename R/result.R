@@ -107,6 +107,9 @@ edu_report <- function(
     options <- edu_reporting_options(style, format, include, tone)
     blocks <- x$report_blocks
     blocks$apa <- .jr_apply_inclusions(blocks$apa, x$analysis, options$include)
+    independent_t <- identical(x$analysis, "ttest") &&
+        is.data.frame(x$statistics) && nrow(x$statistics) == 1L &&
+        x$statistics$test[1] %in% c("Student's t", "Welch's t")
     note <- ""
     if ("effect_size" %in% options$include) {
         effect_text <- .jr_effect_benchmark_text(x)
@@ -114,8 +117,16 @@ edu_report <- function(
             blocks$apa <- paste(blocks$apa, effect_text, sep = " ")
         note <- .jr_effect_interpretation_note(x$analysis)
     }
+    if (independent_t && options$tone == "concise")
+        note <- ""
 
-    if (options$format == "copy_ready") {
+    if (independent_t && options$style != "plain") {
+        selected <- blocks$apa
+        if (options$style == "journal" && options$tone != "concise")
+            selected <- c(selected, .jr_report_style_note(options$style))
+        if (options$style == "dissertation")
+            selected <- c(selected, .jr_report_style_note(options$style))
+    } else if (options$format == "copy_ready") {
         selected <- if (options$style == "plain") blocks$plain else blocks$apa
     } else if (options$format == "short") {
         if (options$style == "plain") {
@@ -201,7 +212,7 @@ edu_report <- function(
     paste(
         "Interpretation note: Conventional benchmarks for effect sizes (e.g., Cohen's small, medium, and large guidelines) are intended as rough aids to interpretation rather than strict cut-offs.",
         "Values close to a boundary should not be interpreted differently simply because they fall on one side of a threshold.",
-        "The practical importance of an effect should be considered in the context of the research area, measurement scale, and existing literature (Cohen, 1988; Cumming, 2014)."
+        "The practical importance of this effect should be considered in the context of the research area, measurement scale, and existing literature (Cohen, 1988; Cumming, 2014)."
     )
 }
 
@@ -271,6 +282,10 @@ edu_report <- function(
 }
 
 .jr_effect_benchmark_text <- function(x) {
+    if (identical(x$analysis, "ttest") && is.data.frame(x$statistics) &&
+            nrow(x$statistics) == 1L &&
+            x$statistics$test[1] %in% c("Student's t", "Welch's t"))
+        return("")
     values <- .jr_effect_values(x)
     name <- .jr_effect_size_name(x$analysis)
     if (!length(values) || !nzchar(name))
@@ -294,6 +309,10 @@ edu_report <- function(
 
 .jr_apply_inclusions <- function(text, analysis, include) {
     if (!"descriptives" %in% include && analysis == "ttest") {
+        text <- gsub(
+            ", with [^(]+ \\(n = [0-9]+, M = [^,]+, SD = [^)]+\\) scoring (?:higher|lower|the same) on .*? than [^(]+ \\(n = [0-9]+, M = [^,]+, SD = [^)]+\\)",
+            "", text, perl = TRUE
+        )
         text <- gsub(" between [^(]+ \\(M = [^)]*\\) and [^(]+ \\(M = [^)]*\\)",
                      " between the two groups", text, perl = TRUE)
         text <- gsub(" from [^(]+ \\(M = [^)]*\\) to [^(]+ \\(M = [^)]*\\)",
@@ -310,8 +329,10 @@ edu_report <- function(
     if (!"posthoc" %in% include && analysis == "anova_oneway")
         text <- gsub(" (Tukey|Holm)-adjusted[^.]*\\.", "", text, perl = TRUE)
     if (!"effect_size" %in% include) {
-        if (analysis == "ttest")
+        if (analysis == "ttest") {
+            text <- gsub(" The effect size was [^.]+, Cohen's d = -?[0-9.]+(?:, [0-9]+% CI \\[[^]]+\\])?\\.", "", text, perl = TRUE)
             text <- gsub(", Cohen's d = -?[0-9.]+(?:, [0-9]+% CI \\[[^]]+\\])?", "", text, perl = TRUE)
+        }
         if (analysis %in% c("mann_whitney", "wilcoxon_signed_rank"))
             text <- gsub(", rank-biserial r = -?[0-9.]+(?:, [0-9]+% CI \\[[^]]+\\])?", "", text, perl = TRUE)
         if (analysis == "anova_oneway")
@@ -340,6 +361,8 @@ edu_report <- function(
     }
     if (!"ci" %in% include)
         text <- gsub(", [0-9]+% CI \\[[^]]+\\]", "", text, perl = TRUE)
+    if (!"assumptions" %in% include && analysis == "ttest")
+        text <- gsub(" Levene's test.*?(?:Student's|Welch's) t-test\\.", "", text, perl = TRUE)
     if (!"p" %in% include)
         text <- gsub(", p (?:= \\.[0-9]+|< \\.001)", "", text, perl = TRUE)
     if (!"df" %in% include)

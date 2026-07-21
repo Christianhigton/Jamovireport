@@ -13,6 +13,75 @@ test_that("report inclusion options alter copy-ready statistical text", {
     expect_false(grepl("M =", minimal, fixed = TRUE))
 })
 
+test_that("independent t-test reporting is coherent, directional, and non-duplicative", {
+    d <- data.frame(
+        tpstress = c(20, 21, 22, 29, 30, 31),
+        gender = factor(
+            c("males", "males", "males", "females", "females", "females"),
+            levels = c("males", "females")
+        )
+    )
+    student <- edu_t_test(d, "tpstress", "gender", var_equal = TRUE)
+    text <- edu_report(student, style = "apa7", format = "paragraph")
+
+    expect_match(text, "A Student's independent-samples t-test was conducted", fixed = TRUE)
+    expect_match(text, "Levene's test", fixed = TRUE)
+    expect_match(text, "F(1, 4)", fixed = TRUE)
+    expect_match(text, "males (n = 3, M = 21.00, SD = 1.00) scoring lower on tpstress than females", fixed = TRUE)
+    expect_match(text, "t(4) =", fixed = TRUE)
+    expect_false(grepl("t(4.00)", text, fixed = TRUE))
+    expect_match(text, "mean difference = -9.00", fixed = TRUE)
+    expect_match(text, "The effect size was large, Cohen's d = -", fixed = TRUE)
+    expect_equal(
+        lengths(regmatches(text, gregexpr("mean difference", text, fixed = TRUE))),
+        1L
+    )
+    expect_false(grepl("This analysis is appropriate when", text, fixed = TRUE))
+    expect_false(grepl("The analysis compared average", text, fixed = TRUE))
+    expect_false(grepl("Effect-size benchmark:", text, fixed = TRUE))
+    expect_match(text, "The practical importance of this effect", fixed = TRUE)
+
+    welch <- edu_report(
+        edu_t_test(d, "tpstress", "gender", var_equal = FALSE),
+        style = "apa7", format = "paragraph"
+    )
+    expect_match(welch, "A Welch independent-samples t-test was conducted", fixed = TRUE)
+    expect_false(grepl("Levene's test", welch, fixed = TRUE))
+})
+
+test_that("Levene violation automatically switches a requested Student test to Welch", {
+    d <- data.frame(
+        score = c(9.9, 10, 10.1, 9.95, 10.05, 10, 0, 5, 10, 15, 20, 25),
+        group = factor(
+            rep(c("stable", "variable"), each = 6),
+            levels = c("stable", "variable")
+        )
+    )
+    result <- edu_t_test(d, "score", "group", var_equal = TRUE)
+    expected <- stats::t.test(score ~ group, data = d, var.equal = FALSE)
+    text <- edu_report(result, style = "apa7", format = "paragraph")
+    addon <- .jr_addon_report_html(
+        list(result), options = .jr_addon_reporting_options()
+    )
+
+    levene <- result$diagnostics[
+        result$diagnostics$check == "Homogeneity of variance (Levene)",
+    ]
+    expect_lt(levene$p, .05)
+    expect_equal(result$statistics$test, "Welch's t")
+    expect_equal(result$statistics$statistic, unname(expected$statistic))
+    expect_equal(result$statistics$df, unname(expected$parameter))
+    expect_equal(result$statistics$p, expected$p.value)
+    expect_match(text, "mean score differed", fixed = TRUE)
+    expect_false(grepl("mean score scores", text, fixed = TRUE))
+    expect_match(
+        text,
+        "jReport automatically used Welch's t-test instead of Student's t-test",
+        fixed = TRUE
+    )
+    expect_match(addon, "automatically used Welch's t-test", fixed = TRUE)
+})
+
 test_that("plain-language format exposes interpretation and cautions", {
     result <- edu_lm(mtcars, mpg ~ wt + hp)
     text <- edu_report(result, style = "plain", format = "paragraph")
@@ -86,7 +155,8 @@ test_that("reported effect sizes include benchmarks and interpretation note", {
     text <- edu_report(result, format = "short")
     rows <- .jr_addon_apa_rows(list(result))
 
-    expect_match(text, "Effect-size benchmark")
+    expect_match(text, "The effect size was")
+    expect_false(grepl("Effect-size benchmark:", text, fixed = TRUE))
     expect_match(text, "Interpretation note")
     expect_match(text, "\n\n\\*Interpretation note:")
     expect_match(text, "Cohen, 1988; Cumming, 2014", fixed = TRUE)
@@ -276,6 +346,7 @@ test_that("automatic native reports render for supported group comparison design
             list(result), options = .jr_addon_reporting_options()
         )
         expect_match(report, "Suggested APA-style report wording")
+        expect_false(grepl("Interpretation guidance", report, fixed = TRUE))
         expect_false(grepl("Select valid analysis variables", report, fixed = TRUE))
         expect_false(grepl("could not be generated", report, fixed = TRUE))
         expect_false(grepl("GAMLj", report, fixed = TRUE))
@@ -291,12 +362,13 @@ test_that("between-subjects ANOVA report uses separated guidance sections", {
         options = .jr_addon_reporting_options(),
         note = .jr_accuracy_note("This generated paragraph describes the selected factorial design.")
     )
+    interpretation <- .jr_addon_interpretation_html(list(result))
 
     expect_match(report, "Suggested APA-style report wording")
     expect_match(report, "This is suggested wording only. Check all values against your jamovi output")
     expect_match(report, "Optional assumptions / diagnostic note")
-    expect_match(report, "Interpretation guidance")
-    expect_match(report, "For understanding only - do not copy directly into your report.")
+    expect_false(grepl("Interpretation guidance", report, fixed = TRUE))
+    expect_match(interpretation, "Interpretation guidance")
     expect_match(report, "Check before reporting")
     expect_match(report, "A between-subjects ANOVA examined")
     expect_match(report, "Descriptive statistics indicated")
@@ -306,8 +378,8 @@ test_that("between-subjects ANOVA report uses separated guidance sections", {
     expect_match(report, "\u03c9p\u00b2")
     expect_match(report, "Assumption checks did not indicate substantial violations")
     expect_match(report, "Residual normality \\(Shapiro-Wilk\\)")
-    expect_match(report, "A between-subjects ANOVA compares mean")
-    expect_match(report, "Effect-size benchmark")
+    expect_match(interpretation, "A between-subjects ANOVA compares mean")
+    expect_match(interpretation, "Effect-size benchmark")
     expect_match(report, "The correct dependent variable is reported.")
     expect_match(report, "Correction methods are named correctly.")
     expect_false(grepl("Copy-ready report text", report, fixed = TRUE))
@@ -423,7 +495,7 @@ test_that("between-subjects ANOVA add-on keeps post hoc wording in suggested sec
 
     expect_match(report, "Suggested APA-style report wording")
     expect_match(report, "Optional assumptions / diagnostic note")
-    expect_match(report, "Interpretation guidance")
+    expect_false(grepl("Interpretation guidance", report, fixed = TRUE))
     expect_false(grepl("Post hoc interpretation", report, fixed = TRUE))
     expect_true(grepl("Holm-adjusted post hoc comparisons", wording_card, fixed = TRUE))
     expect_true(grepl("mean difference", wording_card, fixed = TRUE))
@@ -489,13 +561,14 @@ test_that("linear regression add-on separates copy-ready text from guidance", {
         options = .jr_addon_reporting_options(),
         note = .jr_accuracy_note("This generated paragraph reports the selected predictors.")
     )
+    interpretation <- .jr_addon_interpretation_html(list(result))
 
     expect_match(report, "Copy-ready report text")
     expect_match(report, "Select and copy this paragraph into your report.")
     expect_match(report, "Optional assumptions / diagnostic note")
     expect_match(report, "Include this only if relevant to your study.")
-    expect_match(report, "Interpretation guidance")
-    expect_match(report, "For understanding only - do not copy directly.")
+    expect_false(grepl("Interpretation guidance", report, fixed = TRUE))
+    expect_match(interpretation, "Interpretation guidance")
     expect_match(report, "Check before reporting")
     expect_match(report, "Outcome variable is the intended dependent variable.")
     expect_match(report, "b, SE, beta, t, p, and confidence intervals")
@@ -547,7 +620,10 @@ test_that("native add-ons generate APA results table rows across analysis famili
     ))
 
     expect_equal(nrow(rows), 6L)
-    expect_named(rows, c("analysis", "test", "statistic", "df1", "df2", "p", "effect", "ci"))
+    expect_named(rows, c(
+        "test_id", "analysis", "test", "statistic", "df1", "df2", "p",
+        "p_adjusted", "adjustment_result", "effect", "ci"
+    ))
     expect_equal(rows$df2[1], "")
     expect_true(nzchar(rows$df2[3]))
     expect_match(rows$effect[1], "Cohen's d")

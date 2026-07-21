@@ -28,6 +28,15 @@ items:
     title: p
     type: number
     format: zto,pvalue
+  - name: p_adjusted
+    title: Adjusted p
+    type: number
+    format: zto,pvalue
+    visible: false
+  - name: adjustment_result
+    title: Result after adjustment
+    type: text
+    visible: false
   - name: effect
     title: Effect Size
     type: text
@@ -74,4 +83,3 @@ items:
 - name: methodsReferences
   title: Methods and References
   type: Html
-

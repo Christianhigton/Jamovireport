@@ -30,7 +30,7 @@ options:
       permitted: [factor]
       default:
     - name: varEqual
-      title: Equal-variance Student test
+      title: Prefer Student test when variances are equal
       type: Bool
       default: false
     - name: ciWidth

@@ -5,7 +5,8 @@
 #' @param group Factor/group variable name for an independent test.
 #' @param paired_outcome Second numeric outcome variable name for a paired test.
 #' @param type `"independent"` or `"paired"`.
-#' @param var_equal Whether to use Student's equal-variance independent test.
+#' @param var_equal Whether to prefer Student's equal-variance independent test.
+#'   If Levene's test is significant, Welch's test is used automatically.
 #' @param ci Confidence level.
 #' @return An `edu_analysis` object.
 #' @export
@@ -24,8 +25,6 @@ edu_t_test <- function(data, outcome, group = NULL, paired_outcome = NULL,
         if (nlevels(d$g) != 2L)
             .jr_stop("An independent t-test requires a grouping variable with exactly two levels.")
 
-        test <- stats::t.test(y ~ g, data = d, var.equal = var_equal, conf.level = ci)
-        effect <- suppressMessages(effectsize::cohens_d(d$y, d$g, pooled_sd = var_equal, ci = ci))
         split_y <- split(d$y, d$g)
         descriptives <- data.frame(
             group = names(split_y),
@@ -39,24 +38,76 @@ edu_t_test <- function(data, outcome, group = NULL, paired_outcome = NULL,
             split_y, names(split_y)
         ))
         diagnostics <- rbind(diagnostics, .jr_levene("y", "g", d))
-        method <- if (var_equal) "Student's independent-samples t-test" else "Welch independent-samples t-test"
+        levene <- diagnostics[diagnostics$check == "Homogeneity of variance (Levene)", , drop = FALSE]
+        levene_violated <- nrow(levene) == 1L && is.finite(levene$p) && levene$p < .05
+        use_equal_variance <- isTRUE(var_equal) && !levene_violated
+        test <- stats::t.test(
+            y ~ g, data = d, var.equal = use_equal_variance, conf.level = ci
+        )
+        effect <- suppressMessages(effectsize::cohens_d(
+            d$y, d$g, pooled_sd = use_equal_variance, ci = ci
+        ))
+        method <- if (use_equal_variance)
+            "Student's independent-samples t-test"
+        else
+            "Welch independent-samples t-test"
         difference <- unname(diff(rev(test$estimate)))
         effect_value <- effect$Cohens_d[1]
-        effect_ci <- effect[1, c("CI_low", "CI_high")]
+        if (is.finite(difference) && difference != 0 && is.finite(effect_value))
+            effect_value <- sign(difference) * abs(effect_value)
+        effect_ci_low <- effect$CI_low[1]
+        effect_ci_high <- effect$CI_high[1]
+        if (is.finite(effect_value) && sign(effect_value) != sign(effect$Cohens_d[1])) {
+            original_low <- effect_ci_low
+            effect_ci_low <- -effect_ci_high
+            effect_ci_high <- -original_low
+        }
         sig_phrase <- if (test$p.value < .05)
             "indicated a statistically significant difference"
         else
             "did not indicate a statistically significant difference"
-        apa <- sprintf(
-            "A %s %s between %s (M = %s, SD = %s) and %s (M = %s, SD = %s), t(%s) = %s, p %s, mean difference = %s, %s%% CI %s, Cohen's d = %s, %s%% CI %s.",
-            method, sig_phrase, descriptives$group[1], .jr_num(descriptives$mean[1]),
-            .jr_num(descriptives$sd[1]), descriptives$group[2], .jr_num(descriptives$mean[2]),
-            .jr_num(descriptives$sd[2]), .jr_num(test$parameter, 2L),
-            .jr_num(test$statistic, 2L), .jr_p(test$p.value),
-            .jr_num(difference), .jr_num(ci * 100, 0L), .jr_ci(test$conf.int[1], test$conf.int[2]),
-            .jr_num(effect_value, 2L, TRUE), .jr_num(ci * 100, 0L),
-            .jr_ci(effect_ci$CI_low, effect_ci$CI_high, 2L, TRUE)
+        direction <- if (difference > 0) "higher" else if (difference < 0) "lower" else "the same"
+        outcome_scores <- if (grepl("scores?$", outcome, ignore.case = TRUE))
+            outcome
+        else
+            paste(outcome, "scores")
+        opening <- sprintf(
+            "A %s was conducted to examine whether mean %s differed between %s and %s.",
+            method, outcome_scores, descriptives$group[1], descriptives$group[2]
         )
+        assumption <- ""
+        if (isTRUE(var_equal) && nrow(levene) == 1L &&
+                is.finite(levene$statistic) && is.finite(levene$p)) {
+            assumption <- if (!levene_violated) {
+                sprintf(
+                    "Levene's test indicated no evidence that the homogeneity of variance assumption was violated, F(1, %d) = %s, p %s, supporting the use of Student's t-test.",
+                    nrow(d) - 2L, .jr_num(levene$statistic, 2L), .jr_p(levene$p)
+                )
+            } else {
+                sprintf(
+                    "Levene's test indicated that the homogeneity of variance assumption was violated, F(1, %d) = %s, p %s, so jReport automatically used Welch's t-test instead of Student's t-test.",
+                    nrow(d) - 2L, .jr_num(levene$statistic, 2L), .jr_p(levene$p)
+                )
+            }
+        }
+        result_sentence <- sprintf(
+            "Results %s, with %s (n = %d, M = %s, SD = %s) scoring %s on %s than %s (n = %d, M = %s, SD = %s), t(%s) = %s, p %s, mean difference = %s, %s%% CI %s.",
+            sig_phrase, descriptives$group[1], descriptives$n[1], .jr_num(descriptives$mean[1]),
+            .jr_num(descriptives$sd[1]), direction, outcome, descriptives$group[2],
+            descriptives$n[2], .jr_num(descriptives$mean[2]), .jr_num(descriptives$sd[2]),
+            .jr_num(test$parameter, if (use_equal_variance) 0L else 2L),
+            .jr_num(test$statistic, 2L), .jr_p(test$p.value),
+            .jr_num(difference), .jr_num(ci * 100, 0L), .jr_ci(test$conf.int[1], test$conf.int[2])
+        )
+        effect_sentence <- sprintf(
+            "The effect size was %s, Cohen's d = %s, %s%% CI %s.",
+            .jr_effect_magnitude("ttest", effect_value), .jr_num(effect_value, 2L, TRUE),
+            .jr_num(ci * 100, 0L),
+            .jr_ci(effect_ci_low, effect_ci_high, 2L, TRUE)
+        )
+        apa <- paste(c(opening, assumption, result_sentence, effect_sentence)[nzchar(c(
+            opening, assumption, result_sentence, effect_sentence
+        ))], collapse = " ")
         question <- sprintf("Do the mean %s scores differ between the two %s groups?", outcome, group)
         requirements <- "A numeric outcome measured once for two independent groups."
         plain <- sprintf(
@@ -66,7 +117,7 @@ edu_t_test <- function(data, outcome, group = NULL, paired_outcome = NULL,
             .jr_num(abs(difference))
         )
         stats <- data.frame(
-            test = if (var_equal) "Student's t" else "Welch's t",
+            test = if (use_equal_variance) "Student's t" else "Welch's t",
             statistic = unname(test$statistic), df = unname(test$parameter),
             p = test$p.value, effect = effect_value,
             ci_low = test$conf.int[1], ci_high = test$conf.int[2]

@@ -126,4 +126,19 @@ refs:
       year: 2014
       publisher: "Psychological Science, 25(1), 7–29"
       url: "https://doi.org/10.1177/0956797613504966"
+
+    Holm1979:
+      type: article
+      title: "A simple sequentially rejective multiple test procedure"
+      author: "Sture Holm"
+      year: 1979
+      publisher: "Scandinavian Journal of Statistics, 6(2), 65-70"
+
+    Vickerstaff2019:
+      type: article
+      title: "Methods to adjust for multiple comparisons in the analysis and sample size calculation of randomised controlled trials with multiple primary outcomes"
+      author: "Victoria Vickerstaff, Rumana Z. Omar, and Gareth Ambler"
+      year: 2019
+      publisher: "BMC Medical Research Methodology, 19, Article 129"
+      url: "https://doi.org/10.1186/s12874-019-0754-4"
 ...

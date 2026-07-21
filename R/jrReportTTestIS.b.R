@@ -18,24 +18,24 @@ jrReportTTestISClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class
             results <- list()
             if (isTRUE(self$parent$options$students)) {
                 results <- c(results, lapply(outcomes, function(outcome) {
-                    try(
+                    .jr_tag_ttest_attempt(try(
                         edu_t_test(
                             self$data, outcome, group = group,
                             var_equal = TRUE, ci = .jr_parent_ci(self$parent)
                         ),
                         silent = TRUE
-                    )
+                    ), paste(outcome, "Student t-test"))
                 }))
             }
             if (isTRUE(self$parent$options$welchs)) {
                 results <- c(results, lapply(outcomes, function(outcome) {
-                    try(
+                    .jr_tag_ttest_attempt(try(
                         edu_t_test(
                             self$data, outcome, group = group,
                             var_equal = FALSE, ci = .jr_parent_ci(self$parent)
                         ),
                         silent = TRUE
-                    )
+                    ), paste(outcome, "Welch t-test"))
                 }))
             }
             if (isTRUE(self$parent$options$mann)) {
@@ -60,12 +60,16 @@ jrReportTTestISClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class
                     )
                 }))
             }
-            results <- Filter(function(r) !inherits(r, "try-error"), results)
-            if (length(results) == 0L) {
+            if (!any(vapply(results, inherits, logical(1), what = "edu_analysis"))) {
                 .jr_addon_message(self, "Select Student's, Welch's, Mann-Whitney U, or Bayes factor to generate report text.")
                 return()
             }
-            .jr_addon_set_card(self, results)
+            adjustment <- tryCatch(self$options$pAdjustment, error = function(e) "holm")
+            .jr_addon_set_card(
+                self, results,
+                adjustment = adjustment,
+                alpha = 1 - .jr_parent_ci(self$parent)
+            )
         }
     )
 )

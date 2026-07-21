@@ -17,13 +17,13 @@ jrReportTTestPSClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class
             results <- list()
             if (isTRUE(self$parent$options$students)) {
                 results <- c(results, lapply(pairs, function(pair) {
-                    try(
+                    .jr_tag_ttest_attempt(try(
                         edu_t_test(
                             self$data, pair$i1, paired_outcome = pair$i2,
                             type = "paired", ci = .jr_parent_ci(self$parent)
                         ),
                         silent = TRUE
-                    )
+                    ), paste(pair$i1, "versus", pair$i2))
                 }))
             }
             if (isTRUE(self$parent$options$wilcoxon)) {
@@ -48,12 +48,16 @@ jrReportTTestPSClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class
                     )
                 }))
             }
-            results <- Filter(function(r) !inherits(r, "try-error"), results)
-            if (length(results) == 0L) {
+            if (!any(vapply(results, inherits, logical(1), what = "edu_analysis"))) {
                 .jr_addon_message(self, "Select the paired-samples t-test, Wilcoxon signed-rank test, or Bayes factor to generate report text.")
                 return()
             }
-            .jr_addon_set_card(self, results)
+            adjustment <- tryCatch(self$options$pAdjustment, error = function(e) "holm")
+            .jr_addon_set_card(
+                self, results,
+                adjustment = adjustment,
+                alpha = 1 - .jr_parent_ci(self$parent)
+            )
         }
     )
 )

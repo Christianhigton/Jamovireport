@@ -4,10 +4,15 @@
 \alias{jrReportTTestPS}
 \title{Automatic Report for Paired Samples T-Test}
 \usage{
-jrReportTTestPS(data)
+jrReportTTestPS(data, pAdjustment = "holm")
 }
 \arguments{
 \item{data}{.}
+
+\item{pAdjustment}{When several related t-tests address the same overall
+research question, adjustment controls the increased familywise Type I error
+risk. Holm is recommended for most confirmatory analyses and is generally
+less conservative than Bonferroni.}
 }
 \value{
 A results object containing:

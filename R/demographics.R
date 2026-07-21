@@ -257,9 +257,10 @@ edu_demographics <- function(
 }
 
 .dm_paragraph_html <- function(text) {
-    sprintf(
-        '<div style="font-family:sans-serif;font-size:0.9em;line-height:1.6;padding:8px 0"><p>%s</p></div>',
-        .jr_html_escape(text)
+    paste0(
+        '<div data-jr-copy-section="true" style="font-family:sans-serif;font-size:0.9em;line-height:1.6;padding:8px 0">',
+        .jr_copyable_body_html(sprintf("<p>%s</p>", .jr_html_escape(text))),
+        '</div>'
     )
 }
 
@@ -275,7 +276,10 @@ edu_demographics <- function(
         var_list
     )
     sprintf(
-        '<div style="font-family:sans-serif;font-size:0.85em;color:#555;padding:4px 0"><p>%s</p></div>',
-        msg
+        paste0(
+            '<div data-jr-copy-section="true" style="font-family:sans-serif;font-size:0.85em;color:#555;padding:4px 0">',
+            '%s</div>'
+        ),
+        .jr_copyable_body_html(sprintf("<p>%s</p>", msg))
     )
 }

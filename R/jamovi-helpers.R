@@ -146,6 +146,7 @@
     .jr_build_report_sections_html(
         apa_wording             = do.call(edu_report, c(list(x = result), args)),
         diagnostic_note         = result$caution %||% "",
+        follow_up_guidance       = .jr_follow_up_analysis_guidance(result),
         checklist_items         = .jr_analysis_checklist(result$analysis %||% ""),
         report_style            = args$style
     )
@@ -406,6 +407,7 @@
     .jr_build_report_sections_html(
         apa_wording = apa,
         diagnostic_note = .jr_anova_between_diagnostic_text(result, include),
+        follow_up_guidance = .jr_follow_up_analysis_guidance(result),
         checklist_items = .jr_anova_between_checklist_items(),
         checklist_note = note,
         references = .jr_reference_entries(list(result), include_effect_note = "effect_size" %in% include),

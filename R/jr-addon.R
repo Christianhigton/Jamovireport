@@ -292,6 +292,7 @@
         .jr_build_report_sections_html(
             apa_wording = apa_text,
             diagnostic_note = diagnostic_text,
+            follow_up_guidance = .jr_follow_up_analysis_guidance(result),
             checklist_items = checklist,
             checklist_note = if (nzchar(note) && include_note) note else "",
             report_style = report_style,

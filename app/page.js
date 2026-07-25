@@ -48,6 +48,7 @@ const checks = [
   ['statistics', 'Statistics match', 'Statistics, df, p, confidence intervals and effect sizes match core jamovi.'],
   ['direction', 'Labels and direction', 'Variables, groups, reference levels, signs and directions are correct.'],
   ['assumptions', 'Assumptions attributed', 'Every assumption clearly identifies the analysis or outcome it applies to.'],
+  ['followup', 'Follow-up guidance', 'Appears only when a significant omnibus result needs human-selected comparisons; explains the decision, multiplicity and references.'],
   ['reporting', 'Reporting is clean', 'No repetition, contradiction, placeholder, template fragment or misleading claim.'],
   ['layout', 'Tables and layout fit', 'Tables fit widthways and all explanatory content remains accessible.'],
   ['copy', 'Copy buttons', 'Each button copies only its own complete text section.'],

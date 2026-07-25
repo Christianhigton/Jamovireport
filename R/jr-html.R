@@ -261,6 +261,7 @@
 
 .jr_build_report_sections_html <- function(apa_wording = NULL,
                                            diagnostic_note = NULL,
+                                           follow_up_guidance = NULL,
                                            interpretation_guidance = NULL,
                                            checklist_items = NULL,
                                            checklist_note = "",
@@ -284,6 +285,14 @@
             ),
             "Include this only if relevant to your study.",
             diagnostic_note, accent = "#2f6fa3", background = "#f5f9fd",
+            collapsed = FALSE
+        ))
+    }
+    if (!is.null(follow_up_guidance) && nzchar(follow_up_guidance)) {
+        sections <- c(sections, .jr_report_section_card(
+            .jr_report_section_title("Follow-up analysis", analysis_label),
+            "Further analysis may be needed, but the choice requires human judgement.",
+            follow_up_guidance, accent = "#4b66a2", background = "#f5f9fd",
             collapsed = FALSE
         ))
     }

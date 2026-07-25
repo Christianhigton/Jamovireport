@@ -52,7 +52,7 @@ children:
       - { type: CheckBox, name: statCatMissing }
   - type: CollapseBox
     label: Additional Table Rows
-    collapsed: true
+    collapsed: false
     children:
       - { type: TextBox, name: customRow1Char, format: string }
       - { type: TextBox, name: customRow1Val, format: string }
@@ -76,7 +76,7 @@ children:
       - { type: TextBox, name: customRow5Note, format: string }
   - type: CollapseBox
     label: Reporting
-    collapsed: true
+    collapsed: false
     children:
       - { type: CheckBox, name: showOmitNote }
       - { type: CheckBox, name: showBestPractices }

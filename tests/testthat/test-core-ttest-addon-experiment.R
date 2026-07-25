@@ -25,7 +25,7 @@ test_that("core t-test proof-of-concept remains a hidden add-on", {
     expect_true(registration$hidden)
 })
 
-test_that("core t-test proof-of-concept has an opt-in master control", {
+test_that("core t-test add-on runs automatically when host variables are selected", {
     root <- core_ttest_source_root()
     analysis <- yaml::read_yaml(file.path(root, "jamovi", "jrReportTTestIS.a.yaml"))
     option_names <- vapply(analysis$options, `[[`, character(1), "name")
@@ -33,17 +33,17 @@ test_that("core t-test proof-of-concept has an opt-in master control", {
 
     expect_equal(enabled$title, "Generate jReport output")
     expect_equal(enabled$type, "Bool")
-    expect_false(enabled$default)
+    expect_true(enabled$default)
 })
 
-test_that("generated add-on UI declares the intended collapsed panel", {
+test_that("generated add-on UI declares the intended expanded panel", {
     root <- core_ttest_source_root()
     ui <- yaml::read_yaml(file.path(root, "jamovi", "jrReportTTestIS.u.yaml"))
     section <- ui$children[[1]]
 
     expect_equal(section$type, "CollapseBox")
     expect_equal(section$label, "jReport: Reporting and explanation")
-    expect_true(section$collapsed)
+    expect_false(section$collapsed)
 })
 
 test_that("core t-test reporting configuration has stable values and defaults", {

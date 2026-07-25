@@ -56,6 +56,20 @@ edu_reporting_options <- function(
     text[nzchar(text)]
 }
 
+.jr_deduplicate_report_sentences <- function(blocks) {
+    seen <- character()
+    vapply(blocks, function(block) {
+        sentences <- unlist(strsplit(
+            trimws(block), "(?<=[.!?])\\s+", perl = TRUE
+        ))
+        sentences <- sentences[nzchar(trimws(sentences))]
+        normalized <- tolower(gsub("\\s+", " ", trimws(sentences)))
+        keep <- !normalized %in% seen
+        seen <<- unique(c(seen, normalized[keep]))
+        paste(sentences[keep], collapse = " ")
+    }, character(1), USE.NAMES = FALSE)
+}
+
 .new_edu_analysis <- function(analysis, label, question, requirements, main,
                               descriptives, effects, diagnostics, interpretation,
                               caution, plot_data, report_blocks, statistics,
@@ -197,6 +211,7 @@ edu_report <- function(
     }
     if (options$format != "copy_ready" && !is.null(blocks$note) && nzchar(blocks$note))
         selected <- c(selected, paste0("*", blocks$note, "*"))
+    selected <- .jr_nonempty_text(.jr_deduplicate_report_sentences(selected))
     if (options$format == "bullets")
         return(paste0("- ", selected, collapse = "\n"))
     paste(selected, collapse = "\n\n")

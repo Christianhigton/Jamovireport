@@ -25,7 +25,7 @@ children:
       - { type: TextBox, name: ciWidth, format: number }
   - type: CollapseBox
     label: Reporting
-    collapsed: true
+    collapsed: false
     children:
       - { type: ComboBox, name: reportStyle }
       - { type: ComboBox, name: reportFormat }

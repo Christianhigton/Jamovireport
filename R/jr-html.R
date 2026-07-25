@@ -164,7 +164,7 @@
             "Optional assumptions / diagnostic note", "Assumptions and diagnostics",
             "Include this only if relevant to your study.",
             diagnostic_text, accent = "#2f6fa3", background = "#f5f9fd",
-            collapsed = TRUE
+            collapsed = FALSE
         ))
     }
     if (!is.null(guidance_text) && nzchar(guidance_text)) {
@@ -172,7 +172,7 @@
         "Interpretation guidance", "How to read this result",
         "For understanding only - do not copy directly.",
         guidance_text, accent = "#b46c21", background = "#fff9ef",
-        collapsed = TRUE
+        collapsed = FALSE
         ))
     }
     checklist_html <- .jr_html_bullets(checklist_items %||% character())
@@ -188,7 +188,7 @@
         cards <- paste0(cards, .jr_report_card(
             "Check before reporting", "Verification checklist",
             "", accent = "#6d5a8a", background = "#faf8fc",
-            content_html = checklist_html, collapsed = TRUE
+            content_html = checklist_html, collapsed = FALSE
         ))
     }
     paste0("<div style='width:100%;box-sizing:border-box;display:block;'>", cards, "</div>")
@@ -284,7 +284,7 @@
             ),
             "Include this only if relevant to your study.",
             diagnostic_note, accent = "#2f6fa3", background = "#f5f9fd",
-            collapsed = TRUE
+            collapsed = FALSE
         ))
     }
     if (!is.null(interpretation_guidance) && nzchar(interpretation_guidance)) {
@@ -292,7 +292,7 @@
             .jr_report_section_title("Interpretation guidance", analysis_label),
             "For understanding only - do not copy directly into your report.",
             interpretation_guidance, accent = "#b46c21", background = "#fff9ef",
-            collapsed = TRUE
+            collapsed = FALSE
         ))
     }
     checklist_html <- .jr_html_bullets(checklist_items %||% character())
@@ -302,7 +302,7 @@
         sections <- c(sections, .jr_report_section_card(
             .jr_report_section_title("Check before reporting", analysis_label),
             "", accent = "#6d5a8a", background = "#faf8fc",
-            content_html = checklist_html, collapsed = TRUE
+            content_html = checklist_html, collapsed = FALSE
         ))
     }
     paste0("<div style='width:100%;box-sizing:border-box;display:block;'>", paste(sections, collapse = ""), "</div>")
@@ -431,14 +431,14 @@
             "These are tools used to compute, format, or display the results.",
             accent = "#2f6fa3", background = "#f5f9fd",
             content_html = .jr_methods_reference_items_html(software),
-            collapsed = TRUE
+            collapsed = FALSE
         ),
         .jr_report_section_card(
             "Literature and reporting guidance",
             "These are books or articles used for statistical interpretation and reporting guidance.",
             accent = "#6d5a8a", background = "#faf8fc",
             content_html = .jr_methods_reference_items_html(literature),
-            collapsed = TRUE
+            collapsed = FALSE
         )
     )
     paste0("<div style='width:100%;box-sizing:border-box;display:block;'>", body, "</div>")

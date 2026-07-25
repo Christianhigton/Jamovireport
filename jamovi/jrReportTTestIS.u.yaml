@@ -7,7 +7,7 @@ compilerMode: tame
 children:
   - type: CollapseBox
     label: 'jReport: Reporting and explanation'
-    collapsed: true
+    collapsed: false
     children:
       - type: LayoutBox
         margin: large

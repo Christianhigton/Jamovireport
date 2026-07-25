@@ -16,7 +16,7 @@ options:
     - name: jreportEnabled
       title: Generate jReport output
       type: Bool
-      default: false
+      default: true
     - name: reportStyle
       title: Reporting style
       type: List

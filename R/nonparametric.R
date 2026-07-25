@@ -26,21 +26,14 @@ edu_mann_whitney <- function(data, outcome, group, ci = 0.95) {
         stringsAsFactors = FALSE
     )
     diagnostics <- data.frame(
-        check = c(
-            "Independence of observations",
-            "Similar distribution shape for median interpretation"
-        ),
-        statistic = c(NA_real_, NA_real_),
-        p = c(NA_real_, NA_real_),
-        status = c("Not assessed", "Not assessed"),
-        interpretation = c(
-            "The test requires separate, independent cases in the two groups; this is determined from the research design.",
-            "A rank-based difference can be interpreted as a median difference only when group distributions have broadly similar shapes."
-        ),
-        action = c(
-            "Confirm that no participant or matched unit contributes to both groups.",
-            "Inspect grouped boxplots or violin plots and describe the result as a rank-distribution difference if shapes differ."
-        ),
+        check = "Similar distribution shape for median interpretation",
+        statistic = NA_real_,
+        p = NA_real_,
+        status = "Not assessed",
+        interpretation =
+            "A rank-based difference can be interpreted as a median difference only when group distributions have broadly similar shapes.",
+        action =
+            "Inspect grouped boxplots or violin plots and describe the result as a rank-distribution difference if shapes differ.",
         stringsAsFactors = FALSE
     )
     effect_value <- effect$r_rank_biserial[1]

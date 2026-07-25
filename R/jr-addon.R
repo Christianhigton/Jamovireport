@@ -304,7 +304,7 @@
             "Post hoc interpretation",
             "Follow-up comparisons",
             posthoc_text, accent = "#4b66a2", background = "#f5f9fd",
-            collapsed = TRUE
+            collapsed = FALSE
         ))
     }
     adjustment_summary <- .jr_adjustment_summary(adjustment_info)
@@ -378,7 +378,7 @@
             .jr_report_section_title("Interpretation guidance", analysis_label),
             if (show_analysis_labels) "" else result$label %||% "jReport",
             guidance, accent = "#b46c21", background = "#fff9ef",
-            collapsed = TRUE
+            collapsed = FALSE
         )
     }, character(1))
     if (nzchar(note)) {
@@ -386,7 +386,7 @@
             "Check before using",
             "",
             note, accent = "#6d5a8a", background = "#faf8fc",
-            collapsed = TRUE
+            collapsed = FALSE
         ))
     }
     adjustment_guidance <- .jr_adjustment_guidance(adjustment_info)
@@ -1183,6 +1183,7 @@
         tbl$setNote("multiple-comparisons", adjustment_info$note)
         display_rows <- apa_rows[, setdiff(names(apa_rows), "test_id"), drop = FALSE]
         .jr_addon_fill_table(tbl, display_rows)
+        .jr_set_effect_notes(tbl, display_rows)
     }
     tbl <- .jr_addon_get(self$parent$results, "jReportAssumptions")
     if (!is.null(tbl)) {
@@ -1190,6 +1191,7 @@
         if (!is.null(applies_to))
             applies_to$setTitle(if (length(results) > 1L) "Applies to" else "Analysis")
         .jr_addon_fill_table(tbl, assumption_rows)
+        .jr_set_guidance_notes(tbl, assumption_rows, "assumption")
     }
     for (nm in names(optional_rows)) {
         tbl <- .jr_addon_get(self$parent$results, nm)
@@ -1217,8 +1219,8 @@
             list(name = "p", title = "p", type = "number", format = "zto,pvalue"),
             list(name = "p_adjusted", title = "Adjusted p", type = "number", format = "zto,pvalue", visible = FALSE),
             list(name = "adjustment_result", title = "Result after adjustment", type = "text", visible = FALSE),
-            list(name = "effect", title = "Effect Size", type = "text"),
-            list(name = "ci", title = "Effect 95% CI", type = "text")
+            list(name = "effect", title = "Effect Size", type = "text", visible = FALSE),
+            list(name = "ci", title = "Effect 95% CI", type = "text", visible = FALSE)
         )
     ))
     .jr_addon_add_result_if_missing(self, "jReportAssumptions", jmvcore::Table$new(
@@ -1231,8 +1233,8 @@
             list(name = "statistic", title = "Statistic", type = "number"),
             list(name = "p", title = "p", type = "number", format = "zto,pvalue"),
             list(name = "met", title = "Met?", type = "text"),
-            list(name = "interpretation", title = "What This Means", type = "text"),
-            list(name = "action", title = "Recommended Action", type = "text")
+            list(name = "interpretation", title = "What This Means", type = "text", visible = FALSE),
+            list(name = "action", title = "Recommended Action", type = "text", visible = FALSE)
         )
     ))
     if (isTRUE(posthoc))

@@ -100,4 +100,7 @@ test_that("fixed diagnostics update stable rows without duplication", {
     expect_equal(table$rowCount, 2L)
     expect_equal(unlist(table$rowKeys), c(1L, 2L))
     expect_equal(table_df$status, c("Caution", "Acceptable"))
+    expect_length(table$notes, 2L)
+    expect_match(table$notes[["guidance-1"]]$note, "First interpretation", fixed = TRUE)
+    expect_match(table$notes[["guidance-2"]]$note, "Second action", fixed = TRUE)
 })

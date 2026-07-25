@@ -35,7 +35,7 @@ children:
       - { type: CheckBox, name: showPlot }
   - type: CollapseBox
     label: Reporting
-    collapsed: true
+    collapsed: false
     children:
       - { type: ComboBox, name: reportStyle }
       - { type: ComboBox, name: reportFormat }

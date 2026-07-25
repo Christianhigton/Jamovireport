@@ -89,9 +89,11 @@ items:
   - name: interpretation
     title: Interpretation
     type: text
+    visible: false
   - name: action
     title: Recommended Action
     type: text
+    visible: false
 - name: report
   title: Reporting
   type: Html

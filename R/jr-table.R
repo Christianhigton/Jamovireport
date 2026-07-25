@@ -35,6 +35,41 @@
     )
 }
 
+.jr_set_guidance_notes <- function(table, rows, label_column,
+                                   interpretation_column = "interpretation",
+                                   action_column = "action") {
+    if (is.null(rows) || nrow(rows) == 0L)
+        return(invisible(NULL))
+    for (i in seq_len(nrow(rows))) {
+        label <- as.character(rows[[label_column]][i] %||% "Check")
+        interpretation <- as.character(rows[[interpretation_column]][i] %||% "")
+        action <- as.character(rows[[action_column]][i] %||% "")
+        note <- paste(
+            sprintf("%s — What this means: %s", label, interpretation),
+            sprintf("Recommended action: %s", action)
+        )
+        table$setNote(paste0("guidance-", i), note)
+    }
+    invisible(NULL)
+}
+
+.jr_set_effect_notes <- function(table, rows) {
+    if (is.null(rows) || nrow(rows) == 0L)
+        return(invisible(NULL))
+    for (i in seq_len(nrow(rows))) {
+        analysis <- as.character(rows$analysis[i] %||% "Analysis")
+        test <- as.character(rows$test[i] %||% "Result")
+        effect <- as.character(rows$effect[i] %||% "")
+        interval <- as.character(rows$ci[i] %||% "")
+        table$setNote(
+            paste0("effect-", i),
+            sprintf("%s — %s: Effect size %s; confidence interval %s.",
+                    analysis, test, effect, interval)
+        )
+    }
+    invisible(NULL)
+}
+
 .jr_prefill_diagnostic_rows <- function(table, n) {
     existing <- table$rowKeys
     for (i in seq_len(n)) {
@@ -65,4 +100,5 @@
         else
             table$addRow(rowKey = i, values = values)
     }
+    .jr_set_guidance_notes(table, diagnostics, "check")
 }

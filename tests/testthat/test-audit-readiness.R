@@ -91,14 +91,14 @@ test_that("jamovi YAML files parse and analysis references are declared", {
     }
 })
 
-test_that("guided UI reporting sections are collapsed and labels are polished", {
+test_that("guided UI reporting sections are expanded and labels are polished", {
     root <- audit_root()
     ui_files <- list.files(file.path(root, "jamovi"), pattern = "^edu.*\\.u\\.yaml$", full.names = TRUE)
     for (file in ui_files) {
         text <- readLines(file, warn = FALSE)
         reporting <- grep("label: Reporting", text)
         expect_true(length(reporting) == 1L, info = basename(file))
-        expect_true(any(grepl("collapsed: true", text[seq(reporting, min(reporting + 3L, length(text)))])),
+        expect_true(any(grepl("collapsed: false", text[seq(reporting, min(reporting + 3L, length(text)))])),
                     info = basename(file))
     }
 
@@ -184,6 +184,53 @@ test_that("guided computational result elements declare clearWith", {
     }
 })
 
+test_that("long diagnostic guidance is kept in notes instead of width-expanding columns", {
+    skip_if_not_installed("yaml")
+    root <- audit_root()
+    result_files <- list.files(
+        file.path(root, "jamovi"), pattern = "^(edu|jrReport).*\\.r\\.yaml$",
+        full.names = TRUE
+    )
+    diagnostic_files <- result_files[vapply(result_files, function(file) {
+        text <- readLines(file, warn = FALSE)
+        any(grepl("name: interpretation", text, fixed = TRUE)) &&
+            any(grepl("name: action", text, fixed = TRUE))
+    }, logical(1))]
+
+    expect_true(length(diagnostic_files) > 0L)
+    for (file in diagnostic_files) {
+        text <- paste(readLines(file, warn = FALSE), collapse = "\n")
+        expect_match(
+            text,
+            "- name: interpretation\\n    title: (Interpretation|What This Means)\\n    type: text\\n    visible: false",
+            info = basename(file)
+        )
+        expect_match(
+            text,
+            "- name: action\\n    title: Recommended Action\\n    type: text\\n    visible: false",
+            info = basename(file)
+        )
+    }
+
+    addon_files <- list.files(
+        file.path(root, "jamovi"), pattern = "^jrReport.*\\.r\\.yaml$",
+        full.names = TRUE
+    )
+    for (file in addon_files) {
+        text <- paste(readLines(file, warn = FALSE), collapse = "\n")
+        expect_match(
+            text,
+            "- name: effect\\n    title: Effect Size\\n    type: text\\n    visible: false",
+            info = basename(file)
+        )
+        expect_match(
+            text,
+            "- name: ci\\n    title: Effect 95% CI\\n    type: text\\n    visible: false",
+            info = basename(file)
+        )
+    }
+})
+
 test_that("fixed diagnostics use stable row updates and dynamic diagnostics remain append-based", {
     root <- audit_root()
     fixed_backends <- c(
@@ -193,12 +240,12 @@ test_that("fixed diagnostics use stable row updates and dynamic diagnostics rema
         "eduCorrelation.b.R",
         "eduChiSquareIndependence.b.R",
         "eduChiSquareGoodness.b.R",
-        "eduRMAnova.b.R",
         "eduMixedAnova.b.R",
         "eduReliabilityOmega.b.R"
     )
     dynamic_backends <- c(
         "eduTTest.b.R",
+        "eduRMAnova.b.R",
         "eduRegression.b.R",
         "eduLogistic.b.R",
         "eduMancova.b.R"
@@ -214,7 +261,10 @@ test_that("fixed diagnostics use stable row updates and dynamic diagnostics rema
         text <- paste(readLines(file.path(root, "R", file), warn = FALSE), collapse = "\n")
         expect_true(grepl("\\.jr_populate_diagnostics\\(self\\$results\\$diagnostics, result\\$diagnostics\\)", text),
                     info = file)
-        expect_false(grepl("fixed = TRUE", text, fixed = TRUE), info = file)
+        expect_false(grepl(
+            "\\.jr_populate_diagnostics\\(self\\$results\\$diagnostics, result\\$diagnostics, fixed = TRUE\\)",
+            text
+        ), info = file)
     }
 })
 

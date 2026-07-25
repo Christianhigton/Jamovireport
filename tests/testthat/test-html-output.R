@@ -268,7 +268,7 @@ test_that("checklist items are individually wrapped in <li> tags", {
     expect_true(grepl("Item three", html, fixed = TRUE))
 })
 
-test_that("explanation callouts collapse to title-only disclosure summaries", {
+test_that("explanation callouts are expanded by default", {
     html <- jReport:::.jr_build_report_sections_html(
         apa_wording = "A test was run, F(1, 98) = 4.5, p = .036.",
         diagnostic_note = "Assumptions should be checked.",
@@ -276,12 +276,11 @@ test_that("explanation callouts collapse to title-only disclosure summaries", {
         checklist_items = c("Check A", "Check B")
     )
 
-    expect_true(grepl("<details", html, fixed = TRUE))
-    expect_true(grepl("<summary", html, fixed = TRUE))
-    expect_true(grepl(">Optional assumptions / diagnostic note</summary>", html, fixed = TRUE))
-    expect_true(grepl(">Interpretation guidance</summary>", html, fixed = TRUE))
-    expect_true(grepl(">Check before reporting</summary>", html, fixed = TRUE))
-    expect_false(grepl(">Suggested APA-style report wording</summary>", html, fixed = TRUE))
+    expect_false(grepl("<details", html, fixed = TRUE))
+    expect_match(html, "Optional assumptions / diagnostic note", fixed = TRUE)
+    expect_match(html, "Interpretation guidance", fixed = TRUE)
+    expect_match(html, "Check before reporting", fixed = TRUE)
+    expect_match(html, "Suggested APA-style report wording", fixed = TRUE)
 })
 
 test_that("guided report heading follows selected report style", {

@@ -6,7 +6,7 @@ jrReportTTestISOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
     inherit = jmvcore::Options,
     public = list(
         initialize = function(
-            jreportEnabled = FALSE,
+            jreportEnabled = TRUE,
             reportStyle = "apaConcise",
             explanationTone = "professional",
             showSuggestedWording = TRUE,
@@ -27,7 +27,7 @@ jrReportTTestISOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
             private$..jreportEnabled <- jmvcore::OptionBool$new(
                 "jreportEnabled",
                 jreportEnabled,
-                default=FALSE)
+                default=TRUE)
             private$..reportStyle <- jmvcore::OptionList$new(
                 "reportStyle",
                 reportStyle,
@@ -170,7 +170,7 @@ jrReportTTestISResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
                     list(
                         `name`="p", 
                         `title`="p", 
-                        `type`="number", 
+                        `type`="number",
                         `format`="zto,pvalue"),
                     list(
                         `name`="p_adjusted",
@@ -186,11 +186,13 @@ jrReportTTestISResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
                     list(
                         `name`="effect", 
                         `title`="Effect Size", 
-                        `type`="text"),
+                        `type`="text",
+                        `visible`=FALSE),
                     list(
                         `name`="ci", 
                         `title`="Effect 95% CI", 
-                        `type`="text"))))
+                        `type`="text",
+                        `visible`=FALSE))))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="jReportAssumptions",
@@ -215,7 +217,7 @@ jrReportTTestISResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
                     list(
                         `name`="p", 
                         `title`="p", 
-                        `type`="number", 
+                        `type`="number",
                         `format`="zto,pvalue"),
                     list(
                         `name`="met", 
@@ -224,11 +226,13 @@ jrReportTTestISResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
                     list(
                         `name`="interpretation", 
                         `title`="What This Means", 
-                        `type`="text"),
+                        `type`="text",
+                        `visible`=FALSE),
                     list(
                         `name`="action", 
                         `title`="Recommended Action", 
-                        `type`="text"))))
+                        `type`="text",
+                        `visible`=FALSE))))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="jReportCard",
@@ -311,7 +315,7 @@ jrReportTTestISBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Clas
 #' @export
 jrReportTTestIS <- function(
     data,
-    jreportEnabled = FALSE,
+    jreportEnabled = TRUE,
     reportStyle = "apaConcise",
     explanationTone = "professional",
     showSuggestedWording = TRUE,

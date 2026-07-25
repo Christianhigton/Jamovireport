@@ -272,31 +272,31 @@
                 .jr_report_section_title("Statistical interpretation", label),
                 "Interpretation guidance; do not copy this as a result sentence.",
                 .jr_core_ttest_interpretation(result, tone),
-                accent = "#b46c21", background = "#fff9ef", collapsed = TRUE
+                accent = "#b46c21", background = "#fff9ef", collapsed = FALSE
             ))
         if (isTRUE(.jr_core_ttest_config(config, "showEffectSizeGuidance", TRUE)))
             cards <- c(cards, .jr_report_section_card(
                 .jr_report_section_title("Effect-size interpretation", label), "",
                 .jr_core_ttest_effect_guidance(result),
-                accent = "#4b66a2", background = "#f5f9fd", collapsed = TRUE
+                accent = "#4b66a2", background = "#f5f9fd", collapsed = FALSE
             ))
         if (isTRUE(.jr_core_ttest_config(config, "showAssumptionGuidance", TRUE)))
             cards <- c(cards, .jr_report_section_card(
                 .jr_report_section_title("Assumption guidance", label), "",
                 .jr_core_ttest_assumption_sentence(result),
-                accent = "#2f6fa3", background = "#f5f9fd", collapsed = TRUE
+                accent = "#2f6fa3", background = "#f5f9fd", collapsed = FALSE
             ))
         if (isTRUE(.jr_core_ttest_config(config, "showPracticalMeaning", TRUE)))
             cards <- c(cards, .jr_report_section_card(
                 .jr_report_section_title("Practical meaning", label), "",
                 .jr_core_ttest_practical_meaning(result),
-                accent = "#237f86", background = "#f5fbfb", collapsed = TRUE
+                accent = "#237f86", background = "#f5fbfb", collapsed = FALSE
             ))
         if (isTRUE(.jr_core_ttest_config(config, "showCheckBeforeReporting", TRUE)))
             cards <- c(cards, .jr_report_section_card(
                 .jr_report_section_title("Check before reporting", label), "",
                 content_html = .jr_html_bullets(.jr_core_ttest_checklist(result)),
-                accent = "#6d5a8a", background = "#faf8fc", collapsed = TRUE
+                accent = "#6d5a8a", background = "#faf8fc", collapsed = FALSE
             ))
     }
     if (!length(cards))

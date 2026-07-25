@@ -21,7 +21,7 @@ children:
         children: [{ type: VariablesListBox, name: covariates, isTarget: true }]
   - type: CollapseBox
     label: Reporting
-    collapsed: true
+    collapsed: false
     children:
       - { type: ComboBox, name: reportStyle }
       - { type: ComboBox, name: reportFormat }

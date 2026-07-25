@@ -20,7 +20,7 @@ children:
         children: [{ type: VariablesListBox, name: counts, maxItemCount: 1, isTarget: true }]
   - type: CollapseBox
     label: Reporting
-    collapsed: true
+    collapsed: false
     children:
       - { type: ComboBox, name: reportStyle }
       - { type: ComboBox, name: reportFormat }

@@ -286,11 +286,13 @@ eduMancovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     list(
                         `name`="interpretation", 
                         `title`="Interpretation", 
-                        `type`="text"),
+                        `type`="text",
+                        `visible`=FALSE),
                     list(
                         `name`="action", 
                         `title`="Recommended Action", 
-                        `type`="text"))))
+                        `type`="text",
+                        `visible`=FALSE))))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="followups",

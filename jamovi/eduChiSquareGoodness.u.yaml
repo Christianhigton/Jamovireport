@@ -22,7 +22,7 @@ children:
       - { type: TextBox, name: expectedRatios, format: string }
   - type: CollapseBox
     label: Reporting
-    collapsed: true
+    collapsed: false
     children:
       - { type: ComboBox, name: reportStyle }
       - { type: ComboBox, name: reportFormat }

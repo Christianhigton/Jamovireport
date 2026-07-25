@@ -52,9 +52,11 @@ items:
   - name: effect
     title: Effect Size
     type: text
+    visible: false
   - name: ci
     title: Effect 95% CI
     type: text
+    visible: false
   - name: 'n'
     title: N
     type: integer
@@ -85,9 +87,11 @@ items:
   - name: interpretation
     title: What This Means
     type: text
+    visible: false
   - name: action
     title: Recommended Action
     type: text
+    visible: false
 - name: jReportCard
   title: Automatic Report (jReport)
   type: Html

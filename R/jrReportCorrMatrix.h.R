@@ -69,17 +69,17 @@ jrReportCorrMatrixResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::
                     list(
                         `name`="variable1", 
                         `title`="Variable 1", 
-                        `type`="text", 
+                        `type`="text",
                         `visible`=FALSE),
                     list(
                         `name`="variable2", 
                         `title`="Variable 2", 
-                        `type`="text", 
+                        `type`="text",
                         `visible`=FALSE),
                     list(
                         `name`="method", 
                         `title`="Correlation method", 
-                        `type`="text", 
+                        `type`="text",
                         `visible`=FALSE),
                     list(
                         `name`="statistic", 
@@ -107,16 +107,18 @@ jrReportCorrMatrixResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::
                     list(
                         `name`="adjustment_result", 
                         `title`="Result after adjustment", 
-                        `type`="text", 
+                        `type`="text",
                         `visible`=FALSE),
                     list(
                         `name`="effect", 
                         `title`="Effect Size", 
-                        `type`="text"),
+                        `type`="text",
+                        `visible`=FALSE),
                     list(
                         `name`="ci", 
                         `title`="Effect 95% CI", 
-                        `type`="text"),
+                        `type`="text",
+                        `visible`=FALSE),
                     list(
                         `name`="n", 
                         `title`="N", 
@@ -155,11 +157,13 @@ jrReportCorrMatrixResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::
                     list(
                         `name`="interpretation", 
                         `title`="What This Means", 
-                        `type`="text"),
+                        `type`="text",
+                        `visible`=FALSE),
                     list(
                         `name`="action", 
                         `title`="Recommended Action", 
-                        `type`="text"))))
+                        `type`="text",
+                        `visible`=FALSE))))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="jReportCard",

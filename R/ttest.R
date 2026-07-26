@@ -62,6 +62,9 @@ edu_t_test <- function(data, outcome, group = NULL, paired_outcome = NULL,
             effect_ci_low <- -effect_ci_high
             effect_ci_high <- -original_low
         }
+        effect$Cohens_d[1] <- effect_value
+        effect$CI_low[1] <- effect_ci_low
+        effect$CI_high[1] <- effect_ci_high
         sig_phrase <- if (test$p.value < .05)
             "indicated a statistically significant difference"
         else
@@ -183,7 +186,7 @@ edu_t_test <- function(data, outcome, group = NULL, paired_outcome = NULL,
     caution <- if (any(diagnostics$status == "Caution"))
         paste("Caution:", assumption_text)
     else ""
-    .new_edu_analysis(
+    result <- .new_edu_analysis(
         analysis = "ttest", label = if (type == "independent") "Independent Samples T-Test" else "Paired Samples T-Test",
         question = question, requirements = requirements, main = stats,
         descriptives = descriptives, effects = effect, diagnostics = diagnostics,
@@ -197,4 +200,7 @@ edu_t_test <- function(data, outcome, group = NULL, paired_outcome = NULL,
         ),
         statistics = stats, call = match.call()
     )
+    result$n_total <- nrow(data)
+    result$n_used <- nrow(d)
+    result
 }

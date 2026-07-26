@@ -145,9 +145,6 @@
     args <- .jr_jamovi_report_args(options)
     .jr_build_report_sections_html(
         apa_wording             = do.call(edu_report, c(list(x = result), args)),
-        diagnostic_note         = result$caution %||% "",
-        follow_up_guidance       = .jr_follow_up_analysis_guidance(result),
-        checklist_items         = .jr_analysis_checklist(result$analysis %||% ""),
         report_style            = args$style
     )
 }
@@ -406,11 +403,6 @@
     }
     .jr_build_report_sections_html(
         apa_wording = apa,
-        diagnostic_note = .jr_anova_between_diagnostic_text(result, include),
-        follow_up_guidance = .jr_follow_up_analysis_guidance(result),
-        checklist_items = .jr_anova_between_checklist_items(),
-        checklist_note = note,
-        references = .jr_reference_entries(list(result), include_effect_note = "effect_size" %in% include),
         report_style = args$style
     )
 }
@@ -462,20 +454,16 @@
 .jr_regression_report_cards_html <- function(result, options = NULL, note = "",
                                             include_effect_note = TRUE) {
     copy_ready_text <- result$report_blocks$apa %||% ""
+    report_style <- "apa7"
     if (!is.null(options)) {
-        include <- .jr_jamovi_report_args(options)$include
+        args <- .jr_jamovi_report_args(options)
+        include <- args$include
+        report_style <- args$style
         copy_ready_text <- .jr_apply_inclusions(copy_ready_text, result$analysis, include)
     }
-    diagnostic_text <- result$report_blocks$assumptions %||% ""
-    if (nzchar(result$caution))
-        diagnostic_text <- paste(diagnostic_text, result$caution, sep = "\n\n")
-    .jr_build_report_cards_html(
-        analysis_title = result$label,
-        copy_ready_text = copy_ready_text,
-        diagnostic_text = diagnostic_text,
-        checklist_items = .jr_regression_checklist_items(),
-        references_text = .jr_reference_entries(list(result), include_effect_note = include_effect_note),
-        checklist_note = note
+    .jr_build_report_sections_html(
+        apa_wording = copy_ready_text,
+        report_style = report_style
     )
 }
 

@@ -237,7 +237,7 @@
         plain = "Suggested plain-language report wording",
         journal = "Suggested journal-style report wording",
         dissertation = "Suggested dissertation-style report wording",
-        "Suggested APA-style report wording"
+        "Suggested APA report"
     )
 }
 
@@ -330,9 +330,9 @@
     paste0(
         "<div style='border-top:1px solid #dfe6ea; margin:14px 0 0 0; padding-top:12px;'>",
         "<div style='font-size:13px; font-weight:600; color:#18242d; margin-bottom:8px;'>References</div>",
-        "<ol style='margin:0; padding-left:22px; line-height:1.45;'>",
+        "<ul style='margin:0; padding-left:22px; line-height:1.45;'>",
         rows,
-        "</ol></div>"
+        "</ul></div>"
     )
 }
 
@@ -365,6 +365,11 @@
         RevelleCondon2019 = "Revelle & Condon (2019)",
         Cohen1988 = "Cohen (1988)",
         Cumming2014 = "Cumming (2014)",
+        Lakens2013 = "Lakens (2013)",
+        Maxwell2018 = "Maxwell, Delaney, & Kelley (2018)",
+        Lenth2016 = "Lenth (2016)",
+        Agresti2019 = "Agresti (2019)",
+        Huberty2006 = "Huberty & Olejnik (2006)",
         Holm1979 = "Holm (1979)",
         Vickerstaff2019 = "Vickerstaff et al. (2019)",
         BenjaminiHochberg1995 = "Benjamini & Hochberg (1995)",
@@ -391,6 +396,11 @@
         RevelleCondon2019 = "provides reliability-reporting guidance for omega and alpha.",
         Cohen1988 = "provides conventional effect-size benchmark language.",
         Cumming2014 = "supports cautious interpretation of effect sizes and confidence intervals.",
+        Lakens2013 = "supports transparent reporting of effect sizes and their uncertainty.",
+        Maxwell2018 = "supports factorial-model interpretation, planned contrasts, and follow-up decisions.",
+        Lenth2016 = "supports estimated marginal means and model-based comparisons.",
+        Agresti2019 = "supports categorical-data diagnostics, residual interpretation, and table-sensitive effect interpretation.",
+        Huberty2006 = "supports multivariate-test interpretation and justified outcome-level follow-ups.",
         Holm1979 = "introduces the sequential Holm procedure for controlling the familywise Type I error rate.",
         Vickerstaff2019 = "provides guidance on multiple-comparison adjustment for families of outcomes.",
         BenjaminiHochberg1995 = "introduces the false discovery rate and its sequential p-value adjustment procedure.",
@@ -510,15 +520,5 @@
 }
 
 .jr_jamovi_interpretation_html <- function(result) {
-    content <- result$interpretation
-    accent <- "#278058"
-    if (nzchar(result$caution)) {
-        content <- paste(content, result$caution, sep = "\n\n")
-        accent <- "#b46c21"
-    }
-    rm_guidance <- .jr_rm_ges_guidance(result)
-    if (nzchar(rm_guidance))
-        content <- paste(content, rm_guidance, sep = "\n\n")
-    html <- .jr_html_card("Interpretation", "What does this mean?", content, accent = accent)
-    paste0("<div style='width:100%;box-sizing:border-box;display:block;'>", html, "</div>")
+    .jr_interpretation_guidance_html(result)
 }

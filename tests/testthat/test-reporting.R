@@ -215,7 +215,8 @@ test_that("jReport content is rendered as structured HTML cards", {
     expect_match(report, "Welch independent-samples t-test")
     expect_match(report, "border-left:4px solid #4b66a2", fixed = TRUE)
     expect_match(report, "Interpretation note:")
-    expect_match(interpretation, "What does this mean")
+    expect_match(interpretation, "Interpretation guidance")
+    expect_match(interpretation, "<details", fixed = TRUE)
 })
 
 test_that("jReport display names prefer variable descriptions with name fallback", {
@@ -345,8 +346,11 @@ test_that("automatic native reports render for supported group comparison design
         report <- .jr_addon_report_html(
             list(result), options = .jr_addon_reporting_options()
         )
-        expect_match(report, "Suggested APA-style report wording")
+        guidance <- .jr_addon_interpretation_html(list(result))
+        expect_match(report, "Suggested APA report")
         expect_false(grepl("Interpretation guidance", report, fixed = TRUE))
+        expect_match(guidance, "Interpretation guidance", fixed = TRUE)
+        expect_match(guidance, "Check before using this result", fixed = TRUE)
         expect_false(grepl("Select valid analysis variables", report, fixed = TRUE))
         expect_false(grepl("could not be generated", report, fixed = TRUE))
         expect_false(grepl("GAMLj", report, fixed = TRUE))
@@ -364,29 +368,26 @@ test_that("between-subjects ANOVA report uses separated guidance sections", {
     )
     interpretation <- .jr_addon_interpretation_html(list(result))
 
-    expect_match(report, "Suggested APA-style report wording")
+    expect_match(report, "Suggested APA report")
     expect_match(report, "This is suggested wording only. Check all values against your jamovi output")
-    expect_match(report, "Optional assumptions / diagnostic note")
+    expect_false(grepl("Optional assumptions / diagnostic note", report, fixed = TRUE))
     expect_false(grepl("Interpretation guidance", report, fixed = TRUE))
     expect_match(interpretation, "Interpretation guidance")
-    expect_match(report, "Check before reporting")
+    expect_match(interpretation, "Check before using this result")
     expect_match(report, "A between-subjects ANOVA examined")
     expect_match(report, "Descriptive statistics indicated")
     expect_match(report, "M = ")
     expect_match(report, "SD = ")
     expect_match(report, "\u03b7p\u00b2")
     expect_match(report, "\u03c9p\u00b2")
-    expect_match(report, "Assumption checks did not indicate substantial violations")
-    expect_match(report, "Residual normality \\(Shapiro-Wilk\\)")
-    expect_match(interpretation, "A between-subjects ANOVA compares mean")
-    expect_match(interpretation, "Effect-size benchmark")
-    expect_match(report, "The correct dependent variable is reported.")
-    expect_match(report, "Correction methods are named correctly.")
+    expect_match(interpretation, "Residual normality \\(Shapiro-Wilk\\)")
+    expect_match(interpretation, "What this analysis examines")
+    expect_match(interpretation, "conventional small")
+    expect_match(interpretation, "The correct dependent variable is reported.")
+    expect_match(interpretation, "Correction methods are named correctly.")
     expect_false(grepl("Copy-ready report text", report, fixed = TRUE))
 
-    wording_start <- regexpr("Suggested APA-style report wording", report, fixed = TRUE)
-    diagnostics_start <- regexpr("Optional assumptions / diagnostic note", report, fixed = TRUE)
-    wording_card <- substr(report, wording_start, diagnostics_start - 1L)
+    wording_card <- report
 
     expect_true(grepl("Descriptive statistics indicated", wording_card, fixed = TRUE))
     expect_true(grepl("partial omega squared", wording_card, fixed = TRUE))
@@ -453,8 +454,9 @@ test_that("between-subjects ANOVA references use guided refs and add-on callout"
     result <- edu_anova_between(d, "len", c("dose", "supp"))
     report <- .jr_anova_between_report_sections_html(result, options = .jr_addon_reporting_options())
 
-    expect_match(report, "Suggested APA-style report wording")
-    expect_match(report, "Check before reporting")
+    guidance <- .jr_addon_interpretation_html(list(result))
+    expect_match(report, "Suggested APA report")
+    expect_match(guidance, "Check before using this result")
 })
 
 test_that("one-way between-subjects ANOVA suggested wording reports omega squared", {
@@ -465,9 +467,7 @@ test_that("one-way between-subjects ANOVA suggested wording reports omega square
         result,
         options = .jr_addon_reporting_options()
     )
-    wording_start <- regexpr("Suggested APA-style report wording", report, fixed = TRUE)
-    diagnostics_start <- regexpr("Optional assumptions / diagnostic note", report, fixed = TRUE)
-    wording_card <- substr(report, wording_start, diagnostics_start - 1L)
+    wording_card <- report
 
     expect_match(wording_card, "\u03c9\u00b2")
     expect_match(wording_card, "\u03b7p\u00b2")
@@ -489,12 +489,10 @@ test_that("between-subjects ANOVA add-on keeps post hoc wording in suggested sec
     report <- .jr_addon_report_html(
         list(result), options = .jr_addon_reporting_options()
     )
-    wording_start <- regexpr("Suggested APA-style report wording", report, fixed = TRUE)
-    diagnostics_start <- regexpr("Optional assumptions / diagnostic note", report, fixed = TRUE)
-    wording_card <- substr(report, wording_start, diagnostics_start - 1L)
+    wording_card <- report
 
-    expect_match(report, "Suggested APA-style report wording")
-    expect_match(report, "Optional assumptions / diagnostic note")
+    expect_match(report, "Suggested APA report")
+    expect_false(grepl("Optional assumptions / diagnostic note", report, fixed = TRUE))
     expect_false(grepl("Interpretation guidance", report, fixed = TRUE))
     expect_false(grepl("Post hoc interpretation", report, fixed = TRUE))
     expect_true(grepl("Holm-adjusted post hoc comparisons", wording_card, fixed = TRUE))
@@ -545,10 +543,7 @@ test_that("automatic native reports render for association, model, and omega pat
         report <- .jr_addon_report_html(
             list(result), options = .jr_addon_reporting_options()
         )
-        if (identical(result$analysis, "regression"))
-            expect_match(report, "Copy-ready report text")
-        else
-            expect_match(report, "Suggested APA-style report wording")
+        expect_match(report, "Suggested APA report")
         expect_false(grepl("Select valid analysis variables", report, fixed = TRUE))
         expect_false(grepl("could not be generated", report, fixed = TRUE))
     }
@@ -563,19 +558,15 @@ test_that("linear regression add-on separates copy-ready text from guidance", {
     )
     interpretation <- .jr_addon_interpretation_html(list(result))
 
-    expect_match(report, "Copy-ready report text")
-    expect_match(report, "Select and copy this paragraph into your report.")
-    expect_match(report, "Optional assumptions / diagnostic note")
-    expect_match(report, "Include this only if relevant to your study.")
+    expect_match(report, "Suggested APA report")
+    expect_false(grepl("Optional assumptions / diagnostic note", report, fixed = TRUE))
     expect_false(grepl("Interpretation guidance", report, fixed = TRUE))
     expect_match(interpretation, "Interpretation guidance")
-    expect_match(report, "Check before reporting")
-    expect_match(report, "Outcome variable is the intended dependent variable.")
-    expect_match(report, "b, SE, beta, t, p, and confidence intervals")
+    expect_match(interpretation, "Check before using this result")
+    expect_match(interpretation, "Outcome variable is the intended dependent variable.")
+    expect_match(interpretation, "b, SE, beta, t, p, and confidence intervals")
 
-    copy_start <- regexpr("Copy-ready report text", report, fixed = TRUE)
-    diagnostic_start <- regexpr("Optional assumptions / diagnostic note", report, fixed = TRUE)
-    copy_card <- substr(report, copy_start, diagnostic_start - 1L)
+    copy_card <- report
 
     expect_true(grepl(.jr_html_escape(result$report_blocks$apa), copy_card, fixed = TRUE))
     expect_false(grepl("For understanding only", copy_card, fixed = TRUE))
@@ -718,11 +709,13 @@ test_that("automatic report explains selected ANOVA post hoc comparisons", {
     report <- .jr_addon_report_html(
         list(result), options = .jr_addon_reporting_options()
     )
+    guidance <- .jr_addon_interpretation_html(list(result))
 
     expect_equal(nrow(rows), 3L)
-    expect_match(report, "Post hoc interpretation")
-    expect_match(report, "Tukey-adjusted")
-    expect_match(report, "mean difference")
+    expect_false(grepl("Post hoc interpretation", report, fixed = TRUE))
+    expect_match(guidance, "Follow-up analyses")
+    expect_match(guidance, "Tukey-adjusted")
+    expect_match(guidance, "mean difference")
 })
 
 test_that("post hoc reporting requires a significant omnibus effect", {

@@ -73,12 +73,12 @@ jrReportLogRegMultiResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6:
                     list(
                         `name`="effect", 
                         `title`="Effect Size", 
-                        `type`="text",
+                        `type`="text", 
                         `visible`=FALSE),
                     list(
                         `name`="ci", 
                         `title`="Effect 95% CI", 
-                        `type`="text",
+                        `type`="text", 
                         `visible`=FALSE))))
             self$add(jmvcore::Table$new(
                 options=options,
@@ -113,17 +113,17 @@ jrReportLogRegMultiResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6:
                     list(
                         `name`="interpretation", 
                         `title`="What This Means", 
-                        `type`="text",
+                        `type`="text", 
                         `visible`=FALSE),
                     list(
                         `name`="action", 
                         `title`="Recommended Action", 
-                        `type`="text",
+                        `type`="text", 
                         `visible`=FALSE))))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="jReportCard",
-                title="Automatic Report (jReport)"))
+                title="Suggested APA Report (jReport)"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="jReportInterpretation",
@@ -131,7 +131,7 @@ jrReportLogRegMultiResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6:
             self$add(jmvcore::Html$new(
                 options=options,
                 name="methodsReferences",
-                title="Methods and References"))}))
+                title="References"))}))
 
 jrReportLogRegMultiBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "jrReportLogRegMultiBase",

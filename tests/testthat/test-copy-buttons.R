@@ -21,7 +21,7 @@ test_that("every report section has its own body-only copy button", {
         "\\1", html
     )
     expect_match(first_body, "Report wording", fixed = TRUE)
-    expect_false(grepl("Suggested APA-style report wording", first_body, fixed = TRUE))
+    expect_false(grepl("Suggested APA report", first_body, fixed = TRUE))
     expect_false(grepl("Copy text", first_body, fixed = TRUE))
 })
 
@@ -65,11 +65,8 @@ test_that("multiple add-on results identify the analysis in tables and card titl
     for (label in c("Pearson: mpg with wt", "Spearman: mpg with hp")) {
         expect_match(
             report,
-            paste("Optional assumptions / diagnostic note \u2014", label),
+            paste("Suggested APA report \u2014", label),
             fixed = TRUE
-        )
-        expect_match(
-            report, paste("Check before reporting \u2014", label), fixed = TRUE
         )
         expect_match(
             interpretation,
@@ -87,9 +84,9 @@ test_that("single add-on results retain compact generic section titles", {
     assumptions <- .jr_addon_assumption_rows(list(result))
 
     expect_equal(unique(assumptions$analysis), "Correlation")
-    expect_match(report, "Optional assumptions / diagnostic note", fixed = TRUE)
+    expect_match(report, "Suggested APA report", fixed = TRUE)
     expect_false(grepl(
-        "Optional assumptions / diagnostic note \u2014 Pearson: mpg with wt",
+        "Suggested APA report \u2014 Pearson: mpg with wt",
         report, fixed = TRUE
     ))
 })

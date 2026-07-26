@@ -68,7 +68,7 @@ items:
     type: text
     visible: false
 - name: jReportCard
-  title: Automatic Report (jReport)
+  title: Suggested APA Report (jReport)
   type: Html
 
 - name: jReportInterpretation
@@ -76,6 +76,6 @@ items:
   type: Html
 
 - name: methodsReferences
-  title: Methods and References
+  title: References
   type: Html
 

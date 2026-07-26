@@ -8,6 +8,11 @@
             key,
             Cohen1988 = "Cohen, J. (1988). Statistical power analysis for the behavioral sciences (2nd ed.). Lawrence Erlbaum Associates.",
             Cumming2014 = "Cumming, G. (2014). The new statistics: Why and how. Psychological Science, 25(1), 7-29.",
+            Lakens2013 = "Lakens, D. (2013). Calculating and reporting effect sizes to facilitate cumulative science: A practical primer for t-tests and ANOVAs. Frontiers in Psychology, 4, Article 863. https://doi.org/10.3389/fpsyg.2013.00863",
+            Maxwell2018 = "Maxwell, S. E., Delaney, H. D., & Kelley, K. (2018). Designing Experiments and Analyzing Data: A Model Comparison Perspective (3rd ed.). Routledge.",
+            Lenth2016 = "Lenth, R. V. (2016). Least-Squares Means: The R Package lsmeans. Journal of Statistical Software, 69(1), 1-33. https://doi.org/10.18637/jss.v069.i01",
+            Agresti2019 = "Agresti, A. (2019). An Introduction to Categorical Data Analysis (3rd ed.). Wiley.",
+            Huberty2006 = "Huberty, C. J., & Olejnik, S. (2006). Applied MANOVA and Discriminant Analysis (2nd ed.). Wiley.",
             Holm1979 = "Holm, S. (1979). A simple sequentially rejective multiple test procedure. Scandinavian Journal of Statistics, 6(2), 65-70.",
             Vickerstaff2019 = "Vickerstaff, V., Omar, R. Z., & Ambler, G. (2019). Methods to adjust for multiple comparisons in the analysis and sample size calculation of randomised controlled trials with multiple primary outcomes. BMC Medical Research Methodology, 19, Article 129. https://doi.org/10.1186/s12874-019-0754-4",
             BenjaminiHochberg1995 = "Benjamini, Y., & Hochberg, Y. (1995). Controlling the false discovery rate: A practical and powerful approach to multiple testing. Journal of the Royal Statistical Society: Series B (Methodological), 57(1), 289-300. https://doi.org/10.1111/j.2517-6161.1995.tb02031.x",
@@ -48,7 +53,7 @@
         character(0)
     )
     keys <- c("jmvcore", "RCore", "jReport", analysis_keys)
-    if (isTRUE(include_effect_note) && !identical(result$analysis, "reliability_omega"))
-        keys <- c(keys, "Cohen1988", "Cumming2014")
+    if (isTRUE(include_effect_note))
+        keys <- c(keys, .jr_guidance_reference_keys(result))
     unique(keys)
 }

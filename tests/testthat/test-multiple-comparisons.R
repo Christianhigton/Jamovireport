@@ -67,7 +67,7 @@ test_that("failed requested tests are excluded and retained as labelled rows", {
     results <- list(valid, failed)
     rows <- .jr_addon_apa_rows(results, "holm")
     info <- attr(rows, "adjustment")
-    report <- .jr_addon_report_html(results, adjustment = "holm")
+    guidance <- .jr_addon_interpretation_html(results, adjustment = "holm")
 
     expect_equal(info$n_valid, 1L)
     expect_false(info$active)
@@ -77,7 +77,7 @@ test_that("failed requested tests are excluded and retained as labelled rows", {
     expect_equal(rows$adjustment_result[2], "Test could not be calculated")
     expect_true(is.na(rows$p_adjusted[2]))
     expect_match(info$note, "Only one valid t-test was available", fixed = TRUE)
-    expect_match(report, "Only one valid t-test was available", fixed = TRUE)
+    expect_match(guidance, "Only one valid t-test was available", fixed = TRUE)
 })
 
 test_that("decision labels use adjusted rather than raw p-values", {
@@ -123,12 +123,16 @@ test_that("adjusted reporting labels raw p-values and correction outcomes", {
     results <- multiple_ttest_results(c(.03, .04))
     holm_html <- .jr_addon_report_html(results, adjustment = "holm")
     bonferroni_html <- .jr_addon_report_html(results, adjustment = "bonferroni")
+    holm_guidance <- .jr_addon_interpretation_html(results, adjustment = "holm")
+    bonferroni_guidance <- .jr_addon_interpretation_html(
+        results, adjustment = "bonferroni"
+    )
 
-    expect_match(holm_html, "A Holm correction was applied", fixed = TRUE)
+    expect_match(holm_guidance, "Holm procedure", fixed = TRUE)
     expect_match(holm_html, "unadjusted p", fixed = TRUE)
     expect_match(holm_html, "did not remain statistically significant", fixed = TRUE)
     expect_match(holm_html, "Holm-adjusted p", fixed = TRUE)
-    expect_match(bonferroni_html, "A Bonferroni correction was applied", fixed = TRUE)
+    expect_match(bonferroni_guidance, "Bonferroni procedure", fixed = TRUE)
     expect_match(bonferroni_html, "Bonferroni-adjusted p", fixed = TRUE)
 })
 

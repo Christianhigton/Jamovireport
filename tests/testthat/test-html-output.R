@@ -56,144 +56,56 @@ logistic_binary$am <- factor(logistic_binary$am, labels = c("automatic", "manual
 multinomial_data <- warpbreaks
 
 # ---------------------------------------------------------------------------
-# Per-analysis box tests
+# Per-analysis report/guidance separation
 # ---------------------------------------------------------------------------
 
-test_that("t-test report HTML has reporting sections without duplicate interpretation", {
-    result <- edu_t_test(two_sp, "Sepal.Length", "Species")
-    html   <- report_html(result)
-
-    expect_true(section_present(html, "Suggested APA-style report wording"))
-    expect_true(section_present(html, "Optional assumptions / diagnostic note"))
-    expect_false(section_present(html, "Interpretation guidance"))
-    expect_true(section_present(html, "Check before reporting"))
-
-    # APA section contains substantive sentence
-    apa_start <- regexpr("Suggested APA-style report wording", html, fixed = TRUE)
-    apa_chunk <- substr(html, apa_start, apa_start + 2000L)
-    expect_gte(plain_nchar(apa_chunk), MIN_APA_CHARS)
-    expect_true(grepl("t-test|t test", apa_chunk, ignore.case = TRUE))
-
-    expect_gte(count_bullets(html), MIN_CHECKLIST_ITEMS)
-})
-
-test_that("one-way ANOVA report HTML has reporting sections without duplicate interpretation", {
-    result <- edu_anova_oneway(iris, "Petal.Length", "Species")
-    html   <- report_html(result)
-
-    expect_true(section_present(html, "Suggested APA-style report wording"))
-    expect_false(section_present(html, "Interpretation guidance"))
-    expect_true(section_present(html, "Check before reporting"))
-    expect_gte(plain_nchar(html), MIN_APA_CHARS)
-    expect_gte(count_bullets(html), MIN_CHECKLIST_ITEMS)
-})
-
-test_that("correlation report HTML has reporting sections without duplicate interpretation", {
-    result <- edu_correlation(iris, "Sepal.Length", "Petal.Length")
-    html   <- report_html(result)
-
-    expect_true(section_present(html, "Suggested APA-style report wording"))
-    expect_false(section_present(html, "Interpretation guidance"))
-    expect_true(section_present(html, "Check before reporting"))
-    expect_true(grepl("correlation", html, ignore.case = TRUE))
-    expect_gte(count_bullets(html), MIN_CHECKLIST_ITEMS)
-})
-
-test_that("linear regression report HTML has reporting sections without duplicate interpretation", {
-    result <- edu_lm(iris, Sepal.Length ~ Petal.Length + Petal.Width)
-    html   <- report_html(result)
-
-    expect_true(section_present(html, "Suggested APA-style report wording"))
-    expect_false(section_present(html, "Interpretation guidance"))
-    expect_true(section_present(html, "Check before reporting"))
-    expect_true(grepl("regression|R-squared", html, ignore.case = TRUE))
-    expect_gte(count_bullets(html), MIN_CHECKLIST_ITEMS)
-})
-
-test_that("binomial logistic regression report HTML has no duplicate interpretation", {
-    result <- edu_logistic_regression(logistic_binary, am ~ wt + hp)
-    html   <- report_html(result)
-
-    expect_true(section_present(html, "Suggested APA-style report wording"))
-    expect_false(section_present(html, "Interpretation guidance"))
-    expect_true(section_present(html, "Check before reporting"))
-    expect_true(grepl("logistic", html, ignore.case = TRUE))
-    expect_gte(count_bullets(html), MIN_CHECKLIST_ITEMS)
-})
-
-test_that("multinomial logistic regression report HTML has no duplicate interpretation", {
-    result <- edu_multinomial_logistic(multinomial_data, tension ~ breaks + wool)
-    html   <- report_html(result)
-
-    expect_true(section_present(html, "Suggested APA-style report wording"))
-    expect_false(section_present(html, "Interpretation guidance"))
-    expect_true(section_present(html, "Check before reporting"))
-    expect_true(grepl("multinomial", html, ignore.case = TRUE))
-    expect_gte(count_bullets(html), MIN_CHECKLIST_ITEMS)
-})
-
-test_that("between-subjects ANOVA report HTML has no duplicate interpretation", {
+test_that("guided analyses use the standard three-part reporting structure", {
     d <- iris
     d$sample_block <- factor(rep(c("A", "B"), length.out = nrow(d)))
-    result <- edu_anova_between(d, "Sepal.Length", c("Species", "sample_block"))
-    html   <- jReport:::.jr_anova_between_report_sections_html(result)
-
-    expect_true(section_present(html, "Suggested APA-style report wording"))
-    expect_false(section_present(html, "Interpretation guidance"))
-    expect_true(section_present(html, "Check before reporting"))
-    expect_true(grepl("ANOVA|between", html, ignore.case = TRUE))
-    expect_gte(count_bullets(html), MIN_CHECKLIST_ITEMS)
-})
-
-test_that("ANCOVA report HTML has no duplicate interpretation", {
-    result <- edu_ancova(iris, "Sepal.Length", "Species", "Petal.Length")
-    html   <- report_html(result)
-
-    expect_true(section_present(html, "Suggested APA-style report wording"))
-    expect_false(section_present(html, "Interpretation guidance"))
-    expect_true(section_present(html, "Check before reporting"))
-    expect_gte(count_bullets(html), MIN_CHECKLIST_ITEMS)
-})
-
-test_that("MANOVA report HTML has no duplicate interpretation", {
-    result <- edu_manova(iris, c("Sepal.Length", "Sepal.Width"), "Species")
-    html   <- report_html(result)
-
-    expect_true(section_present(html, "Suggested APA-style report wording"))
-    expect_false(section_present(html, "Interpretation guidance"))
-    expect_true(section_present(html, "Check before reporting"))
-    expect_true(grepl("MANOVA|Pillai", html, ignore.case = TRUE))
-    expect_gte(count_bullets(html), MIN_CHECKLIST_ITEMS)
-})
-
-test_that("reliability omega report HTML has no duplicate interpretation", {
-    result <- edu_reliability_omega(
-        iris[, 1:4],
-        items = c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width"),
-        bootstrap = FALSE
-    )
-    html <- report_html(result)
-
-    expect_true(section_present(html, "Suggested APA-style report wording"))
-    expect_false(section_present(html, "Interpretation guidance"))
-    expect_true(section_present(html, "Check before reporting"))
-    expect_true(grepl("omega|alpha", html, ignore.case = TRUE))
-    expect_gte(count_bullets(html), MIN_CHECKLIST_ITEMS)
-})
-
-test_that("chi-square independence report HTML has no duplicate interpretation", {
-    d <- data.frame(
+    chi_data <- data.frame(
         petal_size = factor(ifelse(iris$Petal.Length > 3.5, "large", "small")),
         sepal_size = factor(ifelse(iris$Sepal.Length > 5.8, "large", "small"))
     )
-    result <- edu_chisq_independence(d, "petal_size", "sepal_size")
-    html   <- report_html(result)
+    results <- list(
+        edu_t_test(two_sp, "Sepal.Length", "Species"),
+        edu_anova_oneway(iris, "Petal.Length", "Species"),
+        edu_correlation(iris, "Sepal.Length", "Petal.Length"),
+        edu_lm(iris, Sepal.Length ~ Petal.Length + Petal.Width),
+        edu_logistic_regression(logistic_binary, am ~ wt + hp),
+        edu_multinomial_logistic(multinomial_data, tension ~ breaks + wool),
+        edu_anova_between(d, "Sepal.Length", c("Species", "sample_block")),
+        edu_ancova(iris, "Sepal.Length", "Species", "Petal.Length"),
+        edu_manova(iris, c("Sepal.Length", "Sepal.Width"), "Species"),
+        edu_reliability_omega(
+            iris[, 1:4],
+            items = c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width"),
+            bootstrap = FALSE
+        ),
+        edu_chisq_independence(chi_data, "petal_size", "sepal_size")
+    )
 
-    expect_true(section_present(html, "Suggested APA-style report wording"))
-    expect_false(section_present(html, "Interpretation guidance"))
-    expect_true(section_present(html, "Check before reporting"))
-    expect_true(grepl("chi-square|Cramer", html, ignore.case = TRUE))
-    expect_gte(count_bullets(html), MIN_CHECKLIST_ITEMS)
+    for (result in results) {
+        report <- report_html(result)
+        guidance <- jReport:::.jr_jamovi_interpretation_html(result)
+        references <- jReport:::.jr_methods_references_html(result)
+
+        expect_true(section_present(report, "Suggested APA report"))
+        expect_false(section_present(report, "Interpretation guidance"))
+        expect_false(section_present(report, "Check before using this result"))
+        expect_gte(plain_nchar(report), MIN_APA_CHARS)
+
+        expect_true(section_present(guidance, "Interpretation guidance"))
+        expect_true(section_present(guidance, "What this analysis examines"))
+        expect_true(section_present(guidance, "Assumptions and diagnostics"))
+        expect_true(section_present(guidance, "Check before using this result"))
+        expect_true(section_present(guidance, "Literature and guidance"))
+        expect_true(grepl("<details", guidance, fixed = TRUE))
+        expect_false(grepl("<details open", guidance, fixed = TRUE))
+        expect_gte(count_bullets(guidance), 4L)
+
+        expect_true(section_present(references, "R packages and software"))
+        expect_true(section_present(references, "Literature and reporting guidance"))
+    }
 })
 
 # ---------------------------------------------------------------------------
@@ -215,10 +127,9 @@ test_that("section cards have the correct accent colours", {
     interpretation <- jReport:::.jr_jamovi_interpretation_html(result)
 
     expect_true(grepl("#278058", html, fixed = TRUE))   # APA wording — green
-    expect_true(grepl("#2f6fa3", html, fixed = TRUE))   # assumptions — blue
     expect_false(grepl("#b46c21", html, fixed = TRUE))  # no duplicate interpretation card
     expect_true(grepl("#b46c21", interpretation, fixed = TRUE))
-    expect_true(grepl("#6d5a8a", html, fixed = TRUE))   # checklist — purple
+    expect_true(grepl("#fff9ef", interpretation, fixed = TRUE))
 })
 
 test_that("HTML card content is HTML-escaped — no raw < or > in text content", {
@@ -249,7 +160,7 @@ test_that("empty optional sections are silently omitted, not rendered as blank b
     )
 
     # APA and checklist appear; optional sections are absent
-    expect_true(section_present(html, "Suggested APA-style report wording"))
+    expect_true(section_present(html, "Suggested APA report"))
     expect_true(section_present(html, "Check before reporting"))
     expect_false(section_present(html, "Optional assumptions / diagnostic note"))
     expect_false(section_present(html, "Interpretation guidance"))
@@ -268,7 +179,7 @@ test_that("checklist items are individually wrapped in <li> tags", {
     expect_true(grepl("Item three", html, fixed = TRUE))
 })
 
-test_that("explanation callouts are expanded by default", {
+test_that("legacy section builder remains expanded while structured guidance collapses", {
     html <- jReport:::.jr_build_report_sections_html(
         apa_wording = "A test was run, F(1, 98) = 4.5, p = .036.",
         diagnostic_note = "Assumptions should be checked.",
@@ -280,7 +191,12 @@ test_that("explanation callouts are expanded by default", {
     expect_match(html, "Optional assumptions / diagnostic note", fixed = TRUE)
     expect_match(html, "Interpretation guidance", fixed = TRUE)
     expect_match(html, "Check before reporting", fixed = TRUE)
-    expect_match(html, "Suggested APA-style report wording", fixed = TRUE)
+    expect_match(html, "Suggested APA report", fixed = TRUE)
+
+    result <- edu_t_test(two_sp, "Sepal.Length", "Species")
+    guidance <- jReport:::.jr_jamovi_interpretation_html(result)
+    expect_match(guidance, "<details", fixed = TRUE)
+    expect_false(grepl("<details open", guidance, fixed = TRUE))
 })
 
 test_that("guided report heading follows selected report style", {
@@ -315,7 +231,7 @@ test_that("guided report heading follows selected report style", {
     expect_true(section_present(plain, "Suggested plain-language report wording"))
     expect_true(section_present(journal, "Suggested journal-style report wording"))
     expect_true(section_present(dissertation, "Suggested dissertation-style report wording"))
-    expect_false(section_present(plain, "Suggested APA-style report wording"))
+    expect_false(section_present(plain, "Suggested APA report"))
 })
 
 test_that("html_card escapes special characters in eyebrow and title", {

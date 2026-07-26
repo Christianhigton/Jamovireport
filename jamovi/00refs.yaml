@@ -127,6 +127,43 @@ refs:
       publisher: "Psychological Science, 25(1), 7–29"
       url: "https://doi.org/10.1177/0956797613504966"
 
+    Lakens2013:
+      type: article
+      title: "Calculating and reporting effect sizes to facilitate cumulative science: A practical primer for t-tests and ANOVAs"
+      author: "Daniel Lakens"
+      year: 2013
+      publisher: "Frontiers in Psychology, 4, Article 863"
+      url: "https://doi.org/10.3389/fpsyg.2013.00863"
+
+    Maxwell2018:
+      type: book
+      title: "Designing Experiments and Analyzing Data: A Model Comparison Perspective (3rd ed.)"
+      author: "Scott E. Maxwell, Harold D. Delaney, and Ken Kelley"
+      year: 2018
+      publisher: "Routledge"
+
+    Lenth2016:
+      type: article
+      title: "Least-Squares Means: The R Package lsmeans"
+      author: "Russell V. Lenth"
+      year: 2016
+      publisher: "Journal of Statistical Software, 69(1), 1-33"
+      url: "https://doi.org/10.18637/jss.v069.i01"
+
+    Agresti2019:
+      type: book
+      title: "An Introduction to Categorical Data Analysis (3rd ed.)"
+      author: "Alan Agresti"
+      year: 2019
+      publisher: "Wiley"
+
+    Huberty2006:
+      type: book
+      title: "Applied MANOVA and Discriminant Analysis (2nd ed.)"
+      author: "Carl J. Huberty and Stephen Olejnik"
+      year: 2006
+      publisher: "Wiley"
+
     Holm1979:
       type: article
       title: "A simple sequentially rejective multiple test procedure"

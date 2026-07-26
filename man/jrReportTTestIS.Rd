@@ -6,7 +6,7 @@
 \usage{
 jrReportTTestIS(
   data,
-  jreportEnabled = FALSE,
+  jreportEnabled = TRUE,
   reportStyle = "apaConcise",
   explanationTone = "professional",
   showSuggestedWording = TRUE,

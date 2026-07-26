@@ -310,21 +310,21 @@ eduCorrelationResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
                     list(
                         `name`="interpretation", 
                         `title`="Interpretation", 
-                        `type`="text",
+                        `type`="text", 
                         `visible`=FALSE),
                     list(
                         `name`="action", 
                         `title`="Recommended Action", 
-                        `type`="text",
+                        `type`="text", 
                         `visible`=FALSE))))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="report",
-                title="Reporting"))
+                title="Suggested APA Report"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="interpretation",
-                title="Plain-Language Interpretation"))
+                title="Interpretation Guidance"))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",
@@ -341,7 +341,7 @@ eduCorrelationResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cl
             self$add(jmvcore::Html$new(
                 options=options,
                 name="methodsReferences",
-                title="Methods and References"))}))
+                title="References"))}))
 
 eduCorrelationBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "eduCorrelationBase",

@@ -170,28 +170,28 @@ jrReportTTestISResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
                     list(
                         `name`="p", 
                         `title`="p", 
-                        `type`="number",
+                        `type`="number", 
                         `format`="zto,pvalue"),
                     list(
-                        `name`="p_adjusted",
-                        `title`="Adjusted p",
-                        `type`="number",
-                        `format`="zto,pvalue",
+                        `name`="p_adjusted", 
+                        `title`="Adjusted p", 
+                        `type`="number", 
+                        `format`="zto,pvalue", 
                         `visible`=FALSE),
                     list(
-                        `name`="adjustment_result",
-                        `title`="Result after adjustment",
-                        `type`="text",
+                        `name`="adjustment_result", 
+                        `title`="Result after adjustment", 
+                        `type`="text", 
                         `visible`=FALSE),
                     list(
                         `name`="effect", 
                         `title`="Effect Size", 
-                        `type`="text",
+                        `type`="text", 
                         `visible`=FALSE),
                     list(
                         `name`="ci", 
                         `title`="Effect 95% CI", 
-                        `type`="text",
+                        `type`="text", 
                         `visible`=FALSE))))
             self$add(jmvcore::Table$new(
                 options=options,
@@ -217,7 +217,7 @@ jrReportTTestISResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
                     list(
                         `name`="p", 
                         `title`="p", 
-                        `type`="number",
+                        `type`="number", 
                         `format`="zto,pvalue"),
                     list(
                         `name`="met", 
@@ -226,17 +226,17 @@ jrReportTTestISResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
                     list(
                         `name`="interpretation", 
                         `title`="What This Means", 
-                        `type`="text",
+                        `type`="text", 
                         `visible`=FALSE),
                     list(
                         `name`="action", 
                         `title`="Recommended Action", 
-                        `type`="text",
+                        `type`="text", 
                         `visible`=FALSE))))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="jReportCard",
-                title="Automatic Report (jReport)"))
+                title="Suggested APA Report (jReport)"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="jReportInterpretation",
@@ -244,7 +244,7 @@ jrReportTTestISResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
             self$add(jmvcore::Html$new(
                 options=options,
                 name="methodsReferences",
-                title="Methods and References"))}))
+                title="References"))}))
 
 jrReportTTestISBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "jrReportTTestISBase",
@@ -356,3 +356,4 @@ jrReportTTestIS <- function(
 
     analysis$results
 }
+

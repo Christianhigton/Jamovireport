@@ -412,17 +412,17 @@ eduDemographicsResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6C
             self$add(jmvcore::Html$new(
                 options=options,
                 name="paragraph",
-                title="APA-Style Descriptive Paragraph",
+                title="Suggested APA Report",
                 visible="(showParagraph)"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="bestPractices",
-                title="Reporting Best Practices",
+                title="Interpretation Guidance",
                 visible="(showBestPractices)"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="methodsReferences",
-                title="Methods and References"))}))
+                title="References"))}))
 
 eduDemographicsBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "eduDemographicsBase",

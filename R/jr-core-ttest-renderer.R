@@ -239,70 +239,104 @@
     tone <- as.character(.jr_core_ttest_config(config, "explanationTone", "professional"))[1]
     adjustment <- as.character(.jr_core_ttest_config(config, "pAdjustment", "holm"))[1]
     adjusted <- .jr_core_ttest_adjusted_p(analyses, adjustment)
-    cards <- character()
+    report_cards <- character()
+    guidance_cards <- character()
     if (!length(analyses)) {
         message <- paste(unique(c(
             adapter$warnings %||% character(),
             "Select a numeric dependent variable, a two-level grouping variable, and Student's or Welch's test in the core analysis."
         )), collapse = " ")
-        cards <- .jr_html_card(
+        report_cards <- .jr_html_card(
             "jReport add-on", "Reporting output is not yet available",
+            message, accent = "#b46c21"
+        )
+        guidance_cards <- .jr_html_card(
+            "Interpretation guidance", "Reporting output is not yet available",
             message, accent = "#b46c21"
         )
     }
     for (index in seq_along(analyses)) {
         result <- analyses[[index]]
         label <- .jr_core_ttest_label(result)
+        details <- .jr_core_ttest_group_details(result)
+        stats <- result$statistics
+        interval <- result$confidenceInterval
         if (isTRUE(.jr_core_ttest_config(config, "showSuggestedWording", TRUE))) {
             title <- switch(
                 style,
                 plainLanguage = "Suggested plain-language report wording",
                 teaching = "Suggested teaching report wording",
-                "Suggested APA-style report wording"
+                "Suggested APA report"
             )
-            cards <- c(cards, .jr_report_section_card(
+            report_cards <- c(report_cards, .jr_report_section_card(
                 .jr_report_section_title(title, label),
                 "Suggested wording only: check every value against the core jamovi output and adapt it to the study.",
                 .jr_core_ttest_suggested_wording(result, style, adjusted[index]),
                 accent = "#278058", background = "#f6fbf8"
             ))
         }
-        if (isTRUE(.jr_core_ttest_config(config, "showInterpretation", TRUE)))
-            cards <- c(cards, .jr_report_section_card(
-                .jr_report_section_title("Statistical interpretation", label),
-                "Interpretation guidance; do not copy this as a result sentence.",
-                .jr_core_ttest_interpretation(result, tone),
-                accent = "#b46c21", background = "#fff9ef", collapsed = FALSE
-            ))
-        if (isTRUE(.jr_core_ttest_config(config, "showEffectSizeGuidance", TRUE)))
-            cards <- c(cards, .jr_report_section_card(
-                .jr_report_section_title("Effect-size interpretation", label), "",
-                .jr_core_ttest_effect_guidance(result),
-                accent = "#4b66a2", background = "#f5f9fd", collapsed = FALSE
-            ))
-        if (isTRUE(.jr_core_ttest_config(config, "showAssumptionGuidance", TRUE)))
-            cards <- c(cards, .jr_report_section_card(
-                .jr_report_section_title("Assumption guidance", label), "",
-                .jr_core_ttest_assumption_sentence(result),
-                accent = "#2f6fa3", background = "#f5f9fd", collapsed = FALSE
-            ))
-        if (isTRUE(.jr_core_ttest_config(config, "showPracticalMeaning", TRUE)))
-            cards <- c(cards, .jr_report_section_card(
-                .jr_report_section_title("Practical meaning", label), "",
-                .jr_core_ttest_practical_meaning(result),
-                accent = "#237f86", background = "#f5fbfb", collapsed = FALSE
-            ))
-        if (isTRUE(.jr_core_ttest_config(config, "showCheckBeforeReporting", TRUE)))
-            cards <- c(cards, .jr_report_section_card(
-                .jr_report_section_title("Check before reporting", label), "",
-                content_html = .jr_html_bullets(.jr_core_ttest_checklist(result)),
-                accent = "#6d5a8a", background = "#faf8fc", collapsed = FALSE
-            ))
+        sections <- list(
+            "What this analysis examines" = sprintf(
+                "This independent-samples t-test compares mean %s between %s and %s. The observations must be independent between groups.",
+                result$outcome, details$first, details$second
+            ),
+            "Check the variables and data" = .jr_guidance_block(bullets = c(
+                sprintf("Confirm that %s is the intended numeric outcome.", result$outcome),
+                sprintf("Confirm that %s identifies exactly the intended groups and that their displayed order is correct.", result$group),
+                "Review complete-case sample sizes, missing data, distributions and unusual observations.",
+                "Confirm from the study design that observations are independent between groups."
+            )),
+            "Descriptive information" = sprintf(
+                "%s had n = %s, M = %s and SD = %s; %s had n = %s, M = %s and SD = %s.",
+                details$first, .jr_num(details$n1, 0L), .jr_num(details$mean1), .jr_num(details$sd1),
+                details$second, .jr_num(details$n2, 0L), .jr_num(details$mean2), .jr_num(details$sd2)
+            ),
+            "Assumptions and diagnostics" = if (isTRUE(.jr_core_ttest_config(config, "showAssumptionGuidance", TRUE)))
+                .jr_core_ttest_assumption_sentence(result) else "",
+            "Main statistical findings" = if (isTRUE(.jr_core_ttest_config(config, "showInterpretation", TRUE)))
+                .jr_core_ttest_interpretation(result, tone) else "",
+            "Direction of the finding" = sprintf(
+                "The signed mean difference is %s minus %s. Its value of %s indicates that the first group's observed mean was %s.",
+                details$first, details$second, .jr_num(stats$meanDifference),
+                if (stats$meanDifference > 0) "higher" else if (stats$meanDifference < 0) "lower" else "the same"
+            ),
+            "Effect size and practical magnitude" =
+                if (isTRUE(.jr_core_ttest_config(config, "showEffectSizeGuidance", TRUE)))
+                    .jr_core_ttest_effect_guidance(result) else "",
+            "Confidence intervals and uncertainty" = paste(
+                sprintf(
+                    "The mean-difference confidence interval was %s and %s zero.",
+                    .jr_ci(interval$lower, interval$upper),
+                    if (.jr_interval_includes(interval$lower, interval$upper, 0)) "included" else "excluded"
+                ),
+                "Use its width to judge uncertainty; non-significance is not proof of equivalence."
+            ),
+            "Follow-up analyses" = paste(
+                "No post-hoc comparison is required for a two-group test.",
+                if (adjustment %in% c("holm", "bonferroni"))
+                    sprintf("The displayed p-value adjustment is %s and applies only when the selected outcomes form one defensible family of tests.", adjustment)
+                else "If several outcomes form one family of tests, consider a pre-specified multiplicity adjustment."
+            ),
+            "Overall interpretation" =
+                if (isTRUE(.jr_core_ttest_config(config, "showPracticalMeaning", TRUE)))
+                    .jr_core_ttest_practical_meaning(result) else "",
+            "Check before using this result" =
+                if (isTRUE(.jr_core_ttest_config(config, "showCheckBeforeReporting", TRUE)))
+                    .jr_guidance_block(bullets = .jr_core_ttest_checklist(result)) else NULL,
+            "Literature and guidance" = paste(
+                "Cohen (1988), Cumming (2014) and Lakens (2013) provide general guidance on effect sizes and interval-based interpretation.",
+                "Complete bibliographic entries are provided in the References output."
+            )
+        )
+        guidance_cards <- c(
+            guidance_cards,
+            .jr_interpretation_guidance_panel(sections, analysis_label = label)
+        )
     }
-    if (!length(cards))
-        cards <- .jr_html_card(
-            "jReport add-on", "No reporting sections selected",
-            "Enable one or more reporting-section checkboxes to show output."
+    if (!length(report_cards))
+        report_cards <- .jr_html_card(
+            "Suggested APA report", "No suggested wording selected",
+            "Enable Suggested report wording to show the concise reporting paragraph."
         )
     reference_keys <- unique(unlist(lapply(analyses, `[[`, "references")))
     if (length(unique(vapply(analyses, `[[`, character(1), "outcome"))) > 1L &&
@@ -311,6 +345,10 @@
             reference_keys,
             if (identical(adjustment, "holm")) "Holm1979" else character()
         ))
+    reference_keys <- unique(c(
+        reference_keys,
+        if (length(analyses)) c("Cohen1988", "Cumming2014", "Lakens2013") else character()
+    ))
     references <- if (length(analyses) &&
             isTRUE(.jr_core_ttest_config(config, "showReferences", TRUE)))
         .jr_methods_references_html(keys = reference_keys)
@@ -318,7 +356,11 @@
     list(
         report = paste0(
             "<div style='width:100%;box-sizing:border-box;display:block;'>",
-            paste(cards, collapse = ""), "</div>"
+            paste(report_cards, collapse = ""), "</div>"
+        ),
+        guidance = paste0(
+            "<div style='width:100%;box-sizing:border-box;display:block;'>",
+            paste(guidance_cards, collapse = ""), "</div>"
         ),
         references = references,
         referenceKeys = reference_keys

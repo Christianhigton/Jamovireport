@@ -74,12 +74,12 @@ jrReportAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     list(
                         `name`="effect", 
                         `title`="Effect Size", 
-                        `type`="text",
+                        `type`="text", 
                         `visible`=FALSE),
                     list(
                         `name`="ci", 
                         `title`="Effect 95% CI", 
-                        `type`="text",
+                        `type`="text", 
                         `visible`=FALSE))))
             self$add(jmvcore::Table$new(
                 options=options,
@@ -114,12 +114,12 @@ jrReportAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
                     list(
                         `name`="interpretation", 
                         `title`="What This Means", 
-                        `type`="text",
+                        `type`="text", 
                         `visible`=FALSE),
                     list(
                         `name`="action", 
                         `title`="Recommended Action", 
-                        `type`="text",
+                        `type`="text", 
                         `visible`=FALSE))))
             self$add(jmvcore::Table$new(
                 options=options,
@@ -171,7 +171,7 @@ jrReportAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
             self$add(jmvcore::Html$new(
                 options=options,
                 name="jReportCard",
-                title="Automatic Report (jReport)"))
+                title="Suggested APA Report (jReport)"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="jReportInterpretation",
@@ -179,7 +179,7 @@ jrReportAnovaResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Cla
             self$add(jmvcore::Html$new(
                 options=options,
                 name="methodsReferences",
-                title="Methods and References"))}))
+                title="References"))}))
 
 jrReportAnovaBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "jrReportAnovaBase",

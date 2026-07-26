@@ -318,25 +318,25 @@ eduMultinomialLogisticResults <- if (requireNamespace("jmvcore", quietly=TRUE)) 
                     list(
                         `name`="interpretation", 
                         `title`="Interpretation", 
-                        `type`="text",
+                        `type`="text", 
                         `visible`=FALSE),
                     list(
                         `name`="action", 
                         `title`="Recommended Action", 
-                        `type`="text",
+                        `type`="text", 
                         `visible`=FALSE))))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="report",
-                title="Reporting"))
+                title="Suggested APA Report"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="interpretation",
-                title="Plain-Language Interpretation"))
+                title="Interpretation Guidance"))
             self$add(jmvcore::Html$new(
                 options=options,
                 name="methodsReferences",
-                title="Methods and References"))}))
+                title="References"))}))
 
 eduMultinomialLogisticBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "eduMultinomialLogisticBase",

@@ -55,14 +55,13 @@ items:
   type: Html
   visible: (showOmitNote)
 - name: paragraph
-  title: APA-Style Descriptive Paragraph
+  title: Suggested APA Report
   type: Html
   visible: (showParagraph)
 - name: bestPractices
-  title: Reporting Best Practices
+  title: Interpretation Guidance
   type: Html
   visible: (showBestPractices)
 - name: methodsReferences
-  title: Methods and References
+  title: References
   type: Html
-

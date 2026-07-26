@@ -51,6 +51,14 @@ jrReportTTestISClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class
                         ),
                         accent = "#b46c21"
                     ),
+                    guidance = .jr_html_card(
+                        "Interpretation guidance", "Reporting output could not be generated",
+                        paste(
+                            "The core analysis is unchanged.",
+                            "jReport encountered a reporting error:", conditionMessage(error)
+                        ),
+                        accent = "#b46c21"
+                    ),
                     references = ""
                 )
             )
@@ -58,6 +66,11 @@ jrReportTTestISClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6Class
             if (!is.null(card)) {
                 card$setVisible(TRUE)
                 card$setContent(rendered$report)
+            }
+            interpretation <- .jr_addon_get(self$parent$results, "jReportInterpretation")
+            if (!is.null(interpretation) && nzchar(rendered$guidance %||% "")) {
+                interpretation$setVisible(TRUE)
+                interpretation$setContent(rendered$guidance)
             }
             references <- .jr_addon_get(self$parent$results, "methodsReferences")
             if (!is.null(references) && nzchar(rendered$references)) {

@@ -105,10 +105,10 @@ items:
     type: text
     visible: false
 - name: report
-  title: Reporting
+  title: Suggested APA Report
   type: Html
 - name: interpretation
-  title: Plain-Language Interpretation
+  title: Interpretation Guidance
   type: Html
 - name: plot
   title: Visualisation
@@ -125,6 +125,6 @@ items:
   height: 360
   renderFun: .plot
 - name: methodsReferences
-  title: Methods and References
+  title: References
   type: Html
 

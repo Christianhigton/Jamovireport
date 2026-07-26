@@ -154,9 +154,6 @@ test_that("correlation family guidance distinguishes FWER, FDR, and no adjustmen
     bonferroni <- .jr_addon_interpretation_html(results, adjustment = "bonferroni")
     bh <- .jr_addon_interpretation_html(results, adjustment = "bh")
     none <- .jr_addon_interpretation_html(results, adjustment = "none")
-    none_report <- .jr_addon_report_html(
-        results, options = .jr_addon_reporting_options(), adjustment = "none"
-    )
 
     expect_match(holm, "meaningful family of related tests", fixed = TRUE)
     expect_match(holm, "Holm procedure controls the familywise", fixed = TRUE)
@@ -166,7 +163,7 @@ test_that("correlation family guidance distinguishes FWER, FDR, and no adjustmen
     expect_false(grepl("Benjamini-Hochberg procedure controls the familywise", bh, fixed = TRUE))
     expect_match(none, "have not been adjusted for multiple testing", fixed = TRUE)
     expect_match(none, "study design, preregistration", fixed = TRUE)
-    expect_match(none_report, "risk of false-positive findings", fixed = TRUE)
+    expect_match(none, "false-positive result", fixed = TRUE)
 })
 
 test_that("correction references are method-specific", {

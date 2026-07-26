@@ -25,7 +25,8 @@ edu_t_test(
 
 \item{type}{\code{"independent"} or \code{"paired"}.}
 
-\item{var_equal}{Whether to use Student's equal-variance independent test.}
+\item{var_equal}{Whether to prefer Student's equal-variance independent test.
+If Levene's test is significant, Welch's test is used automatically.}
 
 \item{ci}{Confidence level.}
 }

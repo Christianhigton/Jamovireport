@@ -259,23 +259,17 @@
     }
     if (length(results) == 0L)
         return(wrap(.jr_html_card("Report add-on", title, "Select valid analysis variables to generate report text.")))
-    include_effect_note <- is.null(options) ||
-        isTRUE(tryCatch(options$reportEffect, error = function(e) TRUE))
     if (length(results) == 1L && identical(results[[1]]$analysis, "regression")) {
         return(.jr_regression_report_cards_html(
-            results[[1]], options = options, note = note,
-            include_effect_note = include_effect_note
+            results[[1]], options = options
         ))
     }
     if (length(results) == 1L && identical(results[[1]]$analysis, "anova_between")) {
         return(.jr_anova_between_report_sections_html(
-            results[[1]], options = options, note = note,
+            results[[1]], options = options,
             posthoc_text = .jr_addon_posthoc_text(results)
         ))
     }
-    include_note <- is.null(options) ||
-        isTRUE(tryCatch(options$reportCautions, error = function(e) FALSE))
-    posthoc_text <- .jr_addon_posthoc_text(results)
     show_analysis_labels <- length(results) > 1L
     sections <- vapply(results, function(result) {
         report_style <- "apa7"
@@ -285,42 +279,13 @@
             report_style <- .jr_jamovi_report_args(options)$style
             .jr_jamovi_text(result, options)
         }
-        diagnostic_text <- result$report_blocks$assumptions %||% ""
-        if (nzchar(result$caution %||% ""))
-            diagnostic_text <- paste(diagnostic_text, result$caution, sep = if (nzchar(diagnostic_text)) "\n\n" else "")
-        checklist <- .jr_analysis_checklist(result$analysis)
         .jr_build_report_sections_html(
             apa_wording = apa_text,
-            diagnostic_note = diagnostic_text,
-            follow_up_guidance = .jr_follow_up_analysis_guidance(result),
-            checklist_items = checklist,
-            checklist_note = if (nzchar(note) && include_note) note else "",
             report_style = report_style,
             analysis_label = if (show_analysis_labels)
                 .jr_addon_result_title(result) else ""
         )
     }, character(1))
-    if (nzchar(posthoc_text)) {
-        sections <- c(sections, .jr_report_section_card(
-            "Post hoc interpretation",
-            "Follow-up comparisons",
-            posthoc_text, accent = "#4b66a2", background = "#f5f9fd",
-            collapsed = FALSE
-        ))
-    }
-    adjustment_summary <- .jr_adjustment_summary(adjustment_info)
-    if (nzchar(adjustment_summary)) {
-        sections <- c(.jr_report_section_card(
-            "Multiple-comparison adjustment",
-            if (adjustment_info$n_valid >= 2L)
-                if (identical(adjustment_info$family %||% "", "correlation"))
-                    sprintf("%d unique, valid correlation tests", adjustment_info$n_valid)
-                else
-                    sprintf("%d valid t-tests", adjustment_info$n_valid)
-            else "",
-            adjustment_summary, accent = "#4b66a2", background = "#f5f9fd"
-        ), sections)
-    }
     paste0("<div style='width:100%;box-sizing:border-box;display:block;'>", paste(sections, collapse = ""), "</div>")
 }
 
@@ -356,48 +321,33 @@
             "Select valid analysis variables to generate interpretation guidance.",
             accent = "#b46c21"
         ))
-    posthoc_text <- .jr_addon_posthoc_text(results)
     show_analysis_labels <- length(results) > 1L
-    cards <- vapply(results, function(result) {
-        guidance <- paste(
-            .jr_nonempty_unique(c(
-                result$report_blocks$rationale %||% "",
-                result$report_blocks$descriptives %||% "",
-                result$interpretation %||% "",
-                if (identical(result$analysis, "regression")) .jr_regression_guidance_text(result) else "",
-                if (identical(result$analysis, "anova_between"))
-                    .jr_anova_between_guidance_text(result, .jr_jamovi_report_args(.jr_addon_reporting_options())$include, posthoc_text)
-                else ""
-            )),
-            collapse = "\n\n"
-        )
-        if (!nzchar(guidance))
-            guidance <- "No separate interpretation guidance was generated for this result."
+    adjustment_guidance <- .jr_adjustment_guidance(adjustment_info)
+    posthoc_text <- .jr_addon_posthoc_text(results)
+    cards <- vapply(seq_along(results), function(index) {
+        result <- results[[index]]
+        sections <- .jr_interpretation_sections(result)
+        follow_up <- .jr_nonempty_unique(c(
+            sections[["Follow-up analyses"]] %||% character(),
+            if (index == 1L) adjustment_guidance else "",
+            if (index == 1L) posthoc_text else ""
+        ))
+        if (length(follow_up))
+            sections[["Follow-up analyses"]] <- follow_up
+        if (index == 1L && nzchar(note)) {
+            checks <- sections[["Check before using this result"]]
+            if (!is.list(checks))
+                checks <- .jr_guidance_block(text = checks)
+            checks$text <- .jr_nonempty_unique(c(checks$text, note))
+            sections[["Check before using this result"]] <- checks
+        }
         analysis_label <- if (show_analysis_labels)
             .jr_addon_result_title(result) else ""
-        .jr_report_section_card(
-            .jr_report_section_title("Interpretation guidance", analysis_label),
-            if (show_analysis_labels) "" else result$label %||% "jReport",
-            guidance, accent = "#b46c21", background = "#fff9ef",
-            collapsed = FALSE
+        .jr_interpretation_guidance_panel(
+            sections,
+            analysis_label = analysis_label
         )
     }, character(1))
-    if (nzchar(note)) {
-        cards <- c(cards, .jr_report_section_card(
-            "Check before using",
-            "",
-            note, accent = "#6d5a8a", background = "#faf8fc",
-            collapsed = FALSE
-        ))
-    }
-    adjustment_guidance <- .jr_adjustment_guidance(adjustment_info)
-    if (nzchar(adjustment_guidance)) {
-        cards <- c(.jr_report_section_card(
-            "Multiple comparisons and the family of tests",
-            "Use one correction only for a meaningful family of related hypotheses.",
-            adjustment_guidance, accent = "#6d5a8a", background = "#faf8fc"
-        ), cards)
-    }
     paste0("<div style='width:100%;box-sizing:border-box;display:block;'>", paste(cards, collapse = ""), "</div>")
 }
 
@@ -1319,7 +1269,7 @@
     .jr_addon_add_result_if_missing(
         self, "jReportCard",
         jmvcore::Html$new(options = self$options, name = "jReportCard",
-            title = "Automatic Report (jReport)", content = placeholder)
+            title = "Suggested APA Report (jReport)", content = placeholder)
     )
     .jr_addon_add_result_if_missing(
         self, "jReportInterpretation",
@@ -1330,7 +1280,7 @@
     .jr_addon_add_result_if_missing(
         self, "methodsReferences",
         jmvcore::Html$new(options = self$options, name = "methodsReferences",
-            title = "Methods and References",
+            title = "References",
             content = .jr_methods_references_html(keys = refs))
     )
 }

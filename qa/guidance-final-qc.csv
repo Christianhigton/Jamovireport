@@ -1,0 +1,35 @@
+user_facing_name,analysis_id,path_type,suggested_report_separate,single_collapsed_guidance,analysis_label_when_multiple,dynamic_findings,diagnostics_and_actions_preserved,effect_size_context,confidence_interval_interpreted,follow_up_human_judgement,final_checks,literature_guidance,references_resolve,author_year_no_numeric,serious_warnings_visible,stable_result_ids,automated_tests,final_status,notes
+Guided T-Test,eduTTest,guided,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,passed,Hidden routing analysis shares the tested guided renderer.
+Guided Independent Samples t-test,eduTTestIndependent,guided,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,passed,Automatic Welch selection and signed mean-difference branches tested.
+Guided Paired Samples t-test,eduTTestPaired,guided,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,passed,Paired order and difference-score checks retained.
+Guided One-Way ANOVA,eduAnova,guided,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,passed,Omnibus-first and human-selected post-hoc guidance included.
+Guided Correlation,eduCorrelation,guided,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,passed,Method direction interval and scatterplot guidance included.
+Guided Chi-Square Test of Independence,eduChiSquareIndependence,guided,pass,pass,pass,pass,pass,pass,not-applicable,pass,pass,pass,pass,pass,pass,pass,pass,passed,Expected-count residual and table-sensitive Cramer's V guidance included.
+Guided Chi-Square Goodness-of-Fit,eduChiSquareGoodness,guided,pass,pass,pass,pass,pass,pass,not-applicable,pass,pass,pass,pass,pass,pass,pass,pass,passed,Expected distribution and category follow-up guidance included.
+Guided Linear Regression,eduRegression,guided,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,passed,Model-first coefficient and diagnostic guidance included.
+Guided Binomial Logistic Regression,eduLogistic,guided,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,passed,Coding-aware odds-ratio interval and separation guidance included.
+Guided Multinomial Logistic Regression,eduMultinomialLogistic,guided,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,passed,Outcome comparison and reference-category labels included.
+Guided Between-Subjects ANOVA,eduBetweenAnova,guided,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,passed,Interactions are prioritised before main effects.
+Guided Repeated-Measures ANOVA,eduRMAnova,guided,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,passed,Sphericity correction and within-person follow-up guidance included.
+Guided Mixed ANOVA,eduMixedAnova,guided,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,passed,Interaction-first simple-effects guidance included.
+Guided ANCOVA,eduAncova,guided,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,passed,Adjusted means and slope diagnostics distinguished.
+Guided MANOVA / MANCOVA,eduMancova,guided,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,passed,Multivariate-first and adjusted univariate follow-up guidance included.
+Guided Reliability: Omega and Alpha,eduReliabilityOmega,guided,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,passed,Omega and alpha are contextualised without universal cut-offs.
+Demographic Table,eduDemographics,standalone,pass,pass,pass,pass,pass,not-applicable,not-applicable,pass,pass,pass,pass,pass,pass,pass,pass,passed,Best-practice text is now the standard collapsed guidance panel.
+Automatic Independent Samples T-Test,jrReportTTestIS,add-on,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,passed,Legacy visibility options feed relevant subsections without duplicate cards.
+Automatic Paired Samples T-Test,jrReportTTestPS,add-on,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,passed,Shared add-on renderer labels each selected test.
+Automatic One-Way ANOVA,jrReportAnovaOneW,add-on,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,passed,Selected post-hocs remain visible inside relevant guidance.
+Automatic Factorial ANOVA,jrReportAnova,add-on,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,passed,Interaction and diagnostic guidance consolidated.
+Automatic ANCOVA,jrReportAncova,add-on,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,passed,ANCOVA-specific shared guidance verified.
+Automatic MANOVA / MANCOVA,jrReportMancova,add-on,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,passed,Follow-up table and multivariate-first guidance retained.
+Automatic Linear Regression,jrReportLinReg,add-on,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,passed,Checklist and diagnostic cards consolidated into guidance.
+Automatic Binomial Logistic Regression,jrReportLogRegBin,add-on,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,passed,Coding and separation checks retained.
+Automatic Multinomial Logistic Regression,jrReportLogRegMulti,add-on,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,passed,Category comparison labels and convergence checks retained.
+Automatic Correlation Matrix,jrReportCorrMatrix,add-on,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,passed,Each correlation receives a clean method-and-variable label.
+Automatic Chi-Square Independence,jrReportContTables,add-on,pass,pass,pass,pass,pass,pass,not-applicable,pass,pass,pass,pass,pass,pass,pass,pass,passed,Residual and expected-count checks retained.
+Automatic Chi-Square Goodness-of-Fit,jrReportPropTestN,add-on,pass,pass,pass,pass,pass,pass,not-applicable,pass,pass,pass,pass,pass,pass,pass,pass,passed,Expected-ratio and category residual guidance retained.
+Automatic Repeated Measures ANOVA,jrReportAnovaRM,add-on,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,passed,Correction and interaction guidance retained.
+Automatic Reliability Report,jrReportReliability,add-on,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,passed,Item and data checks consolidated with reliability cautions.
+Bayesian t-test,edu_bayes_t_test,R-only,pass,pass,pass,pass,pass,not-applicable,pass,pass,pass,pass,pass,pass,pass,not-applicable,pass,passed,Shared R-renderable fallback tested; optional BayesFactor execution skips when unavailable.
+Mann-Whitney U test,edu_mann_whitney,R-only,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,not-applicable,pass,passed,Rank/distribution wording and conditional median caution included.
+Wilcoxon signed-rank test,edu_wilcoxon_signed_rank,R-only-and-addon,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,passed,Paired-rank direction symmetry and tie guidance included.

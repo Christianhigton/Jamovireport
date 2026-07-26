@@ -45,7 +45,7 @@
         interpretation <- as.character(rows[[interpretation_column]][i] %||% "")
         action <- as.character(rows[[action_column]][i] %||% "")
         note <- paste(
-            sprintf("%s — What this means: %s", label, interpretation),
+            sprintf("%s \u2014 What this means: %s", label, interpretation),
             sprintf("Recommended action: %s", action)
         )
         table$setNote(paste0("guidance-", i), note)
@@ -63,7 +63,7 @@
         interval <- as.character(rows$ci[i] %||% "")
         table$setNote(
             paste0("effect-", i),
-            sprintf("%s — %s: Effect size %s; confidence interval %s.",
+            sprintf("%s \u2014 %s: Effect size %s; confidence interval %s.",
                     analysis, test, effect, interval)
         )
     }

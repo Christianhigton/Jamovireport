@@ -3,19 +3,15 @@ test_that("significant unresolved one-way ANOVA receives follow-up guidance", {
         iris, "Sepal.Length", "Species", posthoc = FALSE
     )
     guidance <- .jr_follow_up_analysis_guidance(unresolved)
-    html <- .jr_guided_report_sections_html(
-        unresolved, .jr_addon_reporting_options()
-    )
+    report <- .jr_guided_report_sections_html(unresolved, .jr_addon_reporting_options())
+    html <- .jr_jamovi_interpretation_html(unresolved)
 
     expect_match(guidance, "Human decision required", fixed = TRUE)
     expect_match(guidance, "Holm", fixed = TRUE)
-    expect_match(guidance, "References:", fixed = TRUE)
-    expect_match(html, "Follow-up analysis", fixed = TRUE)
-    expect_match(
-        html,
-        "the choice requires human judgement",
-        fixed = TRUE
-    )
+    expect_match(guidance, "Holm (1979)", fixed = TRUE)
+    expect_match(html, "Follow-up analyses", fixed = TRUE)
+    expect_false(grepl("Follow-up analysis", report, fixed = TRUE))
+    expect_match(html, "Literature and guidance", fixed = TRUE)
 })
 
 test_that("completed, non-significant, and two-level tests avoid unnecessary guidance", {
@@ -76,11 +72,13 @@ test_that("automatic add-on labels follow-up guidance by analysis", {
     )
     second <- unresolved
     second$call$outcome <- "Sepal.Width"
-    html <- .jr_addon_report_html(
+    report <- .jr_addon_report_html(
         list(unresolved, second),
         options = .jr_addon_reporting_options()
     )
+    html <- .jr_addon_interpretation_html(list(unresolved, second))
 
-    expect_match(html, "Follow-up analysis", fixed = TRUE)
+    expect_match(html, "Follow-up analyses", fixed = TRUE)
     expect_match(html, "One-Way ANOVA:", fixed = TRUE)
+    expect_false(grepl("Follow-up analysis", report, fixed = TRUE))
 })

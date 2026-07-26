@@ -45,42 +45,38 @@ eduDemographicsClass <- if (requireNamespace("jmvcore", quietly = TRUE)) R6::R6C
 )
 
 .dm_best_practices_html <- function() {
-    body <- '
-<p style="margin:0 0 6px"><strong>APA 7 Demographic Table \u2014 Reporting Best Practices</strong></p>
-
-<p style="margin:0 0 5px"><strong>Table format.</strong>
-This table follows APA 7 conventions. After pasting into Word: (1) italicise the table title,
-(2) apply thin horizontal borders above and below the column headers and at the table foot only
-(no vertical lines or shading), and (3) bold the word <em>Note.</em> in any table note.</p>
-
-<p style="margin:0 0 5px"><strong>Continuous variables.</strong>
-Report <em>M</em>&nbsp;(<em>SD</em>) for approximately normally distributed variables (e.g., age,
-years of education). For markedly skewed distributions use Median&nbsp;[IQR] instead. Always report
-the full range for age (e.g., <em>ranged from 18 to 65 years, M</em>&nbsp;=&nbsp;32.4,
-<em>SD</em>&nbsp;=&nbsp;11.2).</p>
-
-<p style="margin:0 0 5px"><strong>Categorical variables.</strong>
-Report <em>n</em> and % for each category. Percentages are calculated from the valid (non-missing)
-<em>N</em>. If the displayed percentages do not sum to 100 due to rounding, add a table note:
-"<em>Note.</em> Percentages may not sum to 100 due to rounding."</p>
-
-<p style="margin:0 0 5px"><strong>Missing data.</strong>
-Enable "Missing n" to show the count of missing values per variable. Describe your missing-data
-strategy (e.g., listwise deletion, multiple imputation) in the Method section.</p>
-
-<p style="margin:0 0 5px"><strong>Paragraph.</strong>
-Begin the paragraph with the total sample size, then describe each variable. Keep the tone
-descriptive \u2014 save significance testing for the Results section. Edit the auto-generated
-paragraph above to match your specific phrasing before submitting.</p>
-
-<p style="margin:0"><strong>Table citation.</strong>
-Reference the table in-text as "Table&nbsp;1" (or whichever number applies) the first time you
-mention it: e.g., "Demographic characteristics of the sample are presented in Table&nbsp;1."</p>
-'
+    sections <- list(
+        "What this output describes" = paste(
+            "The demographic table and paragraph describe the analysed sample.",
+            "They do not test group differences or establish that the sample represents a wider population."
+        ),
+        "Check the variables and data" = .jr_guidance_block(bullets = c(
+            "Confirm that each selected variable is demographic or otherwise appropriate for sample description.",
+            "Check category labels, valid sample sizes and the treatment of missing values.",
+            "Check that percentages use the intended denominator and that continuous summaries suit each distribution."
+        )),
+        "Descriptive information" = paste(
+            "Use M (SD) for a roughly symmetric continuous distribution and median [IQR] when a resistant summary is more informative.",
+            "Report n and percentage for categorical levels. Percentages may not total exactly 100% because of rounding."
+        ),
+        "Missing data and uncertainty" = paste(
+            "Enable the missing-count option when omissions matter and describe the study's missing-data strategy in the Method section.",
+            "Descriptive summaries are sample estimates; avoid implying population precision unless suitable confidence intervals or design-based estimates are available."
+        ),
+        "Check before using this result" = .jr_guidance_block(bullets = c(
+            "Verify the total N and all displayed values against the source data.",
+            "Keep the paragraph descriptive and adapt its wording to the study.",
+            "Apply the target document's APA table styling after export and cite the table by its final number.",
+            "Do not add significance tests merely to describe baseline or demographic characteristics without a substantive question."
+        )),
+        "Literature and guidance" = paste(
+            "Use the current APA style guidance and the study area's reporting standards for demographic tables.",
+            "The software and module citations are provided in the References output."
+        )
+    )
     paste0(
-        '<div data-jr-copy-section="true" style="font-family:sans-serif;font-size:0.88em;line-height:1.6;',
-        'border-top:2px solid #ccc;padding:10px 0 4px">',
-        .jr_copyable_body_html(body),
-        '</div>'
+        "<div style='width:100%;box-sizing:border-box;display:block;'>",
+        .jr_interpretation_guidance_panel(sections),
+        "</div>"
     )
 }

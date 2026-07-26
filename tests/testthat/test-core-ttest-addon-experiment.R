@@ -346,30 +346,36 @@ test_that("core t-test renderer labels every reporting box with its analysis", {
     rendered <- .jr_core_ttest_render(
         core_ttest_render_fixture(), core_ttest_render_config()
     )
-    sections <- c(
-        "Suggested APA-style report wording", "Statistical interpretation",
-        "Effect-size interpretation", "Assumption guidance",
-        "Practical meaning", "Check before reporting"
+    expect_match(
+        rendered$report,
+        "Suggested APA report — score — Student's t-test",
+        fixed = TRUE
     )
-    for (section in sections)
-        expect_match(
-            rendered$report,
-            paste(section, "score — Student's t-test", sep = " — "),
-            fixed = TRUE
-        )
+    expect_match(
+        rendered$guidance,
+        "Interpretation guidance — score — Student's t-test",
+        fixed = TRUE
+    )
+    for (section in c(
+        "Main statistical findings", "Effect size and practical magnitude",
+        "Assumptions and diagnostics", "Overall interpretation",
+        "Check before using this result"
+    ))
+        expect_match(rendered$guidance, section, fixed = TRUE)
     expect_match(rendered$report, "data-jr-copy-section='true'", fixed = TRUE)
+    expect_match(rendered$guidance, "<details", fixed = TRUE)
     expect_match(rendered$references, "R packages and software", fixed = TRUE)
     expect_match(rendered$references, "Literature and reporting guidance", fixed = TRUE)
 })
 
 test_that("each core t-test reporting section can be selected independently", {
     controls <- c(
-        showSuggestedWording = "Suggested APA-style report wording",
-        showInterpretation = "Statistical interpretation",
-        showEffectSizeGuidance = "Effect-size interpretation",
-        showAssumptionGuidance = "Assumption guidance",
-        showPracticalMeaning = "Practical meaning",
-        showCheckBeforeReporting = "Check before reporting"
+        showSuggestedWording = "Suggested APA report",
+        showInterpretation = "Main statistical findings",
+        showEffectSizeGuidance = "Effect size and practical magnitude",
+        showAssumptionGuidance = "Assumptions and diagnostics",
+        showPracticalMeaning = "Overall interpretation",
+        showCheckBeforeReporting = "Check before using this result"
     )
     disabled <- as.list(stats::setNames(rep(FALSE, length(controls)), names(controls)))
     for (control in names(controls)) {
@@ -377,17 +383,17 @@ test_that("each core t-test reporting section can be selected independently", {
             core_ttest_render_config(showReferences = FALSE), disabled
         )
         config[[control]] <- TRUE
-        html <- .jr_core_ttest_render(core_ttest_render_fixture(), config)$report
+        rendered <- .jr_core_ttest_render(core_ttest_render_fixture(), config)
+        html <- if (identical(control, "showSuggestedWording"))
+            rendered$report else rendered$guidance
         expect_match(html, controls[[control]], fixed = TRUE)
-        for (other in setdiff(names(controls), control))
-            expect_false(grepl(controls[[other]], html, fixed = TRUE))
     }
 
     all_off <- utils::modifyList(
         core_ttest_render_config(showReferences = FALSE), disabled
     )
     rendered <- .jr_core_ttest_render(core_ttest_render_fixture(), all_off)
-    expect_match(rendered$report, "No reporting sections selected", fixed = TRUE)
+    expect_match(rendered$report, "No suggested wording selected", fixed = TRUE)
     expect_identical(rendered$references, "")
 })
 
@@ -399,12 +405,13 @@ test_that("all requested style and tone combinations change renderer text", {
         c("teaching", "studentFriendly")
     )
     output <- vapply(combinations, function(values) {
-        .jr_core_ttest_render(
+        rendered <- .jr_core_ttest_render(
             core_ttest_render_fixture(),
             core_ttest_render_config(
                 reportStyle = values[1], explanationTone = values[2]
             )
-        )$report
+        )
+        paste(rendered$report, rendered$guidance)
     }, character(1))
 
     expect_length(unique(output), 4L)
@@ -426,7 +433,7 @@ test_that("all four styles and all four tones are individually exercised", {
         core_ttest_render_config(
             explanationTone = tone, showSuggestedWording = FALSE
         )
-    )$report, character(1))
+    )$guidance, character(1))
 
     expect_length(unique(style_output), 4L)
     expect_length(unique(tone_output), 4L)
@@ -436,16 +443,16 @@ test_that("assumption guidance identifies the applicable test and outcome", {
     student <- .jr_core_ttest_render(
         core_ttest_render_fixture("student", levene_p = .01),
         core_ttest_render_config()
-    )$report
+    )$guidance
     welch <- .jr_core_ttest_render(
         core_ttest_render_fixture("welch", outcome = "stress", levene_p = .01),
         core_ttest_render_config()
-    )$report
+    )$guidance
 
     expect_match(student, "Welch's result should normally be preferred", fixed = TRUE)
-    expect_match(student, "Assumption guidance — score — Student's t-test", fixed = TRUE)
+    expect_match(student, "Interpretation guidance — score — Student's t-test", fixed = TRUE)
     expect_match(welch, "Welch's test does not require equal group variances", fixed = TRUE)
-    expect_match(welch, "Assumption guidance — stress — Welch's t-test", fixed = TRUE)
+    expect_match(welch, "Interpretation guidance — stress — Welch's t-test", fixed = TRUE)
 })
 
 test_that("multiple core t-test results remain visibly separated", {
@@ -456,6 +463,8 @@ test_that("multiple core t-test results remain visibly separated", {
 
     expect_match(rendered$report, "score — Student's t-test", fixed = TRUE)
     expect_match(rendered$report, "stress — Welch's t-test", fixed = TRUE)
+    expect_match(rendered$guidance, "score — Student's t-test", fixed = TRUE)
+    expect_match(rendered$guidance, "stress — Welch's t-test", fixed = TRUE)
     expect_match(rendered$references, "Holm", fixed = TRUE)
 })
 
@@ -538,10 +547,11 @@ test_that("live add-on section selections control host output", {
     )
     expect_identical(host$addAddon(add_on), host)
     host$run()
-    html <- host$results$get("jReportCard")$content
+    report <- host$results$get("jReportCard")$content
+    html <- host$results$get("jReportInterpretation")$content
 
-    expect_match(html, "Statistical interpretation", fixed = TRUE)
-    expect_false(grepl("Suggested APA-style report wording", html, fixed = TRUE))
-    expect_false(grepl("Effect-size interpretation", html, fixed = TRUE))
+    expect_match(html, "Main statistical findings", fixed = TRUE)
+    expect_match(report, "No suggested wording selected", fixed = TRUE)
+    expect_false(grepl("Effect size and practical magnitude", html, fixed = TRUE))
     expect_false(host$results$get("methodsReferences")$visible)
 })

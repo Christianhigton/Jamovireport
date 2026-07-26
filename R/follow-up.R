@@ -50,21 +50,21 @@
 }
 
 .jr_follow_up_reference_text <- function(analysis) {
-    general <- c(
-        "Maxwell, S. E., Delaney, H. D., & Kelley, K. (2018). Designing Experiments and Analyzing Data: A Model Comparison Perspective (3rd ed.). Routledge.",
-        "Lenth, R. V. (2016). Least-Squares Means: The R Package lsmeans. Journal of Statistical Software, 69(1), 1–33. https://doi.org/10.18637/jss.v069.i01",
-        "Holm, S. (1979). A simple sequentially rejective multiple test procedure. Scandinavian Journal of Statistics, 6(2), 65–70."
+    general <- paste(
+        "Follow-up selection and model-based comparisons are informed by",
+        "Maxwell, Delaney, and Kelley (2018) and Lenth (2016);",
+        "Holm (1979) supports the familywise-error adjustment described here."
     )
     if (analysis %in% c("chisq_independence", "chisq_gof")) {
-        return(c(
-            "Agresti, A. (2019). An Introduction to Categorical Data Analysis (3rd ed.). Wiley.",
-            general[3]
+        return(paste(
+            "Categorical follow-up interpretation is informed by Agresti (2019);",
+            "Holm (1979) supports the familywise-error adjustment described here."
         ))
     }
     if (identical(analysis, "manova")) {
-        return(c(
-            "Huberty, C. J., & Olejnik, S. (2006). Applied MANOVA and Discriminant Analysis (2nd ed.). Wiley.",
-            general
+        return(paste(
+            "Multivariate follow-up guidance is informed by Huberty and Olejnik (2006),",
+            "Maxwell, Delaney, and Kelley (2018), Lenth (2016), and Holm (1979)."
         ))
     }
     general
@@ -163,10 +163,6 @@
         "jReport has not selected these follow-ups automatically because the software cannot infer the study's hypotheses, the scientifically meaningful contrasts, or which tests form one comparison family.",
         "Use the relevant jamovi post-hoc, estimated-marginal-means, contrast, or residual options after making those decisions."
     )
-    references <- paste(
-        "References:",
-        paste(.jr_follow_up_reference_text(analysis), collapse = "\n"),
-        sep = "\n"
-    )
-    paste(opening, decision, multiplicity, boundary, references, sep = "\n\n")
+    literature <- .jr_follow_up_reference_text(analysis)
+    paste(opening, decision, multiplicity, boundary, literature, sep = "\n\n")
 }
